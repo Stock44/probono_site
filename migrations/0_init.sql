@@ -1,7 +1,7 @@
 create table ContactData
 (
     id    bigint primary key generated always as identity,
-    phone varchar(16) not null,
+    phone varchar(16)  not null,
     email varchar(255) not null
 );
 
@@ -176,7 +176,7 @@ create table Organization
 (
     id                        bigint primary key generated always as identity,
     name                      text    not null,
-    ods                       int     not null check ( value between 1 and 30 ),
+    ods                       int     not null check ( ods between 1 and 30 ),
     foundingYear              int     not null,
     hasInvestmentAgreement    boolean not null,
     contact                   bigint  not null references ContactData (id),
