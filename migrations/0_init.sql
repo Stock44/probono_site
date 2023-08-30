@@ -5,13 +5,7 @@ create table ContactData
     email varchar(255) not null
 );
 
-create table Person
-(
-    id          bigint primary key generated always as identity,
-    authId      text   not null,
-    orgPosition text   not null,
-    contact     bigint not null references ContactData (id)
-);
+
 
 create unique index on Person (authId);
 
@@ -231,5 +225,14 @@ create table OrganizationNeededService
     organization bigint not null references Organization (id),
     service      bigint not null references Service (id),
     priority     bigint not null
+);
+
+create table Person
+(
+    id           bigint primary key generated always as identity,
+    authId       text   not null,
+    orgPosition  text,
+    contactData  bigint not null references ContactData (id),
+    organization bigint references Organization (id)
 );
 
