@@ -1,33 +1,17 @@
 import {getSession, withPageAuthRequired} from '@auth0/nextjs-auth0';
-import getDb from '@/lib/db';
+import {db} from '@/lib/db';
 import {redirect} from 'next/navigation';
-import {getUser} from '@/lib/auth';
+import {get_user} from '@/lib/auth';
+import {get_person_repository} from '@/lib/db/person';
 
-interface ContactData {
-    id: number,
-    phone: string,
-    email: string,
-}
-
-interface Organization {
-
-}
-
-interface Person {
-    id: number
-    authId: string,
-    orgPosition: string,
-    contactData: ContactData
-    organization?: Organization
-}
 
 export default withPageAuthRequired(async function Home() {
-    const db = await getDb();
-    const user = await getUser();
+    const user = await get_user();
+    const personRepository = get_person_repository(db);
 
-    const queryResult = await db.query('select * from Person where authId = $1', [user.sub]);
+    const person = await personRepository.get_by_auth_id(user.sub)
 
-    if (queryResult.rowCount == 0) {
+    if (!person) {
         redirect('/onboarding')
     }
 

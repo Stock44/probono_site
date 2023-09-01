@@ -13,7 +13,7 @@ export default function RootLayout({children}: {
 }) {
     return (
         <html lang='en'>
-        <body className='bg-stone-50 dark:bg-stone-950'>
+        <body className='bg-stone-50 dark:bg-stone-900'>
         <Auth0Provider>
             {children}
         </Auth0Provider>
