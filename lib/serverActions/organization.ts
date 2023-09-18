@@ -1,7 +1,7 @@
 "use server";
 
-import { type Organization } from "@/lib/model/organization";
-import { type OmitMetadata } from "../model";
+import { type Organization } from "@/lib/models/organization";
+import { type OmitMetadata } from "../models";
 import { type ServerActionResult } from "@/lib/serverActions/serverActions";
 import { CreationError } from "@/lib/repository/errors";
 import { ZodError } from "zod";

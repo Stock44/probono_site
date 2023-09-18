@@ -1,12 +1,12 @@
 import pgPromise from "pg-promise";
-import { personSchema, type Person, tableName } from "@/lib/model/person";
+import { person } from "@/lib/models/person";
 import { getRepositoryFactory } from "@/lib/repository/index";
 import QueryResultError = pgPromise.errors.QueryResultError;
 import queryResultErrorCode = pgPromise.errors.queryResultErrorCode;
 import { type Database } from "@/lib/db";
 
 export const getPersonRepository = (db: Database) => ({
-  ...getRepositoryFactory(personSchema)(db),
+  ...getRepositoryFactory(person)(db),
 
   async getByAuthId(authId: string): Promise<Person | null> {
     try {

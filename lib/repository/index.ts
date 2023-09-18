@@ -1,73 +1,85 @@
-import { type z } from "zod";
 import {
-  type AnyHydratable,
-  type AnyHydratableSchema,
   type Entity,
-  type EntitySchema,
-} from "../model";
+  type InferModel,
+  type Schema,
+  Reference,
+  type SpecificEntity,
+  type SchemaPrototype,
+  type SchemaReferencedSchemas,
+} from "../models";
 import { errors, type Database } from "@/lib/db";
 import { CreationError, NotFoundError } from "@/lib/repository/errors";
+import { type Id } from "@/lib/models/schemas";
 
-type HydratableKeys<ES extends Entity> = Array<
-  keyof {
-    [K in keyof ES as ES[K] extends AnyHydratable | AnyHydratable[] | null
-      ? K
-      : never]: ES[K];
-  }
->;
+type HydratableKeys<SP extends SchemaPrototype> =
+  keyof SchemaReferencedSchemas<SP>;
 
-export interface Repository<E extends Entity> {
-  get: (id: E["id"], hydrate: HydratableKeys<E>) => Promise<E | null>;
+export interface Repository<SP extends SchemaPrototype> {
+  get: (
+    id: Id,
+    keysToHydrate: Array<HydratableKeys<SP>>,
+  ) => Promise<SpecificEntity<SP> | null>;
 
-  create: (data: Omit<E, "id" | "_tableName">) => Promise<E>;
+  create: (data: InferModel<SP>) => Promise<SpecificEntity<SP>>;
 
   update: (
-    id: E["id"],
-    diff: Partial<Omit<E, "id" | "_tableName">>,
-  ) => Promise<E>;
+    id: Id,
+    diff: Partial<InferModel<SP>>,
+  ) => Promise<SpecificEntity<SP>>;
 
-  drop: (id: E["id"]) => Promise<void>;
+  drop: (id: Id) => Promise<void>;
 }
 
-export function getRepositoryFactory<ES extends EntitySchema>(schema: ES) {
-  return (db: Database): Repository<z.infer<ES>> => {
-    // lowercase because postgres changes identifiers to lowercase
-    const tableName = schema.shape._tableName.value.toLowerCase();
+export function formatAsPostgresName(key: string) {
+  return key.toLowerCase();
+}
 
-    const initDataSchema = schema.omit({
-      id: true,
-      _tableName: true,
-    });
-    const dataDiffSchema = schema
-      .omit({
-        id: true,
-        _tableName: true,
-      })
-      .partial();
+export function getRepositoryFactory<SP extends SchemaPrototype>(
+  schema: Schema<SP>,
+) {
+  // format identifiers into their postgres format
+  const tableName = formatAsPostgresName(schema.name);
+  const keysToColumnNames: Record<string, string> = {};
+  for (const key of Object.keys(schema.validator.shape)) {
+    keysToColumnNames[key] = formatAsPostgresName(key);
+  }
 
+  return (db: Database): Repository<SP> => {
     return {
       async create(data) {
-        const entityData = initDataSchema.parse(data);
+        const parsedModel = schema.parse(data);
 
         // lowercase because postgres changes identifiers to lowercase
-        const keys = Object.keys(entityData).map((value) =>
-          value.toLowerCase(),
+        const columns = Object.values(keysToColumnNames);
+        const values = Object.keys(keysToColumnNames).map(
+          (key) => parsedModel[key],
         );
-        const values = Object.values(entityData);
 
         try {
-          const result = await db.one<z.infer<ES>>(
-            "insert into $(tableName:name)($(keys:name)) values ($(values:csv)) returning *",
+          const result = await db.one<Entity & Record<string, unknown>>(
+            "insert into $(tableName:name)($(columns:name)) values ($(values:csv)) returning *",
             {
               tableName,
-              keys,
+              columns,
               values,
             },
           );
-          return {
-            ...result,
-            _tableName: tableName,
+
+          const entity = {
+            id: result.id,
           };
+
+          // remap properties from their column names to their model object keys
+          Object.entries(keysToColumnNames).forEach(([key, columnName]) => {
+            Object.defineProperty(entity, key, {
+              enumerable: true,
+              configurable: true,
+              writable: true,
+              value: result[columnName],
+            });
+          });
+
+          return entity as SpecificEntity<SP>;
         } catch (e) {
           if (
             e instanceof errors.QueryResultError &&
@@ -81,60 +93,90 @@ export function getRepositoryFactory<ES extends EntitySchema>(schema: ES) {
         }
       },
 
-      async get(id, keysToHydrate) {
-        const keys = keysToHydrate.map((value) =>
-          value.toString().toLowerCase(),
-        );
+      async get(id, keysToHydrate: Array<HydratableKeys<SP>> = []) {
+        // format all keys to hydrate as lower case strings
 
-        let select = "select $1~.*";
-        let joins = "";
-        const values: any[] = [tableName];
+        const values: any[] = [tableName]; // argument list, $1 being the table name
 
-        for (const [idx, [key, keySchema]] of keys
-          .map((key): [string, AnyHydratableSchema] => [
-            key,
-            (schema as z.AnyZodObject).shape[key],
-          ])
-          .entries()) {
-          const keySchemaTableName = keySchema
-            .innerType()
-            .shape._tableName.value.toLowerCase();
+        let select = "select $1~.*"; // select * from main schema table
+        let joins = ""; // store subsequent join statements with other tables
 
-          values.push(keySchemaTableName, key);
+        // generate additional selects and joins for query
+        for (const [idx, key] of keysToHydrate.entries()) {
+          const keyModel = schema.references[key];
 
+          values.push(
+            formatAsPostgresName(keyModel.name),
+            formatAsPostgresName(key.toString()),
+          );
+
+          // get the specific indices for the table name and key name for this table
           const formattedTableName = `$${2 * idx + 2}~`;
           const formattedKey = `$${2 * idx + 3}~`;
 
+          // generate select and join for current key
           select += `, row_to_json(${formattedTableName}.*) as ${formattedKey}`;
           joins += ` join ${formattedTableName} on (${formattedTableName}.id = $1~.${formattedKey})`;
         }
 
+        // final statement for select, select from main table name
         select += " from $1~";
+        // last parameter, specific id of the record to get
         values.push(id);
 
-        const query = select + joins + ` where $1~.id=$${keys.length * 2 + 2}`;
+        // construct final query
+        const query =
+          select + joins + ` where $1~.id=$${keysToHydrate.length * 2 + 2}`;
 
         try {
-          const result = await db.one<Record<string, any>>(query, values);
+          // perform query
+          const result = await db.one<Entity & Record<string, unknown>>(
+            query,
+            values,
+          );
 
-          for (const key of keys) {
-            const tableName = (schema as z.AnyZodObject).shape[key]
-              .innerType()
-              .shape._tableName.value.toLowerCase();
-            result[key] = {
-              content: {
-                ...result[key],
-                _tableName: tableName,
-              },
-              id: result[key].id,
-              _tableName: tableName,
-            } satisfies AnyHydratable;
-          }
-
-          return {
-            ...result,
-            _tableName: tableName,
+          const entity = {
+            id: result.id,
           };
+
+          // remap properties from their column names to their model object keys
+          Object.entries(keysToColumnNames).forEach(([key, columnName]) => {
+            const value = result[columnName];
+            if (key in schema.references) {
+              const referencedSchema =
+                schema.references[key as HydratableKeys<SP>];
+              if (keysToHydrate.includes(key)) {
+                const referencedEntity = value as Entity;
+                Object.defineProperty(entity, key, {
+                  enumerable: true,
+                  configurable: true,
+                  writable: true,
+                  value: new Reference(
+                    referencedEntity.id,
+                    referencedSchema,
+                    referencedEntity,
+                  ),
+                });
+              } else {
+                const id = value as Id;
+                Object.defineProperty(entity, key, {
+                  enumerable: true,
+                  configurable: true,
+                  writable: true,
+                  value: new Reference(id, referencedSchema, null),
+                });
+              }
+            } else {
+              Object.defineProperty(entity, key, {
+                enumerable: true,
+                configurable: true,
+                writable: true,
+                value,
+              });
+            }
+          });
+
+          return entity as SpecificEntity<SP>;
         } catch (error) {
           console.log(error);
           if (
@@ -149,25 +191,37 @@ export function getRepositoryFactory<ES extends EntitySchema>(schema: ES) {
       },
 
       async update(id, diff) {
-        const validatedDiff = dataDiffSchema.parse(diff);
-        // lowercase because postgres changes identifiers to lowercase
-        const keys = Object.keys(validatedDiff).map((value) =>
-          value.toLowerCase(),
-        );
-        const values = Object.values(validatedDiff);
-        const result = await db.one<z.infer<ES>>(
-          "update $(tableName~) set ($(keys~)) = ($(values:csv~)) where id = $(id)",
+        const parsedDiff = schema.validator.partial().parse(diff);
+
+        const keys = Object.keys(diff);
+        const columns = keys.map((key) => keysToColumnNames[key]);
+        const values = keys.map((key) => parsedDiff[key]);
+
+        const result = await db.one<Entity & Record<string, unknown>>(
+          "update $(tableName:name) set ($(columns:name)) = ($(values:csv~)) where id = $(id)",
           {
             tableName,
-            keys,
+            columns,
             values,
             id,
           },
         );
-        return {
-          ...result,
-          _tableName: tableName,
+
+        const entity = {
+          id: result.id,
         };
+
+        // remap properties from their column names to their model object keys
+        Object.entries(keysToColumnNames).forEach(([key, columnName]) => {
+          Object.defineProperty(entity, key, {
+            enumerable: true,
+            configurable: true,
+            writable: true,
+            value: result[columnName],
+          });
+        });
+
+        return entity as SpecificEntity<SP>;
       },
 
       async drop(id) {

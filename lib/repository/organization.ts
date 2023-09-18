@@ -1,5 +1,4 @@
 import { getRepositoryFactory } from "@/lib/repository/index";
-import { organizationSchema } from "@/lib/model/organization";
+import { organization } from "@/lib/models/organization";
 
-export const getOrganizationRepository =
-  getRepositoryFactory(organizationSchema);
+export const getOrganizationRepository = getRepositoryFactory(organization);

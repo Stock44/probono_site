@@ -6,7 +6,7 @@ import React, { useState } from "react";
 import { createPerson } from "@/lib/serverActions/person";
 import { experimental_useFormStatus as useFormStatus } from "react-dom";
 import { redirect } from "next/navigation";
-import { validatePerson } from "@/lib/model/person";
+import { validatePerson } from "@/lib/models/person";
 import { ZodError } from "zod";
 
 export async function PersonDataForm({

@@ -2,6 +2,8 @@ import { z } from "zod";
 
 export const idSchema = z.bigint().or(z.number()).or(z.string());
 
+export type Id = z.infer<typeof idSchema>;
+
 export const phoneSchema = z
   .string()
   .trim()

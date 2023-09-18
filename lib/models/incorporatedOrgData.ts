@@ -1,8 +1,6 @@
 import { z } from "zod";
-import { entitySchema, references } from "@/lib/model/index";
-import { corporationTypeSchema } from "@/lib/model/CorporationType";
-
-const tableName = "IncorporatedOrgData";
+import { corporationType } from "@/lib/models/corporationType";
+import { type ExtractModel, Schema, references } from "@/lib/models/index";
 
 enum DonationAuthStatus {
   NotAuthorized = "not_authorized",
@@ -18,15 +16,13 @@ enum CLUNIStatus {
   InProgress = "in_progress",
 }
 
-export const incorporatedOrgDataSchema = entitySchema(tableName).extend({
+export const incorporatedOrgData = new Schema("IncorporatedOrgData", {
   legalConcept: z.string(),
   incorporationYear: z.number().int(),
   rfc: z.string().max(13),
   donationAuthStatus: z.nativeEnum(DonationAuthStatus),
   cluniStatus: z.nativeEnum(CLUNIStatus),
-  corporationType: references(corporationTypeSchema),
+  corporationType: references(corporationType),
 });
 
-export type IncorporatedOrgDataSchema = typeof incorporatedOrgDataSchema;
-
-export type IncorporatedOrgData = z.infer<IncorporatedOrgDataSchema>;
+export type IncorporatedOrgData = ExtractModel<typeof incorporatedOrgData>;

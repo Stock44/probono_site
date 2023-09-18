@@ -4,9 +4,9 @@ import { db } from "@/lib/db";
 import { getPersonRepository } from "@/lib/repository/person";
 import { ZodError } from "zod";
 import { CreationError } from "@/lib/repository/errors";
-import { type Person } from "@/lib/model/person";
+import { type Person } from "@/lib/models/person";
 import { type ServerActionResult } from "@/lib/serverActions/serverActions";
-import { type OmitMetadata } from "../model";
+import { type OmitMetadata } from "../models";
 
 export async function createPerson(
   data: OmitMetadata<Person>,
