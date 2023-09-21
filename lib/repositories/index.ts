@@ -8,7 +8,7 @@ import {
   type SchemaReferencedSchemas,
 } from "../models";
 import { errors, type Database } from "@/lib/db";
-import { CreationError } from "@/lib/repository/errors";
+import { CreationError } from "@/lib/repositories/errors";
 import { type Id } from "@/lib/models/schemas";
 
 type HydratableKeys<SP extends SchemaPrototype> = Extract<

@@ -1,7 +1,7 @@
 "use client";
 
 import TextInput from "@/components/TextInput";
-import Button from "@/components/Button";
+import { Button } from "@/components/Buttons";
 import React, { useState } from "react";
 import { createPerson } from "@/lib/serverActions/person";
 import { experimental_useFormStatus as useFormStatus } from "react-dom";

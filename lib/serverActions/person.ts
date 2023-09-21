@@ -1,11 +1,11 @@
 "use server";
 
 import { db } from "@/lib/db";
-import { getPersonRepository } from "@/lib/repository/person";
+import { getPersonRepository } from "@/lib/repositories/person";
 import { ZodError } from "zod";
-import { CreationError } from "@/lib/repository/errors";
+import { CreationError } from "@/lib/repositories/errors";
 import { type Person } from "@/lib/models/person";
-import { type ServerActionResult } from "@/lib/serverActions/serverActions";
+import { type ServerActionResult } from "@/lib/serverActions";
 
 export async function createPerson(data: Person): Promise<ServerActionResult> {
   const persons = getPersonRepository(db);

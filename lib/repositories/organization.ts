@@ -1,4 +1,4 @@
-import { Repository } from "@/lib/repository/index";
+import { Repository } from "@/lib/repositories/index";
 import { organization } from "@/lib/models/organization";
 import { type Database } from "@/lib/db";
 

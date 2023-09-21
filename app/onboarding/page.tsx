@@ -2,7 +2,7 @@ import { withPageAuthRequired } from "@auth0/nextjs-auth0";
 import React, { Suspense } from "react";
 import { redirect } from "next/navigation";
 import { db } from "@/lib/db";
-import { getPersonRepository } from "@/lib/repository/person";
+import { getPersonRepository } from "@/lib/repositories/person";
 import { getUser } from "@/lib/auth";
 import { PersonDataForm } from "@/app/onboarding/personDataForm";
 

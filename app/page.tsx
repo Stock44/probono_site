@@ -1,45 +1,28 @@
 import React from "react";
-import { withPageAuthRequired } from "@auth0/nextjs-auth0";
 import { redirect } from "next/navigation";
 import { db } from "@/lib/db";
-import { getUser } from "@/lib/auth";
-import { getPersonRepository } from "@/lib/repository/person";
-import { getPersonOrganizationRepository } from "@/lib/repository/personOrganization";
+import { getPersonRepository } from "@/lib/repositories/person";
+import { getSession } from "@auth0/nextjs-auth0";
+import { LinkButton } from "@/components/Buttons";
 
-export default withPageAuthRequired(
-  async function Home() {
-    const user = await getUser();
+export default async function Home() {
+  const session = await getSession();
 
-    const { personOrganizations } = await db.task(async (t) => {
+  if (session != null) {
+    await db.task(async (t) => {
       const persons = getPersonRepository(t);
-      const personsOrganizations = getPersonOrganizationRepository(t);
 
-      const person = await persons.getOne("authId", user.sub);
+      const person = await persons.getOne("authId", session.sub);
 
       if (person == null) return redirect("/onboarding");
-
-      const personOrganizations = await personsOrganizations.getMany(
-        "person",
-        person.id,
-        ["organization"],
-      );
-
-      return {
-        personOrganizations,
-      };
     });
+  }
 
-    return (
-      <div>
-        {personOrganizations.length === 0 ? (
-          <button>Registrar una nueva organización</button>
-        ) : (
-          "Hola"
-        )}
-        <a href={"/api/auth/login"}>Login</a>
-        <a href="/api/auth/logout">Logout</a>
-      </div>
-    );
-  },
-  { returnTo: "/api/auth/login" },
-);
+  return (
+    <div className="w-full min-h-screen flex gap-2 items-center justify-center">
+      <LinkButton href="/api/auth/login?returnTo=/">Iniciar sesión</LinkButton>
+      <LinkButton href="/api/auth/logout?returnTo=/">Cerrar sesión</LinkButton>
+      <LinkButton href="/organizations">Ir a organizaciones</LinkButton>
+    </div>
+  );
+}
