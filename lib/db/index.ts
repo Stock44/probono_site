@@ -18,9 +18,11 @@ const PGP_KEY = Symbol.for("probono.pgp");
 const globalSymbols = Object.getOwnPropertySymbols(global);
 const hasDb = globalSymbols.includes(DB_KEY);
 if (!hasDb) {
-  // @ts-expect-error global object has any type
   // eslint-disable-next-line @typescript-eslint/no-var-requires
-  global[PGP_KEY] = require("pg-promise")(cn);
+  const pgp = require("pg-promise")(cn);
+  pgp.pg.types.setTypeParser(20, BigInt);
+  // @ts-expect-error global object has any type
+  global[PGP_KEY] = pgp;
   // @ts-expect-error global object has any type
   global[DB_KEY] = global[PGP_KEY](dbCn);
 }

@@ -6,10 +6,10 @@ import React, { useState } from "react";
 import { createPerson } from "@/lib/serverActions/person";
 import { experimental_useFormStatus as useFormStatus } from "react-dom";
 import { redirect } from "next/navigation";
-import { validatePerson } from "@/lib/models/person";
+import { person, type Person } from "@/lib/models/person";
 import { ZodError } from "zod";
 
-export async function PersonDataForm({
+export function PersonDataForm({
   authId,
   startingUserData,
 }: {
@@ -25,30 +25,28 @@ export async function PersonDataForm({
 
   const [validationError, setValidationError] = useState<ZodError | null>(null);
 
-  const issues: Record<string, string> = {};
+  const issues = new Map<string | number, string>();
 
   if (validationError !== null) {
     validationError.issues.forEach((issue) => {
-      issues[issue.path[0]] = issue.message;
+      issues.set(issue.path[0], issue.message);
     });
   }
 
   async function handleForm(formData: FormData) {
-    const data = {
+    const data: Person = {
       authId,
       givenName: formData.get("givenName") as string,
       familyName: formData.get("familyName") as string,
       email: formData.get("email") as string,
       phone: formData.get("phone") as string,
-      organization: null,
-      orgPosition: null,
     };
 
     try {
-      const personData = validatePerson(data);
+      const personData = person.parse(data);
       const result = await createPerson(personData);
       if (result.success) {
-        redirect("/onboarding/organizationData");
+        redirect("/");
       }
     } catch (e) {
       if (e instanceof ZodError) {
@@ -64,27 +62,27 @@ export async function PersonDataForm({
       <TextInput
         name="givenName"
         label="Nombre (s)"
-        issueText={issues.givenName}
+        issueText={issues.get("givenName")}
         defaultValue={startingUserData.givenName}
       />
       <TextInput
         name="familyName"
         label="Apellido (s)"
-        issueText={issues.familyName}
+        issueText={issues.get("familyName")}
         defaultValue={startingUserData.familyName}
       />
       <TextInput
         name="email"
         type="email"
         label="Correo"
-        issueText={issues.email}
+        issueText={issues.get("email")}
         defaultValue={startingUserData.email}
       />
       <TextInput
         name="phone"
         type="tel"
         label="Teléfono"
-        issueText={issues.phone}
+        issueText={issues.get("phone")}
         defaultValue={startingUserData.phone}
       />
       <Button type="submit" disabled={pending}>

@@ -11,7 +11,15 @@ export type Entity = z.infer<typeof entitySchema>;
 
 export type AnyReferenceType = ReferenceType<any>;
 
+export type AnySchema = Schema<any>;
+
 export type SchemaPrototype = Record<string, z.ZodTypeAny | AnyReferenceType>;
+
+export type ExtractSchemaPrototype<S extends AnySchema> = S extends Schema<
+  infer SP
+>
+  ? SP
+  : never;
 
 export type SchemaValidator<SP extends SchemaPrototype> = z.ZodObject<{
   [K in keyof SP]: SP[K] extends ReferenceType<infer RSP>
@@ -33,7 +41,7 @@ export type InferModel<SP extends SchemaPrototype> = {
   [K in keyof InferInputModel<SP>]: InferInputModel<SP>[K] extends Reference<
     infer RSP
   >
-    ? InferInputModel<RSP>
+    ? InferInputModel<RSP> & Entity
     : InferInputModel<SP>[K];
 };
 

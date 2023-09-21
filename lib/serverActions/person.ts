@@ -6,11 +6,8 @@ import { ZodError } from "zod";
 import { CreationError } from "@/lib/repository/errors";
 import { type Person } from "@/lib/models/person";
 import { type ServerActionResult } from "@/lib/serverActions/serverActions";
-import { type OmitMetadata } from "../models";
 
-export async function createPerson(
-  data: OmitMetadata<Person>,
-): Promise<ServerActionResult> {
+export async function createPerson(data: Person): Promise<ServerActionResult> {
   const persons = getPersonRepository(db);
 
   try {

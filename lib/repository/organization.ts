@@ -1,4 +1,7 @@
-import { getRepositoryFactory } from "@/lib/repository/index";
+import { Repository } from "@/lib/repository/index";
 import { organization } from "@/lib/models/organization";
+import { type Database } from "@/lib/db";
 
-export const getOrganizationRepository = getRepositoryFactory(organization);
+export function getOrganizationRepository(db: Database) {
+  return new Repository(db, organization);
+}

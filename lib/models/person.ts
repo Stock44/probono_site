@@ -8,7 +8,6 @@ export const person = new Schema("Person", {
   familyName: z.string().min(1),
   phone: phoneSchema,
   email: z.string().email(),
-  orgPosition: z.string().nullable(),
 });
 
 export type Person = ExtractModel<typeof person>;
