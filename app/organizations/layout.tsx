@@ -4,7 +4,8 @@ import { LinkButton } from "@/components/Buttons";
 import { getSession } from "@auth0/nextjs-auth0";
 import { getPersonByAuthId } from "@/lib/serverFunctions/getPersonByAuthId";
 import { type PersonOrganization } from "@/lib/models/personOrganization";
-import TextInput from "@/components/TextInput";
+import TopBar from "@/components/TopBar";
+import PersonWidget from "@/components/PersonWidget";
 
 function OrganizationSelector({
   personOrganizations,
@@ -14,7 +15,11 @@ function OrganizationSelector({
   return personOrganizations.length > 0 ? (
     <p>test</p>
   ) : (
-    <LinkButton href="/organizations/create">Crear una organización</LinkButton>
+    <LinkButton
+      href="/organizations/create"
+      label="Registra tu organización"
+      iconName="add"
+    />
   );
 }
 
@@ -32,22 +37,21 @@ export default async function OrganizationLayout({
     user != null ? await getPersonOrganizations(user.id) : null;
 
   return (
-    <nav className="w-full dark:bg-stone-800 flex p-4 gap-2 justify-between">
-      <p className="dark:text-stone-200 text-lg">
-        geostats <span className="dark:text-stone-400"> | </span> probono
-      </p>
-      {personOrganizations != null ? (
-        <OrganizationSelector personOrganizations={personOrganizations} />
-      ) : (
-        <div className="flex gap-2">
-          <LinkButton href={"/api/auth/login?returnTo=/organizations"}>
-            Iniciar sesión
-          </LinkButton>
-          <LinkButton href={"/api/auth/signup?returnTo=/onboarding"}>
-            Registrarse
-          </LinkButton>
-        </div>
-      )}
-    </nav>
+    <>
+      <TopBar.Root>
+        <TopBar.Navbar links={[["Organizaciones", "/organizations"]]} />
+        <TopBar.Toolbar>
+          {personOrganizations != null ? (
+            <>
+              <OrganizationSelector personOrganizations={personOrganizations} />
+              <PersonWidget />
+            </>
+          ) : (
+            <></>
+          )}
+        </TopBar.Toolbar>
+      </TopBar.Root>
+      {children}
+    </>
   );
 }

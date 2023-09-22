@@ -1,6 +1,6 @@
 "use client";
 
-import TextInput from "@/components/TextInput";
+import { LabeledInput } from "@/components/LabeledInput";
 import { Button } from "@/components/Buttons";
 import React, { useState } from "react";
 import { createPerson } from "@/lib/serverActions/person";
@@ -58,36 +58,38 @@ export function PersonDataForm({
   }
 
   return (
-    <form action={handleForm}>
-      <TextInput
+    <form action={handleForm} className="w-full">
+      <LabeledInput
         name="givenName"
         label="Nombre (s)"
         issueText={issues.get("givenName")}
         defaultValue={startingUserData.givenName}
       />
-      <TextInput
+      <LabeledInput
         name="familyName"
         label="Apellido (s)"
         issueText={issues.get("familyName")}
         defaultValue={startingUserData.familyName}
       />
-      <TextInput
+      <LabeledInput
         name="email"
         type="email"
         label="Correo"
         issueText={issues.get("email")}
         defaultValue={startingUserData.email}
       />
-      <TextInput
+      <LabeledInput
         name="phone"
         type="tel"
         label="Teléfono"
         issueText={issues.get("phone")}
         defaultValue={startingUserData.phone}
       />
-      <Button type="submit" disabled={pending}>
-        {pending ? "loading..." : "Siguiente"}
-      </Button>
+      <Button
+        type="submit"
+        disabled={pending}
+        label={pending ? "loading..." : "Siguiente"}
+      />
     </form>
   );
 }

@@ -153,7 +153,7 @@ export class Repository<SP extends SchemaPrototype> {
       const formattedKey = `$${2 * idx + 3}~`;
 
       // generate select and join for current key
-      select += `, row_to_json(${formattedTableName}.*) as ${formattedKey}`;
+      select += `, ${formattedTableName} as ${formattedKey}`;
       joins += ` join ${formattedTableName} on (${formattedTableName}.id = $1~.${formattedKey})`;
     }
 

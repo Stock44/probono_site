@@ -10,29 +10,10 @@ create type DonationAuthStatus as enum ('not_authorized', 'authorized', 'in_prog
 create type CLUNIStatus as enum ('no', 'active', 'inactive', 'in_progress');
 
 
-create table IncorporatedOrgData
-(
-    id                 bigint primary key generated always as identity,
-    legalConcept       text               not null,
-    incorporationYear  int                not null,
-    rfc                varchar(13)        not null unique,
-    donationAuthStatus DonationAuthStatus not null,
-    cluniStatus        CLUNIStatus        not null,
-    corporationType    bigint             not null references CorporationType (id)
-);
-
-
-create table UnincorporatedOrgCategory
+create table OrganizationCategory
 (
     id   bigint primary key generated always as identity,
     name text not null
-);
-
-create table UnincorporatedOrgData
-(
-    id                 bigint primary key generated always as identity,
-    category           bigint  not null references UnincorporatedOrgCategory (id),
-    wantsToIncorporate boolean not null
 );
 
 create table GovernmentOrgCategory
@@ -76,17 +57,17 @@ create table Sector
     limits       polygon not null
 );
 
-create table OrganizationOffice
+create table Address
 (
     id             bigint primary key generated always as identity,
-    municipality   bigint not null references Municipality (id),
-    neighborhood   text   not null,
-    postalCode     int    not null,
-    streetName     text   not null,
-    extNumber      int    not null,
+    municipality   bigint references Municipality (id),
+    neighborhood   text  not null,
+    postalCode     int   not null,
+    streetName     text  not null,
+    extNumber      int   not null,
     intNumber      int,
     betweenStreets text,
-    location       point  not null
+    location       point not null
 );
 
 create table EmployeeCountCategory
@@ -162,11 +143,17 @@ create table Organization
     linkedin               text default '',
     employeeCountCategory  bigint references EmployeeCountCategory (id),
     volunteerCountCategory bigint references VolunteerCountCategory (id),
-    workplace              bigint references WorkplaceType (id),
-    incorporatedOrgData    bigint references IncorporatedOrgData (id),
-    unincorporatedOrgData  bigint references UnincorporatedOrgData (id),
+    workplaceType              bigint references WorkplaceType (id),
     incomeCategory         bigint references IncomeCategory (id),
-    organizationOffice     bigint references OrganizationOffice (id)
+    address                bigint references Address (id),
+    legalConcept           text,
+    incorporationYear      int,
+    rfc                    varchar(13) unique,
+    donationAuthStatus     DonationAuthStatus,
+    cluniStatus            CLUNIStatus,
+    corporationType        bigint references CorporationType (id),
+    category               bigint references OrganizationCategory (id),
+    wantsToIncorporate     boolean
 );
 
 create table OrganizationActivity
