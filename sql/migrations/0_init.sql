@@ -143,7 +143,7 @@ create table Organization
     linkedin               text default '',
     employeeCountCategory  bigint references EmployeeCountCategory (id),
     volunteerCountCategory bigint references VolunteerCountCategory (id),
-    workplaceType              bigint references WorkplaceType (id),
+    workplaceType          bigint references WorkplaceType (id),
     incomeCategory         bigint references IncomeCategory (id),
     address                bigint references Address (id),
     legalConcept           text,
