@@ -1,6 +1,6 @@
 "use client";
 
-import { LinkButton } from "@/components/Buttons";
+import { LinkButton } from "@/components/LinkButton";
 import React from "react";
 import { usePathname } from "next/navigation";
 

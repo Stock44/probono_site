@@ -37,6 +37,10 @@ export type SchemaReferencedSchemas<SP extends SchemaPrototype> = {
 
 type InferInputModel<SP extends SchemaPrototype> = z.input<SchemaValidator<SP>>;
 
+export type InferEntity<S extends AnySchema> = SpecificEntity<
+  ExtractSchemaPrototype<S>
+>;
+
 export type InferModel<SP extends SchemaPrototype> = {
   [K in keyof InferInputModel<SP>]: InferInputModel<SP>[K] extends Reference<
     infer RSP

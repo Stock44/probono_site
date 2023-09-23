@@ -1,6 +1,6 @@
 import React from "react";
 import { getPersonOrganizations } from "@/lib/serverFunctions/getPersonOrganizations";
-import { LinkButton } from "@/components/Buttons";
+import { LinkButton } from "@/components/LinkButton";
 import { getSession } from "@auth0/nextjs-auth0";
 import { getPersonByAuthId } from "@/lib/serverFunctions/getPersonByAuthId";
 import { type PersonOrganization } from "@/lib/models/personOrganization";

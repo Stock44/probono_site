@@ -3,7 +3,7 @@ import { type ExtractModel, Schema, references } from "@/lib/models/index";
 import { pointSchema } from "@/lib/models/schemas";
 import { municipality } from "@/lib/models/municipality";
 
-export const organizationOffice = new Schema("OrganizationOffice", {
+export const address = new Schema("OrganizationOffice", {
   municipality: references(municipality),
   neighborhood: z.string(),
   postalCode: z.number().int(),
@@ -14,4 +14,4 @@ export const organizationOffice = new Schema("OrganizationOffice", {
   location: pointSchema,
 });
 
-export type OrganizationOffice = ExtractModel<typeof organizationOffice>;
+export type Address = ExtractModel<typeof address>;

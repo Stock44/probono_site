@@ -1,10 +1,10 @@
 import React from "react";
-import CreateOrganizationForm from "@/app/organizations/create/createOrganizationForm";
+import GeneralDataForm from "@/app/organizations/create/GeneralDataForm";
 
-export default function CreateOrganizationPage() {
+export default async function CreateOrganizationPage() {
   return (
     <div className="w-full flex justify-center dark:text-stone-200 p-4">
-      <CreateOrganizationForm />
+      <GeneralDataForm handleForm={handleGeneralDataForm} />
     </div>
   );
 }

@@ -4,7 +4,7 @@ import { redirect } from "next/navigation";
 import { db } from "@/lib/db";
 import { getPersonRepository } from "@/lib/repositories/person";
 import { getUser } from "@/lib/auth";
-import { PersonDataForm } from "@/app/onboarding/personDataForm";
+import { PersonDataForm } from "@/app/onboarding/PersonDataForm";
 
 export default withPageAuthRequired(
   async function Onboarding() {

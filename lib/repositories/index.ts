@@ -174,6 +174,7 @@ export class Repository<SP extends SchemaPrototype> {
     return [query, values];
   }
 
+  async getMany(): Promise<Array<SpecificEntity<SP>>>;
   async getMany(
     keysToHydrate: Array<HydratableKeys<SP>>,
   ): Promise<Array<SpecificEntity<SP>>>;

@@ -128,9 +128,10 @@ create table Service
 create table Organization
 (
     id                     bigint primary key generated always as identity,
+    logoUrl                text,
     name                   text not null,
     ods                    int check ( ods between 1 and 30 ),
-    foundingYear           int,
+    foundingYear           int not null,
     hasInvestmentAgreement boolean,
     phone                  varchar(16),
     email                  varchar(255),
@@ -152,7 +153,7 @@ create table Organization
     donationAuthStatus     DonationAuthStatus,
     cluniStatus            CLUNIStatus,
     corporationType        bigint references CorporationType (id),
-    category               bigint references OrganizationCategory (id),
+    organizationCategory               bigint references OrganizationCategory (id),
     wantsToIncorporate     boolean
 );
 

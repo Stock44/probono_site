@@ -1,13 +1,13 @@
 "use client";
 
 import { LabeledInput } from "@/components/LabeledInput";
-import { Button } from "@/components/Buttons";
 import React, { useState } from "react";
 import { createPerson } from "@/lib/serverActions/person";
 import { experimental_useFormStatus as useFormStatus } from "react-dom";
 import { redirect } from "next/navigation";
 import { person, type Person } from "@/lib/models/person";
 import { ZodError } from "zod";
+import { Button } from "@/components/Button";
 
 export function PersonDataForm({
   authId,
