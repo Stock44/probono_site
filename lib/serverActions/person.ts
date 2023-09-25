@@ -7,7 +7,9 @@ import { CreationError } from "@/lib/repositories/errors";
 import { type Person } from "@/lib/models/person";
 import { type ServerActionResult } from "@/lib/serverActions";
 
-export async function createPerson(data: Person): Promise<ServerActionResult> {
+export async function createPerson(
+  data: Omit<Person, "id">,
+): Promise<ServerActionResult> {
   const persons = getPersonRepository(db);
 
   try {

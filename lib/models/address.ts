@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { type ExtractModel, Schema, references } from "@/lib/models/index";
+import { Schema, references, InferEntity } from "@/lib/models/index";
 import { pointSchema } from "@/lib/models/schemas";
 import { municipality } from "@/lib/models/municipality";
 
@@ -14,4 +14,4 @@ export const address = new Schema("OrganizationOffice", {
   location: pointSchema,
 });
 
-export type Address = ExtractModel<typeof address>;
+export type Address = InferEntity<typeof address>;

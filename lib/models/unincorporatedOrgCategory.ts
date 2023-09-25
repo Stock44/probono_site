@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { type ExtractModel, Schema } from "@/lib/models/index";
+import { type InferEntity, Schema } from "@/lib/models/index";
 
 export const unincorporatedOrgCategory = new Schema(
   "UnincorporatedOrgCategory",
@@ -8,6 +8,6 @@ export const unincorporatedOrgCategory = new Schema(
   },
 );
 
-export type UnincorporatedOrgCategory = ExtractModel<
+export type UnincorporatedOrgCategory = InferEntity<
   typeof unincorporatedOrgCategory
 >;

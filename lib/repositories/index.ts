@@ -89,10 +89,12 @@ export class Repository<SP extends SchemaPrototype> {
     const parsedModel = this.schema.parse(data);
 
     // lowercase because postgres changes identifiers to lowercase
-    const columns = Object.values(this.keysToColumnNames);
-    const values = Object.keys(this.keysToColumnNames).map(
-      (key) => parsedModel[key],
-    );
+    const columns = Object.entries(this.keysToColumnNames)
+      .filter(([key]) => parsedModel[key] !== null)
+      .map(([, column]) => column);
+    const values = Object.keys(this.keysToColumnNames)
+      .map((key) => parsedModel[key])
+      .filter((value) => value !== null);
 
     try {
       const result = await this.db.one<OneResult>(

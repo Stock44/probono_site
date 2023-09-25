@@ -25,6 +25,7 @@
     "@types/pg": "^8.10.2",
     "@types/react": "18.2.20",
     "@types/react-dom": "18.2.7",
+    "@vercel/blob": "^0.12.5",
     "autoprefixer": "10.4.15",
     "axios": "^1.5.0",
     "material-symbols": "^0.12.0",

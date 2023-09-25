@@ -9,7 +9,7 @@ export const entitySchema = z.object({
 
 export type Entity = z.infer<typeof entitySchema>;
 
-export type AnyReferenceType = ReferenceType<any>;
+export type AnyReferenceType = ReferenceType<any, boolean>;
 
 export type AnySchema = Schema<any>;
 
@@ -22,15 +22,18 @@ export type ExtractSchemaPrototype<S extends AnySchema> = S extends Schema<
   : never;
 
 export type SchemaValidator<SP extends SchemaPrototype> = z.ZodObject<{
-  [K in keyof SP]: SP[K] extends ReferenceType<infer RSP>
-    ? ReferenceSchema<RSP>
+  [K in keyof SP]: SP[K] extends ReferenceType<infer RSP, infer Nullish>
+    ? ReferenceSchema<RSP, Nullish>
     : Exclude<SP[K], AnyReferenceType>;
 }>;
 
 export type SchemaReferencedSchemas<SP extends SchemaPrototype> = {
   [K in keyof SP as Extract<SP[K], AnyReferenceType> extends AnyReferenceType
     ? K
-    : never]: Extract<SP[K], AnyReferenceType> extends ReferenceType<infer RSP>
+    : never]: Extract<SP[K], AnyReferenceType> extends ReferenceType<
+    infer RSP,
+    any
+  >
     ? Schema<RSP>
     : never;
 };
@@ -42,10 +45,13 @@ export type InferEntity<S extends AnySchema> = SpecificEntity<
 >;
 
 export type InferModel<SP extends SchemaPrototype> = {
-  [K in keyof InferInputModel<SP>]: InferInputModel<SP>[K] extends Reference<
-    infer RSP
-  >
-    ? InferInputModel<RSP> & Entity
+  [K in keyof InferInputModel<SP>]: InferInputModel<SP>[K] extends
+    | Reference<infer RSP>
+    | null
+    | undefined
+    ? InferInputModel<SP>[K] extends null | undefined
+      ? SpecificEntity<RSP> | null | undefined
+      : SpecificEntity<RSP>
     : InferInputModel<SP>[K];
 };
 
@@ -73,12 +79,7 @@ export class Schema<SP extends SchemaPrototype> {
       Object.fromEntries(
         Object.entries(prototype).map(([key, value]) => {
           if (value instanceof ReferenceType) {
-            return [
-              key,
-              value._nullable
-                ? referenceSchema(value.schema).nullable()
-                : referenceSchema,
-            ];
+            return [key, referenceSchema(value.schema, value.nullish)];
           }
 
           return [key, value];
@@ -102,15 +103,14 @@ export type ExtractModel<S> = S extends Schema<infer SP>
   ? InferModel<SP>
   : never;
 
-export class ReferenceType<SP extends SchemaPrototype> {
-  public _nullable = false;
-
-  constructor(public readonly schema: Schema<SP>) {}
-
-  nullable() {
-    this._nullable = true;
-    return this;
-  }
+export class ReferenceType<
+  SP extends SchemaPrototype,
+  Nullish extends boolean,
+> {
+  constructor(
+    public readonly schema: Schema<SP>,
+    public readonly nullish: Nullish,
+  ) {}
 }
 
 export type SpecificEntity<SP extends SchemaPrototype> = Entity &
@@ -145,16 +145,30 @@ export class Reference<SP extends SchemaPrototype> implements Entity {
   }
 }
 
-function referenceSchema<SP extends SchemaPrototype>(schema: Schema<SP>) {
-  return z.instanceof(Reference<SP>);
+function referenceSchema<SP extends SchemaPrototype, Nullish extends boolean>(
+  schema: Schema<SP>,
+  nullish: Nullish,
+): Nullish extends true
+  ? z.ZodOptional<z.ZodNullable<z.ZodType<Reference<SP>>>>
+  : z.ZodType<Reference<SP>> {
+  const validator = z.instanceof(Reference<SP>);
+
+  if (nullish) {
+    return validator.nullish() as any;
+  }
+  return validator as any;
 }
 
-type ReferenceSchema<SP extends SchemaPrototype> = ReturnType<
-  typeof referenceSchema<SP>
->;
+type ReferenceSchema<
+  SP extends SchemaPrototype,
+  Nullish extends boolean,
+> = ReturnType<typeof referenceSchema<SP, Nullish>>;
 
-export function references<SP extends SchemaPrototype>(schema: Schema<SP>) {
-  return new ReferenceType(schema);
+export function references<SP extends SchemaPrototype, Nullish extends boolean>(
+  schema: Schema<SP>,
+  nullish: Nullish = false as any,
+) {
+  return new ReferenceType(schema, nullish);
 }
 
 export class NotHydratedError extends Error {

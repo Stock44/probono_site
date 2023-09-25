@@ -5,7 +5,7 @@ import React, { useState } from "react";
 import { createPerson } from "@/lib/serverActions/person";
 import { experimental_useFormStatus as useFormStatus } from "react-dom";
 import { redirect } from "next/navigation";
-import { person, type Person } from "@/lib/models/person";
+import { person } from "@/lib/models/person";
 import { ZodError } from "zod";
 import { Button } from "@/components/Button";
 
@@ -34,7 +34,7 @@ export function PersonDataForm({
   }
 
   async function handleForm(formData: FormData) {
-    const data: Person = {
+    const data = {
       authId,
       givenName: formData.get("givenName") as string,
       familyName: formData.get("familyName") as string,
@@ -43,8 +43,8 @@ export function PersonDataForm({
     };
 
     try {
-      const personData = person.parse(data);
-      const result = await createPerson(personData);
+      person.parse(data);
+      const result = await createPerson(data);
       if (result.success) {
         redirect("/");
       }

@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { type ExtractModel, Schema, references } from "@/lib/models/index";
+import { Schema, references, type InferEntity } from "@/lib/models/index";
 import { phoneSchema } from "@/lib/models/schemas";
 import { employeeCountCategory } from "@/lib/models/employeeCountCategory";
 import { volunteerCountCategory } from "@/lib/models/volunteerCountCategory";
@@ -25,32 +25,32 @@ export enum CLUNIStatus {
 
 export const organization = new Schema("Organization", {
   name: z.string(),
-  ods: z.number().int().min(1).max(17).nullable(),
+  employeeCountCategory: references(employeeCountCategory, true),
+  ods: z.number().int().min(1).max(17).nullish(),
   foundingYear: z.number().int(),
-  hasInvestmentAgreement: z.boolean().nullable(),
-  phone: phoneSchema.nullable(),
-  email: z.string().email().nullable(),
-  webpage: z.string().url().nullable(),
-  facebook: z.string().url().nullable(),
-  instagram: z.string().url().nullable(),
-  twitter: z.string().url().nullable(),
-  tiktok: z.string().url().nullable(),
-  youtube: z.string().url().nullable(),
-  linkedin: z.string().url().nullable(),
-  employeeCountCategory: references(employeeCountCategory).nullable(),
-  volunteerCountCategory: references(volunteerCountCategory).nullable(),
-  workplaceType: references(workplaceType).nullable(),
-  incomeCategory: references(incomeCategory).nullable(),
-  address: references(address).nullable(),
-  legalConcept: z.string().nullable(),
-  incorporationYear: z.number().int().nullable(),
-  rfc: z.string().max(13).nullable(),
-  donationAuthStatus: z.nativeEnum(DonationAuthStatus).nullable(),
-  cluniStatus: z.nativeEnum(CLUNIStatus).nullable(),
-  corporationType: references(corporationType).nullable(),
-  organizationCategory: references(unincorporatedOrgCategory).nullable(),
-  wantsToIncorporate: z.boolean().nullable(),
-  logoUrl: z.string().url().nullable(),
+  hasInvestmentAgreement: z.boolean().nullish(),
+  phone: phoneSchema.nullish(),
+  email: z.string().email().nullish(),
+  webpage: z.string().url().nullish(),
+  facebook: z.string().url().nullish(),
+  instagram: z.string().url().nullish(),
+  twitter: z.string().url().nullish(),
+  tiktok: z.string().url().nullish(),
+  youtube: z.string().url().nullish(),
+  linkedin: z.string().url().nullish(),
+  volunteerCountCategory: references(volunteerCountCategory, true),
+  workplaceType: references(workplaceType, true),
+  incomeCategory: references(incomeCategory, true),
+  address: references(address, true),
+  legalConcept: z.string().nullish(),
+  incorporationYear: z.number().int().nullish(),
+  rfc: z.string().max(13).nullish(),
+  donationAuthStatus: z.nativeEnum(DonationAuthStatus).nullish(),
+  cluniStatus: z.nativeEnum(CLUNIStatus).nullish(),
+  corporationType: references(corporationType, true),
+  organizationCategory: references(unincorporatedOrgCategory, true),
+  wantsToIncorporate: z.boolean().nullish(),
+  logoUrl: z.string().url().nullish(),
 });
 
-export type Organization = ExtractModel<typeof organization>;
+export type Organization = InferEntity<typeof organization>;
