@@ -15,30 +15,26 @@ export async function createOrganization(
   logoData?: string,
 ): Promise<ServerActionResult> {
   let logoUrl: string | null = null;
-  const logo = logoData != null ? new Blob([logoData]) : undefined;
+  const logo = new Blob([logoData ?? ""]);
   try {
     await db.tx(async (t) => {
       const organizations = getOrganizationRepository(t);
       const personsOrganizations = getPersonOrganizationRepository(t);
 
-      console.log("creating");
       const createdOrg = await organizations.create(organizationData);
 
-      if (logo != null) {
-        console.log("putting");
+      if (logo.size > 0) {
         const { url } = await put(`logos/org_${createdOrg.id}`, logo, {
           access: "public",
         });
 
         logoUrl = url;
 
-        console.log("updating");
         await organizations.update(createdOrg.id, {
           logoUrl,
         });
       }
 
-      console.log("relating");
       await personsOrganizations.create({
         person: owner,
         organization: createdOrg,

@@ -25,14 +25,14 @@ export default function GeneralDataForm({ person }: { person: Person }) {
   }
 
   async function handleForm(formData: FormData) {
-    console.log(formData.get("logo"));
     const name = formData.get("name") as string;
     const foundingYear = formData.get("foundingYear") as string;
     const phone = formData.get("phone") as string;
     const email = formData.get("email") as string;
     const webpage = formData.get("webpage") as string;
     const position = formData.get("position") as string;
-    const logoData = await (formData.get("logo") as File).text();
+    const logoData = formData.get("logo") as File;
+    const logo = logoData.size === 0 ? undefined : await logoData.text();
     const data = {
       name,
       foundingYear: Number.parseInt(foundingYear),
@@ -43,7 +43,7 @@ export default function GeneralDataForm({ person }: { person: Person }) {
 
     try {
       organization.parse(data);
-      const result = await createOrganization(person, data, position, logoData);
+      const result = await createOrganization(person, data, position, logo);
       if (result.success) {
         redirect("/");
       } else {

@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { idSchema } from "@/lib/models/schemas";
+import { id } from "postcss-selector-parser";
 
 type Id = z.infer<typeof idSchema>;
 
@@ -151,7 +152,14 @@ function referenceSchema<SP extends SchemaPrototype, Nullish extends boolean>(
 ): Nullish extends true
   ? z.ZodOptional<z.ZodNullable<z.ZodType<Reference<SP>>>>
   : z.ZodType<Reference<SP>> {
-  const validator = z.instanceof(Reference<SP>);
+  const validator = entitySchema.passthrough().transform((value) => {
+    const result = schema.safeParse(value);
+    if (result.success) {
+      return new Reference(value.id, schema, value as SpecificEntity<SP>);
+    } else {
+      return new Reference((value as SpecificEntity<SP>).id, schema, null);
+    }
+  });
 
   if (nullish) {
     return validator.nullish() as any;

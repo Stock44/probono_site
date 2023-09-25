@@ -93,7 +93,12 @@ export class Repository<SP extends SchemaPrototype> {
       .filter(([key]) => parsedModel[key] !== null)
       .map(([, column]) => column);
     const values = Object.keys(this.keysToColumnNames)
-      .map((key) => parsedModel[key])
+      .map((key) => {
+        if (key in this.schema.references && parsedModel[key] != null) {
+          return (parsedModel[key] as Reference<any>).id;
+        }
+        return parsedModel[key];
+      })
       .filter((value) => value !== null);
 
     try {
