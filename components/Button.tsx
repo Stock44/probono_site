@@ -1,43 +1,29 @@
 import React from "react";
 import { Button as BaseButton, type ButtonProps } from "@mui/base";
+import clsx from "clsx";
 
 export const Button = React.forwardRef(function Button(
   {
-    label,
-    iconName,
-    iconPosition = "left",
-    slotProps,
-    ...buttonProps
-  }: {
-    iconName?: string;
-    label: string;
-    iconPosition?: "left" | "right";
-  } & Omit<ButtonProps, "children" | "className">,
+    variant = "primary",
+    className,
+    ...props
+  }: { variant?: "primary" | "secondary" | "tertiary" } & ButtonProps,
   ref: React.ForwardedRef<HTMLButtonElement>,
 ) {
   return (
     <BaseButton
-      {...buttonProps}
+      {...props}
       ref={ref}
-      slotProps={{
-        ...slotProps,
-        root: {
-          className:
-            "dark:bg-stone-700 h-8 p-1 text-stone-200 rounded-sm hover:bg-stone-600 text-sm flex justify-between items-center",
-        },
-      }}
-    >
-      {iconName != null && iconPosition === "left" ? (
-        <span className="material-symbols-rounded align-middle me-1">
-          {iconName}
-        </span>
-      ) : null}
-      {label}
-      {iconName != null && iconPosition === "right" ? (
-        <span className="material-symbols-rounded align-middle ms-1">
-          {iconName}
-        </span>
-      ) : null}
-    </BaseButton>
+      className={clsx(
+        "h-8 p-1  rounded-sm  text-sm font-bold flex items-center",
+        variant === "primary" &&
+          "bg-stone-50 text-stone-950 hover:bg-stone-200",
+        variant === "secondary" &&
+          "bg-stone-950 text-stone-300 hover:bg-stone-800 border border-stone-800",
+        variant === "tertiary" &&
+          "bg-stone-950 text-stone-300 hover:bg-stone-900",
+        className,
+      )}
+    />
   );
 });

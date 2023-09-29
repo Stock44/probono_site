@@ -1,0 +1,237 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("POSTGRES_PRISMA_URL") // uses connection pooling
+  // directUrl = env("POSTGRES_URL_NON_POOLING") // uses a direct connection
+}
+
+model OrganizationActivity {
+  id            Int            @id @default(autoincrement())
+  name          String
+  organizations Organization[]
+}
+
+model State {
+  id   Int    @id @default(autoincrement())
+  name String
+}
+
+model Municipality {
+  id      Int       @id @default(autoincrement())
+  name    String
+  address Address[]
+  Sector  Sector[]
+}
+
+model Address {
+  id             Int     @id @default(autoincrement())
+  neighborhood   String
+  postalCode     String
+  streetName     String
+  extNumber      Int
+  intNumber      Int?
+  betweenStreets String?
+
+  location Unsupported("point")?
+
+  municipality   Municipality @relation(fields: [municipalityId], references: [id])
+  municipalityId Int
+
+  organization Organization?
+}
+
+enum Gender {
+  male
+  female
+  other
+}
+
+model AgeGroup {
+  id     Int     @id @default(autoincrement())
+  gender Gender?
+  minAge Int
+  maxAge Int
+
+  organizations Organization[]
+}
+
+model OrganizationBeneficiary {
+  id            Int            @id @default(autoincrement())
+  name          String
+  organizations Organization[]
+}
+
+model CorporationType {
+  id            Int            @id @default(autoincrement())
+  name          String
+  short_name    String?
+  organizations Organization[]
+}
+
+model EmployeeCountCategory {
+  id            Int            @id @default(autoincrement())
+  minCount      Int
+  maxCount      Int
+  organizations Organization[]
+}
+
+model GovernmentOrganizationCategory {
+  id                      Int                      @id @default(autoincrement())
+  name                    String
+  governmentOrganizations GovernmentOrganization[]
+}
+
+model GovernmentOrganization {
+  id   Int    @id @default(autoincrement())
+  name String
+
+  category                         GovernmentOrganizationCategory @relation(fields: [governmentOrganizationCategoryId], references: [id])
+  governmentOrganizationCategoryId Int
+
+  organizationCollaborators Organization[]
+}
+
+model IncomeCategory {
+  id            Int            @id @default(autoincrement())
+  minIncome     Int
+  maxIncome     Int
+  organizations Organization[]
+}
+
+model VolunteerCountCategory {
+  Id            Int            @id @default(autoincrement())
+  minCount      Int
+  maxCount      Int
+  organizations Organization[]
+}
+
+model WorkplaceType {
+  Id            Int            @id @default(autoincrement())
+  name          String
+  organizations Organization[]
+}
+
+enum DonationAuthStatus {
+  notAuthorized
+  authorized
+  inProgress
+  inRecovery
+}
+
+enum CluniStatus {
+  no
+  active
+  inactive
+  inProgress
+}
+
+model OrganizationCategory {
+  id           Int            @id @default(autoincrement())
+  name         String
+  Organization Organization[]
+}
+
+model ServiceCategory {
+  id      Int       @id @default(autoincrement())
+  name    String
+  Service Service[]
+}
+
+model Service {
+  id                    Int             @id @default(autoincrement())
+  name                  String
+  serviceCategory       ServiceCategory @relation(fields: [serviceCategoryId], references: [id])
+  serviceCategoryId     Int
+  providerOrganizations Organization[]  @relation(name: "providedServices")
+  needingOrganizations  Organization[]  @relation(name: "neededServices")
+}
+
+model Sector {
+  id     Int                    @id @default(autoincrement())
+  name   String
+  limits Unsupported("polygon")
+
+  municipality   Municipality @relation(fields: [municipalityId], references: [id])
+  municipalityId Int
+
+  organizations Organization[]
+}
+
+model Organization {
+  id                     Int      @id @default(autoincrement())
+  name                   String
+  foundingYear           Int
+  phone                  String?
+  email                  String?
+  hasInvestmendAgreement Boolean?
+  logoUrl                String?
+  ods                    Int?
+  webpage                String?
+  facebook               String?
+  instagram              String?
+  twitter                String?
+  tiktok                 String?
+  youtube                String?
+  linkedIn               String?
+
+  wantsToIncorporate Boolean?
+
+  legalConcept       String?
+  incorporationYear  Int?
+  rfc                String?
+  donationAuthStatus DonationAuthStatus?
+  cluniStatus        CluniStatus?
+
+  address   Address? @relation(fields: [addressId], references: [id])
+  addressId Int?     @unique
+
+  employeeCountCategory   EmployeeCountCategory? @relation(fields: [employeeCountCategoryId], references: [id])
+  employeeCountCategoryId Int?
+
+  volunteerCountCategory   VolunteerCountCategory? @relation(fields: [volunteerCountCategoryId], references: [Id])
+  volunteerCountCategoryId Int?
+
+  workplaceType   WorkplaceType? @relation(fields: [workplaceTypeId], references: [Id])
+  workplaceTypeId Int?
+
+  incomeCategory   IncomeCategory? @relation(fields: [incomeCategoryId], references: [id])
+  incomeCategoryId Int?
+
+  corporationType   CorporationType? @relation(fields: [corporationTypeId], references: [id])
+  corporationTypeId Int?
+
+  organizationCategory   OrganizationCategory? @relation(fields: [organizationCategoryId], references: [id])
+  organizationCategoryId Int?
+
+  organizationActivities OrganizationActivity[]
+
+  organizationAgeGroups AgeGroup[]
+
+  organizationBeneficiaries OrganizationBeneficiary[]
+
+  organizationCollaborators GovernmentOrganization[]
+
+  organizationProvidedServices Service[] @relation(name: "providedServices")
+  organizationNeededServices   Service[] @relation(name: "neededServices")
+
+  sectors Sector[]
+
+  persons Person[]
+}
+
+model Person {
+  id         Int     @id @default(autoincrement())
+  authId     String  @unique
+  givenName  String
+  familyName String
+  email      String
+  phone      String?
+
+  organizations Organization[]
+}
