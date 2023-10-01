@@ -2,7 +2,6 @@ import React from "react";
 import OnboardingNavLink from "@/app/(main)/OnboardingNavLink";
 import Logo from "@/public/logo.png";
 import Image from "next/image";
-import Spacer from "@/components/Spacer";
 
 export default async function OnboardingLayout({
   children,

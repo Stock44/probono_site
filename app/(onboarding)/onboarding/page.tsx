@@ -26,7 +26,7 @@ export default function () {
 
       <Link href="/onboarding/person">
         <Button>
-          Siguiente <Icon iconName="navigate_next" />
+          Continuar <Icon iconName="navigate_next" />
         </Button>
       </Link>
     </main>

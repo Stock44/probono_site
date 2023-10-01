@@ -70,7 +70,7 @@ export default function PersonForm({
           defaultValue={existingPerson?.phone}
         />
         <Button type="submit">
-          Siguiente <Icon iconName="navigate_next" />
+          Continuar <Icon iconName="navigate_next" />
         </Button>
       </form>
     </>

@@ -1,5 +1,5 @@
 import React from "react";
-import GeneralDataForm from "@/app/organizations/create/GeneralDataForm";
+import GeneralDataForm from "@/app/organizations/create/OrganizationForm";
 import { getPersonByAuthId } from "@/lib/serverFunctions/getPersonByAuthId";
 import { getUser } from "@/lib/auth";
 

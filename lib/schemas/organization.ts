@@ -6,7 +6,7 @@ import DonationAuthStatus = $Enums.DonationAuthStatus;
 export const organizationSchema = z.object({
   id: z.number().int(),
   name: z.string().min(1),
-  foundingYear: z.number().int(),
+  foundingYear: z.coerce.number().int(),
   phone: z.preprocess(emptyStringToNull, phoneSchema.nullish()),
   email: z.preprocess(emptyStringToNull, z.string().email().nullish()),
   hasInvestmentAgreement: z.boolean().nullish(),

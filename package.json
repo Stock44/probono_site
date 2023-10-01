@@ -29,6 +29,7 @@
     "auth0": "^4.0.1",
     "autoprefixer": "10.4.15",
     "axios": "^1.5.1",
+    "file-type": "^18.5.0",
     "lodash": "^4.17.21",
     "material-symbols": "^0.12.0",
     "next": "13.4.19",
