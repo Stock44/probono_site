@@ -49,12 +49,14 @@ export default function PersonForm({
     <>
       <form action={handleForm} className="w-full">
         <LabeledInput
+          required
           name="givenName"
           label="Nombre (s)"
           issueText={issueMap.get("givenName")}
           defaultValue={existingPerson?.givenName}
         />
         <LabeledInput
+          required
           name="familyName"
           label="Apellido (s)"
           issueText={issueMap.get("familyName")}

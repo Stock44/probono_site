@@ -28,7 +28,7 @@ export const LabeledInput = React.forwardRef(function Input(
         slotProps={{
           input: {
             className:
-              "border-1 bg-stone-950 border-stone-700 rounded-sm text-stone-50 p-2 text-sm w-full",
+              "border-1 bg-stone-950 border-stone-700 rounded text-stone-50 p-2 text-sm w-full",
           },
         }}
       />

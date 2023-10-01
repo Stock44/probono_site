@@ -169,7 +169,7 @@ model Organization {
   foundingYear           Int
   phone                  String?
   email                  String?
-  hasInvestmendAgreement Boolean?
+  hasInvestmentAgreement Boolean?
   logoUrl                String?
   ods                    Int?
   webpage                String?

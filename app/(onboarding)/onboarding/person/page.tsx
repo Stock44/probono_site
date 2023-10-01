@@ -3,6 +3,7 @@ import React from "react";
 import { redirect } from "next/navigation";
 import { getPersonByAuthId } from "@/lib/getPersonByAuthId";
 import PersonForm from "@/app/(onboarding)/onboarding/person/PersonForm";
+import { list } from "@vercel/blob";
 
 export default withPageAuthRequired(
   async function Onboarding() {
@@ -18,7 +19,7 @@ export default withPageAuthRequired(
     return (
       <main>
         <h1 className="text-2xl text-stone-50">Datos personales</h1>
-        <p className="mb-2">
+        <p className="text-stone-300 mb-2">
           Para empezar, necesitamos unos pocos datos basicos sobre ti.
         </p>
         <PersonForm

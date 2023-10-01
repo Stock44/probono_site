@@ -1,4 +1,5 @@
 import z from "zod";
+import { emptyStringToNull, phoneSchema } from "@/lib/schemas/index";
 
 export const personSchema = z.object({
   id: z.number().int(),
@@ -6,8 +7,5 @@ export const personSchema = z.object({
   givenName: z.string().min(1),
   familyName: z.string().min(1),
   email: z.string().email(),
-  phone: z
-    .string()
-    .regex(/\+?[()+\d ]+(x[\d]+)?/g)
-    .transform((value) => value.replace(/[^+\dx]/g, "")),
+  phone: z.preprocess(emptyStringToNull, phoneSchema.nullish()),
 });
