@@ -25,11 +25,11 @@ export const NumberInput = React.forwardRef(function NumberInput(
       <BaseNumberInput
         ref={ref}
         required
-        className="border-1 h-8 w-full  dark:bg-stone-700 dark:border-stone-600 -border rounded-sm text-stone-50 grid grid-rows-2 grid-cols-[1fr_16px]"
+        className="border-1 w-full  border-stone-700 rounded text-stone-50 grid grid-rows-2 grid-cols-[1fr_16px]"
         slotProps={{
           input: {
             className:
-              "row-span-2 col-span-1 order-1 bg-transparent p-1 text-sm w-full",
+              "row-span-2 col-span-1 order-1 bg-transparent p-2 text-sm w-full",
             name,
           },
           incrementButton: {

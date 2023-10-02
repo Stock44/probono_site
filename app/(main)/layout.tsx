@@ -16,7 +16,7 @@ export default async function MainLayout({
           <Link href="/" className="text-stone-50 font-semibold items-center">
             <Image
               src={Logo}
-              height={32}
+              height={24}
               className="inline me-2"
               alt="geostats logo"
             />

@@ -1,5 +1,5 @@
 "use client";
-import React, { HTMLInputTypeAttribute, InputHTMLAttributes } from "react";
+import React from "react";
 import clsx from "clsx";
 import { useDropzone } from "react-dropzone";
 
@@ -43,7 +43,7 @@ export default function ImageDropArea({
     <label
       {...getRootProps({
         className: clsx(
-          "rounded h-32 w-32 bg-stone-800 relative border mb-4",
+          "rounded h-32 w-32 relative border mb-4",
           acceptedFiles.length === 0 && "border-dashed border-stone-700",
           acceptedFiles.length > 0 && "border-stone-700",
           className,

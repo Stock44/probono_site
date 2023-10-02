@@ -1,6 +1,6 @@
 "use server";
 import { type ServerActionResult } from "@/lib/serverActions/serverActionResult";
-import { getSession } from "@auth0/nextjs-auth0";
+import { getSession, updateSession } from "@auth0/nextjs-auth0";
 import { decodeForm } from "@/lib/schemas/decodeForm";
 import { getPersonByAuthId } from "@/lib/getPersonByAuthId";
 import prisma from "@/lib/prisma";
@@ -41,14 +41,13 @@ export default async function handleOrganizationForm(
       organizationSchema.omit({ id: true }),
     );
 
-    const logo = data.get("logo") as File | null;
+    const logo = data.get("logo") as File;
+    const logoFileType = await fileTypeFromBlob(logo);
 
     let logoUrl: string | undefined;
 
-    if (logo != null) {
-      const fileType = await fileTypeFromBlob(logo);
-
-      if (fileType == null || !imageTypes.includes(fileType.mime)) {
+    if (logoFileType != null) {
+      if (!imageTypes.includes(logoFileType.mime)) {
         return {
           success: false,
           name: "wrong file type",
@@ -58,7 +57,7 @@ export default async function handleOrganizationForm(
 
       const result = await put(`/organizationLogos/${randomUUID()}`, logo, {
         access: "public",
-        contentType: fileType.mime,
+        contentType: logoFileType.mime,
       });
 
       logoUrl = result.url;
@@ -86,6 +85,14 @@ export default async function handleOrganizationForm(
         },
       },
     );
+
+    await updateSession({
+      ...session,
+      user: {
+        ...session.user,
+        finished_onboarding: true,
+      },
+    });
 
     return {
       success: true,

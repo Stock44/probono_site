@@ -20,19 +20,12 @@ export default function OrganizationForm() {
   async function handleForm(formData: FormData) {
     try {
       // validate that the data is correct
-      const test = await decodeForm(
-        formData,
-        organizationSchema.omit({ id: true }),
-      );
-
-      console.log(test);
+      await decodeForm(formData, organizationSchema.omit({ id: true }));
 
       const result = await handleOrganizationForm(formData);
 
-      console.log(result);
-
       if (result.success) {
-        redirect("/");
+        redirect("/organization");
       }
     } catch (e) {
       if (e instanceof ZodError) {

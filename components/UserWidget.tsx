@@ -3,11 +3,12 @@ import React from "react";
 import PersonAvatar from "@/components/PersonAvatar";
 import { usePathname } from "next/navigation";
 import { useQuery } from "react-query";
-import { type Person } from "@/lib/models/person";
 import * as Popover from "@radix-ui/react-popover";
 import axios from "axios";
 import { Button } from "@/components/Button";
 import Link from "next/link";
+import { type Person } from ".prisma/client";
+import { useUser } from "@auth0/nextjs-auth0/client";
 
 /**
  * Renders a widget component based on the authenticated user, that contains user-related data, such as their avatar and organization link. Rendered client-side.
@@ -16,18 +17,26 @@ import Link from "next/link";
  */
 export default function UserWidget() {
   const pathname = usePathname();
+  const user = useUser();
 
-  const userQuery = useQuery("user", async () => {
-    const { data } = await axios.get<Person>("/api/auth/person");
-    return data;
-  });
+  const personQuery = useQuery(
+    "person",
+    async () => {
+      const { data } = await axios.get<Person>("/api/auth/person");
+      return data;
+    },
+    {
+      enabled: user.user != null,
+      staleTime: 10 * 60 * 1000, // 10 mins,
+    },
+  );
 
-  const organizationsQuery = useQuery("userOrganizations", async () => {
-    const { data } = await axios.get<Person>("/api/auth/person/organizations");
-    return data;
-  });
+  // const organizationsQuery = useQuery("userOrganizations", async () => {
+  //   const { data } = await axios.get<Person>("/api/auth/person/organizations");
+  //   return data;
+  // });
 
-  const person = userQuery.data;
+  const person = personQuery.data;
 
   return pathname !== "/onboarding" ? (
     <>
@@ -41,8 +50,14 @@ export default function UserWidget() {
               <div className="bg-stone-900 text-stone-300 border border-stone-800 rounded p-4">
                 <p className="text-sm">Hola,</p>
                 <p className="text-md mb-2">{`${person.givenName} ${person.familyName}`}</p>
-                <Button className="mb-2">Mi cuenta</Button>
-                <Button>Cerrar sesión</Button>
+                <div className="flex gap-2">
+                  <Link href="/account">
+                    <Button variant="secondary">Mi cuenta</Button>
+                  </Link>
+                  <Link href="/api/auth/logout">
+                    <Button variant="secondary">Cerrar sesión</Button>
+                  </Link>
+                </div>
               </div>
             </Popover.Content>
           </Popover.Portal>

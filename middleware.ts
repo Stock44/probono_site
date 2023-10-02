@@ -8,9 +8,10 @@ export async function middleware(request: NextRequest) {
 
   const section = request.nextUrl.pathname.split("/")[1];
 
-  console.log(session.user);
-
-  if (section === "onboarding" && session.user.finished_onboarding === true) {
+  if (
+    section === "onboarding" &&
+    (session.user.finished_onboarding as boolean)
+  ) {
     const url = request.nextUrl.clone();
 
     url.pathname = "/";
@@ -18,7 +19,10 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(url);
   }
 
-  if (section !== "onboarding" && session.user.finished_onboarding === false) {
+  if (
+    section !== "onboarding" &&
+    !(session.user.finished_onboarding as boolean)
+  ) {
     const url = request.nextUrl.clone();
 
     url.pathname = "/onboarding";
