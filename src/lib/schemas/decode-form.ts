@@ -9,5 +9,6 @@ export const decodeForm = async <Schema extends z.ZodTypeAny>(
 				? formDataOrRequest
 				: await formDataOrRequest.clone().formData();
 
-	return schema.parse(Object.fromEntries(formData));
+	// eslint-disable-next-line @typescript-eslint/no-unsafe-return
+	return schema.parse(Object.fromEntries(formData)) as z.infer<Schema>;
 };

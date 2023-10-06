@@ -1,5 +1,5 @@
 import {cache} from 'react';
-import prisma from '@/lib/prisma';
+import prisma from '@/lib/prisma.ts';
 
 export const revalidate = 1800;
 

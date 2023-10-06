@@ -9,7 +9,7 @@ import {
 import {Option as BaseOption} from '@mui/base/Option';
 import clsx from 'clsx';
 
-const SelectButton = React.forwardRef(function SelectButton<
+const SelectButton = React.forwardRef(<
 	Multiple extends boolean,
 >(
 	{
@@ -22,18 +22,16 @@ const SelectButton = React.forwardRef(function SelectButton<
 		readonly ownerState: SelectOwnerState<string | number, Multiple>;
 	} & React.ComponentProps<'button'>,
 	ref: React.ForwardedRef<HTMLButtonElement>,
-) {
-	return (
-		<button {...props} ref={ref}>
-			{children}
-			<span className='material-symbols-rounded'>
-				{ownerState.open ? 'arrow_drop_up' : 'arrow_drop_down'}
-			</span>
-		</button>
-	);
-});
+) => (
+	<button {...props} ref={ref}>
+		{children}
+		<span className='material-symbols-rounded'>
+			{ownerState.open ? 'arrow_drop_up' : 'arrow_drop_down'}
+		</span>
+	</button>
+));
 
-export const LabeledSelect = React.forwardRef(function Select<
+export const LabeledSelect = React.forwardRef(<
 
 	Multiple extends boolean,
 >(
@@ -52,18 +50,13 @@ export const LabeledSelect = React.forwardRef(function Select<
 		readonly labels?: string[];
 	} & SelectProps<string | number, Multiple>,
 	ref: React.ForwardedRef<HTMLButtonElement>,
-) {
-	if (labels != null) {
+) => {
+	if (labels !== undefined) {
 		assert(values.length === labels.length);
 	}
 
 	const actualValues = required === true ? values : [null, ...values];
-	const actualLabels
-    = labels === undefined
-    	? undefined
-    	: (required === true
-    		? labels
-    		: [props.placeholder, ...labels]);
+	const actualLabels = required ? [props.placeholder, ...(labels ?? [])] : labels;
 
 	return (
 		<label className={clsx('mb-4', className)}>
@@ -103,7 +96,7 @@ export const LabeledSelect = React.forwardRef(function Select<
 							},
 						}}
 					>
-						{actualLabels == null ? value : actualLabels[idx]}
+						{actualLabels === undefined ? value : actualLabels[idx]}
 					</BaseOption>
 				))}
 			</BaseSelect>

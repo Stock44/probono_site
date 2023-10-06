@@ -1,9 +1,9 @@
 import React from 'react';
 import Link from 'next/link';
-import {Button} from '@/components/button';
-import Icon from '@/components/icon';
+import {Button} from '@/components/button.tsx';
+import Icon from '@/components/icon.tsx';
 
-export default function () {
+export default function OnboardingPage() {
 	return (
 		<main>
 			<h1 className='text-2xl text-stone-50 mb-2'>Hola!</h1>

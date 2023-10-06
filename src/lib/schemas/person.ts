@@ -1,5 +1,5 @@
 import z from 'zod';
-import {emptyStringToNull, phoneSchema} from '@/lib/schemas/index';
+import {emptyStringToNull, phoneSchema} from '@/lib/schemas/index.ts';
 
 export const personSchema = z.object({
 	id: z.number().int(),

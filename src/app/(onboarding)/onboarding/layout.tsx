@@ -1,8 +1,7 @@
 import React from 'react';
 import Logo from 'public/logo.png';
 import Image from 'next/image';
-import {getSession} from '@auth0/nextjs-auth0';
-import OnboardingNavLink from '@/app/(main)/onboarding-nav-link';
+import OnboardingNavLink from '@/app/(main)/onboarding-nav-link.tsx';
 
 export default async function OnboardingLayout({
 	children,

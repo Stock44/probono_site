@@ -5,12 +5,11 @@ import {useQuery} from 'react-query';
 import * as Popover from '@radix-ui/react-popover';
 import axios from 'axios';
 import Link from 'next/link';
-import {type Person} from '.prisma/client';
+import {type Person, type Organization} from '@prisma/client';
 import {useUser} from '@auth0/nextjs-auth0/client';
-import {type Organization} from '@prisma/client';
 import Image from 'next/image';
-import {Button} from '@/components/button';
-import PersonAvatar from '@/components/person-avatar';
+import {Button} from '@/components/button.tsx';
+import PersonAvatar from '@/components/person-avatar.tsx';
 
 /**
  * Renders a widget component based on the authenticated user, that contains user-related data, such as their avatar and organization link. Rendered client-side.
@@ -28,7 +27,7 @@ export default function UserWidget() {
 			return data;
 		},
 		{
-			enabled: user.user != null,
+			enabled: user.user !== undefined,
 			staleTime: 10 * 60 * 1000, // 10 mins,
 		},
 	);
@@ -42,7 +41,7 @@ export default function UserWidget() {
 			return data;
 		},
 		{
-			enabled: user.user != null,
+			enabled: user.user !== undefined,
 			staleTime: 10 * 60 * 1000, // 10 mins,
 		},
 	);
@@ -53,10 +52,10 @@ export default function UserWidget() {
 
 	return pathname === '/onboarding' ? null : (
 		<>
-			{organization == null ? null : (
+			{organization === undefined ? null : (
 				<Link href='/account/organization'>
 					<Button variant='secondary'>
-						{organization.logoUrl == null ? null : (
+						{organization.logoUrl === null ? null : (
 							<Image
 								src={organization.logoUrl}
 								className='rounded-sm me-1'
@@ -69,7 +68,7 @@ export default function UserWidget() {
 					</Button>
 				</Link>
 			)}
-			{person == null ? (
+			{person === undefined ? (
 				<>
 					<Link href={`/api/auth/login?returnTo=${pathname}`}>
 						<Button variant='secondary'>Iniciar sesión</Button>

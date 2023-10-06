@@ -1,6 +1,6 @@
 import {getSession} from '@auth0/nextjs-auth0';
 import {redirect} from 'next/navigation';
-import {getPersonByAuthId} from '@/lib/get-person-by-auth-id';
+import {getPersonByAuthId} from '@/lib/get-person-by-auth-id.ts';
 
 /**
  * Retrieve the logged-in person data using the request's session.
@@ -10,13 +10,13 @@ import {getPersonByAuthId} from '@/lib/get-person-by-auth-id';
 export default async function getPersonFromSession(redirectTo = '/') {
 	const session = await getSession();
 
-	if (session == null) {
+	if (session === null || session === undefined) {
 		return redirect(redirectTo);
 	}
 
-	const person = await getPersonByAuthId(session.user.sub);
+	const person = await getPersonByAuthId(session.user.sub as string);
 
-	if (person == null) {
+	if (person === null) {
 		return redirect(redirectTo);
 	}
 

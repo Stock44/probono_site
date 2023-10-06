@@ -1,21 +1,15 @@
 import {getSession, withPageAuthRequired} from '@auth0/nextjs-auth0';
 import React from 'react';
 import {redirect} from 'next/navigation';
-import OrganizationForm from '@/app/(onboarding)/onboarding/organization/organization-form';
-import {getPersonByAuthId} from '@/lib/get-person-by-auth-id';
+import OrganizationForm from '@/app/(onboarding)/onboarding/organization/organization-form.tsx';
+import {getPersonByAuthId} from '@/lib/get-person-by-auth-id.ts';
 
 export default withPageAuthRequired(
-	async function Onboarding() {
-		const session = await getSession();
+	async () => {
+		const session = (await getSession())!;
+		const person = (await getPersonByAuthId(session.user.sub as string));
 
-		// Session should never be null
-		if (session == null) {
-			return redirect('/');
-		}
-
-		const person = await getPersonByAuthId(session.user.sub);
-
-		if (person == null) {
+		if (person === null) {
 			redirect('/onboarding/person');
 		}
 

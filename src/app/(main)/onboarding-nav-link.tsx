@@ -12,16 +12,16 @@ export default function OnboardingNavLink({
 	readonly children: React.ReactNode;
 }) {
 	const pathname = useSelectedLayoutSegment();
-	const selected = (slug == null && pathname == null) || pathname === slug;
+	const selected = (slug === undefined && pathname === null) || pathname === slug;
 
 	return (
 		<Link
-			children={children}
 			href={`/onboarding/${slug ?? ''}`}
 			className={clsx(
 				selected && 'text-stone-50',
 				!selected && 'text-stone-400 hover:text-stone-50',
 			)}
-		/>
+		>{children}
+		</Link>
 	);
 }

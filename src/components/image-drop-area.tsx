@@ -3,40 +3,38 @@ import React from 'react';
 import clsx from 'clsx';
 import {useDropzone} from 'react-dropzone';
 
-const KB = 1024;
+const Kb = 1024;
 
-export default function ImageDropArea({
-	className,
-	label,
-	maxSize,
-	...inputProps
-}: {
+export default function ImageDropArea({className, label, maxSize, ...inputProps}: {
 	readonly className?: string;
 	readonly label: string;
 	readonly maxSize?: number;
 } & Omit<React.ComponentProps<'input'>, 'type'>) {
 	const {acceptedFiles, getRootProps, getInputProps, fileRejections}
-    = useDropzone({
-    	accept: {
-    		'image/jpeg': ['.jpg', '.jpeg'],
-    		'image/png': ['.png'],
-    		'image/webp': ['.webp'],
-    	},
-    	validator:
-        maxSize == null
-        	? undefined
-        	: file => {
-        		if (file.size > maxSize * KB) {
-        			return {
-        				code: 'file-too-large',
-        				message: `File must be under ${maxSize} KB in size`,
-        			};
-        		}
+			= useDropzone({
+				accept: {
+					// eslint-disable-next-line @typescript-eslint/naming-convention
+					'image/jpeg': ['.jpg', '.jpeg'],
+					// eslint-disable-next-line @typescript-eslint/naming-convention
+					'image/png': ['.png'],
+					// eslint-disable-next-line @typescript-eslint/naming-convention
+					'image/webp': ['.webp'],
+				},
+				validator:
+				maxSize === undefined
+					? undefined
+					: file => {
+						if (file.size > maxSize * Kb) {
+							return {
+								code: 'file-too-large',
+								message: `File must be under ${maxSize} KB in size`,
+							};
+						}
 
-        		return null;
-        	},
-    	maxFiles: 1,
-    });
+						return null;
+					},
+				maxFiles: 1,
+			});
 
 	const fileTooLarge = fileRejections.length > 0;
 
@@ -50,8 +48,8 @@ export default function ImageDropArea({
 					className,
 				),
 			})}
-			onClick={e => {
-				e.stopPropagation();
+			onClick={event => {
+				event.stopPropagation();
 			}}
 		>
 			<input {...inputProps} {...getInputProps()}/>
@@ -63,7 +61,9 @@ export default function ImageDropArea({
 					src={URL.createObjectURL(acceptedFiles[0])}
 				/>
 			) : (
-				<div className='w-full h-full rounded p-2 flex flex-col items-center justify-center text-stone-400 gap-2 text-center'>
+				<div
+					className='w-full h-full rounded p-2 flex flex-col items-center justify-center text-stone-400 gap-2 text-center'
+				>
 					<span
 						className={clsx(
 							'material-symbols-rounded',

@@ -2,7 +2,7 @@ import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import Logo from 'public/logomark.png';
-import UserWidget from '@/components/user-widget';
+import UserWidget from '@/components/user-widget.tsx';
 
 export default async function MainLayout({
 	children,

@@ -2,20 +2,13 @@ import {type NextRequest, NextResponse} from 'next/server';
 import {getSession} from '@auth0/nextjs-auth0/edge';
 
 export async function middleware(request: NextRequest) {
-	const res = NextResponse.next();
+	const response = NextResponse.next();
 
-	const session = await getSession(request, res);
-
-	if (session == null) {
-		return res;
-	}
+	const session = await getSession(request, response);
 
 	const section = request.nextUrl.pathname.split('/')[1];
 
-	if (
-		section === 'onboarding'
-    && (session.user.finished_onboarding as boolean)
-	) {
+	if (section === 'onboarding' && (session === null || session === undefined || session.user.finished_onboarding as boolean)) {
 		const url = request.nextUrl.clone();
 
 		url.pathname = '/';
@@ -25,7 +18,7 @@ export async function middleware(request: NextRequest) {
 
 	if (
 		section !== 'onboarding'
-    && !(session.user.finished_onboarding as boolean)
+    && (session !== null && session !== undefined && !(session.user.finished_onboarding as boolean))
 	) {
 		const url = request.nextUrl.clone();
 
@@ -34,7 +27,7 @@ export async function middleware(request: NextRequest) {
 		return NextResponse.redirect(url);
 	}
 
-	return res;
+	return response;
 }
 
 export const config = {

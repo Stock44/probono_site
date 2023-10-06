@@ -1,7 +1,6 @@
 'use client';
 import React, {useState} from 'react';
-import {type CorporationType} from '@prisma/client';
-import {CluniStatus} from '.prisma/client';
+import {CluniStatus, type CorporationType, DonationAuthStatus} from '@prisma/client';
 import {LabeledInput} from '@/components/labeled-input.tsx';
 import {NumberInput} from '@/components/number-input.tsx';
 import LabeledCheckbox from '@/components/labeled-checkbox.tsx';
@@ -11,9 +10,7 @@ import ODSSelector from '@/components/ods-selector.tsx';
 import {LabeledSelect} from '@/components/labeled-select.tsx';
 import {Button} from '@/components/button.tsx';
 
-export default function GeneralDataForm({
-	corporationTypes,
-}: {
+export default function GeneralDataForm({corporationTypes}: {
 	readonly corporationTypes: CorporationType[];
 }) {
 	const [showIncFields, setShowIncFields] = useState(false);
@@ -67,7 +64,7 @@ export default function GeneralDataForm({
 						className='basis-2/12'
 						values={corporationTypes.map(corpType => corpType.id.toString())}
 						labels={corporationTypes.map(
-							corpType => corpType.short_name ?? corpType.name,
+							corpType => corpType.shortName ?? corpType.name,
 						)}
 					/>
 
@@ -100,10 +97,10 @@ export default function GeneralDataForm({
 						className='grow basis-full sm:basis-5/12'
 						placeholder='Selecciona un valor'
 						values={[
-							DonationAuthStatus.NotAuthorized,
-							DonationAuthStatus.Authorized,
-							DonationAuthStatus.InProgress,
-							DonationAuthStatus.InRecovery,
+							DonationAuthStatus.notAuthorized,
+							DonationAuthStatus.authorized,
+							DonationAuthStatus.inProgress,
+							DonationAuthStatus.inRecovery,
 						]}
 						labels={[
 							'No contamos con donataria autorizada',
@@ -151,7 +148,7 @@ export default function GeneralDataForm({
 			</p>
 			<ODSSelector/>
 			<Separator/>
-			<Button label='Confirmar' type='submit'/>
+			<Button type='submit'> Confirmar </Button>
 		</form>
 	);
 }

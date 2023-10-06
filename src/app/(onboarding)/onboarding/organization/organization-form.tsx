@@ -3,21 +3,21 @@ import React, {useState} from 'react';
 import {redirect} from 'next/navigation';
 import {ZodError} from 'zod';
 import {experimental_useFormStatus as useFormStatus} from 'react-dom';
-import {LabeledInput} from '@/components/labeled-input';
-import {NumberInput} from '@/components/number-input';
-import {Button} from '@/components/button';
-import ImageDropArea from '@/components/image-drop-area';
-import Icon from '@/components/icon';
-import {organizationSchema} from '@/lib/schemas/organization';
-import {decodeForm} from '@/lib/schemas/decode-form';
-import createOrganizationFromFormAction from '@/app/(onboarding)/onboarding/organization/create-organization-from-form-action';
+import {LabeledInput} from '@/components/labeled-input.tsx';
+import {NumberInput} from '@/components/number-input.tsx';
+import {Button} from '@/components/button.tsx';
+import ImageDropArea from '@/components/image-drop-area.tsx';
+import Icon from '@/components/icon.tsx';
+import {organizationSchema} from '@/lib/schemas/organization.ts';
+import {decodeForm} from '@/lib/schemas/decode-form.ts';
+import createOrganizationFromFormAction from '@/app/(onboarding)/onboarding/organization/create-organization-from-form-action.ts';
 
 export default function OrganizationForm() {
 	const {pending} = useFormStatus();
 
 	const [issueMap, setIssueMap] = useState(new Map<string, string>());
 
-	async function handleForm(formData: FormData) {
+	const handleForm = async (formData: FormData) => {
 		try {
 			// Validate that the data is correct
 			await decodeForm(formData, organizationSchema.omit({id: true}));
@@ -41,7 +41,7 @@ export default function OrganizationForm() {
 				throw error;
 			}
 		}
-	}
+	};
 
 	return (
 		<form

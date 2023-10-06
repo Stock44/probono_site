@@ -3,11 +3,15 @@
     "node": true,
     "es6": true
   },
-  "rules": {
+	"ignorePatterns": [
+		"./*"
+	],
+	"rules": {
     "react/proptypes": "off",
     "react/require-default-props": "off",
     "n/file-extension-in-import": "off",
     "n/prefer-global/process": "off",
+		"react/button-has-type": "off",
     "new-cap": "off"
   },
   "extends": [

@@ -9,7 +9,7 @@ const className
 
 const LinkSlot = prepareForSlot(Link);
 
-export const LinkButton = React.forwardRef(function LinkButton(
+export const LinkButton = React.forwardRef((
 	{
 		label,
 		iconName,
@@ -19,22 +19,20 @@ export const LinkButton = React.forwardRef(function LinkButton(
 	'children' | 'className'
 	>,
 	ref: React.ForwardedRef<HTMLButtonElement>,
-) {
-	return (
-		<BaseButton
-			{...(linkProps as any)}
-			ref={ref}
-			className={className}
-			slots={{
-				root: LinkSlot,
-			}}
-		>
-			{iconName == null ? null : (
-				<span className='material-symbols-rounded align-middle me-1'>
-					{iconName}
-				</span>
-			)}
-			{label}
-		</BaseButton>
-	);
-});
+) => (
+	<BaseButton
+		{...(linkProps as any)}
+		ref={ref}
+		className={className}
+		slots={{
+			root: LinkSlot,
+		}}
+	>
+		{iconName === undefined ? null : (
+			<span className='material-symbols-rounded align-middle me-1'>
+				{iconName}
+			</span>
+		)}
+		{label}
+	</BaseButton>
+));

@@ -1,7 +1,6 @@
 import z from 'zod';
-import {$Enums, CluniStatus} from '.prisma/client';
-import {emptyStringToNull, phoneSchema} from '@/lib/schemas/index';
-import DonationAuthStatus = $Enums.DonationAuthStatus;
+import {DonationAuthStatus, CluniStatus} from '@prisma/client';
+import {emptyStringToNull, phoneSchema} from '@/lib/schemas/index.ts';
 
 export const organizationSchema = z.object({
 	id: z.number().int(),

@@ -1,21 +1,13 @@
 import {getSession, withPageAuthRequired} from '@auth0/nextjs-auth0';
 import React from 'react';
-import {redirect} from 'next/navigation';
-import {getPersonByAuthId} from '@/lib/get-person-by-auth-id';
-import PersonForm from '@/app/(onboarding)/onboarding/person/person-form';
+import {getPersonByAuthId} from '@/lib/get-person-by-auth-id.ts';
+import PersonForm from '@/app/(onboarding)/onboarding/person/person-form.tsx';
 
 export default withPageAuthRequired(
-	async function Onboarding() {
-		const session = await getSession();
+	async () => {
+		const {user} = (await getSession())!;
 
-		// Session should never be null
-		if (session == null) {
-			return redirect('/');
-		}
-
-		const {user} = session;
-
-		const person = await getPersonByAuthId(user.sub);
+		const person = await getPersonByAuthId(user.sub as string);
 
 		return (
 			<main>
@@ -25,9 +17,9 @@ export default withPageAuthRequired(
 				</p>
 				<PersonForm
 					existingPerson={{
-						familyName: person?.familyName ?? user.familyName,
-						givenName: person?.givenName ?? user.givenName,
-						phone: person?.phone ?? user.phone,
+						familyName: person?.familyName ?? user.familyName as string,
+						givenName: person?.givenName ?? user.givenName as string,
+						phone: person?.phone ?? user.phone as string,
 					}}
 				/>
 			</main>

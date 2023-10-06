@@ -1,7 +1,7 @@
 'use client';
 import React from 'react';
 import * as Avatar from '@radix-ui/react-avatar';
-import {type Person} from '.prisma/client';
+import {type Person} from '@prisma/client';
 
 export default function PersonAvatar({person}: {readonly person: Person}) {
 	return (
