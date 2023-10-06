@@ -3,11 +3,11 @@ $$
     declare
         state_id bigint;
     begin
-        insert into state
+        insert into "State"
         values (default, 'Nuevo León')
         returning id into state_id;
 
-        insert into municipality
+        insert into "Municipality"
         values (default, 'Abasolo', state_id),
                (default, 'Aguasleguas', state_id),
                (default, 'Allende', state_id),

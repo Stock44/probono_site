@@ -1,3 +1,9 @@
+import React from 'react';
+
 export default function OrganizationPage() {
-  return null;
+	return (
+		<p>
+			asdf
+		</p>
+	);
 }

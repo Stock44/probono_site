@@ -18,13 +18,18 @@ model OrganizationActivity {
 }
 
 model State {
-  id   Int    @id @default(autoincrement())
-  name String
+  id             Int            @id @default(autoincrement())
+  name           String
+  municipalities Municipality[]
 }
 
 model Municipality {
-  id      Int       @id @default(autoincrement())
-  name    String
+  id   Int    @id @default(autoincrement())
+  name String
+
+  state   State @relation(fields: [stateId], references: [id])
+  stateId Int
+
   address Address[]
   Sector  Sector[]
 }
@@ -70,7 +75,7 @@ model OrganizationBeneficiary {
 model CorporationType {
   id            Int            @id @default(autoincrement())
   name          String
-  short_name    String?
+  shortName     String?
   organizations Organization[]
 }
 
