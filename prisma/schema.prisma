@@ -222,16 +222,16 @@ model Organization {
 
   sectors Sector[]
 
-  persons Person[]
+  owner    Person @relation(fields: [personId], references: [id])
+  personId Int    @unique
 }
 
 model Person {
-  id         Int     @id @default(autoincrement())
-  authId     String  @unique
-  givenName  String
-  familyName String
-  email      String
-  phone      String?
-
-  organizations Organization[]
+  id           Int           @id @default(autoincrement())
+  authId       String        @unique
+  givenName    String
+  familyName   String
+  email        String
+  phone        String?
+  organization Organization?
 }
