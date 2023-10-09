@@ -42,7 +42,7 @@ export default function ImageDropArea({className, label, maxSize, ...inputProps}
 		<label
 			{...getRootProps({
 				className: clsx(
-					'rounded h-32 w-32 relative border mb-4',
+					'rounded relative border block mb-4',
 					acceptedFiles.length === 0 && 'border-dashed border-stone-700',
 					acceptedFiles.length > 0 && 'border-stone-700',
 					className,

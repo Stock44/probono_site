@@ -11,9 +11,17 @@ datasource db {
   // directUrl = env("POSTGRES_URL_NON_POOLING") // uses a direct connection
 }
 
+model OrganizationActivityCategory {
+  id         Int                    @id @default(autoincrement())
+  name       String
+  activities OrganizationActivity[]
+}
+
 model OrganizationActivity {
-  id            Int            @id @default(autoincrement())
+  id            Int                          @id @default(autoincrement())
   name          String
+  category      OrganizationActivityCategory @relation(fields: [categoryId], references: [id])
+  categoryId    Int
   organizations Organization[]
 }
 
@@ -32,6 +40,8 @@ model Municipality {
 
   address Address[]
   Sector  Sector[]
+
+  collaboratingOrganizations Organization[]
 }
 
 model Address {
@@ -61,7 +71,7 @@ model AgeGroup {
   id     Int     @id @default(autoincrement())
   gender Gender?
   minAge Int
-  maxAge Int
+  maxAge Int?
 
   organizations Organization[]
 }
@@ -82,7 +92,7 @@ model CorporationType {
 model EmployeeCountCategory {
   id            Int            @id @default(autoincrement())
   minCount      Int
-  maxCount      Int
+  maxCount      Int?
   organizations Organization[]
 }
 
@@ -99,20 +109,20 @@ model GovernmentOrganization {
   category                         GovernmentOrganizationCategory @relation(fields: [governmentOrganizationCategoryId], references: [id])
   governmentOrganizationCategoryId Int
 
-  organizationCollaborators Organization[]
+  collaboratingOrganizations Organization[]
 }
 
 model IncomeCategory {
   id            Int            @id @default(autoincrement())
   minIncome     Int
-  maxIncome     Int
+  maxIncome     Int?
   organizations Organization[]
 }
 
 model VolunteerCountCategory {
   Id            Int            @id @default(autoincrement())
   minCount      Int
-  maxCount      Int
+  maxCount      Int?
   organizations Organization[]
 }
 
@@ -158,9 +168,9 @@ model Service {
 }
 
 model Sector {
-  id     Int                    @id @default(autoincrement())
+  id     Int                     @id @default(autoincrement())
   name   String
-  limits Unsupported("polygon")
+  limits Unsupported("geometry")
 
   municipality   Municipality @relation(fields: [municipalityId], references: [id])
   municipalityId Int
@@ -220,7 +230,8 @@ model Organization {
 
   organizationBeneficiaries OrganizationBeneficiary[]
 
-  organizationCollaborators GovernmentOrganization[]
+  collaboratingGovernmentOrganizations GovernmentOrganization[]
+  collaboratingMunicipalities          Municipality[]
 
   organizationProvidedServices Service[] @relation(name: "providedServices")
   organizationNeededServices   Service[] @relation(name: "neededServices")

@@ -1,0 +1,17 @@
+insert into "OrganizationCategory"
+values (default, 'Asamblea'),
+       (default, 'Club'),
+       (default, 'Colectivo'),
+       (default, 'Congregación'),
+       (default, 'Comité'),
+       (default, 'Comunidad de aprendizaje'),
+       (default, 'Gremio'),
+       (default, 'Grupo de trabajo o agrupación'),
+       (default, 'Iniciativa'),
+       (default, 'Junta'),
+       (default, 'Liga'),
+       (default, 'Laboratorio ciudadano'),
+       (default, 'Movimiento'),
+       (default, 'Organización de la sociedad civil'),
+       (default, 'Red'),
+       (default, 'Laboratorio Ciudadano');

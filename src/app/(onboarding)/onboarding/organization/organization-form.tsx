@@ -50,7 +50,7 @@ export default function OrganizationForm() {
 		>
 			<ImageDropArea
 				label='Suelta una imagen para tu logo aquí'
-				className='basis-full'
+				className='basis-full h-32'
 				name='logo'
 				maxSize={30}
 			/>

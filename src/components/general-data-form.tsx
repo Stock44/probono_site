@@ -49,66 +49,7 @@ export default function GeneralDataForm({corporationTypes}: {
 			<Collapsible open={showIncFields} className='basis-full'>
 				<div className='flex flex-wrap items-end gap-x-2'>
 					<Separator/>
-					<h2 className='text-2xl mb-2'>Información legal</h2>
-					<p className='text-xs text-stone-300 grow mb-2'>
-						* marca un campo requerido
-					</p>
-					<LabeledInput
-						required
-						label='Razón social'
-						className='grow basis-9/12'
-					/>
-					<LabeledSelect
-						required
-						label='Tipo'
-						className='basis-2/12'
-						values={corporationTypes.map(corpType => corpType.id.toString())}
-						labels={corporationTypes.map(
-							corpType => corpType.shortName ?? corpType.name,
-						)}
-					/>
 
-					<LabeledInput label='RFC' className='grow basis-8/12'/>
-					<NumberInput
-						required
-						label='Año de incorporación'
-						defaultValue={2023}
-						className='basis-3/12'
-					/>
-					<LabeledSelect
-						label='Estatus de CLUNI'
-						className='grow basis-full sm:basis-5/12'
-						placeholder='Selecciona un valor'
-						values={[
-							CluniStatus.active,
-							CluniStatus.inactive,
-							CluniStatus.inProgress,
-							CluniStatus.no,
-						]}
-						labels={[
-							'Contamos con CLUNI activa',
-							'Contamos con CLUNI, actualmente inactiva',
-							'Trámite en proceso',
-							'No contamos con CLUNI',
-						]}
-					/>
-					<LabeledSelect
-						label='Estatus de donataria autorizada'
-						className='grow basis-full sm:basis-5/12'
-						placeholder='Selecciona un valor'
-						values={[
-							DonationAuthStatus.notAuthorized,
-							DonationAuthStatus.authorized,
-							DonationAuthStatus.inProgress,
-							DonationAuthStatus.inRecovery,
-						]}
-						labels={[
-							'No contamos con donataria autorizada',
-							'Sí contamos con donataria autorizada',
-							'En proceso de autorización',
-							'En proceso de recuperación',
-						]}
-					/>
 				</div>
 			</Collapsible>
 			<Collapsible open={!showIncFields} className='basis-full mt-2'>

@@ -11,24 +11,23 @@ export default async function OrganizationLayout({
 }) {
 	const organization = await getOrganizationFromSession();
 	return (
-		<div className='pt-4 flex gap-4'>
-			<div className='w-64'>
-				<OrganizationCard organization={organization}/>
+		<div className='pt-4'>
+			<div className='absolute w-56'>
 				<OrganizationDataProgressCard/>
 			</div>
-
-			<div className='grow'>
+			<div className='grow ml-60'>
 				<div className='w-full flex'>
 					<OrganizationTab label='Información general' className='grow'/>
-					<OrganizationTab slug='focus' label='Enfoque' className='grow'/>
+					<OrganizationTab slug='purpose' label='Propósito' className='grow'/>
+					<OrganizationTab slug='address' label='Dirección' className='grow'/>
 					<OrganizationTab
 						slug='legal'
 						label='Datos legales'
 						className='grow'
 					/>
 					<OrganizationTab
-						slug='geographic'
-						label='Datos geográficos'
+						slug='areas'
+						label='Zonas de impacto'
 						className='grow'
 					/>
 				</div>

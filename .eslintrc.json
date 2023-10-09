@@ -12,13 +12,16 @@
     "n/file-extension-in-import": "off",
     "n/prefer-global/process": "off",
 		"react/button-has-type": "off",
-    "new-cap": "off"
+    "new-cap": "off",
+		"react/jsx-indent-props": "off",
+		"react/jsx-closing-bracket-location": "off",
+		"react/jsx-closing-tag-location": "off"
   },
   "extends": [
     "plugin:@next/next/recommended",
     "xo",
     "xo-typescript",
     "xo-react",
-    "./node_modules/xo/config/plugins.cjs"
-  ]
+		"./node_modules/xo/config/plugins.cjs"
+	]
 }

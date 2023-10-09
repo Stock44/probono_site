@@ -1,5 +1,7 @@
 import React from 'react';
 import {type Metadata} from 'next';
+import Script from 'next/script';
+import 'leaflet/dist/leaflet.css';
 import './globals.css';
 import ClientProviders from '@/app/client-providers.tsx';
 

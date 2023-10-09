@@ -8,5 +8,8 @@ module.exports = {
     "n/prefer-global/process": "off",
     "new-cap": "off",
 	  "react/button-has-type": "off",
+	  "react/jsx-indent-props": "off",
+	  "react/jsx-closing-bracket-location": "off",
+	  "react/jsx-closing-tag-location": "off"
   },
 };
