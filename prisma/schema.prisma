@@ -68,12 +68,23 @@ enum Gender {
 }
 
 model AgeGroup {
-  id     Int     @id @default(autoincrement())
-  gender Gender?
+  id     Int  @id @default(autoincrement())
   minAge Int
   maxAge Int?
 
-  organizations Organization[]
+  organizations OrganizationAgeGroup[]
+}
+
+model OrganizationAgeGroup {
+  organization   Organization @relation(fields: [organizationId], references: [id])
+  organizationId Int
+
+  ageGroup   AgeGroup @relation(fields: [ageGroupId], references: [id])
+  ageGroupId Int
+
+  gender Gender?
+
+  @@id([organizationId, ageGroupId])
 }
 
 model OrganizationBeneficiary {
@@ -226,7 +237,7 @@ model Organization {
 
   organizationActivities OrganizationActivity[]
 
-  organizationAgeGroups AgeGroup[]
+  organizationAgeGroups OrganizationAgeGroup[]
 
   organizationBeneficiaries OrganizationBeneficiary[]
 
