@@ -7,7 +7,7 @@
 		"./*"
 	],
 	"rules": {
-    "react/proptypes": "off",
+    "react/prop-types": "off",
     "react/require-default-props": "off",
     "n/file-extension-in-import": "off",
     "n/prefer-global/process": "off",

@@ -14,11 +14,11 @@ export const Button = React.forwardRef((
 		{...props}
 		ref={ref}
 		className={clsx(
-			'h-8 p-1 rounded text-sm font-bold flex items-center',
+			'p-1 rounded text-sm font-bold flex items-center',
 			variant === 'primary'
           && 'bg-stone-50 text-stone-950 hover:bg-stone-200',
 			variant === 'secondary'
-          && 'text-stone-300 hover:bg-stone-800 border border-stone-800',
+          && 'text-stone-300 hover:bg-stone-800 border border-stone-700',
 			variant === 'tertiary'
           && 'bg-stone-950 text-stone-300 hover:bg-stone-900',
 			className,

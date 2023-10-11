@@ -1,6 +1,6 @@
 import React from 'react';
-import {Input as BaseInput, type InputProps} from '@mui/base';
 import clsx from 'clsx';
+import {Input} from '@/components/input.tsx';
 
 export const LabeledInput = React.forwardRef((
 	{
@@ -12,7 +12,7 @@ export const LabeledInput = React.forwardRef((
 	}: {
 		readonly label: string;
 		readonly issueText?: string;
-	} & Omit<InputProps, 'slotProps' | 'ref'>,
+	} & React.ComponentProps<typeof Input>,
 	ref: React.ForwardedRef<HTMLDivElement>,
 ) => (
 	<label className={clsx('flex flex-col gap-2 mb-4', className)}>
@@ -20,17 +20,7 @@ export const LabeledInput = React.forwardRef((
 			{label}
 			{required === true ? '*' : null}
 		</p>
-		<BaseInput
-			{...(inputProps as any)}
-			ref={ref}
-			required={required}
-			slotProps={{
-				input: {
-					className:
-              'border-1 bg-stone-950 border-stone-700 rounded text-stone-50 p-2 text-sm w-full',
-				},
-			}}
-		/>
+		<Input {...inputProps} required={required}/>
 		{issueText === undefined ? null : (
 			<p className='text-red-400 text-xs'> {issueText}</p>
 		)}

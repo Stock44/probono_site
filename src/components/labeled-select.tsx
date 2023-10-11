@@ -55,7 +55,7 @@ export const LabeledSelect = React.forwardRef(<
 
 	return (
 		<label className={clsx('mb-4 block', className)}>
-			<p className='text-stone-300 text-xs pb-1'>
+			<p className='text-stone-300 text-sm pb-1'>
 				{label}
 				{required === true ? '*' : null}
 			</p>

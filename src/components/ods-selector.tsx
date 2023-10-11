@@ -49,12 +49,11 @@ export default function OdsSelector(props: React.ComponentProps<'div'>) {
 				{ods.map(([number, name, logo]) => (
 					<RadioGroup.Item
 						key={number}
-						className='relative min-w-fit min-h-fit'
+						className='relative min-w-fit min-h-fit group'
 						value={number.toString()}
 					>
-						<Image className='z-0 rounded' width={128} alt={name} src={logo}/>
-						<RadioGroup.Indicator className='absolute left-0 top-0 z-10 w-full h-full bg-blue-700 opacity-40 rounded'/>
-						<RadioGroup.Indicator className='absolute bottom-1 right-1 z-20 rounded text-blue-800 material-symbols-rounded'>
+						<Image className='group-data-[state=checked]:brightness-50 group-hover:brightness-75 rounded' width={128} alt={name} src={logo}/>
+						<RadioGroup.Indicator className='absolute bottom-1 right-1 rounded text-stone-50 material-symbols-rounded'>
 							check_circle
 						</RadioGroup.Indicator>
 					</RadioGroup.Item>

@@ -18,11 +18,23 @@ model OrganizationActivityCategory {
 }
 
 model OrganizationActivity {
-  id            Int                          @id @default(autoincrement())
+  id            Int                                  @id @default(autoincrement())
   name          String
-  category      OrganizationActivityCategory @relation(fields: [categoryId], references: [id])
+  category      OrganizationActivityCategory         @relation(fields: [categoryId], references: [id])
   categoryId    Int
-  organizations Organization[]
+  organizations OrganizationToOrganizationActivity[]
+}
+
+model OrganizationToOrganizationActivity {
+  organization   Organization @relation(fields: [organizationId], references: [id])
+  organizationId Int
+
+  activity   OrganizationActivity @relation(fields: [activityId], references: [id])
+  activityId Int
+
+  priority Int
+
+  @@id([organizationId, activityId])
 }
 
 model State {
@@ -235,8 +247,6 @@ model Organization {
   organizationCategory   OrganizationCategory? @relation(fields: [organizationCategoryId], references: [id])
   organizationCategoryId Int?
 
-  organizationActivities OrganizationActivity[]
-
   organizationAgeGroups OrganizationAgeGroup[]
 
   organizationBeneficiaries OrganizationBeneficiary[]
@@ -249,8 +259,9 @@ model Organization {
 
   sectors Sector[]
 
-  owner    Person @relation(fields: [personId], references: [id])
-  personId Int    @unique
+  owner      Person                               @relation(fields: [personId], references: [id])
+  personId   Int                                  @unique
+  activities OrganizationToOrganizationActivity[]
 }
 
 model Person {

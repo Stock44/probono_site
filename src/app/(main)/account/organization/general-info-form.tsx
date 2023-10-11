@@ -16,22 +16,34 @@ export default function GeneralInfoForm({organization}: {readonly organization: 
 	return (
 		<form>
 			<div className='flex items-end gap-x-4 w-full'>
-				{
-					imageDropAreaOpen || organization.logoUrl === null ? <ImageDropArea label='Suelta una imagen para tu logo aquí' className='w-48 h-48'/>
-						: <button
-							className='relative group mb-4' onClick={() => {
-								setImageDropAreaOpen(true);
-							}}
-						>
-							<Image src={organization.logoUrl} alt={organization.name} width={192} height={192}/>
-							<div
-								className='text-stone-200 text-lg font-semibold absolute top-0 left-0 w-full h-full justify-center items-center hidden group-hover:flex group-hover:flex-col bg-stone-800 opacity-50'
+				<div className='group'>
+					{
+						imageDropAreaOpen || organization.logoUrl === null ? <div>
+							<ImageDropArea
+								label='Suelta una imagen para tu logo aquí' className='w-48 aspect-square'/>
+							<Button
+								variant='secondary' className='w-full justify-center mb-4' onClick={() => {
+									setImageDropAreaOpen(false);
+								}}> Cancelar </Button>
+						</div>
+							: <button
+								className='relative group mb-4' onClick={() => {
+									setImageDropAreaOpen(true);
+								}}
 							>
-								<Icon iconName='add_photo_alternate' size='6xl'/>
-								Cambiar imagen
-							</div>
-						</button>
-				}
+								<Image
+									src={organization.logoUrl} alt={organization.name} className='group-hover:brightness-75'
+									width={192} height={192}/>
+								<div
+									className='text-stone-300 font-semibold absolute top-0 left-0 w-full h-full justify-center items-center hidden group-hover:flex group-hover:flex-col'
+								>
+									<Icon iconName='add_photo_alternate' size='4xl'/>
+									Cambiar logo
+								</div>
+							</button>
+					}
+				</div>
+
 				<div className='flex grow gap-x-4 items-end flex-wrap'>
 					<LabeledInput required label='Nombre de la organización' className='grow'/>
 					<NumberInput
