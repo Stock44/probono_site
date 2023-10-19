@@ -5,7 +5,7 @@ import {ZodError} from 'zod';
 import {experimental_useFormStatus as useFormStatus} from 'react-dom';
 import {LabeledInput} from '@/components/labeled-input.tsx';
 import {NumberInput} from '@/components/number-input.tsx';
-import {Button} from '@/components/button.tsx';
+import Button from '@/components/button.tsx';
 import ImageDropArea from '@/components/image-drop-area.tsx';
 import Icon from '@/components/icon.tsx';
 import {organizationSchema} from '@/lib/schemas/organization.ts';

@@ -5,7 +5,7 @@ import {redirect} from 'next/navigation';
 import {ZodError} from 'zod';
 import {LabeledInput} from '@/components/labeled-input.tsx';
 import createPersonFromFormAction from '@/app/(onboarding)/onboarding/person/create-person-from-form-action.ts';
-import {Button} from '@/components/button.tsx';
+import Button from '@/components/button.tsx';
 import Icon from '@/components/icon.tsx';
 import {decodeForm} from '@/lib/schemas/decode-form.ts';
 import {personSchema} from '@/lib/schemas/person.ts';

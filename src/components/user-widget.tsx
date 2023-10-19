@@ -8,7 +8,7 @@ import Link from 'next/link';
 import {type Person, type Organization} from '@prisma/client';
 import {useUser} from '@auth0/nextjs-auth0/client';
 import Image from 'next/image';
-import {Button} from '@/components/button.tsx';
+import Button from '@/components/button.tsx';
 import PersonAvatar from '@/components/person-avatar.tsx';
 
 /**

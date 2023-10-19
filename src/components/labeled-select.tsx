@@ -49,52 +49,47 @@ export const LabeledSelect = React.forwardRef(<
 		readonly labels?: string[];
 	} & SelectProps<string | number, Multiple>,
 	ref: React.ForwardedRef<HTMLButtonElement>,
-) => {
-	const actualValues = required === true ? values : [null, ...values];
-	const actualLabels = required ? [props.placeholder, ...(labels ?? [])] : labels;
-
-	return (
-		<label className={clsx('mb-4 block', className)}>
-			<p className='text-stone-300 text-sm pb-1'>
-				{label}
-				{required === true ? '*' : null}
-			</p>
-			<BaseSelect<string | number, Multiple>
-				{...props}
-				ref={ref}
-				required={required}
-				slots={{
-					root: SelectButton,
-				}}
-				slotProps={{
-					...slotProps,
-					root: {
-						className:
+) => (
+	<label className={clsx('mb-4 block', className)}>
+		<p className='text-stone-300 text-sm pb-1'>
+			{label}
+			{required === true ? '*' : null}
+		</p>
+		<BaseSelect<string | number, Multiple>
+			{...props}
+			ref={ref}
+			required={required}
+			slots={{
+				root: SelectButton,
+			}}
+			slotProps={{
+				...slotProps,
+				root: {
+					className:
               'rounded flex justify-between p-1 w-full text-sm border border-stone-700 text-stone-300',
-					},
-					popper: {
-						className: 'shadow-md',
-					},
-					listbox: {
-						className: 'rounded bg-stone-800 mt-2 border-stone-600 border',
-					},
-				}}
-			>
-				{actualValues.map((value, idx) => (
-					<BaseOption
-						key={value}
-						value={value}
-						slotProps={{
-							root: {
-								className:
+				},
+				popper: {
+					className: 'shadow-md',
+				},
+				listbox: {
+					className: 'rounded bg-stone-800 mt-2 border-stone-600 border',
+				},
+			}}
+		>
+			{values.map((value, idx) => (
+				<BaseOption
+					key={value}
+					value={value}
+					slotProps={{
+						root: {
+							className:
                   'hover:bg-stone-600 hover:text-stone-100 p-1 text-stone-200',
-							},
-						}}
-					>
-						{actualLabels === undefined ? value : actualLabels[idx]}
-					</BaseOption>
-				))}
-			</BaseSelect>
-		</label>
-	);
-});
+						},
+					}}
+				>
+					{labels === undefined ? value : labels[idx]}
+				</BaseOption>
+			))}
+		</BaseSelect>
+	</label>
+));

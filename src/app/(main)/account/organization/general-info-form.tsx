@@ -6,7 +6,7 @@ import {LabeledInput} from '@/components/labeled-input.tsx';
 import ImageDropArea from '@/components/image-drop-area.tsx';
 import {NumberInput} from '@/components/number-input.tsx';
 import Icon from '@/components/icon.tsx';
-import {Button} from '@/components/button.tsx';
+import Button from '@/components/button.tsx';
 
 export default function GeneralInfoForm({organization}: {readonly organization: Organization}) {
 	const [imageDropAreaOpen, setImageDropAreaOpen] = useState(false);

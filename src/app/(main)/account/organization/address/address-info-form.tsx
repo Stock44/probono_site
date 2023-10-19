@@ -3,7 +3,7 @@ import React from 'react';
 import {MapContainer, TileLayer} from 'react-leaflet';
 import {type State} from '@prisma/client';
 import {LabeledInput} from '@/components/labeled-input.tsx';
-import {Button} from '@/components/button.tsx';
+import Button from '@/components/button.tsx';
 import Icon from '@/components/icon.tsx';
 import {LabeledSelect} from '@/components/labeled-select.tsx';
 

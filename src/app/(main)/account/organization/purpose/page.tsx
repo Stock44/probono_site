@@ -6,12 +6,13 @@ import {
 	getAllOrganizationActivitiesByCategory,
 } from '@/lib/get-all-organization-activities.ts';
 import {getAllBeneficiaries} from '@/lib/get-all-beneficiaries.ts';
+import {getAllAgeGroups} from '@/lib/get-all-age-groups.ts';
 
 export default withPageAuthRequired(async () => {
 	const organizationCategories = await getAllOrganizationCategories();
 	const organizationActivities = await getAllOrganizationActivitiesByCategory();
 	const beneficiaries = await getAllBeneficiaries();
-	const ageGroups = await getAllBeneficiaries();
+	const ageGroups = await getAllAgeGroups();
 	return (
 		<div className='mt-4'>
 			<PurposeInfoForm organizationCategories={organizationCategories} organizationActivities={organizationActivities} beneficiaries={beneficiaries} ageGroups={ageGroups}/>

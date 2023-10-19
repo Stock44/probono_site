@@ -1,6 +1,6 @@
 import React from 'react';
 import Link from 'next/link';
-import {Button} from '@/components/button.tsx';
+import Button from '@/components/button.tsx';
 import Icon from '@/components/icon.tsx';
 
 export default function OnboardingPage() {

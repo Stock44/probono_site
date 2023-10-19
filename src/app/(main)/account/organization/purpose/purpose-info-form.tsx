@@ -1,5 +1,5 @@
 'use client';
-import React, {useState} from 'react';
+import React, {useEffect, useMemo, useRef, useState} from 'react';
 import {
 	type AgeGroup,
 	type OrganizationActivity,
@@ -8,12 +8,16 @@ import {
 	type OrganizationCategory,
 } from '@prisma/client';
 import * as Tabs from '@radix-ui/react-tabs';
+import Fuse from 'fuse.js';
+import {Item} from 'react-stately';
+import clsx from 'clsx';
 import OdsSelector from '@/components/ods-selector.tsx';
 import {LabeledSelect} from '@/components/labeled-select.tsx';
 import Icon from '@/components/icon.tsx';
-import {Button} from '@/components/button.tsx';
+import Button from '@/components/button.tsx';
 import ActivityPrioritySelector from '@/app/(main)/account/organization/purpose/activity-priority-selector.tsx';
-import InputWithIcon from '@/components/input-with-icon.tsx';
+import ComboBox from '@/components/combo-box.tsx';
+import TagGroup from '@/components/tag-group.tsx';
 
 export default function PersonInfoForm({organizationActivities, organizationCategories, beneficiaries, ageGroups}: {
 	readonly organizationCategories: OrganizationCategory[];
@@ -21,27 +25,69 @@ export default function PersonInfoForm({organizationActivities, organizationCate
 	readonly beneficiaries: OrganizationBeneficiary[];
 	readonly ageGroups: AgeGroup[];
 }) {
+	const beneficiaryMap: Record<number, OrganizationBeneficiary> = useMemo(() => Object.fromEntries(beneficiaries.map(beneficiary => [beneficiary.id, beneficiary])), [beneficiaries]);
+
+	const beneficiariesFuseRef = useRef<Fuse<OrganizationBeneficiary>>();
+
+	const [beneficiariesFilter, setBeneficiariesFilter] = useState('');
+
+	const [addedBeneficiaries, setAddedBeneficiaries] = useState<number[]>([]);
+
+	const filteredBeneficiaries = useMemo(() => {
+		const fuse = beneficiariesFuseRef.current;
+		if (fuse === undefined) {
+			return beneficiaries;
+		}
+
+		if (beneficiariesFilter === '') {
+			return beneficiaries;
+		}
+
+		return fuse.search(beneficiariesFilter).map(({item}) => item).filter(({id}) => !addedBeneficiaries.includes(id));
+	}, [beneficiariesFilter, beneficiaries, addedBeneficiaries]);
+
 	const [selectedActivities, setSelectedActivities] = useState<Record<number, OrganizationActivity>>({});
 
 	const [activityPriorities, setActivityPriorities] = useState<number[]>([]);
 
-	const [beneficiariesFilter, setBeneficiariesFilter] = useState();
+	useEffect(() => {
+		beneficiariesFuseRef.current = new Fuse(beneficiaries, {
+			keys: ['name'],
+		});
+	}, [beneficiaries]);
 
 	return (
 		<form>
-			<InputWithIcon
-				iconName='search' value={beneficiariesFilter} onChange={event => {
-					setBeneficiariesFilter(event.target.value);
-				}}/>
-			<div className='flex flex-wrap'>
+			<TagGroup
+				className={clsx(addedBeneficiaries.length > 0 && 'mb-2')}
+				label='Beneficiarios' items={addedBeneficiaries.map(key => beneficiaryMap[key])} onRemove={keys => {
+					setAddedBeneficiaries(previousState => previousState.filter(key => !keys.has(key)));
+				}}>
+				{beneficiary => <Item>{beneficiary.name}</Item>}
+			</TagGroup>
+			<ComboBox
+				icon='add'
+				aria-label='beneficiaries' items={filteredBeneficiaries} selectedKey={null}
+				inputValue={beneficiariesFilter}
+				onSelectionChange={key => {
+					if (key === null) {
+						return;
+					}
+
+					setAddedBeneficiaries(previousState => [...previousState, key as number]);
+					setBeneficiariesFilter('');
+				}}
+				onInputChange={setBeneficiariesFilter}
+			>
 				{
-					beneficiaries.map(beneficiary => (
-						<Button key={beneficiary.id} variant='secondary'>
+					beneficiary => (
+						<Item>
 							{beneficiary.name}
-						</Button>
-					))
+						</Item>
+					)
 				}
-			</div>
+			</ComboBox>
+
 			<LabeledSelect
 				label='¿Cómo categorizarías a tu organización?' values={organizationCategories.map(({id}) => id)}
 				labels={organizationCategories.map(({name}) => name)}/>
@@ -52,7 +98,10 @@ export default function PersonInfoForm({organizationActivities, organizationCate
 				Ordenalas de mayor a menor importancia.
 			</p>
 			<div className='flex gap-2 mb-4'>
-				<ActivityPrioritySelector selectedActivities={selectedActivities} priorities={activityPriorities} onPrioritiesChange={setActivityPriorities} onSelectedActivitiesChange={setSelectedActivities}/>
+				<ActivityPrioritySelector
+					selectedActivities={selectedActivities} priorities={activityPriorities}
+					onPrioritiesChange={setActivityPriorities}
+					onSelectedActivitiesChange={setSelectedActivities}/>
 				<Tabs.Root
 					defaultValue={organizationActivities[0].id.toString()}
 					className='p-2 border-stone-800 border rounded grow basis-5/12'>
@@ -69,7 +118,7 @@ export default function PersonInfoForm({organizationActivities, organizationCate
 								{
 									activities.filter(activity => !(activity.id in selectedActivities)).map(activity => (
 										<Button
-											key={activity.id} variant='secondary' onClick={() => {
+											key={activity.id} variant='secondary' onPress={() => {
 												setActivityPriorities([...activityPriorities, activity.id]);
 												setSelectedActivities({
 													...selectedActivities,

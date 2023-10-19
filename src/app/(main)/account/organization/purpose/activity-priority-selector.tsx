@@ -4,7 +4,7 @@ import clsx from 'clsx';
 import {omit} from 'lodash';
 import Icon from '@/components/icon.tsx';
 import Spacer from '@/components/spacer.tsx';
-import {Button} from '@/components/button.tsx';
+import Button from '@/components/button.tsx';
 
 export default function ActivityPrioritySelector(
 	{
@@ -164,7 +164,7 @@ export default function ActivityPrioritySelector(
 							<Spacer/>
 							<Button
 								className='bg-transparent hover:bg-stone-700'
-								variant='tertiary' onClick={() => {
+								variant='tertiary' onPress={() => {
 									onSelectedActivitiesChange(omit(selectedActivities, [activity.id]));
 									onPrioritiesChange(priorities.filter(activityId => activityId !== activity.id));
 								}}>

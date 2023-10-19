@@ -8,7 +8,7 @@ import Collapsible from '@/components/collapsible.tsx';
 import Separator from '@/components/separator.tsx';
 import ODSSelector from '@/components/ods-selector.tsx';
 import {LabeledSelect} from '@/components/labeled-select.tsx';
-import {Button} from '@/components/button.tsx';
+import Button from '@/components/button.tsx';
 
 export default function GeneralDataForm({corporationTypes}: {
 	readonly corporationTypes: CorporationType[];
