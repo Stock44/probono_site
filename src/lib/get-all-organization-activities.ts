@@ -3,16 +3,7 @@ import prisma from '@/lib/prisma.ts';
 
 const revalidate = 86_400;
 
-export const getAllOrganizationActivitiesByCategory = cache(async () => prisma.organizationActivityCategory.findMany({
-	include: {
-		activities: {
-			orderBy: [
-				{
-					name: 'asc',
-				},
-			],
-		},
-	},
+export const getAllOrganizationActivities = cache(async () => prisma.organizationActivity.findMany({
 	orderBy: [
 		{
 			name: 'asc',

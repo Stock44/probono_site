@@ -1,84 +1,87 @@
 'use client';
-import React, {useEffect, useMemo, useRef, useState} from 'react';
+import React, {useMemo, useState} from 'react';
 import {
-	type AgeGroup,
+	type AgeGroup, Gender,
 	type OrganizationActivity,
-	type OrganizationActivityCategory,
 	type OrganizationBeneficiary,
 	type OrganizationCategory,
 } from '@prisma/client';
-import * as Tabs from '@radix-ui/react-tabs';
-import Fuse from 'fuse.js';
 import {Item} from 'react-stately';
-import clsx from 'clsx';
+import {List, Seq} from 'immutable';
 import OdsSelector from '@/components/ods-selector.tsx';
-import {LabeledSelect} from '@/components/labeled-select.tsx';
+import Select from '@/components/select.tsx';
 import Icon from '@/components/icon.tsx';
 import Button from '@/components/button.tsx';
+import ComboBoxTagMultiSelect from '@/components/combo-box-tag-multi-select.tsx';
+import AgeGenderGroupSelector, {
+	type GenderedAgeGroup,
+} from '@/app/(main)/account/organization/purpose/age-gender-group-selector.tsx';
 import ActivityPrioritySelector from '@/app/(main)/account/organization/purpose/activity-priority-selector.tsx';
-import ComboBox from '@/components/combo-box.tsx';
-import TagGroup from '@/components/tag-group.tsx';
+import useImmutableListData from '@/lib/hooks/use-immutable-list-data.ts';
+import genders from '@/lib/genders.ts';
+import useSearchableListData from '@/lib/hooks/use-searchable-list-data.ts';
 
-export default function PersonInfoForm({organizationActivities, organizationCategories, beneficiaries, ageGroups}: {
+export default function PersonInfoForm({activities, organizationCategories, beneficiaries, ageGroups}: {
 	readonly organizationCategories: OrganizationCategory[];
-	readonly organizationActivities: Array<OrganizationActivityCategory & {activities: OrganizationActivity[]}>;
+	readonly activities: OrganizationActivity[];
 	readonly beneficiaries: OrganizationBeneficiary[];
 	readonly ageGroups: AgeGroup[];
 }) {
-	const beneficiaryMap: Record<number, OrganizationBeneficiary> = useMemo(() => Object.fromEntries(beneficiaries.map(beneficiary => [beneficiary.id, beneficiary])), [beneficiaries]);
+	const activitiesListData = useSearchableListData({
+		initialItems: List(activities),
+		searchKeys: List(['name']),
+	});
 
-	const beneficiariesFuseRef = useRef<Fuse<OrganizationBeneficiary>>();
+	const genderedAgeGroups: List<GenderedAgeGroup> = useMemo(() => List(ageGroups).map(ageGroup => ({
+		...ageGroup,
+		gender: Gender.other,
+	})), [ageGroups]);
 
-	const [beneficiariesFilter, setBeneficiariesFilter] = useState('');
+	const ageGroupsListData = useImmutableListData({
+		initialItems: genderedAgeGroups,
+	});
 
-	const [addedBeneficiaries, setAddedBeneficiaries] = useState<number[]>([]);
+	const beneficiariesListData = useSearchableListData({
+		initialItems: List(beneficiaries),
+		searchKeys: List(['name']),
+	});
 
-	const filteredBeneficiaries = useMemo(() => {
-		const fuse = beneficiariesFuseRef.current;
-		if (fuse === undefined) {
-			return beneficiaries;
-		}
-
-		if (beneficiariesFilter === '') {
-			return beneficiaries;
-		}
-
-		return fuse.search(beneficiariesFilter).map(({item}) => item).filter(({id}) => !addedBeneficiaries.includes(id));
-	}, [beneficiariesFilter, beneficiaries, addedBeneficiaries]);
-
-	const [selectedActivities, setSelectedActivities] = useState<Record<number, OrganizationActivity>>({});
-
-	const [activityPriorities, setActivityPriorities] = useState<number[]>([]);
-
-	useEffect(() => {
-		beneficiariesFuseRef.current = new Fuse(beneficiaries, {
-			keys: ['name'],
-		});
-	}, [beneficiaries]);
+	const [selectedOds, setSelectedOds] = useState<number>();
 
 	return (
-		<form>
-			<TagGroup
-				className={clsx(addedBeneficiaries.length > 0 && 'mb-2')}
-				label='Beneficiarios' items={addedBeneficiaries.map(key => beneficiaryMap[key])} onRemove={keys => {
-					setAddedBeneficiaries(previousState => previousState.filter(key => !keys.has(key)));
-				}}>
-				{beneficiary => <Item>{beneficiary.name}</Item>}
-			</TagGroup>
-			<ComboBox
-				icon='add'
-				aria-label='beneficiaries' items={filteredBeneficiaries} selectedKey={null}
-				inputValue={beneficiariesFilter}
-				onSelectionChange={key => {
-					if (key === null) {
-						return;
-					}
+		<form className='mt-4'>
+			<div className='flex justify-between items-end mb-4'>
+				<div>
+					<h1 className='text-stone-200 text-4xl mb-2'>
+						Propósito
+					</h1>
+					<p className='text-stone-300'>
+						Esta información nos dice lo que tu organización hace, su objetivo y a quienes beneficia.
+					</p>
+				</div>
+				<Button type='submit'>
+					<Icon iconName='save'/>
+					Guardar
+				</Button>
+			</div>
 
-					setAddedBeneficiaries(previousState => [...previousState, key as number]);
-					setBeneficiariesFilter('');
-				}}
-				onInputChange={setBeneficiariesFilter}
-			>
+			<Select label='¿Cómo categorizarias a tu organización?' items={organizationCategories} className='w-full mb-4'>
+				{
+					category => (
+						<Item>
+							{category.name}
+						</Item>
+					)
+				}
+			</Select>
+			<OdsSelector value={selectedOds} className='mb-4' onChange={setSelectedOds}/>
+			<ComboBoxTagMultiSelect
+				label='¿Quiénes son los principales beneficiarios de tu organización?'
+				searchPlaceholder='Escribe aquí para buscar'
+				className='mb-4'
+				items={beneficiariesListData.items} filteredKeys={beneficiariesListData.filteredKeys}
+				filterText={beneficiariesListData.filterText} setFilterText={beneficiariesListData.setFilterText}
+				selectedKeys={beneficiariesListData.selectedKeys} setSelectedKeys={beneficiariesListData.setSelectedKeys}>
 				{
 					beneficiary => (
 						<Item>
@@ -86,60 +89,10 @@ export default function PersonInfoForm({organizationActivities, organizationCate
 						</Item>
 					)
 				}
-			</ComboBox>
+			</ComboBoxTagMultiSelect>
+			<AgeGenderGroupSelector ageGroups={ageGroupsListData}/>
+			<ActivityPrioritySelector label='¿Qué actividades realiza tu organización?' prioritizerLabel='Ordenalas de mayor a menor importancia' activities={activitiesListData}/>
 
-			<LabeledSelect
-				label='¿Cómo categorizarías a tu organización?' values={organizationCategories.map(({id}) => id)}
-				labels={organizationCategories.map(({name}) => name)}/>
-			<h3 className='text-stone-300'>
-				¿Qué actividades realiza tu organización?
-			</h3>
-			<p className='text-stone-400 text-sm mb-4'>
-				Ordenalas de mayor a menor importancia.
-			</p>
-			<div className='flex gap-2 mb-4'>
-				<ActivityPrioritySelector
-					selectedActivities={selectedActivities} priorities={activityPriorities}
-					onPrioritiesChange={setActivityPriorities}
-					onSelectedActivitiesChange={setSelectedActivities}/>
-				<Tabs.Root
-					defaultValue={organizationActivities[0].id.toString()}
-					className='p-2 border-stone-800 border rounded grow basis-5/12'>
-					<Tabs.TabsList className='mb-4 flex flex-wrap'>
-						{organizationActivities.map(({id, name}) => (
-							<Tabs.Trigger
-								key={id} value={id.toString()}
-								className='text-stone-400 hover:text-stone-300 p-2 data-[state=active]:text-stone-50 data-[state=active]:border-b border-stone-50'>{name}</Tabs.Trigger>
-						))}
-					</Tabs.TabsList>
-					{
-						organizationActivities.map(({id, activities}) => (
-							<Tabs.Content key={id} value={id.toString()} className='flex flex-wrap gap-2'>
-								{
-									activities.filter(activity => !(activity.id in selectedActivities)).map(activity => (
-										<Button
-											key={activity.id} variant='secondary' onPress={() => {
-												setActivityPriorities([...activityPriorities, activity.id]);
-												setSelectedActivities({
-													...selectedActivities,
-													[activity.id]: activity,
-												});
-											}}>
-											<Icon iconName='add'/>
-											{activity.name}
-										</Button>
-									))
-								}
-							</Tabs.Content>
-						))
-					}
-				</Tabs.Root>
-			</div>
-
-			<h3 className='text-stone-300 text-lg mb-4'>
-				Selecciona el ODS que atiende tu organización
-			</h3>
-			<OdsSelector/>
 		</form>
 	);
 }

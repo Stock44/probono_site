@@ -1,29 +1,41 @@
-import React, {type ForwardedRef} from 'react';
-import {type AriaComboBoxOptions, type AriaComboBoxProps, useComboBox} from 'react-aria';
-import {type ComboBoxStateOptions, useComboBoxState} from 'react-stately';
-import {useObjectRef} from '@react-aria/utils';
+import React, {useRef} from 'react';
+import {type AriaComboBoxProps, useComboBox} from 'react-aria';
+import {type ComboBoxState, type ComboBoxStateOptions, useComboBoxState} from 'react-stately';
+import clsx from 'clsx';
 import ListBox from '@/components/list-box.tsx';
 import Button from '@/components/button.tsx';
 import Popover from '@/components/popover.tsx';
 import Icon from '@/components/icon.tsx';
 
-export type ComboBoxProps<T> = {
-	readonly buttonRef?: ForwardedRef<HTMLButtonElement>;
-	readonly inputRef?: ForwardedRef<HTMLInputElement>;
-	readonly listBoxRef?: ForwardedRef<HTMLUListElement>;
-	readonly popoverRef?: ForwardedRef<HTMLDivElement>;
-	readonly icon?: string;
-} & AriaComboBoxProps<T> & ComboBoxStateOptions<T> & AriaComboBoxOptions<T>;
+export type ComboBoxProps<T extends Record<string, unknown>> = StatefulComboBoxProps<T> | BaseComboBoxProps<T>;
 
 export default function ComboBox<T extends Record<string, unknown>>(props: ComboBoxProps<T>) {
-	const {buttonRef, inputRef, listBoxRef, popoverRef, icon} = props;
+	return (
+		'state' in props ? <BaseComboBox {...props}/> : <StatefulComboBox {...props}/>
+	);
+}
 
+export type StatefulComboBoxProps<T extends Record<string, unknown>> = Omit<BaseComboBoxProps<T>, 'state'> & ComboBoxStateOptions<T>;
+
+export function StatefulComboBox<T extends Record<string, unknown>>(props: StatefulComboBoxProps<T>) {
 	const state = useComboBoxState<T>(props);
 
-	const buttonObjectRef = useObjectRef(buttonRef);
-	const inputObjectRef = useObjectRef(inputRef);
-	const listBoxObjectRef = useObjectRef(listBoxRef);
-	const popoverObjectRef = useObjectRef(popoverRef);
+	return <BaseComboBox {...props} state={state}/>;
+}
+
+export type BaseComboBoxProps<T extends Record<string, unknown>> = {
+	readonly icon?: string;
+	readonly className?: string;
+	readonly state: ComboBoxState<T>;
+} & AriaComboBoxProps<T>;
+
+export function BaseComboBox<T extends Record<string, unknown>>(props: BaseComboBoxProps<T>) {
+	const {icon, state, className} = props;
+
+	const buttonObjectRef = useRef<HTMLButtonElement>(null);
+	const inputObjectRef = useRef<HTMLInputElement>(null);
+	const listBoxObjectRef = useRef<HTMLUListElement>(null);
+	const popoverObjectRef = useRef<HTMLDivElement>(null);
 
 	const {buttonProps, inputProps, listBoxProps, labelProps} = useComboBox<T>({
 		...props,
@@ -34,14 +46,16 @@ export default function ComboBox<T extends Record<string, unknown>>(props: Combo
 	}, state);
 
 	return (
-		<div className='mb-4 group'>
-			<label {...labelProps} className='text-stone-400 text-sm mb-1 group-focus-within:text-stone-50'>{props.label}</label>
-			<div className='flex items-center text-stone-300 border border-stone-700 rounded bg-stone-950 group-focus-within:border-stone-50 '>
+		<div className={clsx('group', className)}>
+			<label
+				{...labelProps} className='text-stone-300 text-sm mb-1 group-focus-within:text-stone-50'>{props.label}</label>
+			<div
+				className='flex items-center text-stone-300 border border-stone-700 rounded bg-stone-950 group-focus-within:border-stone-50 '>
 				{icon === undefined ? null : <Icon iconName={icon}/>}
 				<input
 					{...inputProps}
 					ref={inputObjectRef}
-					className='p-1 bg-transparent grow outline-0'
+					className='p-1 bg-transparent grow outline-0 placeholder:text-stone-500'
 				/>
 				<Button
 					{...buttonProps}

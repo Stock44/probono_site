@@ -46,7 +46,6 @@ function ListBoxSection<T extends Record<string, unknown>>(props: ListBoxSection
 		heading: section.rendered,
 		'aria-label': section['aria-label'],
 	});
-
 	// If the section is not the first, add a separator element to provide visual separation.
 	// The heading is rendered inside an <li> element, which contains
 	// a <ul> with the child items.
@@ -63,7 +62,9 @@ function ListBoxSection<T extends Record<string, unknown>>(props: ListBoxSection
 				{section.rendered
 							&& (
 								<span
-									{...headingProps}>
+									{...headingProps}
+									className='text-stone-300'
+								>
 									{section.rendered}
 								</span>
 							)}
@@ -107,9 +108,9 @@ function Option<T extends Record<string, unknown>>(props: OptionProps<T>) {
 		<li
 			{...mergeProps(optionProps, focusProps)}
 			ref={ref}
-			className={clsx('text-stone-300 p-1 rounded',
+			className={clsx('text-stone-300 p-1 rounded outline-none',
 				isSelected && 'bg-stone-50 text-stone-800',
-				isFocused && 'bg-stone-50 text-stone-800')}
+				isFocused && !isSelected && 'bg-stone-800')}
 			data-focus-visible={isFocusVisible}
 		>
 			{item.rendered}

@@ -5,7 +5,7 @@ import {type State} from '@prisma/client';
 import {LabeledInput} from '@/components/labeled-input.tsx';
 import Button from '@/components/button.tsx';
 import Icon from '@/components/icon.tsx';
-import {LabeledSelect} from '@/components/labeled-select.tsx';
+import {Select} from '@/components/select.tsx';
 
 export default function AddressInfoForm({states}: {readonly states: State[]}) {
 	return (
@@ -26,7 +26,7 @@ export default function AddressInfoForm({states}: {readonly states: State[]}) {
 				<LabeledInput required label='Codigo postal' className='w-32'/>
 			</div>
 			<LabeledInput label='Entre calles'/>
-			<LabeledSelect label='Estado' placeholder='Selecciona un estado' values={states.map(state => state.id)} labels={states.map(state => state.name)}/>
+			<Select label='Estado' placeholder='Selecciona un estado' values={states.map(state => state.id)} labels={states.map(state => state.name)}/>
 			<Button className='w-24 justify-center'><Icon iconName='save' className='me-2'/>Guardar</Button>
 		</form>
 

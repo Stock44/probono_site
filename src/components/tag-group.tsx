@@ -1,5 +1,6 @@
-import React, {forwardRef, type ForwardedRef, useRef, ReactNode} from 'react';
+import React, {forwardRef, type ForwardedRef, useRef, ReactNode, type Key} from 'react';
 import {type AriaTagGroupProps, type AriaTagProps, useFocusRing, useTag, useTagGroup} from 'react-aria';
+import {Set} from 'immutable';
 import {useObjectRef} from '@react-aria/utils';
 import {type ListState, useListState, type Node} from 'react-stately';
 import Icon from '@/components/icon.tsx';
@@ -7,19 +8,25 @@ import Button from '@/components/button.tsx';
 
 export type TagGroupProps<T extends Record<string, unknown>> = {
 	readonly className?: string;
-} & AriaTagGroupProps<T>;
+	readonly onRemove?: (keys: Set<Key>) => void;
+} & Omit<AriaTagGroupProps<T>, 'onRemove'>;
 
 export default forwardRef(<T extends Record<string, unknown>>(props: TagGroupProps<T>, ref: ForwardedRef<HTMLDivElement>) => {
-	const {className, label, description, errorMessage} = props;
+	const {className, label, description, errorMessage, onRemove} = props;
 	const divRef = useObjectRef(ref);
 
 	const state = useListState(props);
 
-	const {gridProps, labelProps, descriptionProps, errorMessageProps} = useTagGroup(props, state, divRef);
+	const {gridProps, labelProps, descriptionProps, errorMessageProps} = useTagGroup({
+		...props,
+		onRemove: onRemove === undefined ? undefined : keys => {
+			onRemove(Set(keys));
+		},
+	}, state, divRef);
 
 	return (
 		<div className={className}>
-			<div {...labelProps} className='text-stone-400 text-sm mb-1'>{label}</div>
+			<div {...labelProps} className='text-stone-300 text-sm mb-1'>{label}</div>
 			<div {...gridProps} ref={divRef} className='flex flex-wrap gap-2'>
 				{[...state.collection].map(item => (
 					<Tag key={item.key} item={item} state={state}/>
@@ -57,7 +64,7 @@ function Tag<T>(props: TagProps<T>) {
 			<div {...gridCellProps} className='flex gap-2 items-center border border-stone-700 text-stone-300 rounded px-2'>
 				{item.rendered}
 				{allowsRemoving && (
-					<Button {...removeButtonProps} variant='tertiary' size='xs'><Icon iconName='close' size='sm'/></Button>
+					<Button {...removeButtonProps} variant='tertiary' size='xs'><Icon iconName='close' size='xs'/></Button>
 				)}
 			</div>
 		</div>

@@ -2,7 +2,7 @@
 import React, {useState} from 'react';
 import {CluniStatus, type CorporationType, DonationAuthStatus} from '@prisma/client';
 import {LabeledInput} from '@/components/labeled-input.tsx';
-import {LabeledSelect} from '@/components/labeled-select.tsx';
+import {Select} from '@/components/select.tsx';
 import {NumberInput} from '@/components/number-input.tsx';
 import LabeledCheckbox from '@/components/labeled-checkbox.tsx';
 
@@ -21,7 +21,7 @@ export default function LegalInfoForm({corporationTypes}: {readonly corporationT
 				label='Razón social'
 				className='grow basis-9/12'
 			/>
-			<LabeledSelect
+			<Select
 				required
 				disabled={!enabled}
 				label='Tipo'
@@ -40,7 +40,7 @@ export default function LegalInfoForm({corporationTypes}: {readonly corporationT
 				defaultValue={2023}
 				className='basis-3/12'
 			/>
-			<LabeledSelect
+			<Select
 				label='Estatus de CLUNI'
 				disabled={!enabled}
 				className='grow basis-full sm:basis-5/12'
@@ -58,7 +58,7 @@ export default function LegalInfoForm({corporationTypes}: {readonly corporationT
 					'No contamos con CLUNI',
 				]}
 			/>
-			<LabeledSelect
+			<Select
 				label='Estatus de donataria autorizada'
 				className='grow basis-full sm:basis-5/12'
 				disabled={!enabled}

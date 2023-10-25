@@ -1,178 +1,96 @@
-import React, {useState} from 'react';
-import {type OrganizationActivity} from '@prisma/client';
-import clsx from 'clsx';
-import {omit} from 'lodash';
-import Icon from '@/components/icon.tsx';
-import Spacer from '@/components/spacer.tsx';
-import Button from '@/components/button.tsx';
+import React, {type Key, useMemo, useState} from 'react';
+import {type Set as ImmutableSet, List, Seq} from 'immutable';
+import {Item, type ListData, type ListProps, type Node, Section, useListData, useListState} from 'react-stately';
+import {type OrganizationActivity, type OrganizationActivityCategory} from '@prisma/client';
+import ComboBox from '@/components/combo-box.tsx';
+import useFuse from '@/lib/hooks/use-fuse.ts';
+import ListPrioritizer from '@/components/list-prioritizer.tsx';
+import {type SearchableListData} from '@/lib/hooks/use-searchable-list-data.ts';
 
-export default function ActivityPrioritySelector(
-	{
-		selectedActivities,
-		priorities,
-		onPrioritiesChange,
-		onSelectedActivitiesChange,
-	}:
-	{
-		readonly selectedActivities: Record<number, OrganizationActivity>;
-		readonly priorities: number[];
-		readonly onPrioritiesChange: (newPriorities: number[]) => void;
-		readonly onSelectedActivitiesChange: (newSelectedActivities: Record<number, OrganizationActivity>) => void;
-	}) {
-	const [dragStartY, setDragStartY] = useState(0);
+export type ActivityPrioritySelectorProps = {
+	readonly activities: SearchableListData<OrganizationActivity>;
+	readonly label: string;
+	readonly prioritizerLabel: string;
+};
 
-	const [deltaY, setDeltaY] = useState(0);
+export default function ActivityPrioritySelector(props: ActivityPrioritySelectorProps) {
+	const {activities, label, prioritizerLabel} = props;
 
-	const [activityRefs, setActivityRefs] = useState<Record<number, HTMLDivElement | undefined>>({});
+	const {items, selectedKeys, setSelectedKeys, moveBefore, moveAfter, filteredKeys, getItem, filterText, setFilterText} = activities;
 
-	const [draggedActivity, setDraggedActivity] = useState<number | undefined>(undefined);
-
-	const touchStartHandler = (activityId: number) => ((event: React.TouchEvent) => {
-		setDraggedActivity(activityId);
-		const rect = event.currentTarget.getBoundingClientRect();
-		setDragStartY(rect.y + (rect.height / 2));
-	});
-
-	const dragStartHandler = (activityId: number) => ((event: React.DragEvent) => {
-		event.dataTransfer.setDragImage(new Image(), 0, 0);
-		setDraggedActivity(activityId);
-		const rect = event.currentTarget.getBoundingClientRect();
-		setDragStartY(rect.y + (rect.height / 2));
-	});
-
-	const gap = 8;
-
-	const touchHandler = (priority: number) => ((event: React.TouchEvent) => {
-		if (event.touches.length !== 1) {
-			return;
+	const selectedItems = useMemo(() => {
+		if (selectedKeys === 'all') {
+			return items;
 		}
 
-		const deltaY = event.touches[0].clientY - dragStartY;
-		setDeltaY(deltaY);
+		return items.filter(items => selectedKeys.has(items.id));
+	}, [items, selectedKeys]);
 
-		if (priority !== 0) {
-			const previous = activityRefs[priorities[priority - 1]];
-			if (previous !== undefined && deltaY < -(gap + (previous.clientHeight / 2))) {
-				setDragStartY(previous.getBoundingClientRect().y + (previous.clientHeight / 2));
-				setDeltaY(0);
-				const newPriorities = [...priorities];
-				newPriorities[priority] = priorities[priority - 1];
-				newPriorities[priority - 1] = priorities[priority];
-				onPrioritiesChange(newPriorities);
-			}
-		}
-
-		if ((priority + 1) < priorities.length) {
-			const next = activityRefs[priorities[priority + 1]];
-			if (next !== undefined && deltaY > (gap + next.clientHeight)) {
-				setDragStartY(next.getBoundingClientRect().y + (next.clientHeight / 2));
-				setDeltaY(0);
-				const newPriorities = [...priorities];
-				newPriorities[priority] = priorities[priority + 1];
-				newPriorities[priority + 1] = priorities[priority];
-				onPrioritiesChange(newPriorities);
-			}
-		}
-	});
-
-	const dragHandler = (priority: number) => ((event: React.DragEvent) => {
-		if (event.clientY === 0) {
-			return;
-		}
-
-		const deltaY = event.clientY - dragStartY;
-		setDeltaY(deltaY);
-		if (priority !== 0) {
-			const previous = activityRefs[priorities[priority - 1]];
-			if (previous !== undefined && deltaY < -(gap + (previous.clientHeight / 2))) {
-				setDragStartY(previous.getBoundingClientRect().y + (previous.clientHeight / 2));
-				setDeltaY(0);
-				const newPriorities = [...priorities];
-				newPriorities[priority] = priorities[priority - 1];
-				newPriorities[priority - 1] = priorities[priority];
-				onPrioritiesChange(newPriorities);
-			}
-		}
-
-		if ((priority + 1) < priorities.length) {
-			const next = activityRefs[priorities[priority + 1]];
-			if (next !== undefined && deltaY > (gap + next.clientHeight)) {
-				setDragStartY(next.getBoundingClientRect().y + (next.clientHeight / 2));
-				setDeltaY(0);
-				const newPriorities = [...priorities];
-				newPriorities[priority] = priorities[priority + 1];
-				newPriorities[priority + 1] = priorities[priority];
-				onPrioritiesChange(newPriorities);
-			}
-		}
-	});
-
-	const dragEndHandler = () => {
-		setDraggedActivity(undefined);
-		setDragStartY(0);
-		setDeltaY(0);
-	};
+	const filteredItems = useMemo(() => filteredKeys.toList().map(key => getItem(key)), [filteredKeys, getItem]);
 
 	return (
-		<div className='grow basis-5/12 flex flex-col gap-2 items-stretch'>
-			{Object.keys(selectedActivities).length === 0
-				? <p className='text-stone-400 text-sm '>Selecciona una actividad</p>
-				: priorities.map(id => selectedActivities[id]).map((activity, priority) => (
-					<div
-						key={activity.id} className='flex items-center relative '
-					>
-						<p className='text-stone-300 font-bold w-8 flex-shrink-0 text-center'>
-							{priority + 1}
-						</p>
-						{
-							draggedActivity === activity.id
-								? <div
-									className='rounded bg-stone-900 grow'
-									style={{
-										height: activityRefs[activity.id] === undefined ? undefined : `${activityRefs[activity.id]!.clientHeight}px`,
-									}}
-								/> : null
+		<>
+			<ComboBox
+				aria-label='Ingresa el nombre de un actividad.'
+				placeholder='Escribe aquí para buscar'
+				className='mb-4'
+				label={label}
+				items={filteredItems} inputValue={filterText} menuTrigger='focus'
+				selectedKey={null}
+				onInputChange={setFilterText} onSelectionChange={(key: Key) => {
+					if (key === null) {
+						if (filterText !== '') {
+							setFilterText('');
 						}
-						<div
-							ref={element => {
-								if (element !== null && activityRefs[activity.id] !== element) {
-									setActivityRefs({
-										...activityRefs,
-										[activity.id]: element,
-									});
-								}
-							}}
-							className={clsx(
-								draggedActivity === activity.id && 'absolute z-10 w-[calc(100%-32px)] bg-stone-900',
-								draggedActivity === undefined && 'hover:bg-stone-900',
-								'grow text-stone-200 flex p-1 items-center gap-4 border border-stone-700 rounded touch-none  group')}
-							style={{
-								left: '32px',
-								top: draggedActivity === activity.id ? `${deltaY}px` : undefined,
-							}}
-							onTouchStart={touchStartHandler(activity.id)}
-							onTouchMove={touchHandler(priority)}
-							onTouchEnd={dragEndHandler}
-						>
-							<Icon
-								draggable iconName='drag_handle'
-								className='text-stone-400 cursor-grab'
-								onDragStart={dragStartHandler(activity.id)} onDrag={dragHandler(priority)}
-								onDragEnd={dragEndHandler}
-							/>
+
+						return;
+					}
+
+					setFilterText('');
+					if (selectedKeys === 'all') {
+						return;
+					}
+
+					setSelectedKeys(selectedKeys.add(key));
+				}}>
+				{
+					activity => (
+						<Item>
 							{activity.name}
-							<Spacer/>
-							<Button
-								className='bg-transparent hover:bg-stone-700'
-								variant='tertiary' onPress={() => {
-									onSelectedActivitiesChange(omit(selectedActivities, [activity.id]));
-									onPrioritiesChange(priorities.filter(activityId => activityId !== activity.id));
-								}}>
-								<Icon iconName='remove'/>
-							</Button>
-						</div>
-					</div>
-				))}
-		</div>
+						</Item>
+					)
+				}
+			</ComboBox>
+			{
+				selectedItems.size === 0 ? null
+					: <ListPrioritizer
+						className='mb-4'
+						label={prioritizerLabel}
+						items={selectedItems} onRemove={key => {
+							if (selectedKeys === 'all') {
+								setSelectedKeys(items.map(item => item.id as Key).toSet().remove(key));
+								return;
+							}
+
+							setSelectedKeys(selectedKeys.remove(key));
+						}} onReorder={(key, previous, next) => {
+							if (previous !== undefined) {
+								moveBefore(previous, [key]);
+								return;
+							}
+
+							if (next !== undefined) {
+								moveAfter(next, [key]);
+							}
+						}}>
+						{
+							activity => (
+								<Item>{activity.name}</Item>
+							)
+						}
+					</ListPrioritizer>
+			}
+
+		</>
 	);
 }
