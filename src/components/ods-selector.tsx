@@ -91,7 +91,7 @@ export default function OdsSelector(props: OdsSelectorProps) {
 
 	const state = useRadioGroupState({
 		label: 'Selecciona el ODS que atiende tu organización',
-		value: value?.toString(),
+		value: value?.toString() ?? '',
 		onChange: onChange === undefined ? undefined : value => {
 			onChange(Number.parseInt(value, 10));
 		},

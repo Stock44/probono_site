@@ -16,7 +16,7 @@ export default function Checkbox(props: AriaCheckboxProps & ToggleProps) {
 			<VisuallyHidden>
 				<input {...mergeProps(inputProps, focusProps)} ref={ref}/>
 			</VisuallyHidden>
-			<div className='w-6 h-6 border border-stone-700 rounded p-1' aria-hidden='true'>
+			<div className='w-6 h-6 border border-stone-700 rounded p-1 cursor-pointer' aria-hidden='true'>
 				<svg {...pressProps} className='fill-none stroke-stone-50 stroke-2' viewBox='0 0 18 18'>
 					<polyline
 						className='transition-all duration-200'

@@ -53,8 +53,8 @@ const ListItem = forwardRef(<T extends Record<string, unknown>> (props: ListItem
 	const selectable = state.selectionManager.selectionMode !== 'none' && state.selectionManager.selectionBehavior === 'toggle';
 
 	return (
-		<li {...mergeProps(rowProps, focusProps)} ref={itemRef} className='p-2'>
-			<div {...gridCellProps} className={clsx('text-stone-300 flex items-center gap-4', selectable && 'cursor-pointer')}>
+		<li {...mergeProps(rowProps, focusProps)} ref={itemRef} className={clsx('p-2', selectable && 'cursor-pointer')}>
+			<div {...gridCellProps} className={clsx('text-stone-300 flex items-center gap-4')}>
 				{selectable && <ListCheckbox state={state} item={item}/>}
 				{item.rendered}
 			</div>

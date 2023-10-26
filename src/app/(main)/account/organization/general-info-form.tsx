@@ -3,7 +3,6 @@ import React, {useState} from 'react';
 import {type Organization} from '@prisma/client';
 import Image from 'next/image';
 import {LabeledInput} from '@/components/labeled-input.tsx';
-import ImageDropArea from '@/components/image-drop-area.tsx';
 import {NumberInput} from '@/components/number-input.tsx';
 import Icon from '@/components/icon.tsx';
 import Button from '@/components/button.tsx';
@@ -15,33 +14,38 @@ export default function GeneralInfoForm({organization}: {readonly organization: 
 
 	return (
 		<form>
+			<div className='flex justify-between items-end mb-4'>
+				<div>
+					<h1 className='text-stone-200 text-4xl mb-2'>
+						Información general
+					</h1>
+					<p className='text-stone-300'>
+						Datos básicos sobre tu organización, como información de contacto y redes sociales.
+					</p>
+				</div>
+				<Button type='submit'>
+					<Icon iconName='save' className='me-1'/>
+					Guardar
+				</Button>
+			</div>
+			<div/>
 			<div className='flex items-end gap-x-4 w-full'>
-				<div className='group'>
+				<div className='group relative mb-4 border border-stone-700 rounded flex-none'>
 					{
-						imageDropAreaOpen || organization.logoUrl === null ? <div>
-							<ImageDropArea
-								label='Suelta una imagen para tu logo aquí' className='w-48 aspect-square'/>
-							<Button
-								variant='secondary' className='w-full justify-center mb-4' onClick={() => {
-									setImageDropAreaOpen(false);
-								}}> Cancelar </Button>
-						</div>
-							: <button
-								className='relative group mb-4' onClick={() => {
-									setImageDropAreaOpen(true);
-								}}
-							>
+						organization.logoUrl === null
+							? <div
+								className='w-[140px] h-[140px] text-stone-300 text-4xl flex justify-center items-center hover:text-stone-50 hover:bg-stone-900'>
+								<Icon iconName='add_photo_alternate' size='4xl'/></div>
+							: <>
 								<Image
-									src={organization.logoUrl} alt={organization.name} className='group-hover:brightness-75'
-									width={192} height={192}/>
-								<div
-									className='text-stone-300 font-semibold absolute top-0 left-0 w-full h-full justify-center items-center hidden group-hover:flex group-hover:flex-col'
-								>
+									src={organization.logoUrl} alt={organization.name} className='group-hover:brightness-50'
+									width={140} height={140}/>
+								<div className='text-stone-300 font-semibold absolute top-0 left-0 w-full h-full justify-center items-center hidden group-hover:flex group-hover:flex-col'>
 									<Icon iconName='add_photo_alternate' size='4xl'/>
-									Cambiar logo
 								</div>
-							</button>
+							</>
 					}
+
 				</div>
 
 				<div className='flex grow gap-x-4 items-end flex-wrap'>
@@ -104,7 +108,6 @@ export default function GeneralInfoForm({organization}: {readonly organization: 
 				<LabeledInput label='YouTube' type='url' className='flex-auto'/>
 				<LabeledInput label='LinkedIn' type='url' className='flex-auto'/>
 			</div>
-			<Button className='w-24 justify-center'><Icon iconName='save' className='me-2'/>Guardar</Button>
 		</form>
 	);
 }

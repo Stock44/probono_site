@@ -1,5 +1,4 @@
 import React from 'react';
-import {OrganizationCard} from '@/components/organization-card.tsx';
 import {OrganizationDataProgressCard} from '@/app/(main)/account/organization/organization-data-progress-card.tsx';
 import OrganizationTab from '@/app/(main)/account/organization/organization-tab.tsx';
 import getOrganizationFromSession from '@/lib/get-organization-from-session.ts';
@@ -11,12 +10,12 @@ export default async function OrganizationLayout({
 }) {
 	const organization = await getOrganizationFromSession();
 	return (
-		<div className='pt-4 flex gap-4'>
+		<div className='pt-4 flex gap-8'>
 			<div className='sticky top-0 basis-56 h-full'>
 				<OrganizationDataProgressCard/>
 			</div>
 			<div className='flex-1'>
-				<div className='w-full flex'>
+				<div className='w-full flex mb-8'>
 					<OrganizationTab label='Información general' className='grow'/>
 					<OrganizationTab slug='purpose' label='Propósito' className='grow'/>
 					<OrganizationTab slug='address' label='Dirección' className='grow'/>

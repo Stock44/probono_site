@@ -1,4 +1,4 @@
-import {useEffect, useRef} from 'react';
+import {useEffect, useMemo, useRef} from 'react';
 import Immutable, {type List} from 'immutable';
 import type Fuse from 'fuse.js';
 import Indexed = Immutable.Collection.Indexed;
@@ -21,6 +21,7 @@ export default function useFuse<T>(items: List<T>, options?: Fuse.IFuseOptions<T
 			const fuse = (await import('fuse.js'));
 			fuseRef.current = new fuse.default<T>(items.toArray(), options);
 		})();
-	}, [items, options]);
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [items]);
 	return fuseRef.current;
 }

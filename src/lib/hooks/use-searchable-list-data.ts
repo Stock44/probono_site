@@ -1,10 +1,10 @@
 import {type Key, useMemo} from 'react';
-import {type List, OrderedSet, Seq, type Set} from 'immutable';
+import {type Collection, OrderedSet, Seq, type Set} from 'immutable';
 import useFuse from '@/lib/hooks/use-fuse.ts';
 import useImmutableListData, {type ImmutableListData, type ImmutableListOptions} from '@/lib/hooks/use-immutable-list-data.ts';
 
 export type SearchableListOptions<T> = {
-	readonly searchKeys?: List<string>;
+	readonly searchKeys?: Collection.Indexed<string>;
 } & ImmutableListOptions<T>;
 
 export type SearchableListData<T> = {

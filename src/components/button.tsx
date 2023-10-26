@@ -21,12 +21,12 @@ export default forwardRef((props: ButtonProps, ref: ForwardedRef<HTMLButtonEleme
 			className={clsx(
 				'rounded text-sm font-bold flex items-center justify-between text-left',
 				size === 'xs' && 'text-xs',
-				size === 'sm' && 'p-1 text-sm',
-				size === 'md' && 'p-1 text-md',
+				size === 'sm' && 'text-sm',
+				size === 'md' && 'p-1 text-base',
 				size === 'lg' && 'p-2 text-lg',
 				size === 'xl' && 'p-2 text-xl',
 				variant === 'primary' && !isDisabled
-          && 'bg-stone-50 text-stone-950 hover:bg-stone-200',
+          && 'bg-stone-50 text-stone-950 hover:bg-stone-300 hover:text-stone-800',
 				variant === 'secondary' && !isDisabled
           && 'text-stone-300 hover:bg-stone-800 border border-stone-700',
 				variant === 'tertiary' && !isDisabled

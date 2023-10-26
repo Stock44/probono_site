@@ -3,7 +3,7 @@ import {List, Set} from 'immutable';
 import {type Key, useMemo} from 'react';
 
 export type ImmutableListOptions<T> = Omit<ListOptions<T>, 'initialItems'> & {
-	readonly initialItems?: List<T>;
+	readonly initialItems?: Iterable<T>;
 };
 
 export type ImmutableListData<T> = Omit<ListData<T>, 'items' | 'selectedKeys' | 'setSelectedKeys'> & {
@@ -15,7 +15,7 @@ export type ImmutableListData<T> = Omit<ListData<T>, 'items' | 'selectedKeys' | 
 export default function useImmutableListData<T>(options: ImmutableListOptions<T>): ImmutableListData<T> {
 	const listData = useListData<T>({
 		...options,
-		initialItems: options.initialItems?.toArray(),
+		initialItems: options.initialItems === undefined ? undefined : [...options.initialItems],
 	});
 
 	const items = useMemo(() => List(listData.items), [listData.items]);

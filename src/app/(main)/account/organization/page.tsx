@@ -6,8 +6,6 @@ import getOrganizationFromSession from '@/lib/get-organization-from-session.ts';
 export default withPageAuthRequired(async () => {
 	const organization = await getOrganizationFromSession();
 	return (
-		<div className='mt-4'>
-			<GeneralInfoForm organization={organization}/>
-		</div>
+		<GeneralInfoForm organization={organization}/>
 	);
 });

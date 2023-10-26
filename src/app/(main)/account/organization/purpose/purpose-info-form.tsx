@@ -18,7 +18,6 @@ import AgeGenderGroupSelector, {
 } from '@/app/(main)/account/organization/purpose/age-gender-group-selector.tsx';
 import ActivityPrioritySelector from '@/app/(main)/account/organization/purpose/activity-priority-selector.tsx';
 import useImmutableListData from '@/lib/hooks/use-immutable-list-data.ts';
-import genders from '@/lib/genders.ts';
 import useSearchableListData from '@/lib/hooks/use-searchable-list-data.ts';
 
 export default function PersonInfoForm({activities, organizationCategories, beneficiaries, ageGroups}: {
@@ -28,7 +27,7 @@ export default function PersonInfoForm({activities, organizationCategories, bene
 	readonly ageGroups: AgeGroup[];
 }) {
 	const activitiesListData = useSearchableListData({
-		initialItems: List(activities),
+		initialItems: activities,
 		searchKeys: List(['name']),
 	});
 
@@ -42,14 +41,14 @@ export default function PersonInfoForm({activities, organizationCategories, bene
 	});
 
 	const beneficiariesListData = useSearchableListData({
-		initialItems: List(beneficiaries),
+		initialItems: beneficiaries,
 		searchKeys: List(['name']),
 	});
 
 	const [selectedOds, setSelectedOds] = useState<number>();
 
 	return (
-		<form className='mt-4'>
+		<form>
 			<div className='flex justify-between items-end mb-4'>
 				<div>
 					<h1 className='text-stone-200 text-4xl mb-2'>
@@ -60,7 +59,7 @@ export default function PersonInfoForm({activities, organizationCategories, bene
 					</p>
 				</div>
 				<Button type='submit'>
-					<Icon iconName='save'/>
+					<Icon iconName='save' className='me-1'/>
 					Guardar
 				</Button>
 			</div>
@@ -75,6 +74,7 @@ export default function PersonInfoForm({activities, organizationCategories, bene
 				}
 			</Select>
 			<OdsSelector value={selectedOds} className='mb-4' onChange={setSelectedOds}/>
+			<ActivityPrioritySelector label='¿Qué actividades realiza tu organización?' prioritizerLabel='Ordenalas de mayor a menor importancia' activities={activitiesListData}/>
 			<ComboBoxTagMultiSelect
 				label='¿Quiénes son los principales beneficiarios de tu organización?'
 				searchPlaceholder='Escribe aquí para buscar'
@@ -91,7 +91,6 @@ export default function PersonInfoForm({activities, organizationCategories, bene
 				}
 			</ComboBoxTagMultiSelect>
 			<AgeGenderGroupSelector ageGroups={ageGroupsListData}/>
-			<ActivityPrioritySelector label='¿Qué actividades realiza tu organización?' prioritizerLabel='Ordenalas de mayor a menor importancia' activities={activitiesListData}/>
 
 		</form>
 	);

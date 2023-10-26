@@ -30,7 +30,7 @@ export default async function MainLayout({
 					<UserWidget/>
 				</div>
 			</header>
-			<div className='max-w-7xl mx-auto px-4 min-h-[calc(100vh-64px)]'>{children}</div>
+			<div className='max-w-7xl mx-auto px-4 min-h-[calc(100vh-64px)] pb-32'>{children}</div>
 			<footer className='border-t border-stone-800'>
 				<div className='max-w-7xl px-4 mx-auto'>
 					<Link href='/' className='text-stone-50 font-semibold items-center w-fit mx-auto block mt-8 mb-8'>
@@ -49,9 +49,9 @@ export default async function MainLayout({
 						<SocialLink image={LinkedinLogo} name='Linkedin' href='https://www.linkedin.com/company/geo-stats/'/>
 					</div>
 					<div className='flex items-center gap-16 mx-auto w-fit mb-8'>
-						<p className='text-stone-400'>© GeoStats (o quien sea, TODO)</p>
-						<Link href='/terms' className='text-stone-400'>Terminos y condiciones</Link>
-						<Link href='/privacy-policy' className='text-stone-400'>Política de privacidad</Link>
+						<p className='text-stone-400'>© 2023 GeoStats (o quien sea, TODO)</p>
+						<Link href='/terms' className='text-stone-400 hover:text-stone-300'>Terminos y condiciones</Link>
+						<Link href='/privacy-policy' className='text-stone-400 hover:text-stone-300'>Política de privacidad</Link>
 					</div>
 				</div>
 

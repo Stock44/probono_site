@@ -64,7 +64,7 @@ function Tag<T>(props: TagProps<T>) {
 			<div {...gridCellProps} className='flex gap-2 items-center border border-stone-700 text-stone-300 rounded px-2'>
 				{item.rendered}
 				{allowsRemoving && (
-					<Button {...removeButtonProps} variant='tertiary' size='xs'><Icon iconName='close' size='xs'/></Button>
+					<Button {...removeButtonProps} variant='tertiary' size='sm'><Icon iconName='close' size='sm'/></Button>
 				)}
 			</div>
 		</div>
