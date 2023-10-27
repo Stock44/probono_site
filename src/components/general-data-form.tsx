@@ -2,7 +2,7 @@
 import React, {useState} from 'react';
 import {CluniStatus, type CorporationType, DonationAuthStatus} from '@prisma/client';
 import {LabeledInput} from '@/components/labeled-input.tsx';
-import {NumberInput} from '@/components/number-input.tsx';
+import {NumberField} from '@/components/number-field.tsx';
 import LabeledCheckbox from '@/components/labeled-checkbox.tsx';
 import Collapsible from '@/components/collapsible.tsx';
 import Separator from '@/components/separator.tsx';
@@ -22,7 +22,7 @@ export default function GeneralDataForm({corporationTypes}: {
 				* marca un campo requerido
 			</p>
 			<LabeledInput required label='Nombre' className='grow basis-9/12'/>
-			<NumberInput
+			<NumberField
 				required
 				label='Año de fundación'
 				defaultValue={2023}

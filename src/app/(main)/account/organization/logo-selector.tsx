@@ -2,7 +2,6 @@ import React from 'react';
 import {useOverlayTriggerState} from 'react-stately';
 import {useOverlayTrigger} from 'react-aria';
 import {type Organization} from '@prisma/client';
-import Image from 'next/image';
 import Button from '@/components/button.tsx';
 import Modal from '@/components/modal.tsx';
 import Icon from '@/components/icon.tsx';
@@ -12,24 +11,25 @@ import ImageDropZone from '@/components/image-drop-zone.tsx';
 
 export type LogoSelectorProps = {
 	readonly organization: Organization;
-	readonly logo: File | undefined;
-	readonly onLogoChange: (file: File | undefined) => void;
+	readonly logoUrl: string | undefined;
+	readonly onLogoChange: (logoUrl: string | undefined) => void;
 };
 
 export default function LogoSelector(props: LogoSelectorProps) {
-	const {organization, logo, onLogoChange} = props;
+	const {organization, logoUrl, onLogoChange} = props;
 	const state = useOverlayTriggerState({});
 	const {triggerProps, overlayProps} = useOverlayTrigger({type: 'dialog'}, state);
+	const {close} = state;
 
 	return (
 		<>
 			{
-				organization.logoUrl === null
+				organization.logoUrl === null && logoUrl === null
 					? <Button {...triggerProps} className='w-[140px] h-[140px]' variant='secondary'>
 						<Icon iconName='add_photo_alternate' size='4xl' className='mx-auto'/>
 					</Button>
 					: <div className='group relative mb-4 rounded flex-none'>
-						<ImageButton {...triggerProps} src={organization.logoUrl} alt={organization.name} width={140} height={140}/>
+						<ImageButton {...triggerProps} src={logoUrl ?? organization.logoUrl!} alt={organization.name} width={140} height={140}/>
 						<div className='text-stone-50 font-semibold absolute top-0 left-0 w-full h-full justify-center items-center hidden group-hover:flex group-hover:flex-col pointer-events-none'>
 							<Icon iconName='add_photo_alternate' size='4xl'/>
 						</div>
@@ -41,7 +41,7 @@ export default function LogoSelector(props: LogoSelectorProps) {
 						&& (
 							<Modal state={state}>
 								<Dialog {...overlayProps} title='Agrega un logo a tu organización'>
-									<ImageDropZone label='Suelta el logo de tu organización aquí' file={logo} onFileChange={onLogoChange}/>
+									<ImageDropZone label='Suelta el logo de tu organización aquí' fileUrl={logoUrl} onFileChange={onLogoChange}/>
 									<div className='flex gap-2 justify-end'>
 										<Button
 											variant='secondary' onPress={() => {

@@ -4,7 +4,7 @@ import {redirect} from 'next/navigation';
 import {ZodError} from 'zod';
 import {experimental_useFormStatus as useFormStatus} from 'react-dom';
 import {LabeledInput} from '@/components/labeled-input.tsx';
-import {NumberInput} from '@/components/number-input.tsx';
+import {NumberField} from '@/components/number-field.tsx';
 import Button from '@/components/button.tsx';
 import ImageDropZone from '@/components/image-drop-zone.tsx';
 import Icon from '@/components/icon.tsx';
@@ -61,7 +61,7 @@ export default function OrganizationForm() {
 				issueText={issueMap.get('name')}
 				className='grow basis-9/12'
 			/>
-			<NumberInput
+			<NumberField
 				required
 				name='foundingYear'
 				label='Año de fundación'

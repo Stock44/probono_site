@@ -9,15 +9,15 @@ import Icon from '@/components/icon.tsx';
 const Kb = 1024;
 
 export type ImageDropZoneProps = {
-	readonly file: File | undefined;
-	readonly onFileChange: (file: File) => void;
+	readonly fileUrl: string | undefined;
+	readonly onFileChange: (file: string | undefined) => void;
 	readonly label: string;
 	readonly className?: string;
 	readonly maxSize?: number;
 };
 
 export default function ImageDropZone(props: ImageDropZoneProps) {
-	const {file, onFileChange, label, className, maxSize} = props;
+	const {fileUrl, onFileChange, label, className, maxSize} = props;
 
 	const [errorMessage, setErrorMessage] = useState<string>();
 
@@ -50,9 +50,11 @@ export default function ImageDropZone(props: ImageDropZoneProps) {
 			return;
 		}
 
+		console.log(file);
+
 		setErrorMessage(undefined);
 
-		onFileChange(file);
+		onFileChange(URL.createObjectURL(file));
 	};
 
 	const inputRef = useRef<HTMLInputElement>(null);
@@ -83,7 +85,7 @@ export default function ImageDropZone(props: ImageDropZoneProps) {
 					className,
 				)}
 			>
-				{file === undefined ? (
+				{fileUrl === undefined ? (
 					<Button
 						variant='outlined'
 						className='w-full h-full hover:bg-stone-800'
@@ -102,7 +104,7 @@ export default function ImageDropZone(props: ImageDropZoneProps) {
 						alt='userLogo'
 						width={256}
 						height={256}
-						src={URL.createObjectURL(file)}
+						src={fileUrl}
 						onPress={() => {
 							inputRef.current?.click();
 						}}

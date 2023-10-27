@@ -29,9 +29,9 @@ export default forwardRef(<T extends Record<string, unknown>>(props: SelectProps
 			</div>
 			<HiddenSelect isDisabled={isDisabled} state={state} triggerRef={triggerRef} label={label} name={name}/>
 			<Button
-				{...triggerProps} ref={triggerRef} variant='tertiary'
+				{...triggerProps} ref={triggerRef} variant='outlined'
 				isDisabled={isDisabled}
-				className={clsx('w-full border border-stone-700 font-normal')}>
+				className='w-full justify-between'>
 				<span {...valueProps}>
 					{
 						selectedItem

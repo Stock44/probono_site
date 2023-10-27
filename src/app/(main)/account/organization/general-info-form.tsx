@@ -1,24 +1,21 @@
 'use client';
 import React, {useState} from 'react';
 import {type Organization} from '@prisma/client';
-import Image from 'next/image';
-import {LabeledInput} from '@/components/labeled-input.tsx';
-import {NumberInput} from '@/components/number-input.tsx';
+import FacebookLogo from 'public/facebook_logo.png';
+import InstagramLogo from 'public/instagram_logo.png';
+import LinkedinLogo from 'public/linkedin_logo.png';
+import Link from 'next/link';
+import {NumberField} from '@/components/number-field.tsx';
 import Icon from '@/components/icon.tsx';
 import Button from '@/components/button.tsx';
-import ModalTrigger from '@/components/modal-trigger.tsx';
-import ImageButton from '@/components/image-button.tsx';
 import LogoSelector from '@/app/(main)/account/organization/logo-selector.tsx';
+import TextField from '@/components/text-field.tsx';
 
 export default function GeneralInfoForm({organization}: {readonly organization: Organization}) {
-	const [imageDropAreaOpen, setImageDropAreaOpen] = useState(false);
-
-	const handleForm = async (formData: FormData) => {};
-
-	const [organizationLogo, setOrganizationLogo] = useState<File>();
+	const [organizationLogo, setOrganizationLogo] = useState<string>();
 
 	return (
-		<form>
+		<form autoComplete='off'>
 			<div className='flex justify-between items-end mb-4'>
 				<div>
 					<h1 className='text-stone-200 text-4xl mb-2'>
@@ -35,66 +32,75 @@ export default function GeneralInfoForm({organization}: {readonly organization: 
 			</div>
 			<div/>
 			<div className='flex items-end gap-x-4 w-full'>
-				<LogoSelector organization={organization} logo={organizationLogo} onLogoChange={setOrganizationLogo}/>
+				<LogoSelector organization={organization} logoUrl={organizationLogo} onLogoChange={setOrganizationLogo}/>
 				<div className='flex grow gap-x-4 items-end flex-wrap'>
-					<LabeledInput required label='Nombre de la organización' className='grow'/>
-					<NumberInput
-						required
-						name='foundingYear'
+					<TextField isRequired label='Nombre de la organización' className='grow mb-4'/>
+					<NumberField
+						isRequired
+						icon='calendar_month'
 						label='Año de fundación'
+						formatOptions={{
+							useGrouping: false,
+						}}
+						minValue={1900}
 						defaultValue={2023}
-						className='basis-2/12'
+						className='basis-2/12 mb-4'
 					/>
-					<LabeledInput
+					<TextField
 						label='Teléfono de contacto'
 						name='phone'
+						icon='phone'
 						type='tel'
-						className='flex-initial grow basis-full'
+						className='flex-initial grow basis-full mb-4'
 					/>
 				</div>
 			</div>
 
 			<div className='flex gap-x-4'>
-				<LabeledInput
+				<TextField
 					label='Correo eléctronico de contacto'
+					icon='email'
 					name='email'
 					type='email'
-					className='flex-initial grow basis-5/12'
+					className='flex-initial grow basis-5/12 mb-4'
 				/>
-				<LabeledInput
+				<TextField
 					label='Página web'
 					name='webpage'
+					icon='globe'
 					type='url'
-					className='grow basis-5/12'
+					className='grow basis-5/12 mb-4'
 				/>
 			</div>
 
-			<h2 className='text-stone-200 text-lg mb-2'>
+			<h2 className='text-stone-200 text-lg mb-4'>
 				Redes sociales
 			</h2>
 			<div className='flex flex-wrap gap-x-4'>
-				<LabeledInput
+				<TextField
 					label='Facebook'
+					icon={FacebookLogo}
 					type='url'
-					className='grow basis-full sm:basis-5/12'
+					className='grow basis-full sm:basis-5/12 mb-4'
 				/>
-				<LabeledInput
+				<TextField
 					label='Instagram'
+					icon={InstagramLogo}
 					type='url'
-					className='grow basis-full sm:basis-5/12'
+					className='grow basis-full sm:basis-5/12 mb-4'
 				/>
-				<LabeledInput
+				<TextField
 					label='Twitter'
 					type='url'
-					className='grow basis-full sm:basis-5/12'
+					className='grow basis-full sm:basis-5/12 mb-4'
 				/>
-				<LabeledInput
+				<TextField
 					label='TikTok'
 					type='url'
-					className='grow basis-full sm:basis-5/12'
+					className='grow basis-full sm:basis-5/12 mb-4'
 				/>
-				<LabeledInput label='YouTube' type='url' className='flex-auto'/>
-				<LabeledInput label='LinkedIn' type='url' className='flex-auto'/>
+				<TextField label='YouTube' type='url' className='flex-auto mb-4'/>
+				<TextField label='LinkedIn' icon={LinkedinLogo} type='url' className='flex-auto mb-4'/>
 			</div>
 		</form>
 	);

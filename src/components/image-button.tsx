@@ -15,5 +15,5 @@ export default forwardRef((props: ImageButtonProps, ref: ForwardedRef<HTMLImageE
 		...props,
 		elementType: 'img',
 	}, buttonRef);
-	return <Image {...buttonProps} ref={buttonRef} width={width} height={height} src={src} alt={alt} className={clsx('hover:brightness-75', className)}/>;
+	return <Image {...buttonProps} ref={buttonRef} width={width} height={height} src={src} alt={alt} className={clsx('hover:brightness-75 rounded', className)}/>;
 });

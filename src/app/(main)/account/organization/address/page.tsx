@@ -6,10 +6,7 @@ import {getAllStates} from '@/lib/get-all-states.tsx';
 export default withPageAuthRequired(async () => {
 	const states = await getAllStates();
 	return (
-		<div>
-			<h1>asdf</h1>
-			<AddressInfoForm states={states}/>
-		</div>
+		<AddressInfoForm states={states}/>
 	);
 },
 );

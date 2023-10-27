@@ -4,7 +4,7 @@ import {useObjectRef} from '@react-aria/utils';
 import {type VariantProps, cva} from '@/lib/cva.ts';
 
 const buttonVariant = cva({
-	base: 'flex items-center justify-center rounded',
+	base: 'flex items-center justify-center rounded disabled:cursor-not-allowed',
 	variants: {
 		size: {
 			xs: 'text-xs',
@@ -14,60 +14,13 @@ const buttonVariant = cva({
 			xl: 'p-2 text-xl',
 		},
 		variant: {
-			primary: 'font-bold',
-			secondary: 'font-bold',
-			outlined: 'border border-stone-800',
-			text: '',
-		},
-		isDisabled: {
-			true: 'hover:cursor-not-allowed',
-			false: '',
+			primary: 'font-bold bg-stone-50 text-stone-950 hover:bg-stone-300 hover:text-stone-800 disabled:bg-stone-500 disabled:text-stone-800',
+			secondary: 'font-bold text-stone-300 bg-stone-800 hover:bg-stone-700 disabled:text-stone-400 disabled:bg-stone-700',
+			outlined: 'border border-stone-800 text-stone-300 hover:bg-stone-900 disabled:text-stone-600 disabled:bg-transparent',
+			text: 'text-stone-300',
 		},
 	},
-	compoundVariants: [
-		{
-			variant: 'primary',
-			isDisabled: false,
-			class: 'bg-stone-50 text-stone-950 hover:bg-stone-300 hover:text-stone-800',
-		},
-		{
-			variant: 'primary',
-			isDisabled: true,
-			class: 'bg-stone-500 text-stone-800',
-		},
-		{
-			variant: 'secondary',
-			isDisabled: false,
-			class: 'text-stone-300 bg-stone-800 hover:bg-stone-700',
-		},
-		{
-			variant: 'secondary',
-			isDisabled: true,
-			class: 'text-stone-400 bg-stone-700',
-		},
-		{
-			variant: 'outlined',
-			isDisabled: false,
-			class: 'text-stone-300 hover:bg-stone-900',
-		},
-		{
-			variant: 'outlined',
-			isDisabled: true,
-			class: 'text-stone-600',
-		},
-		{
-			variant: 'text',
-			isDisabled: false,
-			class: 'text-stone-300',
-		},
-		{
-			variant: 'text',
-			isDisabled: true,
-			class: 'text-stone-300',
-		},
-	],
 	defaultVariants: {
-		isDisabled: false,
 		variant: 'primary',
 		size: 'md',
 	},
