@@ -38,9 +38,10 @@ model OrganizationToOrganizationActivity {
 }
 
 model State {
-  id             Int            @id @default(autoincrement())
-  name           String
-  municipalities Municipality[]
+  id              Int            @id @default(autoincrement())
+  name            String
+  abbreviatedName String
+  municipalities  Municipality[]
 }
 
 model Municipality {

@@ -1,5 +1,6 @@
 import type {Config} from 'tailwindcss';
 import tailwindScrollbar from 'tailwind-scrollbar';
+import tailwindcss from 'tailwindcss/plugin';
 
 const config: Config = {
 	content: [
@@ -24,6 +25,14 @@ const config: Config = {
 	},
 	plugins: [
 		tailwindScrollbar({nocompatible: true}),
+		tailwindcss(({addBase}) => {
+			addBase({
+				'[type="search"]::-webkit-search-decoration': {display: 'none'},
+				'[type="search"]::-webkit-search-cancel-button': {display: 'none'},
+				'[type="search"]::-webkit-search-results-button': {display: 'none'},
+				'[type="search"]::-webkit-search-results-decoration': {display: 'none'},
+			});
+		}),
 	],
 };
 export default config;

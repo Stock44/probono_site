@@ -32,7 +32,7 @@ export default forwardRef(<T extends Record<string, unknown>>(props: SelectProps
 				{...triggerProps} ref={triggerRef} variant='outlined'
 				isDisabled={isDisabled}
 				className='w-full justify-between'>
-				<span {...valueProps}>
+				<span {...valueProps} className={clsx(selectedItem && 'text-stone-200', !selectedItem && 'text-stone-500')}>
 					{
 						selectedItem
 							? selectedItem.rendered

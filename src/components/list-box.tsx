@@ -1,17 +1,31 @@
 import React, {type ForwardedRef, forwardRef} from 'react';
 import {type AriaListBoxProps, mergeProps, useFocusRing, useListBox, useListBoxSection, useOption} from 'react-aria';
 import {type Node} from '@react-types/shared';
-import {type ListState} from 'react-stately';
+import {type ListProps, type ListState, useListState} from 'react-stately';
 import {useObjectRef} from '@react-aria/utils';
 import clsx from 'clsx';
+import {twMerge} from 'tailwind-merge';
 
-export type ListBoxProps<T extends Record<string, unknown>> = {
+export type ListBoxProps<T extends Record<string, unknown>> = StatefulListBoxProps<T> | BaseListBoxProps<T>;
+
+export default function ListBox<T extends Record<string, unknown>>(props: ListBoxProps<T>) {
+	return 'state' in props ? <BaseListBox {...props}/> : <StatefulListBox {...props}/>;
+}
+
+type StatefulListBoxProps<T extends Record<string, unknown>> = ListProps<T> & Omit<BaseListBoxProps<T>, 'state'>;
+
+const StatefulListBox = forwardRef(<T extends Record<string, unknown>>(props: StatefulListBoxProps<T>, ref: ForwardedRef<HTMLUListElement>) => {
+	const state = useListState<T>(props);
+
+	return <BaseListBox {...props} ref={ref} state={state}/>;
+});
+
+export type BaseListBoxProps<T extends Record<string, unknown>> = {
 	readonly className?: string;
 	readonly state: ListState<T>;
 } & AriaListBoxProps<T>;
 
-// TODO currently only works in inner mode (with a passed in state), implementation of standalone mode needed
-export default forwardRef(<T extends Record<string, unknown>>(props: ListBoxProps<T>, ref: ForwardedRef<HTMLUListElement>) => {
+export const BaseListBox = forwardRef(<T extends Record<string, unknown>>(props: BaseListBoxProps<T>, ref: ForwardedRef<HTMLUListElement>) => {
 	const {label, state, className} = props;
 
 	const listBoxRef = useObjectRef(ref);
@@ -23,7 +37,7 @@ export default forwardRef(<T extends Record<string, unknown>>(props: ListBoxProp
 
 			<ul
 				{...listBoxProps} ref={listBoxRef}
-				className={clsx('rounded overflow-y-scroll scroll-smooth scrollbar-track-transparent scrollbar-thumb-stone-50 scrollbar-thin scrollbar-thumb-rounded', className)}>
+				className={twMerge('rounded overflow-y-scroll scroll-smooth scrollbar-track-transparent scrollbar-thumb-stone-50 scrollbar-thin scrollbar-thumb-rounded', className)}>
 				{[...state.collection].map(item => (
 					item.type === 'section'
 						? <ListBoxSection key={item.key} section={item} state={state}/>
@@ -108,12 +122,14 @@ function Option<T extends Record<string, unknown>>(props: OptionProps<T>) {
 		<li
 			{...mergeProps(optionProps, focusProps)}
 			ref={ref}
-			className={clsx('text-stone-300 p-1 rounded outline-none',
+			className={clsx('text-stone-300 p-1.5 border rounded border-transparent outline-none cursor-pointer data-[focus-visible=true]:border-stone-50',
 				isSelected && 'bg-stone-50 text-stone-800',
-				isFocused && !isSelected && 'bg-stone-800')}
+				!isSelected && 'hover:bg-stone-900',
+				isFocused && !isSelected && 'bg-stone-900')}
 			data-focus-visible={isFocusVisible}
 		>
 			{item.rendered}
 		</li>
 	);
 }
+

@@ -2,7 +2,7 @@ import React, {useRef} from 'react';
 import {type AriaComboBoxProps, useComboBox} from 'react-aria';
 import {type ComboBoxState, type ComboBoxStateOptions, useComboBoxState} from 'react-stately';
 import clsx from 'clsx';
-import ListBox from '@/components/list-box.tsx';
+import {BaseListBox} from '@/components/list-box.tsx';
 import Button from '@/components/button.tsx';
 import Popover from '@/components/popover.tsx';
 import Icon from '@/components/icon.tsx';
@@ -60,7 +60,7 @@ export function BaseComboBox<T extends Record<string, unknown>>(props: BaseCombo
 				<Button
 					{...buttonProps}
 					ref={buttonObjectRef}
-					variant='tertiary'
+					variant='text'
 				>
 					<Icon aria-hidden='true' iconName='arrow_drop_down'/>
 				</Button>
@@ -73,7 +73,7 @@ export function BaseComboBox<T extends Record<string, unknown>>(props: BaseCombo
 						placement='bottom start'
 					>
 						{/* @ts-expect-error children prop is passed in by react-aria */}
-						<ListBox
+						<BaseListBox
 							{...listBoxProps}
 							ref={listBoxObjectRef}
 							state={state}
