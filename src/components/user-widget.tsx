@@ -54,7 +54,7 @@ export default function UserWidget() {
 		<>
 			{organization === undefined ? null : (
 				<Link href='/account/organization'>
-					<Button variant='secondary'>
+					<Button variant='outlined'>
 						{organization.logoUrl === null ? null : (
 							<Image
 								src={organization.logoUrl}

@@ -6,7 +6,7 @@ import {experimental_useFormStatus as useFormStatus} from 'react-dom';
 import {LabeledInput} from '@/components/labeled-input.tsx';
 import {NumberInput} from '@/components/number-input.tsx';
 import Button from '@/components/button.tsx';
-import ImageDropArea from '@/components/image-drop-area.tsx';
+import ImageDropZone from '@/components/image-drop-zone.tsx';
 import Icon from '@/components/icon.tsx';
 import {organizationSchema} from '@/lib/schemas/organization.ts';
 import {decodeForm} from '@/lib/schemas/decode-form.ts';
@@ -48,7 +48,7 @@ export default function OrganizationForm() {
 			className='max-w-2xl w-full pt-4 flex flex-wrap items-end gap-x-2'
 			action={handleForm}
 		>
-			<ImageDropArea
+			<ImageDropZone
 				label='Suelta una imagen para tu logo aquí'
 				className='basis-full h-32'
 				name='logo'

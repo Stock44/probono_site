@@ -13,7 +13,9 @@ export default function Icon({
 } & React.ComponentProps<'span'>) {
 	return (
 		<span
-			{...props} className={clsx(
+			{...props}
+			aria-hidden='true'
+			className={clsx(
 				'material-symbols-rounded select-none',
 				size === 'xs' && 'material-symbols-xs text-xs',
 				size === 'sm' && 'material-symbols-sm text-sm',

@@ -1,45 +1,92 @@
 import React, {type ForwardedRef, forwardRef, type ReactNode} from 'react';
-import clsx from 'clsx';
 import {type AriaButtonOptions, useButton} from 'react-aria';
 import {useObjectRef} from '@react-aria/utils';
+import {type VariantProps, cva} from '@/lib/cva.ts';
+
+const buttonVariant = cva({
+	base: 'flex items-center justify-center rounded',
+	variants: {
+		size: {
+			xs: 'text-xs',
+			sm: 'text-sm',
+			md: 'p-1',
+			lg: 'p-2 text-lg',
+			xl: 'p-2 text-xl',
+		},
+		variant: {
+			primary: 'font-bold',
+			secondary: 'font-bold',
+			outlined: 'border border-stone-800',
+			text: '',
+		},
+		isDisabled: {
+			true: 'hover:cursor-not-allowed',
+			false: '',
+		},
+	},
+	compoundVariants: [
+		{
+			variant: 'primary',
+			isDisabled: false,
+			class: 'bg-stone-50 text-stone-950 hover:bg-stone-300 hover:text-stone-800',
+		},
+		{
+			variant: 'primary',
+			isDisabled: true,
+			class: 'bg-stone-500 text-stone-800',
+		},
+		{
+			variant: 'secondary',
+			isDisabled: false,
+			class: 'text-stone-300 bg-stone-800 hover:bg-stone-700',
+		},
+		{
+			variant: 'secondary',
+			isDisabled: true,
+			class: 'text-stone-400 bg-stone-700',
+		},
+		{
+			variant: 'outlined',
+			isDisabled: false,
+			class: 'text-stone-300 hover:bg-stone-900',
+		},
+		{
+			variant: 'outlined',
+			isDisabled: true,
+			class: 'text-stone-600',
+		},
+		{
+			variant: 'text',
+			isDisabled: false,
+			class: 'text-stone-300',
+		},
+		{
+			variant: 'text',
+			isDisabled: true,
+			class: 'text-stone-300',
+		},
+	],
+	defaultVariants: {
+		isDisabled: false,
+		variant: 'primary',
+		size: 'md',
+	},
+});
 
 export type ButtonProps = {
-	readonly variant?: 'primary' | 'secondary' | 'tertiary' | 'transparent';
-	readonly size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
-	readonly className?: string;
 	readonly children?: ReactNode;
-} & AriaButtonOptions<'button'>;
+	readonly className?: string;
+} & AriaButtonOptions<'button'> & VariantProps<typeof buttonVariant>;
 
 export default forwardRef((props: ButtonProps, ref: ForwardedRef<HTMLButtonElement>) => {
-	const {variant = 'primary', size = 'md', isDisabled, className, children} = props;
+	const {children} = props;
 	const buttonRef = useObjectRef(ref);
 	const {buttonProps} = useButton(props, buttonRef);
 	return (
 		<button
 			{...buttonProps}
 			ref={buttonRef}
-			className={clsx(
-				'rounded text-sm font-bold flex items-center justify-between text-left',
-				size === 'xs' && 'text-xs',
-				size === 'sm' && 'text-sm',
-				size === 'md' && 'p-1 text-base',
-				size === 'lg' && 'p-2 text-lg',
-				size === 'xl' && 'p-2 text-xl',
-				variant === 'primary' && !isDisabled
-          && 'bg-stone-50 text-stone-950 hover:bg-stone-300 hover:text-stone-800',
-				variant === 'secondary' && !isDisabled
-          && 'text-stone-300 hover:bg-stone-800 border border-stone-700',
-				variant === 'tertiary' && !isDisabled
-          && 'text-stone-300 hover:bg-stone-900',
-				variant === 'primary' && isDisabled
-					&& 'bg-stone-400 text-stone-700',
-				variant === 'secondary' && isDisabled
-					&& 'text-stone-300 hover:bg-stone-800 border border-stone-700',
-				variant === 'tertiary' && isDisabled
-					&& 'text-stone-500',
-				isDisabled && 'hover:cursor-not-allowed',
-				className,
-			)}
+			className={buttonVariant(props)}
 		>{children}</button>
 	);
 });
