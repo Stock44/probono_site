@@ -25,11 +25,11 @@ function SectorDisplay(props: SectorProps) {
 			}}
 			style={{
 				fill: true,
-				fillColor: isSelected ? '#ffffff' : '#a3a3a3',
+				fillColor: isSelected ? '#fafaf9' : '#a8a29e',
 				fillOpacity: isSelected ? 0.5 : 0.1,
 				stroke: true,
 				weight: 1,
-				color: '#fafaf9',
+				color: '#78716c',
 			}}>
 			<Tooltip>
 				{sector.name}

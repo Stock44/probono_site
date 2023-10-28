@@ -2,9 +2,9 @@ import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import Logo from 'public/logomark.png';
-import FacebookLogo from 'public/facebook_logo.png';
-import LinkedinLogo from 'public/linkedin_logo.png';
-import InstagramLogo from 'public/instagram_logo.png';
+import FacebookLogo from 'public/facebook-logo.png';
+import LinkedinLogo from 'public/linkedin-logo.png';
+import InstagramLogo from 'public/instagram-logo.png';
 import SocialLink from '@/components/social-link.tsx';
 import UserWidget from '@/components/user-widget.tsx';
 

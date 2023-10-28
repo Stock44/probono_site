@@ -13,5 +13,4 @@ values (default, 'Asamblea'),
        (default, 'Laboratorio ciudadano'),
        (default, 'Movimiento'),
        (default, 'Organización de la sociedad civil'),
-       (default, 'Red'),
-       (default, 'Laboratorio Ciudadano');
+       (default, 'Red');

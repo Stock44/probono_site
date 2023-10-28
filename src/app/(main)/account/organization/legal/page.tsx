@@ -7,9 +7,6 @@ export default withPageAuthRequired(async () => {
 	const corporationTypes = await getAllCorporationTypes();
 	return (
 		<div>
-			<h2>
-				sasdf
-			</h2>
 			<LegalInfoForm corporationTypes={corporationTypes}/>
 		</div>
 	);

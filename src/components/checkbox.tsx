@@ -2,9 +2,14 @@ import React, {type ForwardedRef, forwardRef, useRef} from 'react';
 import {type AriaCheckboxProps, mergeProps, useCheckbox, useFocusRing, usePress, VisuallyHidden} from 'react-aria';
 import {useObjectRef} from '@react-aria/utils';
 import {useToggleState, type ToggleProps} from 'react-stately';
+import {cx} from '@/lib/cva.ts';
 
-export default function Checkbox(props: AriaCheckboxProps & ToggleProps) {
-	const {children} = props;
+export type CheckboxProps = {
+	readonly className?: string;
+} & AriaCheckboxProps & ToggleProps;
+
+export default function Checkbox(props: CheckboxProps) {
+	const {children, className} = props;
 	const ref = useRef<HTMLInputElement>(null);
 	const state = useToggleState(props);
 	const {inputProps} = useCheckbox(props, state, ref);
@@ -12,7 +17,7 @@ export default function Checkbox(props: AriaCheckboxProps & ToggleProps) {
 	const {pressProps} = usePress({isDisabled: props.isDisabled});
 
 	return (
-		<label>
+		<label className={cx('flex gap-2 text-stone-300', className)}>
 			<VisuallyHidden>
 				<input {...mergeProps(inputProps, focusProps)} ref={ref}/>
 			</VisuallyHidden>

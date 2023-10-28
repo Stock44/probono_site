@@ -158,7 +158,7 @@ export default function AddressInfoForm({states}: {readonly states: State[]}) {
 				</Select>
 				<Select
 					isRequired
-					isDisabled={selectedStateKey === undefined} label='Municipio' placeholder='Selecciona un municipio'
+					isDisabled={municipalities === undefined} label='Municipio' placeholder='Selecciona un municipio'
 					items={municipalities ?? []} className='basis-1/2' selectedKey={selectedMunicipalityKey}
 					onSelectionChange={setSelectedMunicipalityKey}>
 					{municipality => (

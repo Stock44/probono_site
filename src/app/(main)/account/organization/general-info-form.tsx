@@ -1,10 +1,12 @@
 'use client';
 import React, {useState} from 'react';
 import {type Organization} from '@prisma/client';
-import FacebookLogo from 'public/facebook_logo.png';
-import InstagramLogo from 'public/instagram_logo.png';
-import LinkedinLogo from 'public/linkedin_logo.png';
-import Link from 'next/link';
+import FacebookLogo from 'public/facebook-logo.png';
+import InstagramLogo from 'public/instagram-logo.png';
+import LinkedinLogo from 'public/linkedin-logo.png';
+import TikTokLogo from 'public/tiktok-logo.png';
+import XLogo from 'public/x-logo.png';
+import YoutubeLogo from 'public/youtube-logo.png';
 import {NumberField} from '@/components/number-field.tsx';
 import Icon from '@/components/icon.tsx';
 import Button from '@/components/button.tsx';
@@ -90,16 +92,18 @@ export default function GeneralInfoForm({organization}: {readonly organization: 
 					className='grow basis-full sm:basis-5/12 mb-4'
 				/>
 				<TextField
-					label='Twitter'
+					label='X (anteriormente Twitter)'
+					icon={XLogo}
 					type='url'
 					className='grow basis-full sm:basis-5/12 mb-4'
 				/>
 				<TextField
 					label='TikTok'
+					icon={TikTokLogo}
 					type='url'
 					className='grow basis-full sm:basis-5/12 mb-4'
 				/>
-				<TextField label='YouTube' type='url' className='flex-auto mb-4'/>
+				<TextField label='YouTube' icon={YoutubeLogo} type='url' className='flex-auto mb-4'/>
 				<TextField label='LinkedIn' icon={LinkedinLogo} type='url' className='flex-auto mb-4'/>
 			</div>
 		</form>
