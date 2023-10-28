@@ -31,20 +31,20 @@ export const NumberField = React.forwardRef((
 	const {labelProps, groupProps, inputProps, incrementButtonProps, decrementButtonProps} = useNumberField(props, state, inputRef);
 	return (
 		<div className={twJoin('group', className)}>
-			<label {...labelProps} className='text-stone-300 group-focus-within:text-stone-50 text-sm'>{label}</label>
-			<div {...groupProps} className='flex items-center pl-1 rounded border border-stone-700 group-focus-within:border-stone-50'>
+			<label {...labelProps} className='block text-stone-300 group-focus-within:text-stone-50 text-sm'>{label}</label>
+			<div {...groupProps} className='flex items-center justify-right pl-1 rounded border border-stone-700 group-focus-within:border-stone-50 w-full'>
 				{
 					icon !== undefined && typeof icon === 'string'
-						? <Icon iconName={icon} className='text-stone-500 group-focus-within:text-stone-50 me-1'/>
+						? <Icon iconName={icon} className='text-stone-500 group-focus-within:text-stone-50 me-1 flex-none basis-4'/>
 						: null
 				}
 				{
 					icon !== undefined && typeof icon === 'object'
-						? <Image src={icon} alt={`${label?.toString()} icon`} width={16} height={16} className='brightness-50 group-focus-within:brightness-100 me-1'/>
+						? <Image src={icon} alt={`${label?.toString()} icon`} width={16} height={16} className='brightness-50 group-focus-within:brightness-100 me-1 flex-none basis-4'/>
 						: null
 				}
-				<input {...inputProps} ref={inputRef} className='bg-transparent text-stone-200 py-1 outline-none autofill:bg-none'/>
-				<div>
+				<input {...inputProps} ref={inputRef} className='bg-transparent text-stone-200 py-1 outline-none grow min-w-0'/>
+				<div className='flex-none basis-4'>
 					<Button {...incrementButtonProps} variant='text' size='xs'>
 						<Icon iconName='arrow_drop_up'/>
 					</Button>

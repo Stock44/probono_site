@@ -16,7 +16,7 @@ const buttonVariant = cva({
 		variant: {
 			primary: 'font-bold bg-stone-50 text-stone-950 hover:bg-stone-300 hover:text-stone-800 disabled:bg-stone-500 disabled:text-stone-800',
 			secondary: 'font-bold text-stone-300 bg-stone-800 hover:bg-stone-700 disabled:text-stone-400 disabled:bg-stone-700',
-			outlined: 'border border-stone-700 text-stone-300 hover:bg-stone-900 disabled:text-stone-600 disabled:bg-transparent',
+			outlined: 'border border-stone-700 text-stone-300 hover:bg-stone-900 disabled:border-stone-800 disabled:text-stone-600 disabled:bg-transparent',
 			text: 'text-stone-300',
 		},
 	},

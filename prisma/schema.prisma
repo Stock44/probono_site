@@ -58,13 +58,12 @@ model Municipality {
 }
 
 model Address {
-  id             Int     @id @default(autoincrement())
-  neighborhood   String
-  postalCode     String
-  streetName     String
-  extNumber      Int
-  intNumber      Int?
-  betweenStreets String?
+  id           Int    @id @default(autoincrement())
+  neighborhood String
+  postalCode   String
+  streetName   String
+  extNumber    Int
+  intNumber    Int?
 
   location Unsupported("point")?
 
