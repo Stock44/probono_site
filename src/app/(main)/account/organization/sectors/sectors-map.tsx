@@ -1,9 +1,9 @@
 import {GeoJSON, MapContainer, TileLayer, Tooltip, useMapEvent} from 'react-leaflet';
 import React, {type Key, useEffect, useState} from 'react';
-import {Set} from 'immutable';
-import {useQuery} from 'react-query';
+import {type Set} from 'immutable';
 import {type Geometry} from 'geojson';
 import {type Sector} from '@prisma/client';
+import {cx} from '@/lib/cva.ts';
 
 type SectorProps = {
 	readonly isSelected: boolean;
@@ -38,40 +38,35 @@ function SectorDisplay(props: SectorProps) {
 	);
 }
 
-export default function SectorsMap() {
-	const {data} = useQuery('sectors', async () => {
-		const response = await fetch('/api/sectors');
-		return (await response.json()) as Array<Sector & {geom: Geometry}>;
-	}, {
-		staleTime: Number.POSITIVE_INFINITY,
-	});
+export type SectorsMapProps = {
+	readonly sectors: Array<Sector & {geom: Geometry}>;
+	readonly selectedKeys: Set<Key>;
+	readonly setSelectedKeys: (keys: Set<Key>) => void;
+	readonly className?: string;
+};
 
-	const [selectedSectorKeys, setSelectedSectorKeys] = useState(Set<Key>());
-
-	console.log(selectedSectorKeys);
+export default function SectorsMap(props: SectorsMapProps) {
+	const {sectors, selectedKeys, setSelectedKeys, className} = props;
 
 	return (
-		<MapContainer scrollWheelZoom center={[25.68, -100.31]} zoom={11} className='h-screen rounded border border-stone-800 mb-4'>
+		<MapContainer scrollWheelZoom worldCopyJump center={[25.68, -100.31]} zoom={11} className={cx('rounded border border-stone-800', className)}>
 
 			<TileLayer
 				attribution='<a href="https://www.maptiler.com/copyright/" target="_blank">&copy; MapTiler</a> <a href="https://www.openstreetmap.org/copyright" target="_blank">&copy; OpenStreetMap contributors</a>'
 				url='https://api.maptiler.com/maps/backdrop-dark/{z}/{x}/{y}.png?key=9R74rUQCdAWUOY0Tf0Xp'
 			/>
 			{
-				data === undefined
-					? null
-					: data.map(sector => (
-						<SectorDisplay
-							key={sector.id}
-							sector={sector} isSelected={selectedSectorKeys.has(sector.id)} onIsSelectedChange={isSelected => {
-								console.log(isSelected);
-								if (isSelected) {
-									setSelectedSectorKeys(selectedSectorKeys.add(sector.id));
-								} else {
-									setSelectedSectorKeys(selectedSectorKeys.remove(sector.id));
-								}
-							}}/>
-					))
+				sectors.map(sector => (
+					<SectorDisplay
+						key={sector.id}
+						sector={sector} isSelected={selectedKeys.has(sector.id)} onIsSelectedChange={isSelected => {
+							if (isSelected) {
+								setSelectedKeys(selectedKeys.add(sector.id));
+							} else {
+								setSelectedKeys(selectedKeys.remove(sector.id));
+							}
+						}}/>
+				))
 			}
 
 		</MapContainer>

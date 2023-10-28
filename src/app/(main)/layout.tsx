@@ -30,7 +30,7 @@ export default async function MainLayout({
 					<UserWidget/>
 				</div>
 			</header>
-			<div className='max-w-7xl mx-auto px-4 min-h-[calc(100vh-64px)] pb-32'>{children}</div>
+			<div className='max-w-7xl mx-auto px-4 min-h-[calc(100vh-64px)] pb-32 flex flex-col'>{children}</div>
 			<footer className='border-t border-stone-800'>
 				<div className='max-w-7xl px-4 mx-auto'>
 					<Link href='/' className='text-stone-50 font-semibold items-center w-fit mx-auto block mt-8 mb-8'>

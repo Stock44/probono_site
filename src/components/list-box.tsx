@@ -33,7 +33,7 @@ export const BaseListBox = forwardRef(<T extends Record<string, unknown>>(props:
 
 	return (
 		<>
-			{label ? <label {...labelProps} className='text-stone-200 text-xl mb-2 block'>{label}</label> : null}
+			{label ? <label {...labelProps} className='text-stone-200 text-xl mb-2 block px-1'>{label}</label> : null}
 
 			<ul
 				{...listBoxProps} ref={listBoxRef}
