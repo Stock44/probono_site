@@ -41,13 +41,13 @@ export default async function createOrganizationFromFormAction(
 			organizationSchema.omit({id: true}),
 		);
 
-		const logo = data.get('logo') as File;
-		const logoFileType = await fileTypeFromBlob(logo);
-
 		let logoUrl: string | undefined;
 
-		if (logoFileType !== undefined) {
-			if (!imageTypes.has(logoFileType.mime)) {
+		const logoImage = data.get('logo') as File | null;
+
+		if (logoImage !== null) {
+			const logoFileType = await fileTypeFromBlob(logoImage);
+			if (logoFileType === undefined || !imageTypes.has(logoFileType.mime)) {
 				return {
 					success: false,
 					name: 'wrong file type',
@@ -55,7 +55,7 @@ export default async function createOrganizationFromFormAction(
 				};
 			}
 
-			const result = await put(`organizationLogos/${randomUUID()}`, logo, {
+			const result = await put(`organizationLogos/${randomUUID()}`, logoImage, {
 				access: 'public',
 				contentType: logoFileType.mime,
 			});

@@ -2,12 +2,14 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
+  previewFeatures = ["postgresqlExtensions"]
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("POSTGRES_PRISMA_URL") // uses connection pooling
+  provider   = "postgresql"
+  url        = env("POSTGRES_PRISMA_URL") // uses connection pooling
+  extensions = [postgis()]
   // directUrl = env("POSTGRES_URL_NON_POOLING") // uses a direct connection
 }
 
@@ -191,12 +193,12 @@ model Service {
 }
 
 model Sector {
-  id     Int                     @id @default(autoincrement())
-  name   String
-  limits Unsupported("geometry")
+  id   Int                     @id @default(autoincrement())
+  name String
+  geom Unsupported("geometry")
 
-  municipality   Municipality @relation(fields: [municipalityId], references: [id])
-  municipalityId Int
+  municipality   Municipality? @relation(fields: [municipalityId], references: [id])
+  municipalityId Int?
 
   organizations Organization[]
 }

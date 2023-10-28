@@ -13,6 +13,7 @@ export const osmResultSchema = z.object({
 		postcode: z.string().optional(),
 		country: z.string().optional(),
 		country_code: z.string().optional(),
+		house_number: z.coerce.number().optional(),
 	}),
 }).transform(({osm_id, display_name, lat, lon, address,
 }) => ({
@@ -22,6 +23,7 @@ export const osmResultSchema = z.object({
 	lng: lon,
 	...address,
 	countryCode: address.country_code,
+	number: address.house_number,
 }));
 /* eslint-enable @typescript-eslint/naming-convention */
 export type InputOsmResult = z.input<typeof osmResultSchema>;

@@ -2,8 +2,7 @@
 import React, {useState} from 'react';
 import {redirect} from 'next/navigation';
 import {ZodError} from 'zod';
-import {experimental_useFormStatus as useFormStatus} from 'react-dom';
-import {LabeledInput} from '@/components/labeled-input.tsx';
+import {useFormStatus} from 'react-dom';
 import {NumberField} from '@/components/number-field.tsx';
 import Button from '@/components/button.tsx';
 import ImageDropZone from '@/components/image-drop-zone.tsx';
@@ -11,9 +10,12 @@ import Icon from '@/components/icon.tsx';
 import {organizationSchema} from '@/lib/schemas/organization.ts';
 import {decodeForm} from '@/lib/schemas/decode-form.ts';
 import createOrganizationFromFormAction from '@/app/(onboarding)/onboarding/organization/create-organization-from-form-action.ts';
+import TextField from '@/components/text-field.tsx';
 
 export default function OrganizationForm() {
 	const {pending} = useFormStatus();
+
+	const [fileUrl, setFileUrl] = useState<string>();
 
 	const [issueMap, setIssueMap] = useState(new Map<string, string>());
 
@@ -21,6 +23,11 @@ export default function OrganizationForm() {
 		try {
 			// Validate that the data is correct
 			await decodeForm(formData, organizationSchema.omit({id: true}));
+
+			if (fileUrl !== undefined) {
+				const logoImage = (await fetch(fileUrl).then(async r => r.blob()));
+				formData.append('logo', logoImage);
+			}
 
 			const result = await createOrganizationFromFormAction(formData);
 
@@ -45,54 +52,60 @@ export default function OrganizationForm() {
 
 	return (
 		<form
-			className='max-w-2xl w-full pt-4 flex flex-wrap items-end gap-x-2'
+			className='max-w-2xl w-full pt-4 items-end gap-x-2'
 			action={handleForm}
 		>
 			<ImageDropZone
 				label='Suelta una imagen para tu logo aquí'
-				className='basis-full h-32'
-				name='logo'
+				className='basis-full h-32 mb-4 w-full'
+				fileUrl={fileUrl}
 				maxSize={30}
+				onFileChange={setFileUrl}
 			/>
-			<LabeledInput
-				required
-				label='Nombre'
-				name='name'
-				issueText={issueMap.get('name')}
-				className='grow basis-9/12'
-			/>
-			<NumberField
-				required
-				name='foundingYear'
-				label='Año de fundación'
-				defaultValue={2023}
-				issueText={issueMap.get('foundingYear')}
-				className='basis-2/12'
-			/>
+			<div className='flex gap-2'>
+				<TextField
+					isRequired
+					label='Nombre'
+					name='name'
+					errorMessage={issueMap.get('name')}
+					className='grow basis-9/12 mb-4'
+				/>
+				<NumberField
+					isRequired
+					name='foundingYear'
+					label='Año de fundación'
+					defaultValue={2023}
+					errorMessage={issueMap.get('foundingYear')}
+					formatOptions={{
+						useGrouping: false,
+					}}
+					className='w-28 mb-4'
+				/>
+			</div>
 
-			<LabeledInput
+			<TextField
 				label='Teléfono de contacto'
 				name='phone'
 				type='tel'
-				className='flex-initial grow basis-full'
-				issueText={issueMap.get('phone')}
+				className='flex-initial grow basis-full mb-4'
+				errorMessage={issueMap.get('phone')}
 			/>
-			<LabeledInput
+			<TextField
 				label='Correo eléctronico de contacto'
 				name='email'
 				type='email'
-				className='flex-initial grow basis-full'
-				issueText={issueMap.get('email')}
+				className='flex-initial grow basis-full mb-4'
+				errorMessage={issueMap.get('email')}
 			/>
-			<LabeledInput
+			<TextField
 				label='Página web'
 				name='webpage'
 				type='url'
-				className='grow basis-full'
-				issueText={issueMap.get('webpage')}
+				className='grow basis-full mb-4'
+				errorMessage={issueMap.get('webpage')}
 			/>
 
-			<Button type='submit' disabled={pending}>
+			<Button type='submit' isDisabled={pending}>
 				Continuar <Icon iconName='navigate_next'/>
 			</Button>
 		</form>

@@ -10,6 +10,7 @@ module.exports = {
 	  "react/button-has-type": "off",
 	  "react/jsx-indent-props": "off",
 	  "react/jsx-closing-bracket-location": "off",
-	  "react/jsx-closing-tag-location": "off"
+	  "react/jsx-closing-tag-location": "off",
+	  "@typescript-eslint/ban-types": "off",
   },
 };

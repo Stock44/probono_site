@@ -10,6 +10,7 @@
     "react/prop-types": "off",
     "react/require-default-props": "off",
     "n/file-extension-in-import": "off",
+		"@typescript-eslint/ban-types": "off",
     "n/prefer-global/process": "off",
 		"react/button-has-type": "off",
     "new-cap": "off",

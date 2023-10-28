@@ -71,7 +71,8 @@ export default function ImageDropZone(props: ImageDropZoneProps) {
 	return (
 		<>
 			<input
-				ref={inputRef} type='file' className='hidden'
+				ref={inputRef}
+				type='file' className='hidden'
 				onInput={event => {
 					const {files} = event.currentTarget;
 					if (files !== null && files.length > 0) {

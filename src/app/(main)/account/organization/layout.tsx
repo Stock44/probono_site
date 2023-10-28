@@ -25,7 +25,7 @@ export default async function OrganizationLayout({
 						className='grow'
 					/>
 					<OrganizationTab
-						slug='areas'
+						slug='sectors'
 						label='Zonas de impacto'
 						className='grow'
 					/>

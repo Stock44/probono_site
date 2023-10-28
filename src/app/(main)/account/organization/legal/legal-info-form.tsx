@@ -2,7 +2,7 @@
 import React, {useState} from 'react';
 import {CluniStatus, type CorporationType, DonationAuthStatus} from '@prisma/client';
 import {LabeledInput} from '@/components/labeled-input.tsx';
-import {Select} from '@/components/select.tsx';
+import Select from '@/components/select.tsx';
 import {NumberField} from '@/components/number-field.tsx';
 import LabeledCheckbox from '@/components/labeled-checkbox.tsx';
 
