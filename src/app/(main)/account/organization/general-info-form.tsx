@@ -16,8 +16,8 @@ import TextField from '@/components/text-field.tsx';
 import Select from '@/components/select.tsx';
 import Form from '@/components/form.tsx';
 import upsertOrganizationAction from '@/lib/actions/organization.ts';
-import {validators} from '@/lib/schemas/util.ts';
 import {organizationSchema} from '@/lib/schemas/organization.ts';
+import {formValidators} from '@/lib/schemas/form-utils.ts';
 
 export type GeneralInfoFormProps = {
 	readonly organization: Organization;
@@ -28,7 +28,7 @@ export type GeneralInfoFormProps = {
 export default function GeneralInfoForm(props: GeneralInfoFormProps) {
 	const {organization, volunteerCountCategories, employeeCountCategories} = props;
 
-	const validate = validators(organizationSchema);
+	const validate = formValidators(organizationSchema);
 
 	return (
 		<Form
@@ -112,6 +112,7 @@ export default function GeneralInfoForm(props: GeneralInfoFormProps) {
 			<div className='flex gap-4 mb-4'>
 				<Select
 					label='¿Cuántos empleados remunerados economicamente tiene tu organización?'
+					name='employeeCountCategoryId'
 					items={employeeCountCategories} className='flex-1'
 					validate={validate.employeeCountCategoryId}
 					defaultSelectedKey={organization.employeeCountCategoryId ?? undefined}
@@ -132,6 +133,7 @@ export default function GeneralInfoForm(props: GeneralInfoFormProps) {
 				</Select>
 				<Select
 					label='¿Cuántos voluntarios tiene tu organización?'
+					name='volunteerCountCategoryId'
 					items={volunteerCountCategories}
 					className='flex-1'
 					validate={validate.volunteerCountCategoryId}

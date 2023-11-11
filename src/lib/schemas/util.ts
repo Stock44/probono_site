@@ -19,28 +19,6 @@ export const phoneSchema = z
 
 export const emptyStringToNullSchema = z.string().transform(emptyStringToNull);
 
-export function validators<Schema extends z.AnyZodObject>(schema: Schema) {
-	const schemas = schema.shape as {
-		[K in keyof Schema['shape']]: z.ZodSchema;
-	};
-
-	return Object.fromEntries(Object.entries(schemas).map(
-		([key, validator]) =>
-			[
-				key,
-				(value: unknown) => {
-					const result = validator.safeParse(value);
-					// If (key === 'entryHour' || key === 'exitHour') {
-					// 	console.log(result);
-					// }
-
-					return result.success ? null : result.error.issues.map(issue => issue.message).join(' ');
-				},
-			])) as {
-		[K in keyof Schema['shape']]: (value: unknown) => null | string;
-	};
-}
-
 export function urlHostnameRefinement(hostname: string) {
 	const hostnames = new Set([`${hostname}.com`, `www.${hostname}.com`]);
 	return (url: string, ctx: z.RefinementCtx) => {
@@ -67,4 +45,8 @@ export function urlHostnameRefinement(hostname: string) {
 
 		return socialId;
 	};
+}
+
+export function formInputSchema<Schema extends z.ZodTypeAny>(schema: Schema) {
+	return z.preprocess(emptyStringToNull, schema);
 }

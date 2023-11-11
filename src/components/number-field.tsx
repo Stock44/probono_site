@@ -11,6 +11,7 @@ import {twJoin} from 'tailwind-merge';
 import Image, {type StaticImageData} from 'next/image';
 import Button from '@/components/button.tsx';
 import Icon from '@/components/icon.tsx';
+import {cx} from '@/lib/cva.ts';
 
 export type NumberFieldProps = {
 	readonly className?: string;
@@ -23,7 +24,7 @@ export const NumberField = React.forwardRef((
 	ref: React.ForwardedRef<HTMLInputElement>,
 ) => {
 	const {locale} = useLocale();
-	const {label, className, icon, isDisabled, name} = props;
+	const {label, className, icon, isDisabled, name, isRequired} = props;
 	const state = useNumberFieldState({
 		validationBehavior: 'native',
 		...props,
@@ -36,13 +37,21 @@ export const NumberField = React.forwardRef((
 		inputProps,
 		incrementButtonProps,
 		decrementButtonProps,
+		errorMessageProps,
+		isInvalid,
+		validationErrors,
 	} = useNumberField({
 		validationBehavior: 'native',
 		...props,
 	}, state, inputRef);
 	return (
 		<div data-disabled={isDisabled} className={twJoin('group', className)}>
-			<label {...labelProps} className='block text-stone-300 group-focus-within:text-stone-50 text-sm mb-1 group-data-[disabled=true]:text-stone-500'>{label}</label>
+			<label
+				{...labelProps} className={cx(
+					'block text-stone-300 group-focus-within:text-stone-50 text-sm mb-1 group-data-[disabled=true]:text-stone-500',
+					isRequired && 'after:content-["*"] after:ml-0.5',
+				)}>{label}</label>
+
 			<div {...groupProps} className='flex items-center justify-right pl-1 rounded border border-stone-700 group-focus-within:border-stone-50 w-full group-data-[disabled=true]:border-stone-800'>
 				{
 					icon !== undefined && typeof icon === 'string'
@@ -64,6 +73,11 @@ export const NumberField = React.forwardRef((
 					</Button>
 				</div>
 			</div>
+			{
+				isInvalid && <div {...errorMessageProps} className='text-red-400 mt-1 text-xs'>
+					{validationErrors.join(' ')}
+				</div>
+			}
 		</div>
 	);
 });

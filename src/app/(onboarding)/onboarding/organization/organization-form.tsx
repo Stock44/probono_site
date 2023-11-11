@@ -1,20 +1,17 @@
 'use client';
 import React from 'react';
-import {useFormStatus} from 'react-dom';
 import {NumberField} from '@/components/number-field.tsx';
-import Button from '@/components/button.tsx';
 import Icon from '@/components/icon.tsx';
 import TextField from '@/components/text-field.tsx';
 import Form from '@/components/form.tsx';
 import FileDropZone from '@/components/file-drop-zone.tsx';
 import upsertOrganizationAction from '@/lib/actions/organization.ts';
-import {validators} from '@/lib/schemas/util.ts';
 import {organizationSchema} from '@/lib/schemas/organization.ts';
+import {formValidators} from '@/lib/schemas/form-utils.ts';
+import SubmitButton from '@/components/submit-button.tsx';
 
 export default function OrganizationForm() {
-	const {pending} = useFormStatus();
-
-	const validate = validators(organizationSchema);
+	const validate = formValidators(organizationSchema);
 
 	return (
 		<Form
@@ -45,7 +42,7 @@ export default function OrganizationForm() {
 					formatOptions={{
 						useGrouping: false,
 					}}
-					className='w-28 mb-4'
+					className='w-32 mb-4'
 				/>
 			</div>
 
@@ -71,9 +68,9 @@ export default function OrganizationForm() {
 				className='grow basis-full mb-4'
 			/>
 
-			<Button type='submit' isDisabled={pending}>
+			<SubmitButton>
 				Continuar <Icon iconName='navigate_next'/>
-			</Button>
+			</SubmitButton>
 		</Form>
 	);
 }

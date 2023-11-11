@@ -1,6 +1,6 @@
 'use client';
 import React, {useState} from 'react';
-import {CluniStatus, type CorporationType, DonationAuthStatus} from '@prisma/client';
+import {CluniStatus, type CorporationType, DonationAuthStatus, type Organization} from '@prisma/client';
 import {Item} from 'react-stately';
 import {LabeledInput} from '@/components/labeled-input.tsx';
 import Select from '@/components/select.tsx';
@@ -10,6 +10,10 @@ import Button from '@/components/button.tsx';
 import Icon from '@/components/icon.tsx';
 import Checkbox from '@/components/checkbox.tsx';
 import TextField from '@/components/text-field.tsx';
+import Form from '@/components/form.tsx';
+import upsertOrganizationAction from '@/lib/actions/organization.ts';
+import {organizationSchema} from '@/lib/schemas/organization.ts';
+import {formValidators} from '@/lib/schemas/form-utils.ts';
 
 const clunis = [
 	{
@@ -49,10 +53,22 @@ const donationStatuses = [
 	},
 ];
 
-export default function LegalInfoForm({corporationTypes}: {readonly corporationTypes: CorporationType[]}) {
+export type LegalInfoFormProps = {
+	readonly organization: Organization;
+	readonly corporationTypes: CorporationType[];
+};
+
+export default function LegalInfoForm(props: LegalInfoFormProps) {
+	const {organization, corporationTypes} = props;
 	const [enabled, setEnabled] = useState(false);
+
+	const validate = formValidators(organizationSchema);
+
 	return (
-		<form>
+		<Form
+			action={upsertOrganizationAction} staticValues={{
+				id: organization.id,
+			}}>
 			<div className='flex justify-between items-end mb-4'>
 				<div>
 					<h1 className='text-stone-200 text-4xl mb-2'>
@@ -77,6 +93,8 @@ export default function LegalInfoForm({corporationTypes}: {readonly corporationT
 			<div className='flex gap-2'>
 				<TextField
 					isRequired
+					name='legalConcept'
+					validate={validate.legalConcept}
 					isDisabled={!enabled}
 					label='Razón social'
 					className='grow basis-9/12 mb-4'
@@ -84,6 +102,8 @@ export default function LegalInfoForm({corporationTypes}: {readonly corporationT
 				<Select
 					isRequired
 					placeholder='Tipo'
+					name='corporationTypeId'
+					validate={validate.corporationTypeId}
 					isDisabled={!enabled}
 					label='Tipo'
 					className='basis-2/12 mb-4'
@@ -99,7 +119,11 @@ export default function LegalInfoForm({corporationTypes}: {readonly corporationT
 			</div>
 
 			<div className='flex gap-2 mb-4'>
-				<TextField label='RFC' isDisabled={!enabled} className='grow basis-8/12'/>
+				<TextField
+					label='RFC'
+					isDisabled={!enabled}
+					className='grow basis-8/12'
+				/>
 				<NumberField
 					isRequired
 					isDisabled={!enabled}
@@ -142,6 +166,6 @@ export default function LegalInfoForm({corporationTypes}: {readonly corporationT
 				</Select>
 			</div>
 
-		</form>
+		</Form>
 	);
 }

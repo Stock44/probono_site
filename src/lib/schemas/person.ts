@@ -6,6 +6,6 @@ export const personSchema = z.object({
 	password: z.string(),
 	givenName: z.string(),
 	familyName: z.string(),
-	contactEmail: z.preprocess(emptyStringToNull, z.string().email().nullish()),
-	phone: z.preprocess(emptyStringToNull, phoneSchema.nullish()),
+	contactEmail: z.string().email().nullish(),
+	phone: phoneSchema.nullish(),
 });

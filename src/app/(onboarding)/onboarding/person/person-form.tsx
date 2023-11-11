@@ -1,16 +1,13 @@
 'use client';
-import React, {useState} from 'react';
+import React from 'react';
 import {type Person} from '@prisma/client';
-import {redirect} from 'next/navigation';
-import {useFormState, useFormStatus} from 'react-dom';
-import {LabeledInput} from '@/components/labeled-input.tsx';
-import Button from '@/components/button.tsx';
 import Icon from '@/components/icon.tsx';
 import upsertPersonAction from '@/lib/actions/person.ts';
 import TextField from '@/components/text-field.tsx';
 import Form from '@/components/form.tsx';
-import {validators} from '@/lib/schemas/util.ts';
 import {personSchema} from '@/lib/schemas/person.ts';
+import {formValidators} from '@/lib/schemas/form-utils.ts';
+import SubmitButton from '@/components/submit-button.tsx';
 
 export type PersonFormProps = {
 	readonly person?: Person;
@@ -19,9 +16,7 @@ export type PersonFormProps = {
 export default function PersonForm(props: PersonFormProps) {
 	const {person} = props;
 
-	const {pending} = useFormStatus();
-
-	const validate = validators(personSchema);
+	const validate = formValidators(personSchema);
 
 	return (
 		<Form
@@ -57,9 +52,9 @@ export default function PersonForm(props: PersonFormProps) {
 				validate={validate.phone}
 				defaultValue={person?.phone ?? ''}
 			/>
-			<Button type='submit' isDisabled={pending}>
+			<SubmitButton>
 				Continuar <Icon iconName='navigate_next'/>
-			</Button>
+			</SubmitButton>
 		</Form>
 	);
 }

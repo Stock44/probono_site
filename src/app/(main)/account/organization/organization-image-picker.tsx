@@ -13,8 +13,8 @@ import FileDropZone from '@/components/file-drop-zone.tsx';
 import {cx} from '@/lib/cva.ts';
 import Form from '@/components/form.tsx';
 import upsertOrganizationAction from '@/lib/actions/organization.ts';
-import {validators} from '@/lib/schemas/util.ts';
 import {organizationSchema} from '@/lib/schemas/organization.ts';
+import {formValidators} from '@/lib/schemas/form-utils.ts';
 
 export type LogoSelectorProps = {
 	readonly label: ReactNode;
@@ -26,7 +26,7 @@ const OrganizationImagePicker = forwardRef((props: LogoSelectorProps, ref: Forwa
 	const state = useOverlayTriggerState({});
 	const {triggerProps, overlayProps} = useOverlayTrigger({type: 'dialog'}, state);
 	const {close} = state;
-	const validate = validators(organizationSchema);
+	const validate = formValidators(organizationSchema);
 
 	return (
 		<>

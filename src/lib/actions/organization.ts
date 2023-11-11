@@ -5,7 +5,7 @@ import {redirect} from 'next/navigation';
 import {getSession, updateSession} from '@auth0/nextjs-auth0';
 import {fileTypeFromBlob} from 'file-type';
 import {del, put} from '@vercel/blob';
-import {decodeForm} from '@/lib/schemas/decode-form.ts';
+import {decodeForm} from '@/lib/schemas/form-utils.ts';
 import prisma from '@/lib/prisma.ts';
 import {type FormState} from '@/components/form.tsx';
 import {management} from '@/lib/auth0.ts';
@@ -39,6 +39,8 @@ export default async function upsertOrganizationAction(
 	try {
 		if (data.has('id')) {
 			const organizationData = await decodeForm(data, organizationSchema.partial());
+
+			console.log(organizationData);
 
 			const id = Number.parseInt(data.get('id')! as string, 10);
 

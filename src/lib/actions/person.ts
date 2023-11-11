@@ -3,7 +3,7 @@ import {getSession} from '@auth0/nextjs-auth0';
 import {type Person} from '@prisma/client';
 import {ZodError} from 'zod';
 import {redirect} from 'next/navigation';
-import {decodeForm} from '@/lib/schemas/decode-form.ts';
+import {decodeForm} from '@/lib/schemas/form-utils.ts';
 import {personSchema} from '@/lib/schemas/person.ts';
 import prisma from '@/lib/prisma.ts';
 import {type FormState} from '@/components/form.tsx';
