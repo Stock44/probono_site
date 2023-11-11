@@ -1,4 +1,4 @@
-insert into "Sector" (name, geom, "municipalityId")
-select s.sector, s.geom, m.id
-from "SectoresCorregidos26-10-2023" as s
+insert into "Sector" (id, name, geom, "municipalityId")
+select distinct on (s.id) s.id, s.sector, s.wkb_geometry, m.id
+from "sectors_dump" as s
 join "Municipality" as m on m.name = s.municipio;

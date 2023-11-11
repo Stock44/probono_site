@@ -25,11 +25,21 @@ export const NumberField = React.forwardRef((
 	const {locale} = useLocale();
 	const {label, className, icon, isDisabled, name} = props;
 	const state = useNumberFieldState({
+		validationBehavior: 'native',
 		...props,
 		locale,
 	});
 	const inputRef = useObjectRef(ref);
-	const {labelProps, groupProps, inputProps, incrementButtonProps, decrementButtonProps} = useNumberField(props, state, inputRef);
+	const {
+		labelProps,
+		groupProps,
+		inputProps,
+		incrementButtonProps,
+		decrementButtonProps,
+	} = useNumberField({
+		validationBehavior: 'native',
+		...props,
+	}, state, inputRef);
 	return (
 		<div data-disabled={isDisabled} className={twJoin('group', className)}>
 			<label {...labelProps} className='block text-stone-300 group-focus-within:text-stone-50 text-sm mb-1 group-data-[disabled=true]:text-stone-500'>{label}</label>

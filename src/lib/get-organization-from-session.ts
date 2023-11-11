@@ -2,6 +2,7 @@ import {getSession} from '@auth0/nextjs-auth0';
 import {redirect} from 'next/navigation';
 import {type Organization} from '@prisma/client';
 import {getPersonOrganizationByAuthId} from '@/lib/get-person-organization-by-auth-id.ts';
+import prisma from '@/lib/prisma.ts';
 
 /**
  * Retrieve the logged-in person data using the request's session.
@@ -17,11 +18,13 @@ export default async function getOrganizationFromSession(
 		return redirect(redirectTo);
 	}
 
-	const organization = await getPersonOrganizationByAuthId(session.user.sub as string);
-
-	if (organization === null) {
-		return redirect(redirectTo);
-	}
-
-	return organization;
+	const personWithOrganization = await prisma.person.findUniqueOrThrow({
+		where: {
+			authId: session.user.sub as string,
+		},
+		include: {
+			organization: true,
+		},
+	});
+	return personWithOrganization.organization[0];
 }

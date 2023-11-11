@@ -15,7 +15,7 @@ export default function Modal(props: ModalProps) {
 	return (
 		<Overlay>
 			<div {...underlayProps} className='fixed z-50 top-0 left-0 bottom-0 right-0 bg-black/50 flex items-center justify-center'>
-				<div {...modalProps} ref={ref} className='bg-stone-900 border border-stone-700 p-4 rounded'>
+				<div {...modalProps} ref={ref} className='bg-stone-950 border border-stone-800 p-4 rounded'>
 					{children}
 				</div>
 			</div>

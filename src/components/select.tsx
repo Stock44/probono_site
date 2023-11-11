@@ -25,7 +25,7 @@ export default forwardRef(<T extends Record<string, unknown>>(props: SelectProps
 
 	return (
 		<div className={className}>
-			<div {...labelProps} data-disabled={isDisabled} className={clsx('text-stone-300 text-sm mb-1 data-[disabled=true]:text-stone-500', (isFocused || isOpen) && 'text-stone-50')}>
+			<div {...labelProps} data-disabled={isDisabled} className={clsx('text-stone-400 text-sm mb-1 data-[disabled=true]:text-stone-500', (isFocused || isOpen) && 'text-stone-50')}>
 				{label}
 			</div>
 			<HiddenSelect isDisabled={isDisabled} state={state} triggerRef={triggerRef} label={label} name={name}/>

@@ -1,5 +1,5 @@
 import {GeoJSON, MapContainer, TileLayer, Tooltip, useMapEvent} from 'react-leaflet';
-import React, {type Key, useEffect, useState} from 'react';
+import React, {type Key, useEffect, useMemo, useState} from 'react';
 import {type Set} from 'immutable';
 import {type Geometry} from 'geojson';
 import {type Sector} from '@prisma/client';
@@ -48,8 +48,10 @@ export type SectorsMapProps = {
 export default function SectorsMap(props: SectorsMapProps) {
 	const {sectors, selectedKeys, setSelectedKeys, className} = props;
 
+	const time = useMemo(() => Date.now(), []);
+
 	return (
-		<MapContainer scrollWheelZoom worldCopyJump center={[25.68, -100.31]} zoom={11} className={cx('rounded border border-stone-800', className)}>
+		<MapContainer key={time} scrollWheelZoom worldCopyJump center={[25.68, -100.31]} zoom={11} className={cx('rounded border border-stone-800', className)}>
 
 			<TileLayer
 				attribution='<a href="https://www.maptiler.com/copyright/" target="_blank">&copy; MapTiler</a> <a href="https://www.openstreetmap.org/copyright" target="_blank">&copy; OpenStreetMap contributors</a>'

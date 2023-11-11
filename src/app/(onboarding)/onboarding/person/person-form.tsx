@@ -2,80 +2,64 @@
 import React, {useState} from 'react';
 import {type Person} from '@prisma/client';
 import {redirect} from 'next/navigation';
-import {ZodError} from 'zod';
+import {useFormState, useFormStatus} from 'react-dom';
 import {LabeledInput} from '@/components/labeled-input.tsx';
-import createPersonFromFormAction from '@/app/(onboarding)/onboarding/person/create-person-from-form-action.ts';
 import Button from '@/components/button.tsx';
 import Icon from '@/components/icon.tsx';
-import {decodeForm} from '@/lib/schemas/decode-form.ts';
+import upsertPersonAction from '@/lib/actions/person.ts';
+import TextField from '@/components/text-field.tsx';
+import Form from '@/components/form.tsx';
+import {validators} from '@/lib/schemas/util.ts';
 import {personSchema} from '@/lib/schemas/person.ts';
 
-export default function PersonForm({
-	existingPerson,
-}: {
-	readonly existingPerson?: Partial<Person>;
-}) {
-	const [issueMap, setIssueMap] = useState(new Map<string, string>());
+export type PersonFormProps = {
+	readonly person?: Person;
+};
 
-	const handleForm = async (form: FormData) => {
-		try {
-			// Validate that the data is correct
-			await decodeForm(
-				form,
-				personSchema.omit({
-					id: true,
-					email: true,
-					authId: true,
-				}),
-			);
+export default function PersonForm(props: PersonFormProps) {
+	const {person} = props;
 
-			const result = await createPersonFromFormAction(form);
+	const {pending} = useFormStatus();
 
-			if (result.success) {
-				redirect('/onboarding/organization');
-			}
-		} catch (error) {
-			if (error instanceof ZodError) {
-				setIssueMap(
-					new Map(
-						error.issues.map(issue => [
-							issue.path[0].toString(),
-							issue.message,
-						]),
-					),
-				);
-			} else {
-				throw error;
-			}
-		}
-	};
+	const validate = validators(personSchema);
 
 	return (
-		<form action={handleForm} className='w-full'>
-			<LabeledInput
-				required
+		<Form
+			action={upsertPersonAction} redirectTo='/onboarding/organization'>
+			<TextField
+				isRequired
+				className='mb-4'
 				name='givenName'
-				label='Nombre (s)'
-				issueText={issueMap.get('givenName')}
-				defaultValue={existingPerson?.givenName}
+				label='Nombre(s)'
+				validate={validate.givenName}
+				defaultValue={person?.givenName}
 			/>
-			<LabeledInput
-				required
+			<TextField
+				isRequired
+				className='mb-4'
 				name='familyName'
-				label='Apellido (s)'
-				issueText={issueMap.get('familyName')}
-				defaultValue={existingPerson?.familyName}
+				label='Apellido(s)'
+				validate={validate.familyName}
+				defaultValue={person?.familyName}
 			/>
-			<LabeledInput
+			<TextField
+				className='mb-4'
+				name='contactEmail'
+				label='Correo electrónico de contacto'
+				validate={validate.contactEmail}
+				defaultValue={person?.contactEmail ?? ''}
+			/>
+			<TextField
 				name='phone'
+				className='mb-4'
 				type='tel'
 				label='Teléfono'
-				issueText={issueMap.get('phone')}
-				defaultValue={existingPerson?.phone}
+				validate={validate.phone}
+				defaultValue={person?.phone ?? ''}
 			/>
-			<Button type='submit'>
+			<Button type='submit' isDisabled={pending}>
 				Continuar <Icon iconName='navigate_next'/>
 			</Button>
-		</form>
+		</Form>
 	);
 }

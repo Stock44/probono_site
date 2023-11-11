@@ -145,7 +145,7 @@ model IncomeCategory {
 }
 
 model VolunteerCountCategory {
-  Id            Int            @id @default(autoincrement())
+  id            Int            @id @default(autoincrement())
   minCount      Int
   maxCount      Int?
   organizations Organization[]
@@ -234,7 +234,7 @@ model Organization {
   employeeCountCategory   EmployeeCountCategory? @relation(fields: [employeeCountCategoryId], references: [id])
   employeeCountCategoryId Int?
 
-  volunteerCountCategory   VolunteerCountCategory? @relation(fields: [volunteerCountCategoryId], references: [Id])
+  volunteerCountCategory   VolunteerCountCategory? @relation(fields: [volunteerCountCategoryId], references: [id])
   volunteerCountCategoryId Int?
 
   workplaceType   WorkplaceType? @relation(fields: [workplaceTypeId], references: [Id])
@@ -261,17 +261,16 @@ model Organization {
 
   sectors Sector[]
 
-  owner      Person                               @relation(fields: [personId], references: [id])
-  personId   Int                                  @unique
+  owners     Person[]
   activities OrganizationToOrganizationActivity[]
 }
 
 model Person {
-  id           Int           @id @default(autoincrement())
-  authId       String        @unique
+  id           Int            @id @default(autoincrement())
+  authId       String         @unique
   givenName    String
   familyName   String
-  email        String
+  contactEmail String?
   phone        String?
-  organization Organization?
+  organization Organization[]
 }

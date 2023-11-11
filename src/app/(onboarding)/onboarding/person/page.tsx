@@ -16,11 +16,7 @@ export default withPageAuthRequired(
 					Para empezar, necesitamos unos pocos datos basicos sobre ti.
 				</p>
 				<PersonForm
-					existingPerson={{
-						familyName: person?.familyName ?? user.familyName as string,
-						givenName: person?.givenName ?? user.givenName as string,
-						phone: person?.phone ?? user.phone as string,
-					}}
+					person={person ?? undefined}
 				/>
 			</main>
 		);
