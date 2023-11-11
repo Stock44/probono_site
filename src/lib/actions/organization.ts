@@ -1,7 +1,7 @@
 'use server';
 import {ZodError} from 'zod';
 import {redirect} from 'next/navigation';
-import {getSession, updateSession} from '@auth0/nextjs-auth0';
+import {updateSession} from '@auth0/nextjs-auth0';
 import {fileTypeFromBlob} from 'file-type';
 import {del, put} from '@vercel/blob';
 import {type Organization} from '@prisma/client';
@@ -10,7 +10,7 @@ import prisma from '@/lib/prisma.ts';
 import {type FormState} from '@/components/form.tsx';
 import {management} from '@/lib/auth0.ts';
 import {organizationSchema} from '@/lib/schemas/organization.ts';
-import {getPersonByAuthId} from '@/lib/get-person-by-auth-id.ts';
+import {getPersonFromSessionAction, getPersonOrganizationAction, handleErrorAction} from '@/lib/actions/utils.ts';
 
 const imageTypes = new Set(['image/jpeg', 'image/png', 'image/webp']);
 
@@ -18,53 +18,22 @@ export default async function upsertOrganizationAction(
 	previousState: FormState<Organization & {logo: File}>,
 	data: FormData,
 ): Promise<FormState<Organization & {logo: File}>> {
-	const session = await getSession();
+	const {values, state} = await getPersonFromSessionAction(previousState);
 
-	if (session === null || session === undefined) {
-		return {
-			...previousState,
-			formErrors: ['Not authenticated'],
-		};
-	}
-
-	const person = await getPersonByAuthId(session.user.sub as string);
-
-	if (person === null) {
-		return {
-			...previousState,
-			formErrors: ['User has not completed registration'],
-		};
+	if (values === null) {
+		return state;
 	}
 
 	try {
 		if (data.has('id')) {
 			const organizationData = await decodeForm(data, organizationSchema.partial());
-			console.log(organizationData);
 
 			const id = Number.parseInt(data.get('id')! as string, 10);
 
-			const currentOrganization = await prisma.organization.findUnique({
-				where: {
-					id,
-				},
-				include: {
-					owners: true,
-				},
-			});
+			const {organization: currentOrganization, state} = await getPersonOrganizationAction(previousState, values.person, id);
 
 			if (currentOrganization === null) {
-				return {
-					...previousState,
-					formErrors: ['Specified organization does not exist'],
-				};
-			}
-
-			// If none of the owners is the current user
-			if (!currentOrganization.owners.some(owner => owner.id === person.id)) {
-				return {
-					...previousState,
-					formErrors: ['You are not the owner of the specified organization'],
-				};
+				return state;
 			}
 
 			const logo = data.get('logo') as File | null;
@@ -131,7 +100,7 @@ export default async function upsertOrganizationAction(
 					...organizationData,
 					owners: {
 						connect: {
-							id: person.id,
+							id: values.person.id,
 						},
 					},
 				},
@@ -139,7 +108,7 @@ export default async function upsertOrganizationAction(
 
 			await management.users.update(
 				{
-					id: session.user.sub as string,
+					id: values.person.authId,
 				},
 				{
 					// eslint-disable-next-line @typescript-eslint/naming-convention
@@ -151,35 +120,16 @@ export default async function upsertOrganizationAction(
 			);
 
 			await updateSession({
-				...session,
+				...values.session,
 				user: {
-					...session.user,
+					...values.session.user,
 					// eslint-disable-next-line @typescript-eslint/naming-convention
 					finished_onboarding: true,
 				},
 			});
 		}
 	} catch (error) {
-		if (error instanceof ZodError) {
-			return {
-				...previousState,
-				...error.formErrors,
-			};
-		}
-
-		if (error instanceof Error) {
-			return {
-				...previousState,
-				formErrors: [error.message],
-				fieldErrors: {},
-			};
-		}
-
-		return {
-			...previousState,
-			formErrors: ['Unknown form error'],
-			fieldErrors: {},
-		};
+		return handleErrorAction(previousState, error);
 	}
 
 	if (previousState.redirectTo) {

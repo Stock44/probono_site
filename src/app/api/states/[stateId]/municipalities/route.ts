@@ -8,7 +8,6 @@ export const GET = async (request: NextRequest, {params}: {
 	};
 }) => {
 	const {stateId} = params;
-	console.log(stateId);
 	const municipalities = await getMunicipalitiesByState(Number.parseInt(stateId, 10));
 
 	return NextResponse.json(municipalities);

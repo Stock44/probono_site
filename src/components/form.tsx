@@ -18,7 +18,7 @@ export type FormProps<T> = {
 	readonly action: (previousState: FormState<T>, data: FormData) => Promise<FormState<T>>;
 	readonly redirectTo?: string;
 	readonly staticValues?: {
-		readonly [K in keyof T as T[K] extends ValidFormValues ? K : never]?: T[K];
+		readonly [K in keyof T]?: ValidFormValues;
 	};
 };
 
