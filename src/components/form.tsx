@@ -1,6 +1,7 @@
 import React, {type ReactNode} from 'react';
 import {FormValidationContext} from 'react-stately';
 import {useFormState} from 'react-dom';
+import {type Organization} from '@prisma/client';
 
 export type FormState<T> = {
 	readonly redirectTo?: string;
@@ -10,14 +11,18 @@ export type FormState<T> = {
 	};
 };
 
+type ValidFormValues = string | boolean | string[] | number | undefined | null;
+
 export type FormProps<T> = {
 	readonly children: ReactNode;
 	readonly action: (previousState: FormState<T>, data: FormData) => Promise<FormState<T>>;
 	readonly redirectTo?: string;
 	readonly staticValues?: {
-		readonly [K in keyof T]?: T[K] extends string | number | readonly string[] ? T[K] : never;
+		readonly [K in keyof T as T[K] extends ValidFormValues ? K : never]?: T[K];
 	};
 };
+
+type Test = FormProps<Organization>['staticValues'];
 
 export default function Form<T>(props: FormProps<T>) {
 	const {children, action, staticValues, redirectTo} = props;
@@ -36,7 +41,9 @@ export default function Form<T>(props: FormProps<T>) {
 		<form action={formAction}>
 			{
 				staticValues && Object.entries(staticValues).map(([key, value]) => (
-					<input key={key} readOnly hidden name={key} value={value as string | number | readonly string[] | undefined}/>
+					value === undefined
+						? null
+						: <input key={key} readOnly hidden name={key} value={typeof value === 'boolean' ? (value ? 'true' : '') : value as string | string[] | number | null ?? ''}/>
 				))
 			}
 

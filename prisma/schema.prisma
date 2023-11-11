@@ -220,6 +220,7 @@ model Organization {
   youtube                String?
   linkedIn               String?
 
+  isIncorporated     Boolean
   wantsToIncorporate Boolean?
 
   legalConcept       String?

@@ -1,10 +1,10 @@
 'use server';
-import {type Organization} from '@prisma/client';
 import {ZodError} from 'zod';
 import {redirect} from 'next/navigation';
 import {getSession, updateSession} from '@auth0/nextjs-auth0';
 import {fileTypeFromBlob} from 'file-type';
 import {del, put} from '@vercel/blob';
+import {type Organization} from '@prisma/client';
 import {decodeForm} from '@/lib/schemas/form-utils.ts';
 import prisma from '@/lib/prisma.ts';
 import {type FormState} from '@/components/form.tsx';
@@ -15,9 +15,9 @@ import {getPersonByAuthId} from '@/lib/get-person-by-auth-id.ts';
 const imageTypes = new Set(['image/jpeg', 'image/png', 'image/webp']);
 
 export default async function upsertOrganizationAction(
-	previousState: FormState<Organization & {logo: string}>,
+	previousState: FormState<Organization & {logo: File}>,
 	data: FormData,
-): Promise<FormState<Organization & {logo: string}>> {
+): Promise<FormState<Organization & {logo: File}>> {
 	const session = await getSession();
 
 	if (session === null || session === undefined) {
@@ -39,7 +39,6 @@ export default async function upsertOrganizationAction(
 	try {
 		if (data.has('id')) {
 			const organizationData = await decodeForm(data, organizationSchema.partial());
-
 			console.log(organizationData);
 
 			const id = Number.parseInt(data.get('id')! as string, 10);
@@ -161,7 +160,6 @@ export default async function upsertOrganizationAction(
 			});
 		}
 	} catch (error) {
-		console.log(error);
 		if (error instanceof ZodError) {
 			return {
 				...previousState,

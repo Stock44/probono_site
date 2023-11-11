@@ -18,6 +18,7 @@ import Form from '@/components/form.tsx';
 import upsertOrganizationAction from '@/lib/actions/organization.ts';
 import {organizationSchema} from '@/lib/schemas/organization.ts';
 import {formValidators} from '@/lib/schemas/form-utils.ts';
+import SubmitButton from '@/components/submit-button.tsx';
 
 export type GeneralInfoFormProps = {
 	readonly organization: Organization;
@@ -45,10 +46,10 @@ export default function GeneralInfoForm(props: GeneralInfoFormProps) {
 					</p>
 				</div>
 				<div className='grow'/>
-				<Button type='submit'>
+				<SubmitButton>
 					<Icon iconName='save' className='me-1'/>
 					Guardar
-				</Button>
+				</SubmitButton>
 			</div>
 			<div/>
 			<div className='flex items-end gap-x-4 w-full'>

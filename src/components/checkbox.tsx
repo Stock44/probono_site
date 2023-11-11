@@ -9,12 +9,14 @@ export type CheckboxProps = {
 } & AriaCheckboxProps & ToggleProps;
 
 export default function Checkbox(props: CheckboxProps) {
-	const {children, className} = props;
+	const {children, className, name} = props;
 	const ref = useRef<HTMLInputElement>(null);
 	const state = useToggleState(props);
 	const {inputProps} = useCheckbox(props, state, ref);
 	const {focusProps, isFocusVisible} = useFocusRing();
 	const {pressProps} = usePress({isDisabled: props.isDisabled});
+
+	const {isSelected} = state;
 
 	return (
 		<label className={cx('flex gap-2 text-stone-300', className)}>

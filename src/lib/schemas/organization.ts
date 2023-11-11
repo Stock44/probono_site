@@ -36,6 +36,7 @@ export const organizationSchema = z.object({
 	youtube: z.string().transform(urlHostnameRefinement('youtube')).nullish(),
 	linkedIn: z.string().transform(urlHostnameRefinement('linkedin')).nullish(),
 	wantsToIncorporate: z.coerce.boolean().nullish(),
+	isIncorporated: z.coerce.boolean(),
 	rfc: z.string().nullish(),
 	donationAuthStatus: z.nativeEnum(DonationAuthStatus).nullish(),
 	cluniStatus: z.nativeEnum(CluniStatus).nullish(),
@@ -43,4 +44,5 @@ export const organizationSchema = z.object({
 	volunteerCountCategoryId: z.coerce.number().int().nullish(),
 	legalConcept: z.string().nullish(),
 	corporationTypeId: z.coerce.number().int().nullish(),
+	incorporationYear: z.coerce.number().int().nullish(),
 });

@@ -7,6 +7,10 @@ import type z from 'zod';
  * @return {unknown} - The preprocessed value.
  */
 export function preprocessFormValue(value: unknown): unknown {
+	if (Number.isNaN(value)) {
+		return null;
+	}
+
 	if (typeof value !== 'string') {
 		return value;
 	}
