@@ -1,12 +1,23 @@
 'use client';
 import React from 'react';
-import {Root, type SeparatorProps} from '@radix-ui/react-separator';
+import {useSeparator, type SeparatorProps as AriaSeparatorProps} from 'react-aria';
+import {cx} from '@/lib/cva.ts';
+
+export type SeparatorProps = {
+	readonly className?: string;
+} & AriaSeparatorProps;
 
 export default function Separator(props: SeparatorProps) {
+	const {className, orientation = 'horizontal'} = props;
+	const {separatorProps} = useSeparator(props);
+
 	return (
-		<Root
-			{...props}
-			className='dark:bg-stone-700 data-[orientation=horizontal]:w-full data-[orientation=horizontal]:h-px data-[orientation=horizontal]:my-4 data-[orientation=vertical]:h-full data-[orientation=vertical]:w-px data-[orientation=vertical]:mx-4'
-		/>
+		<div
+			{...separatorProps} className={cx(
+				'bg-stone-800',
+				orientation === 'horizontal' && 'h-[1px] w-full my-8',
+				orientation === 'vertical' && 'w-[1px] h-full mx-8',
+				className,
+			)}/>
 	);
 }

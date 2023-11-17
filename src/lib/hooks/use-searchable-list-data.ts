@@ -1,5 +1,6 @@
-import {type Key, useMemo} from 'react';
+import {useMemo} from 'react';
 import {type Collection, OrderedSet, Seq, type Set} from 'immutable';
+import {type Key} from 'react-stately';
 import useFuse from '@/lib/hooks/use-fuse.ts';
 import useImmutableListData, {type ImmutableListData, type ImmutableListOptions} from '@/lib/hooks/use-immutable-list-data.ts';
 

@@ -48,7 +48,7 @@ export const NumberField = React.forwardRef((
 		<div data-disabled={isDisabled} className={twJoin('group', className)}>
 			<label
 				{...labelProps} className={cx(
-					'block text-stone-300 group-focus-within:text-stone-50 text-sm mb-1 group-data-[disabled=true]:text-stone-500',
+					'block text-stone-400 group-focus-within:text-stone-50 text-sm mb-1 group-data-[disabled=true]:text-stone-500',
 					isRequired && 'after:content-["*"] after:ml-0.5',
 				)}>{label}</label>
 

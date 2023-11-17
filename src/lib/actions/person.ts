@@ -1,28 +1,27 @@
 'use server';
 import {getSession} from '@auth0/nextjs-auth0';
-import {type Person} from '@prisma/client';
 import {ZodError} from 'zod';
 import {redirect} from 'next/navigation';
+import {type User} from '@prisma/client';
 import {decodeForm} from '@/lib/schemas/form-utils.ts';
 import {personSchema} from '@/lib/schemas/person.ts';
 import prisma from '@/lib/prisma.ts';
 import {type FormState} from '@/components/form.tsx';
 import {management} from '@/lib/auth0.ts';
-import {getPersonByAuthId} from '@/lib/get-person-by-auth-id.ts';
 
-type PersonProperties = Omit<Person, 'id' | 'authId'>;
+type UserProperties = Omit<User, 'id' | 'authId'>;
 
 /**
  * Either creates or inserts a Person record, based on session id.
  *
- * @param {FormState<PersonProperties>} previousState - The previous form state.
- * @param {FormData} data - The form data to update or create the person.
- * @returns {Promise<FormState<PersonProperties>>} The updated form state.
+ * @param {FormState<UserProperties>} previousState - The previous form state.
+ * @param {FormData} data - The form data to update or create the user.
+ * @returns {Promise<FormState<UserProperties>>} The updated form state.
  */
-export default async function upsertPersonAction(
-	previousState: FormState<PersonProperties>,
+export default async function upsertUserAction(
+	previousState: FormState<UserProperties>,
 	data: FormData,
-): Promise<FormState<PersonProperties>> {
+): Promise<FormState<UserProperties>> {
 	const session = await getSession();
 
 	if (session === null || session === undefined) {
@@ -35,16 +34,16 @@ export default async function upsertPersonAction(
 	const authId = session.user.sub as string;
 
 	try {
-		const existingPerson = await prisma.person.findUnique({
+		const existingUser = await prisma.user.findUnique({
 			where: {
 				authId,
 			},
 		});
 
-		if (existingPerson === null) {
+		if (existingUser === null) {
 			const personData = await decodeForm(data, personSchema.omit({email: true, password: true}));
 
-			await prisma.person.create({
+			await prisma.user.create({
 				data: {
 					...personData,
 					authId,
@@ -65,9 +64,9 @@ export default async function upsertPersonAction(
 			// );
 		} else {
 			const personData = await decodeForm(data, personSchema.partial());
-			await prisma.person.update({
+			await prisma.user.update({
 				where: {
-					id: existingPerson.id,
+					id: existingUser.id,
 				},
 				data: personData,
 			});

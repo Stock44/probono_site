@@ -19,8 +19,16 @@ import ods14Logo from 'public/odsIcons/14.png';
 import ods15Logo from 'public/odsIcons/15.png';
 import ods16Logo from 'public/odsIcons/16.png';
 import ods17Logo from 'public/odsIcons/17.png';
-import {type RadioGroupState, useRadioGroupState} from 'react-stately';
-import {mergeProps, useFocusRing, usePress, useRadio, useRadioGroup, VisuallyHidden} from 'react-aria';
+import {type RadioGroupProps, type RadioGroupState, useRadioGroupState} from 'react-stately';
+import {
+	type AriaRadioGroupProps,
+	mergeProps,
+	useFocusRing,
+	usePress,
+	useRadio,
+	useRadioGroup,
+	VisuallyHidden,
+} from 'react-aria';
 import clsx from 'clsx';
 import Icon from '@/components/icon.tsx';
 
@@ -81,22 +89,14 @@ function OdsRadio(props: OdsRadioProps) {
 
 export type OdsSelectorProps = {
 	readonly name?: string;
-	readonly value?: number;
 	readonly className?: string;
-	readonly onChange?: (value: number) => void;
-};
+} & RadioGroupProps & AriaRadioGroupProps;
 
 export default function OdsSelector(props: OdsSelectorProps) {
-	const {value, onChange, className} = props;
+	const {className} = props;
 
-	const state = useRadioGroupState({
-		label: 'Selecciona el ODS que atiende tu organización',
-		value: value?.toString() ?? '',
-		onChange: onChange === undefined ? undefined : value => {
-			onChange(Number.parseInt(value, 10));
-		},
-	});
-	const {radioGroupProps, labelProps} = useRadioGroup({}, state);
+	const state = useRadioGroupState(props);
+	const {radioGroupProps, labelProps} = useRadioGroup(props, state);
 
 	return (
 		<div {...radioGroupProps} className={className}>

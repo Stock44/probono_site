@@ -1,6 +1,7 @@
-import React, {useState, type Key, useMemo} from 'react';
+import React, {useState, useMemo} from 'react';
 import clsx from 'clsx';
 import {Seq, Map} from 'immutable';
+import {type Key} from 'react-stately';
 import Icon from '@/components/icon.tsx';
 import Spacer from '@/components/spacer.tsx';
 import Button from '@/components/button.tsx';
@@ -30,36 +31,36 @@ export default function ListPrioritizer<T extends Record<string, unknown>>(
 	const handleMove = (deltaY: number, key: Key) => {
 		setDeltaY(deltaY);
 
-		const previousKey = collection.getKeyBefore(key);
+		const previousKey = collection.getKeyBefore(key.toString());
 		if (previousKey !== null && previousKey !== undefined) {
-			const previousContainer = activityRefs.get(key);
+			const previousContainer = activityRefs.get(key.toString());
 			if (previousContainer !== undefined && deltaY < -((previousContainer.clientHeight / 2))) {
 				setDragStartY(previousContainer.getBoundingClientRect().y);
 				setDeltaY(0);
-				reorder(key, previousKey);
+				reorder(key.toString(), previousKey.toString());
 			}
 		}
 
-		const nextKey = collection.getKeyAfter(key);
+		const nextKey = collection.getKeyAfter(key.toString());
 		if (nextKey !== null && nextKey !== undefined) {
-			const nextContainer = activityRefs.get(key);
+			const nextContainer = activityRefs.get(key.toString());
 			if (nextContainer !== undefined && deltaY > (nextContainer.clientHeight)) {
 				setDragStartY(nextContainer.getBoundingClientRect().y + (nextContainer.clientHeight / 2));
 				setDeltaY(0);
-				reorder(key, undefined, nextKey);
+				reorder(key.toString(), undefined, nextKey.toString());
 			}
 		}
 	};
 
 	const touchStartHandler = (key: Key) => ((event: React.TouchEvent) => {
-		setDraggedActivity(key);
+		setDraggedActivity(key.toString());
 		const rect = event.currentTarget.getBoundingClientRect();
 		setDragStartY(rect.y + (rect.height / 2));
 	});
 
 	const dragStartHandler = (key: Key) => ((event: React.DragEvent) => {
 		event.dataTransfer.setDragImage(new Image(), 0, 0);
-		setDraggedActivity(key);
+		setDraggedActivity(key.toString());
 		const rect = event.currentTarget.getBoundingClientRect();
 		setDragStartY(rect.y + (rect.height / 2));
 	});
@@ -71,7 +72,7 @@ export default function ListPrioritizer<T extends Record<string, unknown>>(
 
 		const deltaY = event.touches[0].clientY - dragStartY;
 
-		handleMove(deltaY, key);
+		handleMove(deltaY, key.toString());
 	});
 
 	const dragHandler = (key: Key) => ((event: React.DragEvent) => {
@@ -81,7 +82,7 @@ export default function ListPrioritizer<T extends Record<string, unknown>>(
 
 		const deltaY = event.clientY - dragStartY;
 
-		handleMove(deltaY, key);
+		handleMove(deltaY, key.toString());
 	});
 
 	const dragEndHandler = () => {
@@ -95,11 +96,11 @@ export default function ListPrioritizer<T extends Record<string, unknown>>(
 			return undefined;
 		}
 
-		if (draggedActivity === collection.getFirstKey() && deltaY < 0) {
+		if (draggedActivity === collection.getFirstKey()?.toString() && deltaY < 0) {
 			return '0px';
 		}
 
-		if (draggedActivity === collection.getLastKey() && deltaY > 0) {
+		if (draggedActivity === collection.getLastKey()?.toString() && deltaY > 0) {
 			return '0px';
 		}
 
@@ -114,13 +115,13 @@ export default function ListPrioritizer<T extends Record<string, unknown>>(
 						key={activity.key}
 						className={clsx('relative')}
 						style={{
-							height: draggedActivity === activity.key ? `${activityRefs.get(activity.key)?.clientHeight ?? 0}px` : undefined,
+							height: draggedActivity === activity.key.toString() ? `${activityRefs.get(activity.key.toString())?.clientHeight ?? 0}px` : undefined,
 						}}
 					>
 						<div
 							ref={element => {
 								if (element !== null) {
-									setActivityRefs(activityRefs.set(activity.key, element));
+									setActivityRefs(current => current.set(activity.key, element));
 								}
 							}}
 							className={clsx(
@@ -144,7 +145,7 @@ export default function ListPrioritizer<T extends Record<string, unknown>>(
 							<Spacer/>
 							<Button
 								className='bg-transparent hover:bg-stone-700'
-								variant='tertiary' onPress={() => {
+								variant='text' onPress={() => {
 									onRemove(activity.key);
 								}}>
 								<Icon iconName='remove'/>

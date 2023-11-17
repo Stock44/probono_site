@@ -24,7 +24,7 @@ export default function OnboardingPage() {
 				Antes de nada, queremos conocer más sobre ti y tu organización.
 			</p>
 
-			<Link href='/onboarding/person'>
+			<Link href='/onboarding/user'>
 				<Button>
 					Continuar <Icon iconName='navigate_next'/>
 				</Button>

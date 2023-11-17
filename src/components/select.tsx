@@ -61,7 +61,7 @@ export default forwardRef(<T extends Record<string, unknown>>(props: SelectProps
 				<Icon iconName='arrow_drop_down' aria-hidden='true'/>
 			</Button>
 			{
-				isOpen && <Popover state={state} triggerRef={triggerRef} popoverRef={popoverRef} placement='bottom start'>
+				isOpen && <Popover ref={popoverRef} state={state} triggerRef={triggerRef} placement='bottom start'>
 					{/** @ts-expect-error children not necessary **/}
 					<ListBox {...menuProps} state={state}/>
 				</Popover>

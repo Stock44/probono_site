@@ -1,10 +1,11 @@
 'use server';
-import {type Organization, type Person} from '@prisma/client';
+import {type Organization, type User} from '@prisma/client';
 import {getSession, type Session} from '@auth0/nextjs-auth0';
 import {ZodError} from 'zod';
+import {redirect} from 'next/navigation';
 import {type FormState} from '@/components/form.tsx';
-import {getPersonByAuthId} from '@/lib/get-person-by-auth-id.ts';
 import prisma from '@/lib/prisma.ts';
+import {getUserByAuthId} from '@/lib/user.ts';
 
 export async function handleErrorAction<T>(previousState: FormState<T>, error: unknown): Promise<FormState<T>> {
 	if (error instanceof ZodError) {
@@ -29,16 +30,16 @@ export async function handleErrorAction<T>(previousState: FormState<T>, error: u
 	};
 }
 
-export async function getPersonOrganizationAction<T>(previousState: FormState<T>, person: Person, organizationId: number): Promise<{
-	organization: Organization | null;
-	state: FormState<T>;
-}> {
+export async function getOrganizationFromSession() {}
+
+export async function getUserOrganizationAction<T>(previousState: FormState<T>, user: User, organizationId: number) {
 	const organization = await prisma.organization.findUnique({
 		where: {
 			id: organizationId,
 		},
 		include: {
 			owners: true,
+			activities: true,
 		},
 	});
 
@@ -53,7 +54,7 @@ export async function getPersonOrganizationAction<T>(previousState: FormState<T>
 	}
 
 	// If none of the owners is the current user
-	if (!organization.owners.some(owner => owner.id === person.id)) {
+	if (!organization.owners.some(owner => owner.id === user.id)) {
 		return {
 			organization: null,
 			state: {
@@ -69,9 +70,9 @@ export async function getPersonOrganizationAction<T>(previousState: FormState<T>
 	};
 }
 
-export async function getPersonFromSessionAction<T>(previousState: FormState<T>): Promise<{
+export async function getUserFromSessionAction<T>(previousState: FormState<T>): Promise<{
 	values: {
-		person: Person;
+		user: User;
 		session: Session;
 	} | null;
 	state: FormState<T>;
@@ -88,9 +89,9 @@ export async function getPersonFromSessionAction<T>(previousState: FormState<T>)
 		};
 	}
 
-	const person = await getPersonByAuthId(session.user.sub as string);
+	const user = await getUserByAuthId(session.user.sub as string);
 
-	if (person === null) {
+	if (user === null) {
 		return {
 			values: null,
 			state: {
@@ -102,7 +103,7 @@ export async function getPersonFromSessionAction<T>(previousState: FormState<T>)
 
 	return {
 		values: {
-			person,
+			user,
 			session,
 		},
 		state: previousState,

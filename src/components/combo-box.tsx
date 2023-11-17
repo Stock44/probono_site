@@ -66,10 +66,10 @@ export function BaseComboBox<T extends Record<string, unknown>>(props: BaseCombo
 				</Button>
 				{state.isOpen
 					? <Popover
+						ref={popoverObjectRef}
 						isNonModal
 						state={state}
 						triggerRef={inputObjectRef}
-						popoverRef={popoverObjectRef}
 						placement='bottom start'
 					>
 						{/* @ts-expect-error children prop is passed in by react-aria */}

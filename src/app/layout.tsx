@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {type ReactNode} from 'react';
 import {type Metadata} from 'next';
 import 'leaflet/dist/leaflet.css';
 import localFont from 'next/font/local';
@@ -12,15 +12,18 @@ export const metadata: Metadata = {
 	description: 'probono',
 };
 
-export default function RootLayout({
-	children,
-}: {
-	readonly children: React.ReactNode;
-}) {
+export type RootLayoutProps = {
+	readonly children: ReactNode;
+};
+
+export default function RootLayout(props: RootLayoutProps) {
+	const {children} = props;
 	return (
 		<html lang='en' className={`${myFont.variable}`}>
 			<body className='bg-stone-950'>
-				<ClientProviders>{children}</ClientProviders>
+				<ClientProviders>
+					{children}
+				</ClientProviders>
 			</body>
 		</html>
 	);

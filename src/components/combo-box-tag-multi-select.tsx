@@ -1,5 +1,5 @@
-import React, {type Key, useMemo} from 'react';
-import {useListState} from 'react-stately';
+import React, {useMemo} from 'react';
+import {useListState, type Key} from 'react-stately';
 import {type List, Seq, Set} from 'immutable';
 import clsx from 'clsx';
 import {type CollectionElement} from '@react-types/shared';

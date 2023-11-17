@@ -1,6 +1,6 @@
-import {type ListData, type ListOptions, useListData} from 'react-stately';
+import {type Key, type ListData, type ListOptions, useListData} from 'react-stately';
 import {List, Set} from 'immutable';
-import {type Key, useMemo} from 'react';
+import {useMemo} from 'react';
 
 export type ImmutableListOptions<T> = Omit<ListOptions<T>, 'initialItems'> & {
 	readonly initialItems?: Iterable<T>;

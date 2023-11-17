@@ -1,5 +1,4 @@
-import {type Key} from 'react';
-import {type ListProps, useListState} from 'react-stately';
+import {type ListProps, useListState, type Key} from 'react-stately';
 
 export type ReorderableListStateProps<T extends Record<string, unknown>> = {
 	readonly onReorder: (key: Key, previous?: Key, next?: Key) => void;

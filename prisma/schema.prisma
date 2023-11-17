@@ -34,7 +34,7 @@ model OrganizationToOrganizationActivity {
   activity   OrganizationActivity @relation(fields: [activityId], references: [id])
   activityId Int
 
-  priority Int
+  priority Int @unique
 
   @@id([organizationId, activityId])
 }
@@ -260,16 +260,17 @@ model Organization {
 
   sectors Sector[]
 
-  owners     Person[]
   activities OrganizationToOrganizationActivity[]
+  owners     User[]
 }
 
-model Person {
-  id           Int            @id @default(autoincrement())
-  authId       String         @unique
-  givenName    String
-  familyName   String
-  contactEmail String?
-  phone        String?
-  organization Organization[]
+model User {
+  id             Int           @id @default(autoincrement())
+  authId         String        @unique
+  givenName      String
+  familyName     String
+  contactEmail   String?
+  phone          String?
+  organization   Organization? @relation(fields: [organizationId], references: [id])
+  organizationId Int?
 }

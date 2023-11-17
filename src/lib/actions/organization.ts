@@ -1,139 +1,236 @@
 'use server';
-import {ZodError} from 'zod';
 import {redirect} from 'next/navigation';
-import {updateSession} from '@auth0/nextjs-auth0';
+import {getSession, updateSession} from '@auth0/nextjs-auth0';
 import {fileTypeFromBlob} from 'file-type';
 import {del, put} from '@vercel/blob';
-import {type Organization} from '@prisma/client';
+import {type Organization, type User} from '@prisma/client';
 import {decodeForm} from '@/lib/schemas/form-utils.ts';
 import prisma from '@/lib/prisma.ts';
 import {type FormState} from '@/components/form.tsx';
 import {management} from '@/lib/auth0.ts';
-import {organizationSchema} from '@/lib/schemas/organization.ts';
-import {getPersonFromSessionAction, getPersonOrganizationAction, handleErrorAction} from '@/lib/actions/utils.ts';
+import {organizationSchema, type OrganizationInit} from '@/lib/schemas/organizationInit.ts';
+import {handleErrorAction} from '@/lib/actions/utils.ts';
+import {getUserByAuthId} from '@/lib/user.ts';
 
 const imageTypes = new Set(['image/jpeg', 'image/png', 'image/webp']);
 
-export default async function upsertOrganizationAction(
-	previousState: FormState<Organization & {logo: File}>,
-	data: FormData,
-): Promise<FormState<Organization & {logo: File}>> {
-	const {values, state} = await getPersonFromSessionAction(previousState);
+/**
+ * Creates a new organization with the given owner and organization initialization data.
+ *
+ * @param {User} owner - The owner of the organization.
+ * @param {OrganizationInit} organizationInit - The initialization data for the organization.
+ * @throws {Error} If the logo image is not in a supported image format.
+ * @returns {Promise<void>} A promise that resolves after the organization is created.
+ */
+async function createOrganization(owner: User, organizationInit: OrganizationInit) {
+	if (organizationInit.logo) {
+		const logoFileType = await fileTypeFromBlob(organizationInit.logo);
 
-	if (values === null) {
-		return state;
+		if (logoFileType === undefined || !imageTypes.has(logoFileType.mime)) {
+			throw new Error('Logo image is not in a supported image format');
+		}
+
+		const result = await put(`organizationLogos/${organizationInit.name}.${logoFileType.ext}`, organizationInit.logo, {
+			access: 'public',
+			contentType: logoFileType.mime,
+		});
+
+		organizationInit.logoUrl = result.url;
+		organizationInit.logo = undefined;
 	}
 
-	try {
-		if (data.has('id')) {
-			const organizationData = await decodeForm(data, organizationSchema.partial());
+	await prisma.organization.create({
+		data: {
+			...organizationInit,
+			owners: {
+				connect: {
+					id: owner.id,
+				},
+			},
+			activities: organizationInit.activities ? {
+				create: organizationInit.activities.map((item, idx) => ({
+					activityId: item.activityId,
+					priority: idx,
+				})),
+			} : undefined,
+			organizationBeneficiaries: organizationInit.organizationBeneficiaries ? {
+				connect: organizationInit.organizationBeneficiaries.map(id => ({
+					id,
+				})),
+			} : undefined,
+		},
+	});
 
-			const id = Number.parseInt(data.get('id')! as string, 10);
+	await management.users.update(
+		{
+			id: owner.authId,
+		},
+		{
+			// eslint-disable-next-line @typescript-eslint/naming-convention
+			app_metadata: {
+				// eslint-disable-next-line @typescript-eslint/naming-convention
+				finished_onboarding: true,
+			},
+		},
+	);
 
-			const {organization: currentOrganization, state} = await getPersonOrganizationAction(previousState, values.person, id);
+	const session = await getSession();
 
-			if (currentOrganization === null) {
-				return state;
-			}
+	if (!session) {
+		throw new Error('Unable to update user session, may need to log out and log back in to fix it.');
+	}
 
-			const logo = data.get('logo') as File | null;
+	await updateSession({
+		...session,
+		user: {
+			...session.user,
+			// eslint-disable-next-line @typescript-eslint/naming-convention
+			finished_onboarding: true,
+		},
+	});
+}
 
-			if (logo !== null) {
-				const logoFileType = await fileTypeFromBlob(logo);
+/**
+ * Updates an organization with the provided organization updates.
+ *
+ * @param {Partial<OrganizationInit>} organizationUpdate - The updated organization details.
+ * @param {Organization} currentOrganization - The current organization to be updated.
+ *
+ * @throws {Error} Throws an error if the logo image is not in a supported format.
+ *
+ * @returns {Promise<void>} Returns a Promise that resolves when the organization is successfully updated.
+ */
+async function updateOrganization(organizationUpdate: Partial<OrganizationInit>, currentOrganization: Organization) {
+	if (organizationUpdate.logo) {
+		const logoFileType = await fileTypeFromBlob(organizationUpdate.logo);
 
-				if (logoFileType === undefined || !imageTypes.has(logoFileType.mime)) {
-					return {
-						...previousState,
-						fieldErrors: {
-							logo: ['Logo image is not in a supported image format'],
-						},
-					};
-				}
+		if (logoFileType === undefined || !imageTypes.has(logoFileType.mime)) {
+			throw new Error('Logo image is not in a supported image format');
+		}
 
-				if (organizationData.logoUrl) {
-					await del(organizationData.logoUrl);
-				}
+		if (currentOrganization.logoUrl) {
+			await del(currentOrganization.logoUrl);
+		}
 
-				const result = await put(`organizationLogos/${organizationData.name}.${logoFileType.ext}`, logo, {
-					access: 'public',
-					contentType: logoFileType.mime,
-				});
+		const result = await put(`organizationLogos/${organizationUpdate.name}.${logoFileType.ext}`, organizationUpdate.logo, {
+			access: 'public',
+			contentType: logoFileType.mime,
+		});
 
-				organizationData.logoUrl = result.url;
-				organizationData.logo = undefined;
-			}
+		organizationUpdate.logoUrl = result.url;
+		organizationUpdate.logo = undefined;
+	}
 
-			await prisma.organization.update({
+	console.log(organizationUpdate);
+
+	await prisma.$transaction(async tx => {
+		if (organizationUpdate.ageGroups) {
+			await tx.organizationAgeGroup.deleteMany({
 				where: {
-					id: organizationData.id!,
+					organizationId: currentOrganization.id,
 				},
-				data: organizationData,
 			});
-		} else {
-			const logo = data.get('logo') as File | null;
+		}
 
-			const organizationData = await decodeForm(data, organizationSchema.omit({id: true}));
+		if (organizationUpdate.activities) {
+			await tx.organizationToOrganizationActivity.deleteMany({
+				where: {
+					organizationId: currentOrganization.id,
+				},
+			});
+		}
 
-			if (logo !== null) {
-				const logoFileType = await fileTypeFromBlob(logo);
-
-				if (logoFileType === undefined || !imageTypes.has(logoFileType.mime)) {
-					return {
-						...previousState,
-						fieldErrors: {
-							logo: ['Logo image is not in a supported image format'],
+		await tx.organization.update({
+			where: {
+				id: currentOrganization.id,
+			},
+			data: {
+				...organizationUpdate,
+				organizationCategoryId: organizationUpdate.organizationCategoryId,
+				organizationAgeGroups: organizationUpdate.ageGroups
+					? {
+						createMany: {
+							data: organizationUpdate.ageGroups.map(item => ({
+								ageGroupId: item.ageGroupId,
+								gender: item.gender,
+							})),
 						},
-					};
-				}
+					}
+					: undefined,
+				activities: organizationUpdate.activities
+					? {
+						createMany: {
+							data: organizationUpdate.activities.map((item, idx) => ({
+								activityId: item.activityId,
+								priority: idx,
+							})),
+						},
+					}
+					: undefined,
+				organizationBeneficiaries: organizationUpdate.organizationBeneficiaries ? {
+					set: organizationUpdate.organizationBeneficiaries.map(id => ({
+						id,
+					})),
+				} : undefined,
+			},
+		});
+	});
+}
 
-				const result = await put(`organizationLogos/${organizationData.name}.${logoFileType.ext}`, logo, {
-					access: 'public',
-					contentType: logoFileType.mime,
-				});
+/**
+ * Upsert an organization via a form server action.
+ *
+ * @param {FormState<OrganizationInit>} previousState - The previous state of the form.
+ * @param {FormData} data - The form data.
+ * @returns {Promise<FormState<OrganizationInit>>} - The updated form state after upserting the organization.
+ */
+export default async function upsertOrganizationAction(
+	previousState: FormState<OrganizationInit>,
+	data: FormData,
+): Promise<FormState<OrganizationInit>> {
+	const session = await getSession();
 
-				organizationData.logoUrl = result.url;
-				organizationData.logo = undefined;
+	if (session === null || session === undefined) {
+		redirect('/');
+	}
+
+	const organization = await prisma.organization.findFirst({
+		where: {
+			owners: {
+				some: {
+					authId: session.user.sub as string,
+				},
+			},
+		},
+	});
+
+	const {redirectTo} = previousState;
+
+	try {
+		if (organization) {
+			const organizationUpdate = await decodeForm(data, organizationSchema.partial());
+
+			await updateOrganization(organizationUpdate, organization);
+		} else {
+			const organizationInit = await decodeForm(data, organizationSchema);
+
+			const owner = await getUserByAuthId(session.user.sub as string);
+
+			if (owner === null) {
+				return {
+					...previousState,
+					formErrors: ['User has not completed registration'],
+				};
 			}
 
-			await prisma.organization.create({
-				data: {
-					...organizationData,
-					owners: {
-						connect: {
-							id: values.person.id,
-						},
-					},
-				},
-			});
-
-			await management.users.update(
-				{
-					id: values.person.authId,
-				},
-				{
-					// eslint-disable-next-line @typescript-eslint/naming-convention
-					app_metadata: {
-						// eslint-disable-next-line @typescript-eslint/naming-convention
-						finished_onboarding: true,
-					},
-				},
-			);
-
-			await updateSession({
-				...values.session,
-				user: {
-					...values.session.user,
-					// eslint-disable-next-line @typescript-eslint/naming-convention
-					finished_onboarding: true,
-				},
-			});
+			await createOrganization(owner, organizationInit);
 		}
 	} catch (error) {
 		return handleErrorAction(previousState, error);
 	}
 
-	if (previousState.redirectTo) {
-		redirect(previousState.redirectTo);
+	if (redirectTo) {
+		redirect(redirectTo);
 	}
 
 	return {

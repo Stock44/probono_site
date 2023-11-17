@@ -6,7 +6,7 @@ import TextField from '@/components/text-field.tsx';
 import Form from '@/components/form.tsx';
 import FileDropZone from '@/components/file-drop-zone.tsx';
 import upsertOrganizationAction from '@/lib/actions/organization.ts';
-import {organizationSchema} from '@/lib/schemas/organization.ts';
+import {organizationSchema} from '@/lib/schemas/organizationInit.ts';
 import {formValidators} from '@/lib/schemas/form-utils.ts';
 import SubmitButton from '@/components/submit-button.tsx';
 
@@ -16,7 +16,7 @@ export default function OrganizationForm() {
 	return (
 		<Form
 			action={upsertOrganizationAction}
-			redirectTo='/account/organization'
+			redirectTo='/my'
 		>
 			<FileDropZone
 				acceptedFileTypes={['image/png', 'image/jpeg', 'image/jpeg']}

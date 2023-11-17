@@ -17,7 +17,7 @@ export async function middleware(request: NextRequest) {
 	}
 
 	if (
-		section !== 'onboarding'
+		section === 'my'
     && (session !== null && session !== undefined && !(session.user.finished_onboarding as boolean))
 	) {
 		const url = request.nextUrl.clone();
