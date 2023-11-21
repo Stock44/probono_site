@@ -14,7 +14,7 @@ import {NumberField} from '@/components/number-field.tsx';
 import Form, {type FormState} from '@/components/form.tsx';
 import {formValidators} from '@/lib/schemas/form-utils.ts';
 import {upsertOrganizationAddress} from '@/lib/actions/address.ts';
-import {type OrganizationAddress, organizationAddressSchema} from '@/lib/schemas/address.ts';
+import {type Address, addressSchema} from '@/lib/schemas/address.ts';
 import {geocodeAddress, reverseGeocode} from '@/lib/mapbox.ts';
 
 const AddressMap = dynamic(async () => import('@/app/(my)/my/location/address-map.tsx'), {ssr: false});
@@ -52,7 +52,7 @@ export default function AddressInfoForm(props: AddressInfoFormProps) {
 		enabled: address.selectedState !== null,
 	});
 
-	const validate = formValidators(organizationAddressSchema);
+	const validate = formValidators(addressSchema);
 
 	const debouncedAddress = useDebounce(address, 2000);
 
@@ -95,11 +95,9 @@ export default function AddressInfoForm(props: AddressInfoFormProps) {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [debouncedAddress, municipalities, states]);
 
-	const action = async (previousState: FormState<OrganizationAddress>, data: FormData): Promise<FormState<OrganizationAddress>> => upsertOrganizationAddress(previousState, data);
-
 	return (
 		<Form
-			action={action}
+			action={upsertOrganizationAddress}
 			id={organization.id}
 			staticValues={{
 				location: coords ?? undefined,
@@ -186,6 +184,7 @@ export default function AddressInfoForm(props: AddressInfoFormProps) {
 				<TextField
 					isRequired
 					label='Codigo postal'
+					name='postalCode'
 					className='w-32'
 					value={address.postalCode}
 					onChange={value => {
