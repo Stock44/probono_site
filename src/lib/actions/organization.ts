@@ -4,6 +4,7 @@ import {getSession, updateSession} from '@auth0/nextjs-auth0';
 import {fileTypeFromBlob} from 'file-type';
 import {del, put} from '@vercel/blob';
 import {type Organization, type User} from '@prisma/client';
+import {omit} from 'lodash';
 import {decodeForm} from '@/lib/schemas/form-utils.ts';
 import prisma from '@/lib/prisma.ts';
 import {type FormState} from '@/components/form.tsx';
@@ -22,7 +23,7 @@ const imageTypes = new Set(['image/jpeg', 'image/png', 'image/webp']);
  * @throws {Error} If the logo image is not in a supported image format.
  * @returns {Promise<void>} A promise that resolves after the organization is created.
  */
-async function createOrganization(owner: User, organizationInit: OrganizationInit) {
+async function createOrganization(owner: User, organizationInit: OrganizationInit): Promise<void> {
 	if (organizationInit.logo) {
 		const logoFileType = await fileTypeFromBlob(organizationInit.logo);
 
@@ -145,8 +146,7 @@ async function updateOrganization(organizationUpdate: Partial<OrganizationInit>,
 				id: currentOrganization.id,
 			},
 			data: {
-				...organizationUpdate,
-				organizationCategoryId: organizationUpdate.organizationCategoryId,
+				...omit(organizationUpdate, ['ageGroups']),
 				organizationAgeGroups: organizationUpdate.ageGroups
 					? {
 						createMany: {

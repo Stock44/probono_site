@@ -94,7 +94,7 @@ model OrganizationAgeGroup {
   ageGroup   AgeGroup @relation(fields: [ageGroupId], references: [id])
   ageGroupId Int
 
-  gender Gender?
+  gender Gender
 
   @@id([organizationId, ageGroupId])
 }

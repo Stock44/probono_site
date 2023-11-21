@@ -1,20 +1,21 @@
 'use client';
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useCallback, useEffect, useRef, useState} from 'react';
 import {type Map} from 'leaflet';
 import {type Municipality, type Organization, type State} from '@prisma/client';
-import {Item, type Key} from 'react-stately';
+import {Item, type Key, useListData} from 'react-stately';
 import {useQuery} from 'react-query';
 import dynamic from 'next/dynamic';
+import {useDebounce} from 'usehooks-ts';
 import Button from '@/components/button.tsx';
 import Icon from '@/components/icon.tsx';
 import Select from '@/components/select.tsx';
 import TextField from '@/components/text-field.tsx';
 import {NumberField} from '@/components/number-field.tsx';
-import Form from '@/components/form.tsx';
-import {type AddressQuery, useNominatimSearch} from '@/lib/hooks/use-nominatim-search.ts';
+import Form, {type FormState} from '@/components/form.tsx';
 import {formValidators} from '@/lib/schemas/form-utils.ts';
 import {upsertOrganizationAddress} from '@/lib/actions/address.ts';
-import {organizationAddressSchema} from '@/lib/schemas/address.ts';
+import {type OrganizationAddress, organizationAddressSchema} from '@/lib/schemas/address.ts';
+import {geocodeAddress, reverseGeocode} from '@/lib/mapbox.ts';
 
 const AddressMap = dynamic(async () => import('@/app/(my)/my/location/address-map.tsx'), {ssr: false});
 
@@ -26,56 +27,82 @@ export type AddressInfoFormProps = {
 export default function AddressInfoForm(props: AddressInfoFormProps) {
 	const {states, organization} = props;
 	const mapRef = useRef<Map>(null);
-	const [searchQuery, setSearchQuery] = useState<AddressQuery>();
-	const {searchResult} = useNominatimSearch(searchQuery);
 
-	const [coords, setCoords] = useState<[number, number]>();
+	const [address, setAddress] = useState<{
+		street: string;
+		number: number;
+		postalCode: string;
+		selectedState: Key | null;
+		selectedMunicipality: Key | null;
+	}>({
+		street: '',
+		number: Number.NaN,
+		postalCode: '',
+		selectedState: null,
+		selectedMunicipality: null,
+	});
 
-	useEffect(() => {
-		if (searchResult !== undefined) {
-			const newCoords = [searchResult.lat, searchResult.lng] as [number, number];
-			setCoords(newCoords);
+	const [coords, setCoords] = useState<[number, number] | null>(null);
 
-			if (mapRef.current !== null) {
-				mapRef.current.flyTo(newCoords, 15);
-			}
-		}
-	}, [searchResult]);
-
-	const [street, setStreet] = useState('');
-	const [number, setNumber] = useState<number>(Number.NaN);
-	const [selectedStateKey, setSelectedStateKey] = useState<Key | null>(null);
-	const [selectedMunicipalityKey, setSelectedMunicipalityKey] = useState<Key | null>(null);
-	const [postalCode, setPostalCode] = useState<number>(Number.NaN);
-
-	const {data: municipalities} = useQuery<Municipality[]>(['municipalities', selectedStateKey], async () => {
-		const response = await fetch(`/api/states/${selectedStateKey}/municipalities`);
+	const {data: municipalities} = useQuery<Municipality[]>(['municipalities', address.selectedState], async () => {
+		const response = await fetch(`/api/states/${address.selectedState}/municipalities`);
 		return response.json();
 	}, {
 		staleTime: Number.POSITIVE_INFINITY,
-		enabled: selectedStateKey !== null,
+		enabled: address.selectedState !== null,
 	});
-
-	const submitSearchHandler = () => {
-		const state = states.find(state => state.id === selectedStateKey);
-		const municipality = municipalities?.find(municipality => municipality.id === selectedMunicipalityKey);
-		setSearchQuery({
-			street,
-			number,
-			postalCode,
-			municipality: municipality?.name,
-			state: state?.name,
-		});
-	};
 
 	const validate = formValidators(organizationAddressSchema);
 
+	const debouncedAddress = useDebounce(address, 2000);
+
+	useEffect(() => {
+		if (
+			coords !== null
+				|| !municipalities
+				|| debouncedAddress.street.trim() === ''
+				|| debouncedAddress.postalCode.trim() === ''
+				|| debouncedAddress.selectedState === null
+				|| debouncedAddress.selectedMunicipality === null
+				|| Number.isNaN(debouncedAddress.number)
+		) {
+			return;
+		}
+
+		console.log('geocoding');
+
+		console.log(debouncedAddress);
+
+		const state = states.find(state => state.id === debouncedAddress.selectedState);
+		const municipality = municipalities.find(municipality => municipality.id === debouncedAddress.selectedMunicipality);
+
+		if (!state || !municipality) {
+			return;
+		}
+
+		void geocodeAddress({
+			...debouncedAddress,
+			state: state.name,
+			municipality: municipality.name,
+		}).then(coordinates => {
+			if (!coordinates) {
+				return;
+			}
+
+			setCoords(coordinates);
+			mapRef.current?.flyTo(coordinates, 15);
+		});
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [debouncedAddress, municipalities, states]);
+
+	const action = async (previousState: FormState<OrganizationAddress>, data: FormData): Promise<FormState<OrganizationAddress>> => upsertOrganizationAddress(previousState, data);
+
 	return (
 		<Form
-			action={upsertOrganizationAddress}
+			action={action}
 			id={organization.id}
 			staticValues={{
-				location: coords === undefined ? undefined : JSON.stringify(coords),
+				location: coords ?? undefined,
 			}}>
 			<div className='flex justify-between items-end mb-4'>
 				<div>
@@ -91,7 +118,36 @@ export default function AddressInfoForm(props: AddressInfoFormProps) {
 					Guardar
 				</Button>
 			</div>
-			<AddressMap mapRef={mapRef} selectedCoords={coords}/>
+			<AddressMap
+				mapRef={mapRef} selectedCoords={coords} onClick={async latlng => {
+					const address = await reverseGeocode(latlng);
+					if (!address) {
+						return;
+					}
+
+					const state = states.find(state => state.name === address.state);
+					const response = await fetch(`/api/municipalities/search?name=${address.municipality}`);
+
+					if (response.status === 404) {
+						return;
+					}
+
+					const municipality = await response.json() as Municipality;
+
+					if (!state || !municipality) {
+						return;
+					}
+
+					console.log(municipality);
+
+					setAddress({
+						...address,
+						selectedMunicipality: municipality.id,
+						selectedState: state.id,
+					});
+					setCoords(address.center);
+					mapRef.current?.flyTo(address.center, 15);
+				}}/>
 			<div className='flex w-full gap-x-4 mb-4'>
 				<TextField
 					isRequired
@@ -99,24 +155,47 @@ export default function AddressInfoForm(props: AddressInfoFormProps) {
 					validate={validate.streetName}
 					label='Calle'
 					className='grow'
-					value={street}
-					onChange={setStreet}
+					value={address.street}
+					onChange={value => {
+						setAddress(previous => ({
+							...previous,
+							street: value,
+						}));
+
+						setCoords(null);
+					}}
 				/>
 				<NumberField
 					isRequired
 					label='Número' className='w-32'
 					name='extNumber'
 					validate={validate.extNumber}
-					value={number} formatOptions={{
+					value={address.number}
+					formatOptions={{
 						useGrouping: false,
 					}}
-					onChange={setNumber}/>
-				<NumberField
+					onChange={value => {
+						setAddress(previous => ({
+							...previous,
+							number: value,
+						}));
+
+						setCoords(null);
+					}}
+				/>
+				<TextField
 					isRequired
 					label='Codigo postal'
 					className='w-32'
-					value={postalCode}
-					onChange={setPostalCode}
+					value={address.postalCode}
+					onChange={value => {
+						setAddress(previous => ({
+							...previous,
+							postalCode: value,
+						}));
+
+						setCoords(null);
+					}}
 				/>
 			</div>
 			<div className='flex mb-4 gap-x-4'>
@@ -124,7 +203,15 @@ export default function AddressInfoForm(props: AddressInfoFormProps) {
 					isRequired
 					label='Estado' placeholder='Selecciona un estado' items={states}
 					className='basis-1/2'
-					selectedKey={selectedStateKey} onSelectionChange={setSelectedStateKey}>
+					selectedKey={address.selectedState}
+					onSelectionChange={selection => {
+						setAddress(previous => ({
+							...previous,
+							selectedState: selection,
+						}));
+						setCoords(null);
+					}}
+				>
 					{
 						state => (
 							<Item>{state.name}</Item>
@@ -135,9 +222,16 @@ export default function AddressInfoForm(props: AddressInfoFormProps) {
 					isRequired
 					name='municipalityId'
 					validate={validate.municipalityId}
-					isDisabled={municipalities === undefined} label='Municipio' placeholder='Selecciona un municipio'
-					items={municipalities ?? []} className='basis-1/2' selectedKey={selectedMunicipalityKey}
-					onSelectionChange={setSelectedMunicipalityKey}>
+					isDisabled={municipalities === undefined}
+					label='Municipio' placeholder='Selecciona un municipio' items={municipalities ?? []}
+					className='basis-1/2' selectedKey={address.selectedMunicipality}
+					onSelectionChange={selection => {
+						setAddress(previous => ({
+							...previous,
+							selectedMunicipality: selection,
+						}));
+						setCoords(null);
+					}}>
 					{municipality => (
 						<Item>
 							{municipality.name}
@@ -145,9 +239,6 @@ export default function AddressInfoForm(props: AddressInfoFormProps) {
 					)}
 				</Select>
 			</div>
-			<Button onPress={submitSearchHandler}>
-				<Icon iconName='search' className='me-2'/> Buscar
-			</Button>
 		</Form>
 
 	);

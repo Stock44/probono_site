@@ -29,7 +29,7 @@ export default async function MyLayout(props: MyLayoutProps) {
 					<MySectionLink iconName='location_on' root='/my' slug='location'>Ubicación</MySectionLink>
 					<MySectionLink iconName='map' root='/my' slug='sectors'>Alcance geografico</MySectionLink>
 				</div>
-				<div className='flex-1 overflow-hidden'>
+				<div className='flex-1'>
 					<div className='flex gap-4 scrollbar-track-transparent scrollbar scrollbar-thumb-stone-50'>
 						<OrganizationDataProgressCard/>
 						<div className='border border-stone-800 p-4 rounded col-span-4 w-96'>

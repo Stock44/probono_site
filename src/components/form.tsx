@@ -1,6 +1,7 @@
 import React, {type ReactNode, useMemo} from 'react';
 import {FormValidationContext} from 'react-stately';
 import {useFormState} from 'react-dom';
+import {Seq} from 'immutable';
 
 export type FormState<T> = {
 	readonly id?: number;
@@ -37,7 +38,7 @@ export default function Form<T>(props: FormProps<T>) {
 
 	const processedStaticValues = useMemo(() => staticValues === undefined
 		? []
-		: Object.entries(staticValues).map(
+		: Seq(Object.entries(staticValues)).filter(([, value]) => value !== undefined).map(
 			([key, value]) => {
 				if (typeof value === 'boolean') {
 					return [key, value ? 'true' : ''] as const;
@@ -57,15 +58,13 @@ export default function Form<T>(props: FormProps<T>) {
 
 				throw new Error('failed to process static values for form');
 			},
-		), [staticValues]);
+		).toArray(), [staticValues]);
 
 	return (
 		<form action={formAction}>
 			{
 				processedStaticValues.map(([key, value]) => (
-					value === undefined
-						? null
-						: <input key={key} readOnly hidden name={key} value={value}/>
+					<input key={key} readOnly hidden name={key} value={value}/>
 				))
 			}
 

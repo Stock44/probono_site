@@ -55,13 +55,31 @@ export default function PersonInfoForm(props: PurposeInfoFormProps) {
 		searchKeys: List(['name']),
 	});
 
-	const genderedAgeGroups: List<GenderedAgeGroup> = useMemo(() => List(ageGroups).map(ageGroup => ({
-		...ageGroup,
-		gender: Gender.other,
-	})), [ageGroups]);
+	console.log(organization.organizationAgeGroups);
+
+	console.log(organization.organizationAgeGroups);
+
+	const initialSelectedAgeGroups = useMemo(() => Set(organization.organizationAgeGroups.map(item => item.ageGroupId.toString())), [organization.organizationAgeGroups]);
+
+	const initialOrganizationAgeGroups = useMemo(
+		() => [
+			...ageGroups
+				.filter(ageGroup => !initialSelectedAgeGroups.has(ageGroup.id.toString()))
+				.map(ageGroup => ({
+					...ageGroup,
+					gender: Gender.other,
+				}),
+				),
+			...organization.organizationAgeGroups.map(ageGroup => ({
+				...ageGroup.ageGroup,
+				gender: ageGroup.gender,
+			})),
+		].sort((lhs, rhs) => lhs.minAge - rhs.minAge),
+		[ageGroups, initialSelectedAgeGroups, organization.organizationAgeGroups]);
 
 	const ageGroupsListData = useImmutableListData({
-		initialItems: genderedAgeGroups,
+		initialItems: initialOrganizationAgeGroups,
+		initialSelectedKeys: initialSelectedAgeGroups,
 	});
 
 	const beneficiariesListData = useSearchableListData({
@@ -76,7 +94,7 @@ export default function PersonInfoForm(props: PurposeInfoFormProps) {
 		const {selectedKeys} = ageGroupsListData;
 		const selectedAgeGroups = selectedKeys === 'all'
 			? ageGroupsListData.items
-			: ageGroupsListData.items.filter(item => selectedKeys.has(item.id));
+			: ageGroupsListData.items.filter(item => selectedKeys.has(item.id.toString()));
 
 		return selectedAgeGroups.map(item => ({
 			ageGroupId: item.id,
@@ -94,7 +112,9 @@ export default function PersonInfoForm(props: PurposeInfoFormProps) {
 						: activitiesListData.items
 							.filter(item => (activitiesListData.selectedKeys as unknown as Set<Key>).has(item.id))
 				).map((item, idx) => ({activityId: item.id, priority: idx})).toArray(),
-				organizationBeneficiaries: [...(beneficiariesListData.selectedKeys === 'all' ? beneficiaries.map(item => item.id) : beneficiariesListData.selectedKeys as Set<number>)],
+				organizationBeneficiaries: [...(beneficiariesListData.selectedKeys === 'all'
+					? beneficiaries.map(item => item.id)
+					: beneficiariesListData.selectedKeys as Set<number>)],
 			}}>
 			<div className='flex justify-between items-end mb-4'>
 				<div>

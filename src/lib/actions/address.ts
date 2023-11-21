@@ -2,11 +2,13 @@
 import {ZodError} from 'zod';
 import {type FormState} from '@/components/form.tsx';
 import {type OrganizationAddress, organizationAddressSchema} from '@/lib/schemas/address.ts';
-import {getUserFromSessionAction, handleErrorAction} from '@/lib/actions/utils.ts';
+import {getOrganizationFromSession, getUserFromSessionAction, handleErrorAction} from '@/lib/actions/utils.ts';
 import {decodeForm} from '@/lib/schemas/form-utils.ts';
 
 export async function upsertOrganizationAddress(previousState: FormState<OrganizationAddress>, data: FormData): Promise<FormState<OrganizationAddress>> {
 	const {values, state} = await getUserFromSessionAction(previousState);
+
+	const organization = getOrganizationFromSession();
 
 	try {
 		const organizationAddress = await decodeForm(data, organizationAddressSchema);

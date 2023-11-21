@@ -46,7 +46,8 @@ export default function SectorsForm() {
 					Guardar
 				</Button>
 			</div>
-			<div className='flex gap-4 h-[32rem]'>
+			<div
+				className='flex gap-4 h-[32rem]'>
 				<SectorsMap sectors={data ?? []} selectedKeys={selectedSectorKeys} setSelectedKeys={setSelectedSectorKeys} className='h-full grow'/>
 				<div className='w-64 border border-stone-800 rounded px-2 py-3 overflow-y-scroll scroll-smooth scrollbar-thumb-rounded scrollbar-track-transparent scrollbar-thin scrollbar-thumb-stone-50'>
 					<ListBox
