@@ -1,4 +1,4 @@
-import React, {type ComponentProps, Suspense} from 'react';
+import React, {type ComponentProps, memo, Suspense} from 'react';
 import {cx} from '@/lib/cva.ts';
 
 type IconProps = {
@@ -55,7 +55,7 @@ async function ServerIcon(props: IconProps) {
 	);
 }
 
-export default function Icon(props: IconProps) {
+const Icon = memo((props: IconProps) => {
 	const {size = 'md', className} = props;
 	return (
 		<Suspense fallback={<div className={cx(
@@ -69,4 +69,6 @@ export default function Icon(props: IconProps) {
 			<ServerIcon {...props}/>
 		</Suspense>
 	);
-}
+});
+
+export default Icon;
