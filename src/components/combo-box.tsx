@@ -51,7 +51,7 @@ export function BaseComboBox<T extends Record<string, unknown>>(props: BaseCombo
 				{...labelProps} className='text-stone-300 text-sm mb-1 group-focus-within:text-stone-50'>{props.label}</label>
 			<div
 				className='flex items-center text-stone-300 border border-stone-700 rounded bg-stone-950 group-focus-within:border-stone-50 '>
-				{icon === undefined ? null : <Icon iconName={icon}/>}
+				{icon === undefined ? null : <Icon name={icon}/>}
 				<input
 					{...inputProps}
 					ref={inputObjectRef}
@@ -62,7 +62,7 @@ export function BaseComboBox<T extends Record<string, unknown>>(props: BaseCombo
 					ref={buttonObjectRef}
 					variant='text'
 				>
-					<Icon aria-hidden='true' iconName='arrow_drop_down'/>
+					<Icon aria-hidden='true' name='arrow_drop_down'/>
 				</Button>
 				{state.isOpen
 					? <Popover

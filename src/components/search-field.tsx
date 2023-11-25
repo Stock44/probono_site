@@ -20,13 +20,13 @@ export default forwardRef((props: SearchFieldProps, ref: ForwardedRef<HTMLInputE
 		<div className={cx('group', className)}>
 			<label {...labelProps} className='text-stone-300 group-focus-within:text-stone-50'>{label}</label>
 			<div className='flex rounded border border-stone-700 items-center px-1 group-focus-within:border-stone-50 gap-1'>
-				<Icon iconName='search' className='text-stone-500 group-focus-within:text-stone-50'/>
+				<Icon name='search' className='text-stone-500 group-focus-within:text-stone-50'/>
 				<input {...inputProps} ref={inputRef} className='py-1 grow text-stone-200 bg-transparent outline-none'/>
 				{
 					state.value === ''
 						? null
 						: <Button {...clearButtonProps} variant='text'>
-							<Icon iconName='close'/>
+							<Icon name='close'/>
 						</Button>
 				}
 

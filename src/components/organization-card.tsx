@@ -28,13 +28,13 @@ export function OrganizationCard({
 			</h2>
 			{organization.phone === null ? null : (
 				<p className='text-stone-300 flex gap-2 mb-4 text-sm'>
-					<Icon iconName='phone'/>
+					<Icon name='phone'/>
 					{organization.phone}
 				</p>
 			)}
 			{organization.email === null ? null : (
 				<p className='text-stone-300 flex gap-2 text-sm'>
-					<Icon iconName='email'/>
+					<Icon name='email'/>
 					{organization.email}
 				</p>
 			)}

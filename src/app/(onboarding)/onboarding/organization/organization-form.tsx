@@ -69,7 +69,7 @@ export default function OrganizationForm() {
 			/>
 
 			<SubmitButton>
-				Continuar <Icon iconName='navigate_next'/>
+				Continuar <Icon name='navigate_next'/>
 			</SubmitButton>
 		</Form>
 	);

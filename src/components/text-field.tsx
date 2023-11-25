@@ -36,7 +36,7 @@ export default forwardRef((props: TextFieldProps, ref: ForwardedRef<HTMLInputEle
 			<div className='border rounded border-stone-700 flex items-center px-1 gap-1 group-focus-within:border-stone-50 group-data-[disabled=true]:border-stone-800'>
 				{
 					icon !== undefined && typeof icon === 'string'
-						? <Icon iconName={icon} className='text-stone-500 group-focus-within:text-stone-50'/>
+						? <Icon name={icon} className='text-stone-500 group-focus-within:text-stone-50'/>
 						: null
 				}
 				{

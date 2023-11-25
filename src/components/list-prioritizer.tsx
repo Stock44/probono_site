@@ -133,7 +133,7 @@ export default function ListPrioritizer<T extends Record<string, unknown>>(
 							}}
 						>
 							<Icon
-								draggable iconName='drag_handle'
+								draggable name='drag_handle'
 								className='text-stone-400 cursor-grab touch-none'
 								onTouchStart={touchStartHandler(activity.key)}
 								onTouchMove={touchHandler(activity.key)}
@@ -148,7 +148,7 @@ export default function ListPrioritizer<T extends Record<string, unknown>>(
 								variant='text' onPress={() => {
 									onRemove(activity.key);
 								}}>
-								<Icon iconName='remove'/>
+								<Icon name='remove'/>
 							</Button>
 						</div>
 					</div>

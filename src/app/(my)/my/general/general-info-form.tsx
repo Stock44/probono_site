@@ -46,7 +46,7 @@ export default function GeneralInfoForm(props: GeneralInfoFormProps) {
 				</div>
 				<div className='grow'/>
 				<SubmitButton>
-					<Icon iconName='save' className='me-1'/>
+					<Icon name='save' className='me-1'/>
 					Guardar
 				</SubmitButton>
 			</div>

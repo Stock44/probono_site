@@ -17,7 +17,11 @@ import {upsertOrganizationAddress} from '@/lib/actions/address.ts';
 import {type Address, addressSchema} from '@/lib/schemas/address.ts';
 import {geocodeAddress, reverseGeocode} from '@/lib/mapbox.ts';
 
-const AddressMap = dynamic(async () => import('@/app/(my)/my/location/address-map.tsx'), {ssr: false});
+const AddressMap = dynamic(async () => import('@/app/(my)/my/location/address-map.tsx'),
+	{
+		ssr: false,
+		loading: props => <div className='w-full h-96 bg-stone-900 animate-pulse'/>,
+	});
 
 export type AddressInfoFormProps = {
 	readonly states: State[];
@@ -112,7 +116,7 @@ export default function AddressInfoForm(props: AddressInfoFormProps) {
 					</p>
 				</div>
 				<Button type='submit'>
-					<Icon iconName='save' className='me-1'/>
+					<Icon name='save' className='me-1'/>
 					Guardar
 				</Button>
 			</div>

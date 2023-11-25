@@ -23,12 +23,12 @@ export default function MySectionLink(props: MySectionLinkProps) {
 			href={`${root}/${slug ?? ''}`}
 			className={clsx(
 				'flex items-center p-2 rounded',
-				selected && 'bg-stone-50 text-stone-900',
-				!selected && 'text-stone-400 hover:bg-stone-800',
+				selected && 'bg-stone-50 text-stone-900 fill-stone-900',
+				!selected && 'text-stone-400 hover:bg-stone-800 fill-stone-400',
 				className,
 			)}
 		>
-			<Icon iconName={iconName} size='2xl' className='me-2'/>
+			<Icon name={iconName} className='me-2'/>
 			{children}
 		</Link>
 	);

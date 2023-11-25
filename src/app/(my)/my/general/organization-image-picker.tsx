@@ -33,12 +33,12 @@ const OrganizationImagePicker = forwardRef((props: LogoSelectorProps, ref: Forwa
 			{
 				organization.logoUrl === null
 					? <Button {...triggerProps} className='' variant='secondary'>
-						<Icon iconName='add_photo_alternate' size='4xl' className='mx-auto'/>
+						<Icon name='add_photo_alternate' className='mx-auto'/>
 					</Button>
 					: <div className='group relative mb-4 rounded flex-none'>
 						<ImageButton {...triggerProps} src={organization.logoUrl} alt='Imagen seleccionada' className='w-36 h-36'/>
 						<div className='text-stone-50 font-semibold absolute top-0 left-0 w-full h-full justify-center items-center hidden group-hover:flex group-hover:flex-col pointer-events-none'>
-							<Icon iconName='add_photo_alternate' size='4xl'/>
+							<Icon name='add_photo_alternate'/>
 						</div>
 					</div>
 
@@ -49,16 +49,14 @@ const OrganizationImagePicker = forwardRef((props: LogoSelectorProps, ref: Forwa
 							<Modal state={state}>
 								<Dialog {...overlayProps} title={label}>
 									<Form
-										action={upsertOrganizationAction} staticValues={{
-											id: organization.id,
-										}} redirectTo='/my/general'>
+										action={upsertOrganizationAction} redirectTo='/my/general'>
 										<FileDropZone className='w-full h-full mb-4' label='Da click para subir una imagen o suelta una imagen aqui.' name='logo' validate={validate.logo}/>
 										<div className='flex justify-between gap-4'>
 											<Button onPress={close}>
 												Cancelar
 											</Button>
 											<Button type='submit'>
-												<Icon iconName='save' className='me-1'/>
+												<Icon name='save' className='me-1'/>
 												Guardar
 											</Button>
 										</div>

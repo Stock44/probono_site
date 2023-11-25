@@ -84,7 +84,7 @@ export default function LegalInfoForm(props: LegalInfoFormProps) {
 					</p>
 				</div>
 				<SubmitButton>
-					<Icon iconName='save' className='me-1'/>
+					<Icon name='save' className='me-1'/>
 					Guardar
 				</SubmitButton>
 			</div>

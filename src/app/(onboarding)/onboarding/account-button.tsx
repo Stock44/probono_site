@@ -11,8 +11,8 @@ export default function AccountButton() {
 			size='md'
 			placement='bottom end' label={
 				<>
-					<Icon iconName='person' size='lg'/>
-					<Icon iconName='arrow_drop_down' size='lg'/>
+					<Icon name='person'/>
+					<Icon name='arrow_drop_down'/>
 				</>
 			}>
 			<Link href='/api/auth/logout'>

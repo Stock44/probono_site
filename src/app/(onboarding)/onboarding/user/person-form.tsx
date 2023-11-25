@@ -53,7 +53,7 @@ export default function PersonForm(props: PersonFormProps) {
 				defaultValue={user?.phone ?? ''}
 			/>
 			<SubmitButton>
-				Continuar <Icon iconName='navigate_next'/>
+				Continuar <Icon name='navigate_next'/>
 			</SubmitButton>
 		</Form>
 	);

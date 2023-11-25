@@ -81,7 +81,7 @@ function OdsRadio(props: OdsRadioProps) {
 				aria-hidden='true'
 				className={clsx('relative group rounded', isFocusVisible && 'ring-2 ring-stone-50')}>
 				<Image className={clsx(isSelected && 'brightness-50', 'group-hover:brightness-75 rounded')} draggable='false' width={128} alt={name} src={image}/>
-				{isSelected ? <Icon iconName='check_circle' className='absolute bottom-1 right-1 text-stone-50'/> : null}
+				{isSelected ? <Icon name='check_circle' className='absolute bottom-1 right-1 text-stone-50'/> : null}
 			</div>
 		</label>
 	);

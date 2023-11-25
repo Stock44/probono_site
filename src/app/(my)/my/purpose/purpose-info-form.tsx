@@ -126,7 +126,7 @@ export default function PersonInfoForm(props: PurposeInfoFormProps) {
 					</p>
 				</div>
 				<Button type='submit'>
-					<Icon iconName='save' className='me-1'/>
+					<Icon name='save' className='me-1'/>
 					Guardar
 				</Button>
 			</div>

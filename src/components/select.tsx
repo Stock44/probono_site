@@ -58,7 +58,7 @@ export default forwardRef(<T extends Record<string, unknown>>(props: SelectProps
 						? selectedItem.rendered
 						: (placeholder ?? 'Selecciona una opción')
 				}
-				<Icon iconName='arrow_drop_down' aria-hidden='true'/>
+				<Icon name='arrow_drop_down' aria-hidden='true'/>
 			</Button>
 			{
 				isOpen && <Popover ref={popoverRef} state={state} triggerRef={triggerRef} placement='bottom start'>

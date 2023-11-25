@@ -10,25 +10,28 @@ import ListBox from '@/components/list-box.tsx';
 import Icon from '@/components/icon.tsx';
 import Button from '@/components/button.tsx';
 
-const SectorsMap = dynamic(async () => import('@/app/(my)/my/sectors/sectors-map.tsx'), {ssr: false});
-
-export default function SectorsForm() {
-	const {data} = useQuery('sectors', async () => {
-		const response = await fetch('/api/sectors');
-		return (await response.json()) as Array<Sector & {geom: Geometry}>;
-	}, {
-		staleTime: Number.POSITIVE_INFINITY,
+const SectorsMap = dynamic(async () => import('@/app/(my)/my/sectors/sectors-map.tsx'),
+	{
+		ssr: false,
+		loading(props) {
+			return <div className='w-full h-full animate-pulse bg-stone-900 rounded'/>;
+		},
 	});
+
+export type SectorFormProps = {
+	readonly sectors: Array<Sector & {
+		geom: Geometry;
+	}>;
+};
+
+export default function SectorsForm(props: SectorFormProps) {
+	const {
+		sectors,
+	} = props;
 
 	const [selectedSectorKeys, setSelectedSectorKeys] = useState(Set<Key>());
 
-	const selectedSectors = useMemo(() => {
-		if (data === undefined) {
-			return [];
-		}
-
-		return data.filter(sector => selectedSectorKeys.has(sector.id));
-	}, [data, selectedSectorKeys]);
+	const selectedSectors = useMemo(() => sectors.filter(sector => selectedSectorKeys.has(sector.id)), [sectors, selectedSectorKeys]);
 
 	return (
 		<div className='grow'>
@@ -42,13 +45,13 @@ export default function SectorsForm() {
 					</p>
 				</div>
 				<Button type='submit'>
-					<Icon iconName='save' className='me-1'/>
+					<Icon name='save' className='me-1'/>
 					Guardar
 				</Button>
 			</div>
 			<div
 				className='flex gap-4 h-[32rem]'>
-				<SectorsMap sectors={data ?? []} selectedKeys={selectedSectorKeys} setSelectedKeys={setSelectedSectorKeys} className='h-full grow'/>
+				<SectorsMap sectors={sectors} selectedKeys={selectedSectorKeys} setSelectedKeys={setSelectedSectorKeys} className='h-full grow'/>
 				<div className='w-64 border border-stone-800 rounded px-2 py-3 overflow-y-scroll scroll-smooth scrollbar-thumb-rounded scrollbar-track-transparent scrollbar-thin scrollbar-thumb-stone-50'>
 					<ListBox
 						items={selectedSectors} label='Sectores seleccionados' selectionMode='single'
@@ -62,7 +65,7 @@ export default function SectorsForm() {
 								<Item>
 									<div className='w-full flex justify-between items-center'>
 										{sector.name}
-										<Icon iconName='remove' size='lg'/>
+										<Icon name='remove' size='lg'/>
 									</div>
 								</Item>
 							)
