@@ -21,7 +21,7 @@ import useSearchableListData from '@/lib/hooks/use-searchable-list-data.ts';
 import Form from '@/components/form.tsx';
 import upsertOrganizationAction from '@/lib/actions/organization.ts';
 import {formValidators} from '@/lib/schemas/form-utils.ts';
-import {organizationSchema} from '@/lib/schemas/organizationInit.ts';
+import {organizationSchema} from '@/lib/schemas/organization-init.ts';
 import {type OrganizationWithPurposeData} from '@/lib/organization.ts';
 
 export type PurposeInfoFormProps = {

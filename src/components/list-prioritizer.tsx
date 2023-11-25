@@ -9,7 +9,6 @@ import useReorderableListState, {type ReorderableListStateProps} from '@/lib/hoo
 
 export type ListPrioritizerProps<T extends Record<string, unknown>> = {
 	readonly onRemove: (key: Key) => void;
-	readonly label?: string;
 	readonly className?: string;
 } & ReorderableListStateProps<T>;
 

@@ -30,8 +30,6 @@ export async function handleErrorAction<T>(previousState: FormState<T>, error: u
 	};
 }
 
-export async function getOrganizationFromSession() {}
-
 export async function getUserOrganizationAction<T>(previousState: FormState<T>, user: User, organizationId: number) {
 	const organization = await prisma.organization.findUnique({
 		where: {

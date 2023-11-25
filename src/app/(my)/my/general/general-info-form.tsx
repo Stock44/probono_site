@@ -16,7 +16,7 @@ import TextField from '@/components/text-field.tsx';
 import Select from '@/components/select.tsx';
 import Form from '@/components/form.tsx';
 import upsertOrganizationAction from '@/lib/actions/organization.ts';
-import {organizationSchema} from '@/lib/schemas/organizationInit.ts';
+import {organizationSchema} from '@/lib/schemas/organization-init.ts';
 import {formValidators} from '@/lib/schemas/form-utils.ts';
 import SubmitButton from '@/components/submit-button.tsx';
 import Separator from '@/components/separator.tsx';

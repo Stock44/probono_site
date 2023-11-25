@@ -8,6 +8,7 @@
 	],
 	"rules": {
     "react/prop-types": "off",
+		"import/no-duplicates": "off",
     "react/require-default-props": "off",
     "n/file-extension-in-import": "off",
 		"@typescript-eslint/ban-types": "off",

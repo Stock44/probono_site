@@ -13,7 +13,7 @@ import FileDropZone from '@/components/file-drop-zone.tsx';
 import {cx} from '@/lib/cva.ts';
 import Form from '@/components/form.tsx';
 import upsertOrganizationAction from '@/lib/actions/organization.ts';
-import {organizationSchema} from '@/lib/schemas/organizationInit.ts';
+import {organizationSchema} from '@/lib/schemas/organization-init.ts';
 import {formValidators} from '@/lib/schemas/form-utils.ts';
 
 export type LogoSelectorProps = {

@@ -9,7 +9,7 @@ import {decodeForm} from '@/lib/schemas/form-utils.ts';
 import prisma from '@/lib/prisma.ts';
 import {type FormState} from '@/components/form.tsx';
 import {management} from '@/lib/auth0.ts';
-import {organizationSchema, type OrganizationInit} from '@/lib/schemas/organizationInit.ts';
+import {organizationSchema, type OrganizationInit} from '@/lib/schemas/organization-init.ts';
 import {handleErrorAction} from '@/lib/actions/utils.ts';
 import {getUserByAuthId} from '@/lib/user.ts';
 

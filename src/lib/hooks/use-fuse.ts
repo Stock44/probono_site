@@ -1,6 +1,7 @@
 import {useEffect, useMemo, useRef} from 'react';
 import Immutable, {type List} from 'immutable';
 import type Fuse from 'fuse.js';
+import {type IFuseOptions} from 'fuse.js';
 import Indexed = Immutable.Collection.Indexed;
 
 /**
@@ -13,7 +14,7 @@ import Indexed = Immutable.Collection.Indexed;
  *
  * @returns {Fuse<T> | undefined} - The initialized Fuse instance, or undefined if the Fuse instance is not yet available.
  */
-export default function useFuse<T>(items: List<T>, options?: Fuse.IFuseOptions<T>): Fuse<T> | undefined {
+export default function useFuse<T>(items: List<T>, options?: IFuseOptions<T>): Fuse<T> | undefined {
 	const fuseRef = useRef<Fuse<T>>();
 
 	useEffect(() => {
