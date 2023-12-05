@@ -11,6 +11,7 @@ module.exports = {
 	  "react/jsx-indent-props": "off",
 	  "react/jsx-closing-bracket-location": "off",
 	  "react/jsx-closing-tag-location": "off",
+	  "react/jsx-no-bind": "off",
 	  "@typescript-eslint/ban-types": "off",
   },
 };

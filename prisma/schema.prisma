@@ -13,25 +13,25 @@ datasource db {
   // directUrl = env("POSTGRES_URL_NON_POOLING") // uses a direct connection
 }
 
-model OrganizationActivityCategory {
-  id         Int                    @id @default(autoincrement())
+model ActivityCategory {
+  id         Int        @id @default(autoincrement())
   name       String
-  activities OrganizationActivity[]
+  activities Activity[]
 }
 
-model OrganizationActivity {
-  id            Int                                  @id @default(autoincrement())
+model Activity {
+  id            Int                      @id @default(autoincrement())
   name          String
-  category      OrganizationActivityCategory         @relation(fields: [categoryId], references: [id])
+  category      ActivityCategory         @relation(fields: [categoryId], references: [id])
   categoryId    Int
-  organizations OrganizationToOrganizationActivity[]
+  organizations OrganizationToActivity[]
 }
 
-model OrganizationToOrganizationActivity {
+model OrganizationToActivity {
   organization   Organization @relation(fields: [organizationId], references: [id])
   organizationId Int
 
-  activity   OrganizationActivity @relation(fields: [activityId], references: [id])
+  activity   Activity @relation(fields: [activityId], references: [id])
   activityId Int
 
   priority Int @unique
@@ -84,10 +84,10 @@ model AgeGroup {
   minAge Int
   maxAge Int?
 
-  organizations OrganizationAgeGroup[]
+  organizations OrganizationToAgeGroup[]
 }
 
-model OrganizationAgeGroup {
+model OrganizationToAgeGroup {
   organization   Organization @relation(fields: [organizationId], references: [id])
   organizationId Int
 
@@ -99,7 +99,7 @@ model OrganizationAgeGroup {
   @@id([organizationId, ageGroupId])
 }
 
-model OrganizationBeneficiary {
+model Beneficiary {
   id            Int            @id @default(autoincrement())
   name          String
   organizations Organization[]
@@ -184,10 +184,9 @@ model ServiceCategory {
 model Service {
   id                    Int             @id @default(autoincrement())
   name                  String
-  serviceCategory       ServiceCategory @relation(fields: [serviceCategoryId], references: [id])
-  serviceCategoryId     Int
+  category              ServiceCategory @relation(fields: [categoryId], references: [id])
+  categoryId            Int
   providerOrganizations Organization[]  @relation(name: "providedServices")
-  needingOrganizations  Organization[]  @relation(name: "neededServices")
 }
 
 model Sector {
@@ -245,32 +244,34 @@ model Organization {
   corporationType   CorporationType? @relation(fields: [corporationTypeId], references: [id])
   corporationTypeId Int?
 
-  organizationCategory   OrganizationCategory? @relation(fields: [organizationCategoryId], references: [id])
-  organizationCategoryId Int?
+  category   OrganizationCategory? @relation(fields: [categoryId], references: [id])
+  categoryId Int?
 
-  organizationAgeGroups OrganizationAgeGroup[]
+  ageGroups OrganizationToAgeGroup[]
 
-  organizationBeneficiaries OrganizationBeneficiary[]
+  beneficiaries Beneficiary[]
 
   collaboratingGovernmentOrganizations GovernmentOrganization[]
   collaboratingMunicipalities          Municipality[]
 
-  organizationProvidedServices Service[] @relation(name: "providedServices")
-  organizationNeededServices   Service[] @relation(name: "neededServices")
+  providedServices Service[] @relation(name: "providedServices")
 
   sectors Sector[]
 
-  activities OrganizationToOrganizationActivity[]
+  activities OrganizationToActivity[]
   owners     User[]
 }
 
 model User {
-  id             Int           @id @default(autoincrement())
-  authId         String        @unique
-  givenName      String
-  familyName     String
-  contactEmail   String?
-  phone          String?
-  organization   Organization? @relation(fields: [organizationId], references: [id])
-  organizationId Int?
+  id     Int    @id @default(autoincrement())
+  authId String @unique
+  email  String @unique
+
+  givenName  String
+  familyName String
+
+  contactEmail String?
+  contactPhone String?
+
+  organizations Organization[]
 }

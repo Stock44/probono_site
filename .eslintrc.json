@@ -17,8 +17,9 @@
     "new-cap": "off",
 		"react/jsx-indent-props": "off",
 		"react/jsx-closing-bracket-location": "off",
-		"react/jsx-closing-tag-location": "off"
-  },
+		"react/jsx-closing-tag-location": "off",
+		"react/jsx-no-bind": "off"
+	},
   "extends": [
     "plugin:@next/next/recommended",
     "xo",

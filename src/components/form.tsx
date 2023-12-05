@@ -4,7 +4,7 @@ import {useFormState} from 'react-dom';
 import {Seq} from 'immutable';
 
 export type FormState<T> = {
-	readonly id?: number;
+	readonly success: boolean;
 	readonly redirectTo?: string;
 	readonly formErrors: string[];
 	readonly fieldErrors: {
@@ -13,7 +13,6 @@ export type FormState<T> = {
 };
 
 export type FormProps<T> = {
-	readonly id?: number;
 	readonly children: ReactNode;
 	readonly action: (previousState: FormState<T>, data: FormData) => Promise<FormState<T>>;
 	readonly redirectTo?: string;
@@ -23,9 +22,9 @@ export type FormProps<T> = {
 };
 
 export default function Form<T>(props: FormProps<T>) {
-	const {children, action, staticValues, redirectTo, id} = props;
+	const {children, action, staticValues, redirectTo} = props;
 	const [result, formAction] = useFormState(action, {
-		id,
+		success: false,
 		redirectTo,
 		formErrors: [],
 		fieldErrors: {},
@@ -69,7 +68,7 @@ export default function Form<T>(props: FormProps<T>) {
 			}
 
 			{
-				formErrors.length > 0 && <div className='rounded bg-red-400 text-stone-50'>
+				formErrors.length > 0 && <div className='p-4 mb-4 rounded bg-red-400 text-stone-50'>
 					{formErrors.join(' ')}
 				</div>
 			}

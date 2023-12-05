@@ -1,38 +1,17 @@
-'use client';
+import React, {type ReactNode} from 'react';
+import Link, {type LinkProps} from 'next/link';
+import {type VariantProps} from 'cva';
+import buttonVariant from '@/components/variants/button.tsx';
 
-import React from 'react';
-import Link from 'next/link';
-import {Button as BaseButton, prepareForSlot} from '@mui/base';
+export type LinkButtonProps = {
+	readonly children: ReactNode;
+} & LinkProps & VariantProps<typeof buttonVariant>;
 
-const className
-  = 'dark:bg-stone-700 h-8 p-1 text-stone-200 rounded-sm hover:bg-stone-600 text-sm flex justify-center items-center';
-
-const LinkSlot = prepareForSlot(Link);
-
-export const LinkButton = React.forwardRef((
-	{
-		label,
-		iconName,
-		...linkProps
-	}: {readonly iconName?: string; readonly label: string} & Omit<
-	React.ComponentProps<typeof Link>,
-	'children' | 'className'
-	>,
-	ref: React.ForwardedRef<HTMLButtonElement>,
-) => (
-	<BaseButton
-		{...(linkProps as any)}
-		ref={ref}
-		className={className}
-		slots={{
-			root: LinkSlot,
-		}}
-	>
-		{iconName === undefined ? null : (
-			<span className='material-symbols-rounded align-middle me-1'>
-				{iconName}
-			</span>
-		)}
-		{label}
-	</BaseButton>
-));
+export default function LinkButton(props: LinkButtonProps) {
+	const {children} = props;
+	return (
+		<Link {...props} className={buttonVariant(props)}>
+			{children}
+		</Link>
+	);
+}

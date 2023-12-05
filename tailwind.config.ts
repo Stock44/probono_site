@@ -2,6 +2,7 @@ import type {Config} from 'tailwindcss';
 import tailwindScrollbar from 'tailwind-scrollbar';
 import tailwindcss from 'tailwindcss/plugin';
 
+/* eslint-disable @typescript-eslint/naming-convention */
 const config: Config = {
 	content: [
 		'./src/pages/**/*.{js,ts,jsx,tsx,mdx}',
@@ -10,6 +11,28 @@ const config: Config = {
 	],
 	theme: {
 		extend: {
+			keyframes: {
+				'spin-path': {
+					'0%': {
+						'stroke-dasharray': '1, 150',
+						'stroke-dashoffset': '0',
+					},
+					'50%': {
+						'stroke-dasharray': '90, 150',
+						'stroke-dashoffset': '-35',
+					},
+					'100%': {
+						'stroke-dasharray': '90, 150',
+						'stroke-dashoffset': '-124',
+					},
+				},
+			},
+			animation: {
+				'spin-path': 'spin-path 1.5s ease-in-out infinite;',
+			},
+			strokeWidth: {
+				3: '6px',
+			},
 			transitionProperty: {
 				height: 'max-height',
 			},
@@ -19,7 +42,7 @@ const config: Config = {
 			backgroundImage: {
 				'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
 				'gradient-conic':
-          'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
+						'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
 			},
 		},
 	},
@@ -35,4 +58,5 @@ const config: Config = {
 		}),
 	],
 };
+/* eslint-enable @typescript-eslint/naming-convention */
 export default config;

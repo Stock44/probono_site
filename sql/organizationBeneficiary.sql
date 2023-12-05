@@ -1,4 +1,4 @@
-insert into "OrganizationBeneficiary"
+insert into "Beneficiary"
 values (default, 'Familias'),
        (default, 'Familias monoparentales'),
        (default, 'Mujeres embarazadas'),

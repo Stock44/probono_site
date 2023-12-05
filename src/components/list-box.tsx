@@ -37,7 +37,7 @@ export const BaseListBox = forwardRef(<T extends Record<string, unknown>>(props:
 
 			<ul
 				{...listBoxProps} ref={listBoxRef}
-				className={twMerge('rounded overflow-y-scroll scroll-smooth scrollbar-track-transparent scrollbar-thumb-stone-50 scrollbar-thin scrollbar-thumb-rounded', className)}>
+				className={twMerge('rounded overflow-auto scroll-smooth scrollbar-track-transparent scrollbar-thumb-stone-50 scrollbar-thin scrollbar-thumb-rounded', className)}>
 				{[...state.collection].map(item => (
 					item.type === 'section'
 						? <ListBoxSection key={item.key} section={item} state={state}/>
@@ -124,7 +124,7 @@ function Option<T extends Record<string, unknown>>(props: OptionProps<T>) {
 			ref={ref}
 			className={clsx('text-stone-300 p-1.5 border rounded border-transparent outline-none cursor-pointer data-[focus-visible=true]:border-stone-50',
 				isSelected && 'bg-stone-50 text-stone-800',
-				!isSelected && 'hover:bg-stone-900',
+				!isSelected && 'hover:bg-stone-800',
 				isFocused && !isSelected && 'bg-stone-900')}
 			data-focus-visible={isFocusVisible}
 		>

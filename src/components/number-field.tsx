@@ -1,22 +1,17 @@
-import React from 'react';
-import {
-	type NumberInputProps,
-	Unstable_NumberInput as BaseNumberInput,
-} from '@mui/base/Unstable_NumberInput';
-import clsx from 'clsx';
+import React, {type ReactNode} from 'react';
 import {type AriaNumberFieldProps, useLocale, useNumberField} from 'react-aria';
 import {type NumberFieldStateOptions, useNumberFieldState} from 'react-stately';
 import {useObjectRef} from '@react-aria/utils';
 import {twJoin} from 'tailwind-merge';
-import Image, {type StaticImageData} from 'next/image';
+import ArrowDropDown from '@material-design-icons/svg/round/arrow_drop_down.svg';
+import ArrowDropUp from '@material-design-icons/svg/round/arrow_drop_up.svg';
 import Button from '@/components/button.tsx';
-import Icon from '@/components/icon.tsx';
 import {cx} from '@/lib/cva.ts';
 
 export type NumberFieldProps = {
 	readonly className?: string;
 	readonly name?: string;
-	readonly icon?: string | StaticImageData;
+	readonly icon?: ReactNode;
 } & AriaNumberFieldProps & Omit<NumberFieldStateOptions, 'locale'>;
 
 export const NumberField = React.forwardRef((
@@ -53,23 +48,14 @@ export const NumberField = React.forwardRef((
 				)}>{label}</label>
 
 			<div {...groupProps} className='flex items-center justify-right px-1 gap-1 rounded border border-stone-700 group-focus-within:border-stone-50 w-full group-data-[disabled=true]:border-stone-800'>
-				{
-					icon !== undefined && typeof icon === 'string'
-						? <Icon name={icon} className='fill-stone-500 group-focus-within:fill-stone-50'/>
-						: null
-				}
-				{
-					icon !== undefined && typeof icon === 'object'
-						? <Image src={icon} alt={`${label?.toString()} icon`} width={16} height={16} className='brightness-50 group-focus-within:brightness-100 me-1 flex-none basis-4'/>
-						: null
-				}
+				{icon}
 				<input {...inputProps} ref={inputRef} name={name} className='bg-transparent text-stone-200 py-1 outline-none grow min-w-0 disabled:text-stone-600 disabled:cursor-not-allowed'/>
 				<div className='flex-none flex-col justify-around items-center basis-4 fill-stone-400'>
 					<Button {...incrementButtonProps} variant='text' size='xs'>
-						<Icon name='arrow_drop_up' size='sm' className='w-4 h-4'/>
+						<ArrowDropUp className='w-4 h-4'/>
 					</Button>
 					<Button {...decrementButtonProps} variant='text' size='xs'>
-						<Icon name='arrow_drop_down' size='sm' className='w-4 h-4'/>
+						<ArrowDropDown className='w-4 h-4'/>
 					</Button>
 				</div>
 			</div>

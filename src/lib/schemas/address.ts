@@ -1,6 +1,6 @@
 import z from 'zod';
 
-export const addressSchema = z.object({
+export const addressInitSchema = z.object({
 	streetName: z.string(),
 	postalCode: z.string(),
 	extNumber: z.coerce.number().int(),
@@ -8,4 +8,4 @@ export const addressSchema = z.object({
 	municipalityId: z.coerce.number().int(),
 });
 
-export type Address = z.infer<typeof addressSchema>;
+export type AddressInit = z.infer<typeof addressInitSchema>;
