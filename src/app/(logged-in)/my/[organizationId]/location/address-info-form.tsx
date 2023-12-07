@@ -1,59 +1,66 @@
 'use client';
-import React, {useCallback, useEffect, useRef, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {type Map} from 'leaflet';
-import {type Municipality, type Organization, type State} from '@prisma/client';
-import {Item, type Key, useListData} from 'react-stately';
+import {type Address, type Municipality, type Organization, type State} from '@prisma/client';
+import {Item} from 'react-stately';
 import {useQuery} from 'react-query';
 import dynamic from 'next/dynamic';
 import {useDebounce} from 'usehooks-ts';
-import Button from '@/components/button.tsx';
-import Icon from '@/components/icon.tsx';
+import Save from '@material-design-icons/svg/round/save.svg';
+import Done from '@material-design-icons/svg/round/done.svg';
 import Select from '@/components/select.tsx';
 import TextField from '@/components/text-field.tsx';
 import {NumberField} from '@/components/number-field.tsx';
 import Form, {type FormState} from '@/components/form.tsx';
 import {formValidators} from '@/lib/form-utils.ts';
-import {upsertOrganizationAddress} from '@/lib/actions/address.ts';
-import {type AddressInit, addressInitSchema} from '@/lib/schemas/address.ts';
+import {addressInitSchema} from '@/lib/schemas/address.ts';
 import {geocodeAddress, reverseGeocode} from '@/lib/mapbox.ts';
+import {type OrganizationUpdate} from '@/lib/schemas/organization.ts';
+import SubmitButton from '@/components/submit-button.tsx';
 
 const AddressMap = dynamic(async () => import('@/app/(logged-in)/my/[organizationId]/location/address-map.tsx'),
 	{
 		ssr: false,
-		loading: props => <div className='w-full h-96 bg-stone-900 animate-pulse'/>,
+		loading: () => <div className='w-full h-96 bg-stone-900 animate-pulse mb-4'/>,
 	});
 
 export type AddressInfoFormProps = {
 	readonly states: State[];
-	readonly organization: Organization;
+	readonly organization: Organization & {
+		readonly address: Address & {
+			readonly municipality: Municipality;
+			readonly location: [number, number] | null;
+		} | null;
+	};
+	readonly action: (state: FormState<OrganizationUpdate>, data: FormData) => Promise<FormState<OrganizationUpdate>>;
 };
 
 export default function AddressInfoForm(props: AddressInfoFormProps) {
-	const {states, organization} = props;
+	const {states, organization, action} = props;
 	const mapRef = useRef<Map>(null);
 
 	const [address, setAddress] = useState<{
 		street: string;
 		number: number;
 		postalCode: string;
-		selectedState: Key | null;
-		selectedMunicipality: Key | null;
+		stateId: number | null;
+		municipalityId: number | null;
 	}>({
-		street: '',
-		number: Number.NaN,
-		postalCode: '',
-		selectedState: null,
-		selectedMunicipality: null,
+		street: organization.address?.street ?? '',
+		number: organization.address?.number ?? Number.NaN,
+		postalCode: organization.address?.postalCode ?? '',
+		stateId: organization.address?.municipality.stateId ?? null,
+		municipalityId: organization.address?.municipalityId ?? null,
 	});
 
-	const [coords, setCoords] = useState<[number, number] | null>(null);
+	const [coords, setCoords] = useState<[number, number] | null>(organization.address?.location ?? null);
 
-	const {data: municipalities} = useQuery<Municipality[]>(['municipalities', address.selectedState], async () => {
-		const response = await fetch(`/api/states/${address.selectedState}/municipalities`);
+	const {data: municipalities} = useQuery<Municipality[]>(['municipalities', address.stateId], async () => {
+		const response = await fetch(`/api/states/${address.stateId}/municipalities`);
 		return response.json();
 	}, {
 		staleTime: Number.POSITIVE_INFINITY,
-		enabled: address.selectedState !== null,
+		enabled: address.stateId !== null,
 	});
 
 	const validate = formValidators(addressInitSchema);
@@ -66,19 +73,15 @@ export default function AddressInfoForm(props: AddressInfoFormProps) {
 				|| !municipalities
 				|| debouncedAddress.street.trim() === ''
 				|| debouncedAddress.postalCode.trim() === ''
-				|| debouncedAddress.selectedState === null
-				|| debouncedAddress.selectedMunicipality === null
+				|| debouncedAddress.stateId === null
+				|| debouncedAddress.municipalityId === null
 				|| Number.isNaN(debouncedAddress.number)
 		) {
 			return;
 		}
 
-		console.log('geocoding');
-
-		console.log(debouncedAddress);
-
-		const state = states.find(state => state.id === debouncedAddress.selectedState);
-		const municipality = municipalities.find(municipality => municipality.id === debouncedAddress.selectedMunicipality);
+		const state = states.find(state => state.id === debouncedAddress.stateId);
+		const municipality = municipalities.find(municipality => municipality.id === debouncedAddress.municipalityId);
 
 		if (!state || !municipality) {
 			return;
@@ -101,10 +104,17 @@ export default function AddressInfoForm(props: AddressInfoFormProps) {
 
 	return (
 		<Form
-			action={upsertOrganizationAddress}
-			id={organization.id}
+			successToast={{
+				title: 'Se han guardado los cambios.',
+				icon: <Done/>,
+			}}
+			action={action}
 			staticValues={{
-				location: coords ?? undefined,
+				address: coords && address?.municipalityId ? {
+					...address,
+					municipalityId: address.municipalityId,
+					location: coords,
+				} : undefined,
 			}}>
 			<div className='flex justify-between items-end mb-4'>
 				<div>
@@ -115,12 +125,13 @@ export default function AddressInfoForm(props: AddressInfoFormProps) {
 						¿Dónde está ubicada tu organización?
 					</p>
 				</div>
-				<Button type='submit'>
-					<Icon name='save' className='me-1'/>
+				<SubmitButton icon={<Save/>}>
 					Guardar
-				</Button>
+				</SubmitButton>
 			</div>
 			<AddressMap
+				initialZoom={organization.address?.location ? 15 : 11}
+				initialCoords={organization.address?.location ?? [25.68, -100.31]}
 				mapRef={mapRef} selectedCoords={coords} onClick={async latlng => {
 					const address = await reverseGeocode(latlng);
 					if (!address) {
@@ -144,8 +155,8 @@ export default function AddressInfoForm(props: AddressInfoFormProps) {
 
 					setAddress({
 						...address,
-						selectedMunicipality: municipality.id,
-						selectedState: state.id,
+						municipalityId: municipality.id,
+						stateId: state.id,
 					});
 					setCoords(address.center);
 					mapRef.current?.flyTo(address.center, 15);
@@ -154,7 +165,7 @@ export default function AddressInfoForm(props: AddressInfoFormProps) {
 				<TextField
 					isRequired
 					name='streetName'
-					validate={validate.streetName}
+					validate={validate.street}
 					label='Calle'
 					className='grow'
 					value={address.street}
@@ -171,7 +182,7 @@ export default function AddressInfoForm(props: AddressInfoFormProps) {
 					isRequired
 					label='Número' className='w-32'
 					name='extNumber'
-					validate={validate.extNumber}
+					validate={validate.number}
 					value={address.number}
 					formatOptions={{
 						useGrouping: false,
@@ -206,11 +217,11 @@ export default function AddressInfoForm(props: AddressInfoFormProps) {
 					isRequired
 					label='Estado' placeholder='Selecciona un estado' items={states}
 					className='basis-1/2'
-					selectedKey={address.selectedState}
+					selectedKey={address.stateId}
 					onSelectionChange={selection => {
 						setAddress(previous => ({
 							...previous,
-							selectedState: selection,
+							stateId: selection as number,
 						}));
 						setCoords(null);
 					}}
@@ -227,11 +238,11 @@ export default function AddressInfoForm(props: AddressInfoFormProps) {
 					validate={validate.municipalityId}
 					isDisabled={municipalities === undefined}
 					label='Municipio' placeholder='Selecciona un municipio' items={municipalities ?? []}
-					className='basis-1/2' selectedKey={address.selectedMunicipality}
+					className='basis-1/2' selectedKey={address.municipalityId}
 					onSelectionChange={selection => {
 						setAddress(previous => ({
 							...previous,
-							selectedMunicipality: selection,
+							municipalityId: selection as number,
 						}));
 						setCoords(null);
 					}}>

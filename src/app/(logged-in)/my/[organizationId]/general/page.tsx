@@ -20,7 +20,7 @@ export default async function GeneralPage(props: GeneralPageProps) {
 	const organization = await getSessionUserOrganization(organizationId);
 
 	if (!organization) {
-		return redirect('/onboarding');
+		notFound();
 	}
 
 	const volunteerCountCategories = await getAllVolunteerCountCategories();

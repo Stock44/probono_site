@@ -2,17 +2,15 @@
 import React, {useState} from 'react';
 import {CluniStatus, type CorporationType, DonationAuthStatus, type Organization} from '@prisma/client';
 import {Item} from 'react-stately';
-import {LabeledInput} from '@/components/labeled-input.tsx';
+import Save from '@material-design-icons/svg/round/save.svg';
+import CalendarMonth from '@material-design-icons/svg/round/calendar_month.svg';
+import Done from '@material-design-icons/svg/round/done.svg';
 import Select from '@/components/select.tsx';
 import {NumberField} from '@/components/number-field.tsx';
-import LabeledCheckbox from '@/components/labeled-checkbox.tsx';
-import Button from '@/components/button.tsx';
-import Icon from '@/components/icon.tsx';
 import Checkbox from '@/components/checkbox.tsx';
 import TextField from '@/components/text-field.tsx';
-import Form from '@/components/form.tsx';
-import upsertOrganizationAction from '@/lib/actions/[organizationId].ts';
-import {organizationInitSchema} from '@/lib/schemas/organization.ts';
+import Form, {type FormState} from '@/components/form.tsx';
+import {organizationInitSchema, type OrganizationUpdate} from '@/lib/schemas/organization.ts';
 import {formValidators} from '@/lib/form-utils.ts';
 import SubmitButton from '@/components/submit-button.tsx';
 
@@ -57,12 +55,11 @@ const donationStatuses = [
 export type LegalInfoFormProps = {
 	readonly organization: Organization;
 	readonly corporationTypes: CorporationType[];
+	readonly action: (state: FormState<OrganizationUpdate>, data: FormData) => Promise<FormState<OrganizationUpdate>>;
 };
 
-const legalFields = ['legalConcept', 'incorporationYear', 'rfc', 'donationAuthStatus', 'cluniStatus', 'corporationTypeId'] as const;
-
 export default function LegalInfoForm(props: LegalInfoFormProps) {
-	const {organization, corporationTypes} = props;
+	const {organization, corporationTypes, action} = props;
 
 	const [enabled, setEnabled] = useState(organization.isIncorporated);
 
@@ -70,8 +67,11 @@ export default function LegalInfoForm(props: LegalInfoFormProps) {
 
 	return (
 		<Form
-			id={organization.id}
-			action={upsertOrganizationAction} staticValues={{
+			successToast={{
+				title: 'Se han guardado los cambios.',
+				icon: <Done/>,
+			}}
+			action={action} staticValues={{
 				isIncorporated: enabled ? undefined : false,
 			}}>
 			<div className='flex justify-between items-end mb-4'>
@@ -83,8 +83,7 @@ export default function LegalInfoForm(props: LegalInfoFormProps) {
 						Aquí va la información legal de tu organización.
 					</p>
 				</div>
-				<SubmitButton>
-					<Icon name='save' className='me-1'/>
+				<SubmitButton icon={<Save/>}>
 					Guardar
 				</SubmitButton>
 			</div>
@@ -137,7 +136,9 @@ export default function LegalInfoForm(props: LegalInfoFormProps) {
 				<NumberField
 					isDisabled={!enabled}
 					name='incorporationYear'
-					icon='calendar_month'
+					icon={<CalendarMonth
+						viewBox='0 0 24 24'
+							                     className='h-4 w-4 fill-stone-600 group-focus-within:fill-stone-50'/>}
 					validate={validate.incorporationYear}
 					defaultValue={organization.incorporationYear ?? undefined}
 					label='Año de incorporación'

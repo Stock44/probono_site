@@ -1,11 +1,11 @@
 import React, {useRef} from 'react';
 import {type AriaComboBoxProps, useComboBox} from 'react-aria';
 import {type ComboBoxState, type ComboBoxStateOptions, useComboBoxState} from 'react-stately';
-import clsx from 'clsx';
+import ArrowDropDown from '@material-design-icons/svg/round/arrow_drop_down.svg';
 import {BaseListBox} from '@/components/list-box.tsx';
 import Button from '@/components/button.tsx';
 import Popover from '@/components/popover.tsx';
-import Icon from '@/components/icon.tsx';
+import {cx} from '@/lib/cva.ts';
 
 export type ComboBoxProps<T extends Record<string, unknown>> = StatefulComboBoxProps<T> | BaseComboBoxProps<T>;
 
@@ -46,7 +46,7 @@ export function BaseComboBox<T extends Record<string, unknown>>(props: BaseCombo
 	}, state);
 
 	return (
-		<div className={clsx('group', className)}>
+		<div className={cx('group', className)}>
 			<label
 				{...labelProps} className='text-stone-300 text-sm mb-1 group-focus-within:text-stone-50'>{props.label}</label>
 			<div
@@ -62,7 +62,7 @@ export function BaseComboBox<T extends Record<string, unknown>>(props: BaseCombo
 					ref={buttonObjectRef}
 					variant='text'
 				>
-					<Icon aria-hidden='true' name='arrow_drop_down'/>
+					<ArrowDropDown/>
 				</Button>
 				{state.isOpen
 					? <Popover

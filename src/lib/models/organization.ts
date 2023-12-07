@@ -31,48 +31,60 @@ export async function createOrganization(ownerId: number, init: OrganizationInit
 		init.logoUrl = result.url;
 	}
 
-	return prisma.organization.create({
-		data: {
-			...omit(init,
-				'logo',
-				'employeeCountCategoryId',
-				'volunteerCountCategoryId',
-				'workplaceTypeId',
-				'incomeCategoryId',
-				'corporationTypeId',
-				'categoryId'),
-			employeeCountCategory: connectId(init.employeeCountCategoryId),
-			volunteerCountCategory: connectId(init.volunteerCountCategoryId),
-			incomeCategory: connectId(init.incomeCategoryId),
-			corporationType: connectId(init.corporationTypeId),
-			address: init.address
-				? {
-					create: init.address,
-				}
-				: undefined,
-			owners: {
-				connect: {
-					id: ownerId,
+	return prisma.$transaction(async tx => {
+		const organization = await tx.organization.create({
+			data: {
+				...omit(init,
+					'logo',
+					'employeeCountCategoryId',
+					'volunteerCountCategoryId',
+					'workplaceTypeId',
+					'incomeCategoryId',
+					'corporationTypeId',
+					'categoryId'),
+				employeeCountCategory: connectId(init.employeeCountCategoryId),
+				volunteerCountCategory: connectId(init.volunteerCountCategoryId),
+				incomeCategory: connectId(init.incomeCategoryId),
+				corporationType: connectId(init.corporationTypeId),
+				address: init.address
+					? {
+						create: init.address,
+					}
+					: undefined,
+				owners: {
+					connect: {
+						id: ownerId,
+					},
 				},
+				ageGroups: init.ageGroups ? {
+					create: init.ageGroups.map(ageGroup => ({
+						ageGroupId: ageGroup.ageGroupId,
+						gender: ageGroup.gender,
+					})),
+				} : undefined,
+				activities: init.activities ? {
+					create: init.activities.map((item, idx) => ({
+						activityId: item.activityId,
+						priority: idx,
+					})),
+				} : undefined,
+				beneficiaries: init.beneficiaries ? {
+					connect: init.beneficiaries.map(id => ({
+						id,
+					})),
+				} : undefined,
 			},
-			ageGroups: init.ageGroups ? {
-				create: init.ageGroups.map(ageGroup => ({
-					ageGroupId: ageGroup.ageGroupId,
-					gender: ageGroup.gender,
-				})),
-			} : undefined,
-			activities: init.activities ? {
-				create: init.activities.map((item, idx) => ({
-					activityId: item.activityId,
-					priority: idx,
-				})),
-			} : undefined,
-			beneficiaries: init.beneficiaries ? {
-				connect: init.beneficiaries.map(id => ({
-					id,
-				})),
-			} : undefined,
-		},
+		});
+
+		if (init.address) {
+			await tx.$queryRaw`update "Address" 
+                         set location=point(${init.address.location[0]}, ${init.address.location[1]})
+                         from "Address" as a
+                                  join "Organization" as o on a.id = o."addressId"
+                         where o.id = ${organization.id}`;
+		}
+
+		return organization;
 	});
 }
 
@@ -130,6 +142,8 @@ export async function updateOrganization(organizationId: number, update: Organiz
 			});
 		}
 
+		console.log(update.address);
+
 		await tx.organization.update({
 			where: {
 				id: organizationId,
@@ -137,6 +151,7 @@ export async function updateOrganization(organizationId: number, update: Organiz
 			data: {
 				...omit(update,
 					'logo',
+					'categoryId',
 					'employeeCountCategoryId',
 					'volunteerCountCategoryId',
 					'incomeCategoryId',
@@ -145,11 +160,12 @@ export async function updateOrganization(organizationId: number, update: Organiz
 				volunteerCountCategory: connectId(update.volunteerCountCategoryId),
 				incomeCategory: connectId(update.incomeCategoryId),
 				corporationType: connectId(update.corporationTypeId),
+				category: connectId(update.categoryId),
 				address: update.address
 					? {
 						upsert: {
-							update: update.address,
-							create: update.address,
+							update: omit(update.address, 'location'),
+							create: omit(update.address, 'location'),
 						},
 					}
 					: undefined,
@@ -180,6 +196,14 @@ export async function updateOrganization(organizationId: number, update: Organiz
 				} : undefined,
 			},
 		});
+
+		if (update.address) {
+			await tx.$queryRaw`update "Address" 
+                         set location=point(${update.address.location[0]}, ${update.address.location[1]})
+                         from "Address" as a
+                                  join "Organization" as o on a.id = o."addressId"
+                         where o.id = ${organizationId}`;
+		}
 	});
 }
 

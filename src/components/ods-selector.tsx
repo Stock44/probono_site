@@ -1,6 +1,6 @@
 'use client';
 import React, {useRef} from 'react';
-import * as RadioGroup from '@radix-ui/react-radio-group';
+import CheckCircle from '@material-design-icons/svg/round/check_circle.svg';
 import Image, {type StaticImageData} from 'next/image';
 import ods1Logo from 'public/odsIcons/1.png';
 import ods2Logo from 'public/odsIcons/2.png';
@@ -24,13 +24,11 @@ import {
 	type AriaRadioGroupProps,
 	mergeProps,
 	useFocusRing,
-	usePress,
 	useRadio,
 	useRadioGroup,
 	VisuallyHidden,
 } from 'react-aria';
-import clsx from 'clsx';
-import Icon from '@/components/icon.tsx';
+import {cx} from '@/lib/cva.ts';
 
 type Ods = [number, string, StaticImageData];
 
@@ -79,9 +77,9 @@ function OdsRadio(props: OdsRadioProps) {
 			</VisuallyHidden>
 			<div
 				aria-hidden='true'
-				className={clsx('relative group rounded', isFocusVisible && 'ring-2 ring-stone-50')}>
-				<Image className={clsx(isSelected && 'brightness-50', 'group-hover:brightness-75 rounded')} draggable='false' width={128} alt={name} src={image}/>
-				{isSelected ? <Icon name='check_circle' className='absolute bottom-1 right-1 text-stone-50'/> : null}
+				className={cx('relative group rounded', isFocusVisible && 'ring-2 ring-stone-50')}>
+				<Image className={cx(isSelected && 'brightness-50', 'group-hover:brightness-75 rounded')} draggable='false' width={128} alt={name} src={image}/>
+				{isSelected ? <CheckCircle className='absolute bottom-1 right-1 fill-stone-50'/> : null}
 			</div>
 		</label>
 	);

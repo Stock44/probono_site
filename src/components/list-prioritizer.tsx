@@ -1,11 +1,12 @@
-import React, {useState, useMemo} from 'react';
-import clsx from 'clsx';
-import {Seq, Map} from 'immutable';
+import React, {useMemo, useState} from 'react';
+import {Map, Seq} from 'immutable';
 import {type Key} from 'react-stately';
-import Icon from '@/components/icon.tsx';
+import DragHandle from '@material-design-icons/svg/round/drag_handle.svg';
+import Remove from '@material-design-icons/svg/round/remove.svg';
 import Spacer from '@/components/spacer.tsx';
 import Button from '@/components/button.tsx';
 import useReorderableListState, {type ReorderableListStateProps} from '@/lib/hooks/use-reorderable-list-state.ts';
+import {cx} from '@/lib/cva.ts';
 
 export type ListPrioritizerProps<T extends Record<string, unknown>> = {
 	readonly onRemove: (key: Key) => void;
@@ -30,36 +31,36 @@ export default function ListPrioritizer<T extends Record<string, unknown>>(
 	const handleMove = (deltaY: number, key: Key) => {
 		setDeltaY(deltaY);
 
-		const previousKey = collection.getKeyBefore(key.toString());
+		const previousKey = collection.getKeyBefore(key);
 		if (previousKey !== null && previousKey !== undefined) {
-			const previousContainer = activityRefs.get(key.toString());
+			const previousContainer = activityRefs.get(key);
 			if (previousContainer !== undefined && deltaY < -((previousContainer.clientHeight / 2))) {
 				setDragStartY(previousContainer.getBoundingClientRect().y);
 				setDeltaY(0);
-				reorder(key.toString(), previousKey.toString());
+				reorder(key, previousKey);
 			}
 		}
 
-		const nextKey = collection.getKeyAfter(key.toString());
+		const nextKey = collection.getKeyAfter(key);
 		if (nextKey !== null && nextKey !== undefined) {
-			const nextContainer = activityRefs.get(key.toString());
+			const nextContainer = activityRefs.get(key);
 			if (nextContainer !== undefined && deltaY > (nextContainer.clientHeight)) {
 				setDragStartY(nextContainer.getBoundingClientRect().y + (nextContainer.clientHeight / 2));
 				setDeltaY(0);
-				reorder(key.toString(), undefined, nextKey.toString());
+				reorder(key, undefined, nextKey);
 			}
 		}
 	};
 
 	const touchStartHandler = (key: Key) => ((event: React.TouchEvent) => {
-		setDraggedActivity(key.toString());
+		setDraggedActivity(key);
 		const rect = event.currentTarget.getBoundingClientRect();
 		setDragStartY(rect.y + (rect.height / 2));
 	});
 
 	const dragStartHandler = (key: Key) => ((event: React.DragEvent) => {
 		event.dataTransfer.setDragImage(new Image(), 0, 0);
-		setDraggedActivity(key.toString());
+		setDraggedActivity(key);
 		const rect = event.currentTarget.getBoundingClientRect();
 		setDragStartY(rect.y + (rect.height / 2));
 	});
@@ -71,7 +72,7 @@ export default function ListPrioritizer<T extends Record<string, unknown>>(
 
 		const deltaY = event.touches[0].clientY - dragStartY;
 
-		handleMove(deltaY, key.toString());
+		handleMove(deltaY, key);
 	});
 
 	const dragHandler = (key: Key) => ((event: React.DragEvent) => {
@@ -81,7 +82,7 @@ export default function ListPrioritizer<T extends Record<string, unknown>>(
 
 		const deltaY = event.clientY - dragStartY;
 
-		handleMove(deltaY, key.toString());
+		handleMove(deltaY, key);
 	});
 
 	const dragEndHandler = () => {
@@ -95,11 +96,11 @@ export default function ListPrioritizer<T extends Record<string, unknown>>(
 			return undefined;
 		}
 
-		if (draggedActivity === collection.getFirstKey()?.toString() && deltaY < 0) {
+		if (draggedActivity === collection.getFirstKey() && deltaY < 0) {
 			return '0px';
 		}
 
-		if (draggedActivity === collection.getLastKey()?.toString() && deltaY > 0) {
+		if (draggedActivity === collection.getLastKey() && deltaY > 0) {
 			return '0px';
 		}
 
@@ -107,14 +108,16 @@ export default function ListPrioritizer<T extends Record<string, unknown>>(
 	}, [collection, deltaY, draggedActivity]);
 
 	return (
-		<div className={clsx('grow basis-5/12 border border-stone-700 rounded divide-stone-700 divide-y', className)}>
+		<div className={cx('grow basis-5/12 border border-stone-700 rounded divide-stone-700 divide-y', className)}>
 			{
 				Seq(collection).map(activity => (
 					<div
 						key={activity.key}
-						className={clsx('relative')}
+						className='relative'
 						style={{
-							height: draggedActivity === activity.key.toString() ? `${activityRefs.get(activity.key.toString())?.clientHeight ?? 0}px` : undefined,
+							height: draggedActivity === activity.key
+								? `${activityRefs.get(activity.key)?.clientHeight ?? 0}px`
+								: undefined,
 						}}
 					>
 						<div
@@ -123,7 +126,7 @@ export default function ListPrioritizer<T extends Record<string, unknown>>(
 									setActivityRefs(current => current.set(activity.key, element));
 								}
 							}}
-							className={clsx(
+							className={cx(
 								draggedActivity === activity.key && 'absolute z-10 bg-stone-900 w-full border-y border-stone-700',
 								draggedActivity === undefined && 'hover:bg-stone-900',
 								'flex items-center gap-4 rounded grow text-stone-200 p-2 group select-none left-0')}
@@ -131,15 +134,17 @@ export default function ListPrioritizer<T extends Record<string, unknown>>(
 								top: draggedActivity === activity.key ? draggedActivityOffset : undefined,
 							}}
 						>
-							<Icon
-								draggable name='drag_handle'
-								className='text-stone-400 cursor-grab touch-none'
+							<div
+								draggable
+								className='fill-stone-400 cursor-grab touch-none'
 								onTouchStart={touchStartHandler(activity.key)}
 								onTouchMove={touchHandler(activity.key)}
 								onTouchEnd={dragEndHandler}
 								onDragStart={dragStartHandler(activity.key)} onDrag={dragHandler(activity.key)}
-								onDragEnd={dragEndHandler}
-							/>
+								onDragEnd={dragEndHandler}>
+								<DragHandle/>
+							</div>
+
 							{activity.rendered}
 							<Spacer/>
 							<Button
@@ -147,7 +152,7 @@ export default function ListPrioritizer<T extends Record<string, unknown>>(
 								variant='text' onPress={() => {
 									onRemove(activity.key);
 								}}>
-								<Icon name='remove'/>
+								<Remove className='fill-current'/>
 							</Button>
 						</div>
 					</div>

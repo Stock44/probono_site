@@ -14,6 +14,7 @@ import CalendarMonth from '@material-design-icons/svg/round/calendar_month.svg';
 import Email from '@material-design-icons/svg/round/email.svg';
 import Public from '@material-design-icons/svg/round/public.svg';
 import Phone from '@material-design-icons/svg/round/phone.svg';
+import Done from '@material-design-icons/svg/round/done.svg';
 import {NumberField} from '@/components/number-field.tsx';
 import OrganizationImagePicker from '@/app/(logged-in)/my/[organizationId]/general/organization-image-picker.tsx';
 import TextField from '@/components/text-field.tsx';
@@ -38,6 +39,10 @@ export default function GeneralInfoForm(props: GeneralInfoFormProps) {
 
 	return (
 		<Form
+			successToast={{
+				title: 'Se han guardado los cambios.',
+				icon: <Done/>,
+			}}
 			action={action}>
 			<div className='flex items-end mb-4 gap-4'>
 				<div>
@@ -128,7 +133,7 @@ export default function GeneralInfoForm(props: GeneralInfoFormProps) {
 									category.maxCount === null
 										? `Mas de ${category.minCount}`
 										: (category.minCount === category.maxCount
-											? category.minCount
+											? category.minCount.toString()
 											: `${category.minCount} a ${category.maxCount}`)
 								}
 							</Item>
@@ -150,7 +155,7 @@ export default function GeneralInfoForm(props: GeneralInfoFormProps) {
 									category.maxCount === null
 										? `Mas de ${category.minCount}`
 										: (category.minCount === category.maxCount
-											? category.minCount
+											? category.minCount.toString()
 											: `${category.minCount} a ${category.maxCount}`)
 								}
 							</Item>

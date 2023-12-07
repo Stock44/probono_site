@@ -3,9 +3,9 @@ $$
     declare
         category_id int;
     begin
-       insert into "OrganizationActivityCategory" values (default, 'Becantes') returning id into category_id;
+       insert into "ActivityCategory" values (default, 'Becantes') returning id into category_id;
 
-       insert into "OrganizationActivity" values
+       insert into "Activity" values
                                               (default, 'Apoyo estudios académicos (grado académico)', category_id),
                                               (default, 'Apoyo educación continua (cursos, bootcamps, certificaciones, diplomados, etc.)', category_id),
                                               (default, 'Apoyo material escolar', category_id),

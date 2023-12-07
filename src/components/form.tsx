@@ -1,7 +1,8 @@
-import React, {type ReactNode, useMemo} from 'react';
+import React, {type ReactNode, useEffect, useMemo} from 'react';
 import {FormValidationContext} from 'react-stately';
-import {useFormState} from 'react-dom';
+import {useFormState, useFormStatus} from 'react-dom';
 import {Seq} from 'immutable';
+import {type ToastContent, useToasts} from '@/components/toast.tsx';
 
 export type FormState<T> = {
 	readonly success: boolean;
@@ -12,20 +13,40 @@ export type FormState<T> = {
 	};
 };
 
+type FormSubmitListenerProps<T> = {
+	readonly state: FormState<T>;
+	readonly successToast: ToastContent;
+};
+
+function FormSubmitListener<T>(props: FormSubmitListenerProps<T>) {
+	const {successToast, state} = props;
+
+	const {pending} = useFormStatus();
+	const {add} = useToasts();
+
+	useEffect(() => {
+		if (state.success && !pending) {
+			add(successToast, {timeout: 3000});
+		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [state.success, pending]);
+
+	return null;
+}
+
 export type FormProps<T> = {
 	readonly children: ReactNode;
 	readonly action: (previousState: FormState<T>, data: FormData) => Promise<FormState<T>>;
-	readonly redirectTo?: string;
+	readonly successToast?: ToastContent;
 	readonly staticValues?: {
 		readonly [K in keyof T]?: T[K];
 	};
 };
 
 export default function Form<T>(props: FormProps<T>) {
-	const {children, action, staticValues, redirectTo} = props;
-	const [result, formAction] = useFormState(action, {
+	const {children, action, staticValues, successToast} = props;
+	const [state, formAction] = useFormState(action, {
 		success: false,
-		redirectTo,
 		formErrors: [],
 		fieldErrors: {},
 	});
@@ -33,7 +54,7 @@ export default function Form<T>(props: FormProps<T>) {
 	const {
 		formErrors,
 		fieldErrors,
-	} = result;
+	} = state;
 
 	const processedStaticValues = useMemo(() => staticValues === undefined
 		? []
@@ -72,6 +93,7 @@ export default function Form<T>(props: FormProps<T>) {
 					{formErrors.join(' ')}
 				</div>
 			}
+			{successToast && <FormSubmitListener state={state} successToast={successToast}/>}
 			<FormValidationContext.Provider
 				// @ts-expect-error fieldErrors is of a correct type, provider is wrongly typed.
 				value={fieldErrors}

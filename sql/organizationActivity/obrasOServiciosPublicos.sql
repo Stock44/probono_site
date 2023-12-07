@@ -3,11 +3,11 @@ $$
     declare
         category_id int;
     begin
-        insert into "OrganizationActivityCategory"
+        insert into "ActivityCategory"
         values (default, 'Obras o servicios públicos')
         returning id into category_id;
 
-        insert into "OrganizationActivity"
+        insert into "Activity"
         values (default, 'Desarrollo orientado a ciclistas y peatones', category_id),
                (default, 'Desarrollo rural', category_id),
                (default, 'Transporte público', category_id),

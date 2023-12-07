@@ -62,8 +62,8 @@ model Municipality {
 model Address {
   id         Int    @id @default(autoincrement())
   postalCode String
-  streetName String
-  extNumber  Int
+  street     String
+  number     Int
 
   location Unsupported("point")?
 

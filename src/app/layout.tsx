@@ -3,6 +3,7 @@ import {type Metadata} from 'next';
 import 'leaflet/dist/leaflet.css';
 import './globals.css';
 import ClientProviders from '@/app/client-providers.tsx';
+import {ToastProvider} from '@/components/toast.tsx';
 
 export const metadata: Metadata = {
 	title: 'probono',
@@ -19,7 +20,9 @@ export default function RootLayout(props: RootLayoutProps) {
 		<html lang='en'>
 			<body className='bg-stone-950'>
 				<ClientProviders>
-					{children}
+					<ToastProvider>
+						{children}
+					</ToastProvider>
 				</ClientProviders>
 			</body>
 		</html>

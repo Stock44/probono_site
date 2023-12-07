@@ -1,5 +1,5 @@
-import {GeoJSON, MapContainer, TileLayer, Tooltip, useMapEvent} from 'react-leaflet';
-import React, {type Key, useEffect, useMemo, useState} from 'react';
+import {GeoJSON, MapContainer, TileLayer, Tooltip} from 'react-leaflet';
+import React, {type Key, useMemo} from 'react';
 import {type Set} from 'immutable';
 import {type Geometry} from 'geojson';
 import {type Sector} from '@prisma/client';

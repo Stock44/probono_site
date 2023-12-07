@@ -48,7 +48,7 @@ const OrganizationImagePicker = forwardRef((props: LogoSelectorProps, ref: Forwa
 							<Modal state={state}>
 								<Dialog {...overlayProps} title={label}>
 									<Form
-										action={action} redirectTo='/my/general'>
+										action={action}>
 										<FileDropZone
 											className='w-full h-full mb-4' label={
 												<>

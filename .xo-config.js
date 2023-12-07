@@ -13,5 +13,6 @@ module.exports = {
 	  "react/jsx-closing-tag-location": "off",
 	  "react/jsx-no-bind": "off",
 	  "@typescript-eslint/ban-types": "off",
+	  "@typescript-eslint/no-unnecessary-type-assertion": "off"
   },
 };

@@ -1,27 +1,68 @@
 import React from 'react';
-import {withPageAuthRequired} from '@auth0/nextjs-auth0';
-import {redirect} from 'next/navigation';
+import {notFound} from 'next/navigation';
+import {getSession} from '@auth0/nextjs-auth0';
 import PurposeInfoForm from './purpose-info-form.tsx';
 import {getAllOrganizationCategories} from '@/lib/get-all-organization-categories.ts';
 import {
-	getAllOrganizationActivities,
-} from '@/lib/get-all-organization-activities.ts';
+	getAllActivities,
+} from '@/lib/get-all-activities.ts';
 import {getAllBeneficiaries} from '@/lib/get-all-beneficiaries.ts';
 import {getAllAgeGroups} from '@/lib/get-all-age-groups.ts';
-import {getOrganizationWithPurposeDataFromSession} from '@/lib/models/organization.ts';
+import prisma from '@/lib/prisma.ts';
+import updateOrganizationAction from '@/app/(logged-in)/my/[organizationId]/update-organization-action.ts';
 
-export default async function PurposePage() {
-	const organizationCategories = await getAllOrganizationCategories();
-	const organizationActivities = await getAllOrganizationActivities();
-	const beneficiaries = await getAllBeneficiaries();
-	const ageGroups = await getAllAgeGroups();
-	const organization = await getOrganizationWithPurposeDataFromSession();
+export type PurposePageProps = {
+	readonly params: {
+		readonly organizationId: string;
+	};
+};
 
-	if (organization === null || organization === undefined) {
-		redirect('/onboarding');
+export default async function PurposePage(props: PurposePageProps) {
+	const {params} = props;
+	const organizationId = Number.parseInt(params.organizationId, 10);
+
+	if (Number.isNaN(organizationId)) {
+		notFound();
 	}
 
+	const session = (await getSession())!; // Guaranteed to not be null or undefined
+
+	const organization = await prisma.organization.findUnique({
+		where: {
+			id: organizationId,
+			owners: {
+				some: {
+					authId: session.user.sub as string,
+				},
+			},
+		},
+		include: {
+			activities: {
+				include: {
+					activity: true,
+				},
+			},
+			beneficiaries: true,
+			ageGroups: {
+				include: {
+					ageGroup: true,
+				},
+			},
+		},
+	});
+
+	if (organization === null) {
+		notFound();
+	}
+
+	const organizationCategories = await getAllOrganizationCategories();
+	const activities = await getAllActivities();
+	const beneficiaries = await getAllBeneficiaries();
+	const ageGroups = await getAllAgeGroups();
+
+	const action = updateOrganizationAction.bind(null, organizationId);
+
 	return (
-		<PurposeInfoForm organization={organization} organizationCategories={organizationCategories} activities={organizationActivities} beneficiaries={beneficiaries} ageGroups={ageGroups}/>
+		<PurposeInfoForm action={action} organization={organization} organizationCategories={organizationCategories} activities={activities} beneficiaries={beneficiaries} ageGroups={ageGroups}/>
 	);
 }

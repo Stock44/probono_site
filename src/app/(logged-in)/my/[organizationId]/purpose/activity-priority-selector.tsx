@@ -1,18 +1,17 @@
 import React, {useMemo, useState} from 'react';
 import {Item, type Key, type ListData, type ListProps, type Node, Section, useListData, useListState} from 'react-stately';
-import {type OrganizationActivity, type OrganizationActivityCategory} from '@prisma/client';
+import {type Activity} from '@prisma/client';
 import ComboBox from '@/components/combo-box.tsx';
 import ListPrioritizer from '@/components/list-prioritizer.tsx';
 import {type SearchableListData} from '@/lib/hooks/use-searchable-list-data.ts';
 
 export type ActivityPrioritySelectorProps = {
-	readonly activities: SearchableListData<OrganizationActivity>;
+	readonly activities: SearchableListData<Activity>;
 	readonly label: string;
-	readonly prioritizerLabel: string;
 };
 
 export default function ActivityPrioritySelector(props: ActivityPrioritySelectorProps) {
-	const {activities, label, prioritizerLabel} = props;
+	const {activities, label} = props;
 
 	const {items, selectedKeys, setSelectedKeys, moveBefore, moveAfter, filteredKeys, getItem, filterText, setFilterText} = activities;
 
@@ -63,7 +62,6 @@ export default function ActivityPrioritySelector(props: ActivityPrioritySelector
 				selectedItems.size === 0 ? null
 					: <ListPrioritizer
 						className='mb-4'
-						label={prioritizerLabel}
 						items={selectedItems} onRemove={key => {
 							console.log(key);
 							if (selectedKeys === 'all') {
@@ -84,7 +82,7 @@ export default function ActivityPrioritySelector(props: ActivityPrioritySelector
 						}}>
 						{
 							activity => (
-								<Item key={activity.id}>{activity.name}</Item>
+								<Item>{activity.name}</Item>
 							)
 						}
 					</ListPrioritizer>

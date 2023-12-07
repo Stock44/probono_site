@@ -1,6 +1,6 @@
 import React from 'react';
 
-export default function OnboardingPage() {
+export default function MyStartPage() {
 	return (
 		<main>
 			<h1 className='text-stone-200 text-4xl'>

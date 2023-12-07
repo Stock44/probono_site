@@ -21,7 +21,7 @@ export default function MySectionLink(props: MySectionLinkProps) {
 		<Link
 			href={`${root}/${slug ?? ''}`}
 			className={clsx(
-				'flex items-center p-2 rounded',
+				'flex items-center p-2 rounded gap-1',
 				selected && 'bg-stone-50 text-stone-900 fill-stone-900',
 				!selected && 'text-stone-400 hover:bg-stone-800 fill-stone-400',
 				className,

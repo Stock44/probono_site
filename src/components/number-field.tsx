@@ -47,15 +47,15 @@ export const NumberField = React.forwardRef((
 					isRequired && 'after:content-["*"] after:ml-0.5',
 				)}>{label}</label>
 
-			<div {...groupProps} className='flex items-center justify-right px-1 gap-1 rounded border border-stone-700 group-focus-within:border-stone-50 w-full group-data-[disabled=true]:border-stone-800'>
+			<div {...groupProps} className='flex items-center justify-right ps-1 gap-1 rounded border border-stone-700 group-focus-within:border-stone-50 w-full group-data-[disabled=true]:border-stone-800'>
 				{icon}
 				<input {...inputProps} ref={inputRef} name={name} className='bg-transparent text-stone-200 py-1 outline-none grow min-w-0 disabled:text-stone-600 disabled:cursor-not-allowed'/>
 				<div className='flex-none flex-col justify-around items-center basis-4 fill-stone-400'>
 					<Button {...incrementButtonProps} variant='text' size='xs'>
-						<ArrowDropUp className='w-4 h-4'/>
+						<ArrowDropUp viewBox='0 0 24 24' className='w-4 h-4'/>
 					</Button>
 					<Button {...decrementButtonProps} variant='text' size='xs'>
-						<ArrowDropDown className='w-4 h-4'/>
+						<ArrowDropDown viewBox='0 0 24 24' className='w-4 h-4'/>
 					</Button>
 				</div>
 			</div>

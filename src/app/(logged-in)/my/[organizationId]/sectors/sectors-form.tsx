@@ -1,13 +1,13 @@
 'use client';
 import React, {type Key, useMemo, useState} from 'react';
 import dynamic from 'next/dynamic';
-import {useQuery} from 'react-query';
 import {type Sector} from '@prisma/client';
 import {type Geometry} from 'geojson';
 import {Set} from 'immutable';
 import {Item} from 'react-stately';
+import Save from '@material-design-icons/svg/round/save.svg';
+import Remove from '@material-design-icons/svg/round/remove.svg';
 import ListBox from '@/components/list-box.tsx';
-import Icon from '@/components/icon.tsx';
 import Button from '@/components/button.tsx';
 
 const SectorsMap = dynamic(async () => import('@/app/(logged-in)/my/[organizationId]/sectors/sectors-map.tsx'),
@@ -45,7 +45,7 @@ export default function SectorsForm(props: SectorFormProps) {
 					</p>
 				</div>
 				<Button type='submit'>
-					<Icon name='save' className='me-1'/>
+					<Save className='fill-current'/>
 					Guardar
 				</Button>
 			</div>
@@ -62,10 +62,10 @@ export default function SectorsForm(props: SectorFormProps) {
 						}}>
 						{
 							sector => (
-								<Item>
+								<Item textValue={sector.name}>
 									<div className='w-full flex justify-between items-center'>
 										{sector.name}
-										<Icon name='remove' size='lg'/>
+										<Remove/>
 									</div>
 								</Item>
 							)

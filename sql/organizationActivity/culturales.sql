@@ -3,9 +3,9 @@ $$
     declare
         category_id int;
     begin
-        insert into "OrganizationActivityCategory" values (default, 'Cultura') returning id into category_id;
+        insert into "ActivityCategory" values (default, 'Cultura') returning id into category_id;
 
-        insert into "OrganizationActivity"
+        insert into "Activity"
         values (default, 'Protección, conservación, restauración y/o recuperación del patrimonio cultural de la nación',
                 category_id),
                (default,

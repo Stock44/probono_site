@@ -3,9 +3,9 @@ $$
     declare
         category_id int;
     begin
-        insert into "OrganizationActivityCategory" values (default, 'Ecología') returning id into category_id;
+        insert into "ActivityCategory" values (default, 'Ecología') returning id into category_id;
 
-        insert into "OrganizationActivity"
+        insert into "Activity"
         values (default, 'Protección del medio ambiente', category_id),
                (default, 'Preservación forestal', category_id),
                (default, 'Manejo de especies invasoras', category_id),

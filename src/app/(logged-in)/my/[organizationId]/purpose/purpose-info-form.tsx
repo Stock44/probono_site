@@ -1,35 +1,42 @@
 'use client';
 import React, {useMemo} from 'react';
 import {
-	type AgeGroup,
-	Gender,
-	type OrganizationActivity,
-	type OrganizationBeneficiary,
-	type OrganizationCategory,
+	type Activity,
+	type AgeGroup, type Beneficiary,
+	Gender, type Organization,
+	type OrganizationCategory, type OrganizationToActivity, type OrganizationToAgeGroup,
 } from '@prisma/client';
 import {Item, type Key} from 'react-stately';
 import {List, Set} from 'immutable';
+import Save from '@material-design-icons/svg/round/save.svg';
+import Done from '@material-design-icons/svg/round/done.svg';
 import OdsSelector from '@/components/ods-selector.tsx';
 import Select from '@/components/select.tsx';
-import Icon from '@/components/icon.tsx';
-import Button from '@/components/button.tsx';
 import ComboBoxTagMultiSelect from '@/components/combo-box-tag-multi-select.tsx';
-import AgeGenderGroupSelector, {type GenderedAgeGroup} from '@/app/(logged-in)/my/[organizationId]/purpose/age-gender-group-selector.tsx';
+import AgeGenderGroupSelector from '@/app/(logged-in)/my/[organizationId]/purpose/age-gender-group-selector.tsx';
 import ActivityPrioritySelector from '@/app/(logged-in)/my/[organizationId]/purpose/activity-priority-selector.tsx';
 import useImmutableListData from '@/lib/hooks/use-immutable-list-data.ts';
 import useSearchableListData from '@/lib/hooks/use-searchable-list-data.ts';
-import Form from '@/components/form.tsx';
-import upsertOrganizationAction from '@/lib/actions/[organizationId].ts';
+import Form, {type FormState} from '@/components/form.tsx';
 import {formValidators} from '@/lib/form-utils.ts';
-import {organizationInitSchema} from '@/lib/schemas/organization.ts';
-import {type OrganizationWithPurposeData} from '@/lib/models/organization.ts';
+import {organizationInitSchema, type OrganizationUpdate} from '@/lib/schemas/organization.ts';
+import SubmitButton from '@/components/submit-button.tsx';
 
 export type PurposeInfoFormProps = {
 	readonly organizationCategories: OrganizationCategory[];
-	readonly activities: OrganizationActivity[];
-	readonly beneficiaries: OrganizationBeneficiary[];
+	readonly activities: Activity[];
+	readonly beneficiaries: Beneficiary[];
 	readonly ageGroups: AgeGroup[];
-	readonly organization: OrganizationWithPurposeData;
+	readonly organization: Organization & {
+		readonly beneficiaries: Beneficiary[];
+		readonly ageGroups: Array<OrganizationToAgeGroup & {
+			ageGroup: AgeGroup;
+		}>;
+		readonly activities: Array<OrganizationToActivity & {
+			activity: Activity;
+		}>;
+	};
+	readonly action: (state: FormState<OrganizationUpdate>, data: FormData) => Promise<FormState<OrganizationUpdate>>;
 };
 
 export default function PersonInfoForm(props: PurposeInfoFormProps) {
@@ -39,6 +46,7 @@ export default function PersonInfoForm(props: PurposeInfoFormProps) {
 		beneficiaries,
 		ageGroups,
 		organization,
+		action,
 	} = props;
 
 	const initialActivities = useMemo(() => {
@@ -50,16 +58,12 @@ export default function PersonInfoForm(props: PurposeInfoFormProps) {
 		initialItems: initialActivities,
 		initialSelectedKeys: organization.activities.map(activity => activity.activityId),
 		getKey(item) {
-			return item.id.toString();
+			return item.id;
 		},
 		searchKeys: List(['name']),
 	});
 
-	console.log(organization.organizationAgeGroups);
-
-	console.log(organization.organizationAgeGroups);
-
-	const initialSelectedAgeGroups = useMemo(() => Set(organization.organizationAgeGroups.map(item => item.ageGroupId.toString())), [organization.organizationAgeGroups]);
+	const initialSelectedAgeGroups = useMemo(() => Set(organization.ageGroups.map(item => item.ageGroupId.toString())), [organization.ageGroups]);
 
 	const initialOrganizationAgeGroups = useMemo(
 		() => [
@@ -70,12 +74,12 @@ export default function PersonInfoForm(props: PurposeInfoFormProps) {
 					gender: Gender.other,
 				}),
 				),
-			...organization.organizationAgeGroups.map(ageGroup => ({
+			...organization.ageGroups.map(ageGroup => ({
 				...ageGroup.ageGroup,
 				gender: ageGroup.gender,
 			})),
 		].sort((lhs, rhs) => lhs.minAge - rhs.minAge),
-		[ageGroups, initialSelectedAgeGroups, organization.organizationAgeGroups]);
+		[ageGroups, initialSelectedAgeGroups, organization.ageGroups]);
 
 	const ageGroupsListData = useImmutableListData({
 		initialItems: initialOrganizationAgeGroups,
@@ -84,7 +88,7 @@ export default function PersonInfoForm(props: PurposeInfoFormProps) {
 
 	const beneficiariesListData = useSearchableListData({
 		initialItems: beneficiaries,
-		initialSelectedKeys: organization.organizationBeneficiaries.map(item => item.id),
+		initialSelectedKeys: organization.beneficiaries.map(item => item.id),
 		searchKeys: List(['name']),
 	});
 
@@ -104,7 +108,11 @@ export default function PersonInfoForm(props: PurposeInfoFormProps) {
 
 	return (
 		<Form
-			action={upsertOrganizationAction} id={organization.id} staticValues={{
+			successToast={{
+				title: 'Se han guardado los cambios.',
+				icon: <Done/>,
+			}}
+			action={action} staticValues={{
 				ageGroups: selectedAgeGroups,
 				activities: (
 					activitiesListData.selectedKeys === 'all'
@@ -112,7 +120,7 @@ export default function PersonInfoForm(props: PurposeInfoFormProps) {
 						: activitiesListData.items
 							.filter(item => (activitiesListData.selectedKeys as unknown as Set<Key>).has(item.id))
 				).map((item, idx) => ({activityId: item.id, priority: idx})).toArray(),
-				organizationBeneficiaries: [...(beneficiariesListData.selectedKeys === 'all'
+				beneficiaries: [...(beneficiariesListData.selectedKeys === 'all'
 					? beneficiaries.map(item => item.id)
 					: beneficiariesListData.selectedKeys as Set<number>)],
 			}}>
@@ -125,16 +133,15 @@ export default function PersonInfoForm(props: PurposeInfoFormProps) {
 						Esta información nos dice lo que tu organización hace, su objetivo y a quienes beneficia.
 					</p>
 				</div>
-				<Button type='submit'>
-					<Icon name='save' className='me-1'/>
+				<SubmitButton icon={<Save/>}>
 					Guardar
-				</Button>
+				</SubmitButton>
 			</div>
 
 			<Select
-				label='¿Cómo categorizarias a tu organización?' name='organizationCategoryId'
-				validate={validate.organizationCategoryId} items={organizationCategories}
-				className='w-full mb-4' defaultSelectedKey={organization.organizationCategoryId ?? undefined}
+				label='¿Cómo categorizarias a tu organización?' name='categoryId'
+				validate={validate.categoryId} items={organizationCategories}
+				className='w-full mb-4' defaultSelectedKey={organization.categoryId ?? undefined}
 			>
 				{
 					category => (
@@ -151,7 +158,6 @@ export default function PersonInfoForm(props: PurposeInfoFormProps) {
 			/>
 			<ActivityPrioritySelector
 				label='¿Qué actividades realiza tu organización?'
-				prioritizerLabel='Ordenalas de mayor a menor importancia'
 				activities={activitiesListData}
 			/>
 			<ComboBoxTagMultiSelect

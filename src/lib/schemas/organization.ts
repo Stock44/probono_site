@@ -11,7 +11,6 @@ const kb = 1000;
 
 export const organizationInitSchema = z.object({
 	logo: z.instanceof(File).superRefine((file, ctx) => {
-		console.log(file.size);
 		if (file.size > 50 * kb) {
 			ctx.addIssue({
 				code: 'custom',
@@ -22,7 +21,7 @@ export const organizationInitSchema = z.object({
 	}).nullish(),
 	// eslint-disable-next-line @typescript-eslint/naming-convention
 	name: z.string({invalid_type_error: 'Campo requerido'}),
-	foundingYear: z.coerce.number().int(),
+	foundingYear: z.coerce.number().int().lte((new Date()).getFullYear(), 'Fecha futura'),
 	email: z.string().email('Correo inválido').nullish(),
 	webpage: z.string().url('Dirección inválida').nullish(),
 	phone: phoneSchema.nullish(),
@@ -46,8 +45,8 @@ export const organizationInitSchema = z.object({
 	volunteerCountCategoryId: z.coerce.number().int().nullish(),
 	legalConcept: z.string().nullish(),
 	corporationTypeId: z.coerce.number().int().nullish(),
-	incorporationYear: z.coerce.number().int().nullish(),
-	organizationCategoryId: z.coerce.number().int().nullish(),
+	incorporationYear: z.coerce.number().int().lte((new Date()).getFullYear(), 'Fecha futura').nullish(),
+	categoryId: z.coerce.number().int().nullish(),
 	incomeCategoryId: z.coerce.number().int().nullish(),
 
 	ageGroups: json(z.array(z.object({

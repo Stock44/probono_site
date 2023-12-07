@@ -19,6 +19,7 @@ export default function OrganizationSelect(props: OrganizationSelectProps) {
 
 	return (
 		<Select
+			aria-label='Selecciona la organización a ver.'
 			popoverPlacement='bottom end'
 			placeholder='Selecciona una organización'
 			selectedKey={selectedOrganization[1]} onSelectionChange={id => {

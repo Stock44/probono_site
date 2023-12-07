@@ -16,7 +16,7 @@ export default forwardRef((props: ImageButtonProps, ref: ForwardedRef<HTMLButton
 	}, buttonRef);
 	return (
 		<button {...buttonProps} ref={buttonRef} className={cx('hover:brightness-75 rounded relative', className)}>
-			<Image fill src={src} alt={alt} objectFit='contain'/>
+			<Image fill src={src} alt={alt} className='object-contain' sizes='(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw'/>
 		</button>
 	);
 });

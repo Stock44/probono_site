@@ -3,9 +3,9 @@ $$
     declare
         category_id int;
     begin
-        insert into "OrganizationActivityCategory" values (default, 'Desarrollo Económico') returning id into category_id;
+        insert into "ActivityCategory" values (default, 'Desarrollo Económico') returning id into category_id;
 
-        insert into "OrganizationActivity" values
+        insert into "Activity" values
                                                (default, 'Creación de empleo y desarrollo de la fuerza laboral', category_id),
                                                (default, 'Capacitación laboral', category_id),
                                                (default, 'Responsabilidad social corporativa', category_id),

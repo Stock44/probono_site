@@ -1,9 +1,9 @@
-import React, {forwardRef, type ForwardedRef, useRef, ReactNode} from 'react';
+import React, {forwardRef, type ForwardedRef, useRef} from 'react';
 import {type AriaTagGroupProps, type AriaTagProps, useFocusRing, useTag, useTagGroup} from 'react-aria';
 import {Set} from 'immutable';
 import {useObjectRef} from '@react-aria/utils';
 import {type ListState, useListState, type Node, type Key} from 'react-stately';
-import Icon from '@/components/icon.tsx';
+import Close from '@material-design-icons/svg/round/close.svg';
 import Button from '@/components/button.tsx';
 
 export type TagGroupProps<T extends Record<string, unknown>> = {
@@ -64,7 +64,7 @@ function Tag<T>(props: TagProps<T>) {
 			<div {...gridCellProps} className='flex gap-2 items-center border border-stone-700 text-stone-300 rounded px-2'>
 				{item.rendered}
 				{allowsRemoving && (
-					<Button {...removeButtonProps} variant='text' size='sm'><Icon name='close' size='sm'/></Button>
+					<Button {...removeButtonProps} variant='text' size='sm'><Close className='fill-current'/></Button>
 				)}
 			</div>
 		</div>
