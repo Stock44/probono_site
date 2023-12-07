@@ -1,10 +1,10 @@
 'use client';
-import React, {type Key, useMemo, useState} from 'react';
+import React, {useMemo, useState} from 'react';
 import dynamic from 'next/dynamic';
 import {type Sector} from '@prisma/client';
 import {type Geometry} from 'geojson';
-import {Set} from 'immutable';
-import {Item} from 'react-stately';
+import {Seq, Set} from 'immutable';
+import {Item, Section, useListData} from 'react-stately';
 import Save from '@material-design-icons/svg/round/save.svg';
 import Remove from '@material-design-icons/svg/round/remove.svg';
 import ListBox from '@/components/list-box.tsx';
@@ -21,6 +21,7 @@ const SectorsMap = dynamic(async () => import('@/app/(logged-in)/my/[organizatio
 export type SectorFormProps = {
 	readonly sectors: Array<Sector & {
 		geom: Geometry;
+		municipalityName: string;
 	}>;
 };
 
@@ -29,9 +30,20 @@ export default function SectorsForm(props: SectorFormProps) {
 		sectors,
 	} = props;
 
-	const [selectedSectorKeys, setSelectedSectorKeys] = useState(Set<Key>());
+	const sectorsList = useListData({
+		initialItems: sectors,
+	});
 
-	const selectedSectors = useMemo(() => sectors.filter(sector => selectedSectorKeys.has(sector.id)), [sectors, selectedSectorKeys]);
+	const [selectedSectorKeys, setSelectedSectorKeys] = useState(Set<number>());
+	const selectedSectors = useMemo(() =>
+		[
+			...Seq(selectedSectorKeys).map(key => sectorsList.getItem(key))
+				.groupBy(sector => sector.municipalityName),
+		].map(([name, sectors]) => ({
+			name,
+			sectors,
+		}))
+	, [sectorsList, selectedSectorKeys]);
 
 	return (
 		<div className='grow'>
@@ -51,23 +63,32 @@ export default function SectorsForm(props: SectorFormProps) {
 			</div>
 			<div
 				className='flex gap-4 h-[32rem]'>
-				<SectorsMap sectors={sectors} selectedKeys={selectedSectorKeys} setSelectedKeys={setSelectedSectorKeys} className='h-full grow'/>
+				<SectorsMap
+					sectors={sectors} selectedKeys={selectedSectorKeys} setSelectedKeys={key => {
+						setSelectedSectorKeys(key as Set<number>);
+					}}
+					className='h-full grow'/>
 				<div className='w-64 border border-stone-800 rounded px-2 py-3 overflow-y-scroll scroll-smooth scrollbar-thumb-rounded scrollbar-track-transparent scrollbar-thin scrollbar-thumb-stone-50'>
 					<ListBox
-						items={selectedSectors} label='Sectores seleccionados' selectionMode='single'
-						selectedKeys={[]} onSelectionChange={keys => {
-							for (const key of keys) {
-								setSelectedSectorKeys(selectedSectorKeys.remove(key));
-							}
-						}}>
+						items={selectedSectors} label='Sectores seleccionados'>
 						{
-							sector => (
-								<Item textValue={sector.name}>
-									<div className='w-full flex justify-between items-center'>
-										{sector.name}
-										<Remove/>
-									</div>
-								</Item>
+							municipality => (
+								<Section key={municipality.name} items={municipality.sectors} title={municipality.name}>
+									{
+										sector => (
+											<Item textValue={sector.name}>
+												<div className='w-full flex items-center'>
+													<span className='grow'>
+														{sector.name}
+													</span>
+													<Button variant='text' className='enabled:hover:bg-stone-700'>
+														<Remove className='fill-current'/>
+													</Button>
+												</div>
+											</Item>
+										)
+									}
+								</Section>
 							)
 						}
 					</ListBox>

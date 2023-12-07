@@ -194,8 +194,8 @@ model Sector {
   name String
   geom Unsupported("geometry")
 
-  municipality   Municipality? @relation(fields: [municipalityId], references: [id])
-  municipalityId Int?
+  municipality   Municipality @relation(fields: [municipalityId], references: [id])
+  municipalityId Int
 
   organizations Organization[]
 }

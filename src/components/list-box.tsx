@@ -5,6 +5,7 @@ import {type ListProps, type ListState, useListState} from 'react-stately';
 import {useObjectRef} from '@react-aria/utils';
 import clsx from 'clsx';
 import {twMerge} from 'tailwind-merge';
+import {cx} from '@/lib/cva.ts';
 
 export type ListBoxProps<T extends Record<string, unknown>> = StatefulListBoxProps<T> | BaseListBoxProps<T>;
 
@@ -33,11 +34,11 @@ export const BaseListBox = forwardRef(<T extends Record<string, unknown>>(props:
 
 	return (
 		<>
-			{label ? <label {...labelProps} className='text-stone-200 text-xl mb-2 block px-1'>{label}</label> : null}
+			{label ? <label {...labelProps} className='text-stone-200 text-xl mb-2 block px-2'>{label}</label> : null}
 
 			<ul
 				{...listBoxProps} ref={listBoxRef}
-				className={twMerge('rounded overflow-auto scroll-smooth scrollbar-track-transparent scrollbar-thumb-stone-50 scrollbar-thin scrollbar-thumb-rounded', className)}>
+				className={twMerge('rounded overflow-y-auto scroll-smooth scrollbar-track-transparent scrollbar-thumb-stone-50 scrollbar-thin scrollbar-thumb-rounded', className)}>
 				{[...state.collection].map(item => (
 					item.type === 'section'
 						? <ListBoxSection key={item.key} section={item} state={state}/>
@@ -64,41 +65,29 @@ function ListBoxSection<T extends Record<string, unknown>>(props: ListBoxSection
 	// The heading is rendered inside an <li> element, which contains
 	// a <ul> with the child items.
 	return (
-		<>
-			{section.key !== state.collection.getFirstKey()
-						&& (
-							<li
-								role='presentation'
-
-							/>
-						)}
-			<li {...itemProps}>
-				{section.rendered
+		<li {...itemProps} className='p-2'>
+			{section.rendered
 							&& (
-								<span
+								<div
 									{...headingProps}
-									className='text-stone-300'
+									className={cx('font-semibold py-2 text-sm text-stone-200 top-0',
+										section.key !== state.collection.getFirstKey() && 'mt-2')}
 								>
 									{section.rendered}
-								</span>
+								</div>
 							)}
-				<ul
-					{...groupProps}
-					style={{
-						padding: 0,
-						listStyle: 'none',
-					}}
-				>
-					{[...section.childNodes].map(node => (
-						<Option
-							key={node.key}
-							item={node}
-							state={state}
-						/>
-					))}
-				</ul>
-			</li>
-		</>
+			<ul
+				{...groupProps}
+			>
+				{[...state.collection.getChildren!(section.key)].map(node => (
+					<Option
+						key={node.key}
+						item={node}
+						state={state}
+					/>
+				))}
+			</ul>
+		</li>
 	);
 }
 
@@ -122,7 +111,7 @@ function Option<T extends Record<string, unknown>>(props: OptionProps<T>) {
 		<li
 			{...mergeProps(optionProps, focusProps)}
 			ref={ref}
-			className={clsx('text-stone-300 p-1.5 border rounded border-transparent outline-none cursor-pointer data-[focus-visible=true]:border-stone-50',
+			className={clsx('text-stone-300 p-2 border rounded border-transparent outline-none cursor-pointer data-[focus-visible=true]:border-stone-50',
 				isSelected && 'bg-stone-50 text-stone-800',
 				!isSelected && 'hover:bg-stone-800',
 				isFocused && !isSelected && 'bg-stone-900')}
