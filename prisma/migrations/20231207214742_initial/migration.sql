@@ -58,8 +58,8 @@ CREATE TABLE "Municipality" (
 CREATE TABLE "Address" (
     "id" SERIAL NOT NULL,
     "postalCode" TEXT NOT NULL,
-    "streetName" TEXT NOT NULL,
-    "extNumber" INTEGER NOT NULL,
+    "street" TEXT NOT NULL,
+    "number" INTEGER NOT NULL,
     "location" point,
     "municipalityId" INTEGER NOT NULL,
 
@@ -183,7 +183,7 @@ CREATE TABLE "Sector" (
     "id" SERIAL NOT NULL,
     "name" TEXT NOT NULL,
     "geom" geometry NOT NULL,
-    "municipalityId" INTEGER,
+    "municipalityId" INTEGER NOT NULL,
 
     CONSTRAINT "Sector_pkey" PRIMARY KEY ("id")
 );
@@ -348,7 +348,7 @@ ALTER TABLE "GovernmentOrganization" ADD CONSTRAINT "GovernmentOrganization_gove
 ALTER TABLE "Service" ADD CONSTRAINT "Service_categoryId_fkey" FOREIGN KEY ("categoryId") REFERENCES "ServiceCategory"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Sector" ADD CONSTRAINT "Sector_municipalityId_fkey" FOREIGN KEY ("municipalityId") REFERENCES "Municipality"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "Sector" ADD CONSTRAINT "Sector_municipalityId_fkey" FOREIGN KEY ("municipalityId") REFERENCES "Municipality"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Organization" ADD CONSTRAINT "Organization_addressId_fkey" FOREIGN KEY ("addressId") REFERENCES "Address"("id") ON DELETE SET NULL ON UPDATE CASCADE;
