@@ -26,7 +26,7 @@ export default function UserOnboardingForm(props: UserOnboardingFormProps) {
 
 	return (
 		<Form
-			action={action} redirectTo='/onboarding/organization'>
+			action={action}>
 			<TextField
 				isRequired
 				className='mb-4'
@@ -58,7 +58,7 @@ export default function UserOnboardingForm(props: UserOnboardingFormProps) {
 				validate={validate.contactPhone}
 				defaultValue={user?.contactPhone ?? ''}
 			/>
-			<SubmitButton icon={<NavigateNext/>} iconPlacement='right'>
+			<SubmitButton icon={<NavigateNext/>} iconPlacement='right' className='ms-auto'>
 				Continuar
 			</SubmitButton>
 		</Form>

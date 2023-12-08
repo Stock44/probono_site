@@ -2,23 +2,6 @@
 import React, {useRef} from 'react';
 import CheckCircle from '@material-design-icons/svg/round/check_circle.svg';
 import Image, {type StaticImageData} from 'next/image';
-import ods1Logo from 'public/odsIcons/1.png';
-import ods2Logo from 'public/odsIcons/2.png';
-import ods3Logo from 'public/odsIcons/3.png';
-import ods4Logo from 'public/odsIcons/4.png';
-import ods5Logo from 'public/odsIcons/5.png';
-import ods6Logo from 'public/odsIcons/6.png';
-import ods7Logo from 'public/odsIcons/7.png';
-import ods8Logo from 'public/odsIcons/8.png';
-import ods9Logo from 'public/odsIcons/9.png';
-import ods10Logo from 'public/odsIcons/10.png';
-import ods11Logo from 'public/odsIcons/11.png';
-import ods12Logo from 'public/odsIcons/12.png';
-import ods13Logo from 'public/odsIcons/13.png';
-import ods14Logo from 'public/odsIcons/14.png';
-import ods15Logo from 'public/odsIcons/15.png';
-import ods16Logo from 'public/odsIcons/16.png';
-import ods17Logo from 'public/odsIcons/17.png';
 import {type RadioGroupProps, type RadioGroupState, useRadioGroupState} from 'react-stately';
 import {
 	type AriaRadioGroupProps,
@@ -28,6 +11,23 @@ import {
 	useRadioGroup,
 	VisuallyHidden,
 } from 'react-aria';
+import ods1Logo from '@/images/ods-icons/1.png';
+import ods2Logo from '@/images/ods-icons/2.png';
+import ods3Logo from '@/images/ods-icons/3.png';
+import ods4Logo from '@/images/ods-icons/4.png';
+import ods5Logo from '@/images/ods-icons/5.png';
+import ods6Logo from '@/images/ods-icons/6.png';
+import ods7Logo from '@/images/ods-icons/7.png';
+import ods8Logo from '@/images/ods-icons/8.png';
+import ods9Logo from '@/images/ods-icons/9.png';
+import ods10Logo from '@/images/ods-icons/10.png';
+import ods11Logo from '@/images/ods-icons/11.png';
+import ods12Logo from '@/images/ods-icons/12.png';
+import ods13Logo from '@/images/ods-icons/13.png';
+import ods14Logo from '@/images/ods-icons/14.png';
+import ods15Logo from '@/images/ods-icons/15.png';
+import ods16Logo from '@/images/ods-icons/16.png';
+import ods17Logo from '@/images/ods-icons/17.png';
 import {cx} from '@/lib/cva.ts';
 
 type Ods = [number, string, StaticImageData];

@@ -21,7 +21,6 @@ export default function OrganizationForm(props: OrganizationFormProps) {
 	return (
 		<Form
 			action={action}
-			redirectTo='/my'
 		>
 			<FileDropZone
 				acceptedFileTypes={['image/png', 'image/jpeg', 'image/jpeg']}
@@ -78,7 +77,7 @@ export default function OrganizationForm(props: OrganizationFormProps) {
 				className='grow basis-full mb-4'
 			/>
 
-			<SubmitButton icon={<NavigateNext/>} iconPlacement='right'>
+			<SubmitButton icon={<NavigateNext/>} iconPlacement='right' className='ms-auto'>
 				Continuar
 			</SubmitButton>
 		</Form>

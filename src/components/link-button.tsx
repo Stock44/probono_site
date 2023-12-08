@@ -5,6 +5,7 @@ import buttonVariant from '@/components/variants/button.tsx';
 
 export type LinkButtonProps = {
 	readonly children: ReactNode;
+	readonly className?: string;
 } & LinkProps & VariantProps<typeof buttonVariant>;
 
 export default function LinkButton(props: LinkButtonProps) {

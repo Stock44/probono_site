@@ -36,13 +36,16 @@ export default function SectorsForm(props: SectorFormProps) {
 
 	const [selectedSectorKeys, setSelectedSectorKeys] = useState(Set<number>());
 	const selectedSectors = useMemo(() =>
-		[
-			...Seq(selectedSectorKeys).map(key => sectorsList.getItem(key))
-				.groupBy(sector => sector.municipalityName),
-		].map(([name, sectors]) => ({
-			name,
-			sectors,
-		}))
+
+		Seq(selectedSectorKeys).map(key => sectorsList.getItem(key))
+			.groupBy(sector => sector.municipalityId)
+			.map((sectors, id) => ({
+				name: sectors.first()!.municipalityName,
+				id,
+				sectors: sectors.sortBy(sector => sector.name),
+			}))
+			.toList()
+			.sortBy(municipality => municipality.name)
 	, [sectorsList, selectedSectorKeys]);
 
 	return (
@@ -73,7 +76,7 @@ export default function SectorsForm(props: SectorFormProps) {
 						items={selectedSectors} label='Sectores seleccionados'>
 						{
 							municipality => (
-								<Section key={municipality.name} items={municipality.sectors} title={municipality.name}>
+								<Section items={municipality.sectors} title={municipality.name}>
 									{
 										sector => (
 											<Item textValue={sector.name}>
@@ -81,7 +84,10 @@ export default function SectorsForm(props: SectorFormProps) {
 													<span className='grow'>
 														{sector.name}
 													</span>
-													<Button variant='text' className='enabled:hover:bg-stone-700'>
+													<Button
+														variant='text' className='enabled:hover:bg-stone-700' onPress={() => {
+															setSelectedSectorKeys(previous => previous.remove(sector.id));
+														}}>
 														<Remove className='fill-current'/>
 													</Button>
 												</div>

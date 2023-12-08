@@ -1,11 +1,11 @@
 import React, {type ReactNode} from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import Logo from 'public/logo.png';
-import Logomark from 'public/logomark.png';
-import FacebookLogo from 'public/facebook-logo.png';
-import InstagramLogo from 'public/instagram-logo.png';
-import LinkedinLogo from 'public/linkedin-logo.png';
+import GeoStatsLogo from '@/images/logos/geostats.png';
+import GeoStatsLogoMark from '@/images/logos/geostats-logomark.png';
+import FacebookLogo from '@/images/logos/facebook.png';
+import InstagramLogo from '@/images/logos/instagram.png';
+import LinkedinLogo from '@/images/logos/linkedin.png';
 import SocialLink from '@/components/social-link.tsx';
 
 export type TopBarFooterLayoutProps = {
@@ -21,7 +21,7 @@ export default function TopBarFooterLayout(props: TopBarFooterLayoutProps) {
 				<div className='max-w-7xl mx-auto h-full items-center flex gap-2'>
 					<Link href='/' className='flex items-center gap-2 text-md font-bold text-stone-50'>
 						<Image
-							src={Logomark}
+							src={GeoStatsLogoMark}
 							height={28}
 							className='mx-auto my-4'
 							alt='geostats logo'
@@ -37,7 +37,7 @@ export default function TopBarFooterLayout(props: TopBarFooterLayoutProps) {
 				<div className='max-w-7xl mx-auto'>
 					<Link href='/' className='text-stone-50 font-semibold items-center w-fit mx-auto block mt-8 mb-8'>
 						<Image
-							src={Logo}
+							src={GeoStatsLogo}
 							height={64}
 							className='mx-auto my-4'
 							alt='geostats logo'

@@ -1,6 +1,7 @@
 import React, {type ForwardedRef, useMemo} from 'react';
 import {type Map, Icon} from 'leaflet';
 import {CircleMarker, MapContainer, Marker, Popup, TileLayer, useMapEvents} from 'react-leaflet';
+import Location from '@/images/location.png';
 
 type AddressMapProps = {
 	readonly selectedCoords: [number, number] | null;
@@ -11,8 +12,8 @@ type AddressMapProps = {
 };
 
 const locationIcon = new Icon({
-	iconUrl: '/location.png',
-	iconSize: [30, 30],
+	iconUrl: Location.src,
+	iconSize: [Location.height / 2, Location.width / 2],
 	iconAnchor: [15, 30],
 });
 

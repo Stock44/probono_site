@@ -24,7 +24,7 @@ export default function OnboardingPage() {
 				Antes de nada, queremos conocer más sobre ti y tu organización.
 			</p>
 
-			<LinkButton href='/onboarding/user'>
+			<LinkButton href='/onboarding/user' className='ms-auto'>
 				Continuar <NavigateNext/>
 			</LinkButton>
 		</AnimatedLayoutContainer>
