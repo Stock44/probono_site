@@ -1,4 +1,4 @@
-import React, {useRef} from 'react';
+import React, {type ReactNode, useRef} from 'react';
 import {type AriaComboBoxProps, useComboBox} from 'react-aria';
 import {type ComboBoxState, type ComboBoxStateOptions, useComboBoxState} from 'react-stately';
 import ArrowDropDown from '@material-design-icons/svg/round/arrow_drop_down.svg';
@@ -24,7 +24,7 @@ export function StatefulComboBox<T extends Record<string, unknown>>(props: State
 }
 
 export type BaseComboBoxProps<T extends Record<string, unknown>> = {
-	readonly icon?: string;
+	readonly icon?: ReactNode;
 	readonly className?: string;
 	readonly state: ComboBoxState<T>;
 } & AriaComboBoxProps<T>;
@@ -51,7 +51,7 @@ export function BaseComboBox<T extends Record<string, unknown>>(props: BaseCombo
 				{...labelProps} className='text-stone-300 text-sm mb-1 group-focus-within:text-stone-50'>{props.label}</label>
 			<div
 				className='flex items-center text-stone-300 border border-stone-700 rounded bg-stone-950 group-focus-within:border-stone-50 '>
-				{icon === undefined ? null : <Icon name={icon}/>}
+				{icon}
 				<input
 					{...inputProps}
 					ref={inputObjectRef}

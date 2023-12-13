@@ -138,7 +138,7 @@ export default function LegalInfoForm(props: LegalInfoFormProps) {
 					name='incorporationYear'
 					icon={<CalendarMonth
 						viewBox='0 0 24 24'
-							                     className='h-4 w-4 fill-stone-600 group-focus-within:fill-stone-50'/>}
+						className='h-4 w-4 fill-stone-600 group-focus-within:fill-stone-50'/>}
 					validate={validate.incorporationYear}
 					defaultValue={organization.incorporationYear ?? undefined}
 					label='Año de incorporación'

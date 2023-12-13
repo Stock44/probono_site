@@ -7,8 +7,8 @@ import {
 } from 'react-aria';
 import {useListState, type ListProps as ListStateProps, type ListState, type Node} from 'react-stately';
 import {useObjectRef} from '@react-aria/utils';
-import clsx from 'clsx';
 import Checkbox from '@/components/checkbox.tsx';
+import {cx} from '@/lib/cva.ts';
 
 export type ListProps<T extends Record<string, unknown>> = {
 	readonly className?: string;
@@ -22,7 +22,7 @@ export default forwardRef(<T extends Record<string, unknown>>(props: ListProps<T
 	const {gridProps} = useGridList(props, state, listRef);
 
 	return (
-		<ul {...gridProps} ref={listRef} className={clsx('border border-stone-700 divide-y divide-stone-700 rounded', className)}>
+		<ul {...gridProps} ref={listRef} className={cx('border border-stone-700 divide-y divide-stone-700 rounded', className)}>
 			{[...state.collection].map(item => (
 				<ListItem key={item.key} item={item} state={state}/>
 			))}
@@ -53,8 +53,8 @@ const ListItem = forwardRef(<T extends Record<string, unknown>> (props: ListItem
 	const selectable = state.selectionManager.selectionMode !== 'none' && state.selectionManager.selectionBehavior === 'toggle';
 
 	return (
-		<li {...mergeProps(rowProps, focusProps)} ref={itemRef} className={clsx('p-2', selectable && 'cursor-pointer')}>
-			<div {...gridCellProps} className={clsx('text-stone-300 flex items-center gap-4')}>
+		<li {...mergeProps(rowProps, focusProps)} ref={itemRef} className={cx('p-2', selectable && 'cursor-pointer')}>
+			<div {...gridCellProps} className={cx('text-stone-300 flex items-center gap-4')}>
 				{selectable && <ListCheckbox state={state} item={item}/>}
 				{item.rendered}
 			</div>

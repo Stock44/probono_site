@@ -3,7 +3,6 @@ import {type AriaListBoxProps, mergeProps, useFocusRing, useListBox, useListBoxS
 import {type Node} from '@react-types/shared';
 import {type ListProps, type ListState, useListState} from 'react-stately';
 import {useObjectRef} from '@react-aria/utils';
-import clsx from 'clsx';
 import {twMerge} from 'tailwind-merge';
 import {cx} from '@/lib/cva.ts';
 
@@ -111,7 +110,7 @@ function Option<T extends Record<string, unknown>>(props: OptionProps<T>) {
 		<li
 			{...mergeProps(optionProps, focusProps)}
 			ref={ref}
-			className={clsx('text-stone-300 p-2 border rounded border-transparent outline-none cursor-pointer data-[focus-visible=true]:border-stone-50',
+			className={cx('text-stone-300 p-2 border rounded border-transparent outline-none cursor-pointer data-[focus-visible=true]:border-stone-50',
 				isSelected && 'bg-stone-50 text-stone-800',
 				!isSelected && 'hover:bg-stone-800',
 				isFocused && !isSelected && 'bg-stone-900')}
