@@ -1,11 +1,10 @@
 import React, {type ReactNode} from 'react';
 import {type Metadata} from 'next';
 import 'leaflet/dist/leaflet.css';
-import Script from 'next/script';
+import Head from 'next/head';
 import './globals.css';
 import ClientProviders from '@/app/client-providers.tsx';
 import {ToastProvider} from '@/components/toast.tsx';
-import Head from 'next/head';
 
 export const metadata: Metadata = {
 	title: 'probono',
