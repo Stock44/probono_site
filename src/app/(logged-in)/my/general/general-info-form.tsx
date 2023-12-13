@@ -16,7 +16,7 @@ import LinkedInLogo from '@/images/logos/linkedin.png';
 import InstagramLogo from '@/images/logos/instagram.png';
 import FacebookLogo from '@/images/logos/facebook.png';
 import {NumberField} from '@/components/number-field.tsx';
-import OrganizationImagePicker from '@/app/(logged-in)/my/[organizationId]/general/organization-image-picker.tsx';
+import OrganizationImagePicker from '@/app/(logged-in)/my/general/organization-image-picker.tsx';
 import TextField from '@/components/text-field.tsx';
 import Select from '@/components/select.tsx';
 import Form, {type FormState} from '@/components/form.tsx';

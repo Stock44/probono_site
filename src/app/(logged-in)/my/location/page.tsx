@@ -1,31 +1,26 @@
 import React from 'react';
 import {notFound} from 'next/navigation';
 import {getSession} from '@auth0/nextjs-auth0';
-import {type Address} from '@prisma/client';
-import AddressInfoForm from '@/app/(logged-in)/my/[organizationId]/location/address-info-form.tsx';
+import AddressInfoForm from '@/app/(logged-in)/my/location/address-info-form.tsx';
 import {getAllStates} from '@/lib/get-all-states.tsx';
-import {getSessionUserOrganization} from '@/lib/models/user.ts';
-import updateOrganizationAction from '@/app/(logged-in)/my/[organizationId]/update-organization-action.ts';
+import updateOrganizationAction from '@/lib/actions/update-organization-action.ts';
 import prisma from '@/lib/prisma.ts';
 
 export type LocationFormPageProps = {
-	readonly params: {
-		readonly organizationId: string;
+	readonly searchParams: {
+		readonly organization: string;
 	};
 };
 
 export default async function LocationFormPage(props: LocationFormPageProps) {
-	const {params} = props;
-	const organizationId = Number.parseInt(params.organizationId, 10);
-
-	if (Number.isNaN(organizationId)) {
-		notFound();
-	}
+	const {searchParams} = props;
 
 	const session = (await getSession())!;
 
+	const organizationId = searchParams.organization ? Number.parseInt(searchParams.organization, 10) : undefined;
+
 	const organization = await prisma.$transaction(async tx => {
-		const result = await tx.organization.findUnique({
+		const result = await prisma.organization.findFirst({
 			where: {
 				id: organizationId,
 				owners: {
@@ -73,7 +68,7 @@ export default async function LocationFormPage(props: LocationFormPageProps) {
 
 	const states = await getAllStates();
 
-	const action = updateOrganizationAction.bind(null, organizationId);
+	const action = updateOrganizationAction.bind(null, organization.id);
 
 	return (
 		<AddressInfoForm states={states} organization={organization} action={action}/>

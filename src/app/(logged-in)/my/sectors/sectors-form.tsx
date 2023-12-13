@@ -1,7 +1,7 @@
 'use client';
 import React, {useMemo, useState} from 'react';
 import dynamic from 'next/dynamic';
-import {type Sector} from '@prisma/client';
+import {type Address, type Municipality, type Organization, type Sector} from '@prisma/client';
 import {type Geometry} from 'geojson';
 import {Seq, Set} from 'immutable';
 import {Item, Section, useListData} from 'react-stately';
@@ -9,8 +9,13 @@ import Save from '@material-design-icons/svg/round/save.svg';
 import Remove from '@material-design-icons/svg/round/remove.svg';
 import ListBox from '@/components/list-box.tsx';
 import Button from '@/components/button.tsx';
+import type {FormState} from '@/components/form.tsx';
+import type {OrganizationUpdate} from '@/lib/schemas/organization.ts';
+import {type ServerActionResult} from '@/lib/server-action-result.ts';
+import {useToasts} from '@/components/toast.tsx';
+import LoadingSpinner from '@/components/loading-spinner.tsx';
 
-const SectorsMap = dynamic(async () => import('@/app/(logged-in)/my/[organizationId]/sectors/sectors-map.tsx'),
+const SectorsMap = dynamic(async () => import('@/app/(logged-in)/my/sectors/sectors-map.tsx'),
 	{
 		ssr: false,
 		loading(props) {
@@ -23,18 +28,29 @@ export type SectorFormProps = {
 		geom: Geometry;
 		municipalityName: string;
 	}>;
+	readonly organization: {
+		sectors: Array<{
+			id: number;
+		}>;
+	};
+	readonly action: (sectorIds: number[]) => Promise<ServerActionResult>;
 };
 
 export default function SectorsForm(props: SectorFormProps) {
 	const {
 		sectors,
+		organization,
+		action,
 	} = props;
 
 	const sectorsList = useListData({
 		initialItems: sectors,
 	});
 
-	const [selectedSectorKeys, setSelectedSectorKeys] = useState(Set<number>());
+	const [selectedSectorKeys, setSelectedSectorKeys] = useState(() => Set(organization.sectors.map(sector => sector.id)));
+	const {add} = useToasts();
+	const [isLoading, setIsLoading] = useState(false);
+	const [error, setError] = useState<string>();
 	const selectedSectors = useMemo(() =>
 
 		Seq(selectedSectorKeys).map(key => sectorsList.getItem(key))
@@ -59,8 +75,26 @@ export default function SectorsForm(props: SectorFormProps) {
 						¿En dónde trabaja tu organización?
 					</p>
 				</div>
-				<Button type='submit'>
-					<Save className='fill-current'/>
+				<Button
+					isDisabled={isLoading}
+					type='submit' onPress={async () => {
+						setIsLoading(true);
+						const result = await action([...selectedSectorKeys]);
+						setIsLoading(false);
+						if (result.success) {
+							add({
+								title: 'Se han guardado los cambios.',
+							});
+							setError(undefined);
+						} else {
+							setError(result.message);
+						}
+					}}>
+					{
+						isLoading
+							? <LoadingSpinner className='me-1'/>
+							: <Save className='fill-current me-1'/>
+					}
 					Guardar
 				</Button>
 			</div>

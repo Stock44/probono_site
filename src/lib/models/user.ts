@@ -5,16 +5,15 @@ import {type UserInit, type UserUpdate} from '@/lib/schemas/user.ts';
 import prisma from '@/lib/prisma.ts';
 import {management} from '@/lib/auth0.ts';
 
-export const getSessionUserOrganization = cache(async (id: number) => {
+export const getFirstSessionUserOrganization = cache(async () => {
 	const session = await getSession();
 
 	if (!session) {
 		return null;
 	}
 
-	return prisma.organization.findUnique({
+	return prisma.organization.findFirst({
 		where: {
-			id,
 			owners: {
 				some: {
 					authId: session.user.sub as string,
@@ -23,6 +22,26 @@ export const getSessionUserOrganization = cache(async (id: number) => {
 		},
 	});
 });
+
+export const getSessionUserOrganization = cache(
+	async (id: number) => {
+		const session = await getSession();
+
+		if (!session) {
+			return null;
+		}
+
+		return prisma.organization.findUnique({
+			where: {
+				id,
+				owners: {
+					some: {
+						authId: session.user.sub as string,
+					},
+				},
+			},
+		});
+	});
 
 export const getUserFromSession = cache(async () => {
 	const session = await getSession();

@@ -9,25 +9,21 @@ import {
 import {getAllBeneficiaries} from '@/lib/get-all-beneficiaries.ts';
 import {getAllAgeGroups} from '@/lib/get-all-age-groups.ts';
 import prisma from '@/lib/prisma.ts';
-import updateOrganizationAction from '@/app/(logged-in)/my/[organizationId]/update-organization-action.ts';
+import updateOrganizationAction from '@/lib/actions/update-organization-action.ts';
 
 export type PurposePageProps = {
-	readonly params: {
-		readonly organizationId: string;
+	readonly searchParams: {
+		readonly organization: string;
 	};
 };
 
 export default async function PurposePage(props: PurposePageProps) {
-	const {params} = props;
-	const organizationId = Number.parseInt(params.organizationId, 10);
+	const {searchParams} = props;
 
-	if (Number.isNaN(organizationId)) {
-		notFound();
-	}
+	const session = (await getSession())!;
 
-	const session = (await getSession())!; // Guaranteed to not be null or undefined
-
-	const organization = await prisma.organization.findUnique({
+	const organizationId = searchParams.organization ? Number.parseInt(searchParams.organization, 10) : undefined;
+	const organization = await prisma.organization.findFirst({
 		where: {
 			id: organizationId,
 			owners: {
@@ -51,7 +47,7 @@ export default async function PurposePage(props: PurposePageProps) {
 		},
 	});
 
-	if (organization === null) {
+	if (!organization) {
 		notFound();
 	}
 
@@ -60,7 +56,7 @@ export default async function PurposePage(props: PurposePageProps) {
 	const beneficiaries = await getAllBeneficiaries();
 	const ageGroups = await getAllAgeGroups();
 
-	const action = updateOrganizationAction.bind(null, organizationId);
+	const action = updateOrganizationAction.bind(null, organization.id);
 
 	return (
 		<PurposeInfoForm action={action} organization={organization} organizationCategories={organizationCategories} activities={activities} beneficiaries={beneficiaries} ageGroups={ageGroups}/>

@@ -18,7 +18,7 @@ import {geocodeAddress, reverseGeocode} from '@/lib/mapbox.ts';
 import {type OrganizationUpdate} from '@/lib/schemas/organization.ts';
 import SubmitButton from '@/components/submit-button.tsx';
 
-const AddressMap = dynamic(async () => import('@/app/(logged-in)/my/[organizationId]/location/address-map.tsx'),
+const AddressMap = dynamic(async () => import('@/app/(logged-in)/my/location/address-map.tsx'),
 	{
 		ssr: false,
 		loading: () => <div className='w-full h-96 bg-stone-900 animate-pulse mb-4'/>,

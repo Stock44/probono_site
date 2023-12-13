@@ -7,20 +7,17 @@ import Psychology from '@material-design-icons/svg/round/psychology.svg';
 import Policy from '@material-design-icons/svg/round/policy.svg';
 import LocationOn from '@material-design-icons/svg/round/location_on.svg';
 import Map from '@material-design-icons/svg/round/map.svg';
-import MySectionLink from '@/app/(logged-in)/my/[organizationId]/my-section-link.tsx';
+import MySectionLink from '@/app/(logged-in)/my/my-section-link.tsx';
 import Separator from '@/components/separator.tsx';
-import {OrganizationDataProgressCard} from '@/app/(logged-in)/my/[organizationId]/organization-data-progress-card.tsx';
+import {OrganizationDataProgressCard} from '@/app/(logged-in)/my/organization-data-progress-card.tsx';
 import {getSessionUserOrganization, getUserFromSession} from '@/lib/models/user.ts';
 
 export type MyLayoutProps = {
 	readonly children: ReactNode;
-	readonly params: {
-		organizationId: string;
-	};
 };
 
 export default async function MyLayout(props: MyLayoutProps) {
-	const {children, params} = props;
+	const {children} = props;
 
 	const user = await getUserFromSession();
 
@@ -32,18 +29,6 @@ export default async function MyLayout(props: MyLayoutProps) {
 		redirect('/onboarding/organization');
 	}
 
-	const organizationId = Number.parseInt(params.organizationId, 10);
-
-	if (Number.isNaN(organizationId)) {
-		notFound();
-	}
-
-	const organization = await getSessionUserOrganization(organizationId);
-
-	if (!organization) {
-		notFound();
-	}
-
 	return (
 		<div className='flex-1'>
 			<div className='flex gap-8 max-w-7xl mx-auto w-full relative items-start'>
@@ -51,16 +36,16 @@ export default async function MyLayout(props: MyLayoutProps) {
 					<p className='text-stone-300 font-bold text-sm mb-2 ps-2'>
 						Menu
 					</p>
-					<MySectionLink icon={<Home/>} root={`/my/${organizationId}`}>Inicio</MySectionLink>
-					<MySectionLink icon={<Person/>} root={`/my/${organizationId}`} slug='account'>Mi cuenta</MySectionLink>
+					<MySectionLink icon={<Home/>} root='/my'>Inicio</MySectionLink>
+					<MySectionLink icon={<Person/>} root='/my' slug='account'>Mi cuenta</MySectionLink>
 					<p className='text-stone-300 font-bold text-sm mt-4 mb-2 ps-2'>
 						Mi organización
 					</p>
-					<MySectionLink icon={<Feed/>} root={`/my/${organizationId}`} slug='general'>Información general</MySectionLink>
-					<MySectionLink icon={<Psychology/>} root={`/my/${organizationId}`} slug='purpose'>Propósito</MySectionLink>
-					<MySectionLink icon={<Policy/>} root={`/my/${organizationId}`} slug='legal'>Datos legales</MySectionLink>
-					<MySectionLink icon={<LocationOn/>} root={`/my/${organizationId}`} slug='location'>Ubicación</MySectionLink>
-					<MySectionLink icon={<Map/>} root={`/my/${organizationId}`} slug='sectors'>Alcance geografico</MySectionLink>
+					<MySectionLink icon={<Feed/>} root='/my' slug='general'>Información general</MySectionLink>
+					<MySectionLink icon={<Psychology/>} root='/my' slug='purpose'>Propósito</MySectionLink>
+					<MySectionLink icon={<Policy/>} root='/my' slug='legal'>Datos legales</MySectionLink>
+					<MySectionLink icon={<LocationOn/>} root='/my' slug='location'>Ubicación</MySectionLink>
+					<MySectionLink icon={<Map/>} root='/my' slug='sectors'>Alcance geografico</MySectionLink>
 				</div>
 				<div className='grow w-0'>
 					<div className='flex gap-4 pb-4 overflow-x-auto scrollbar-thin scrollbar-thumb-rounded scrollbar-thumb-stone-400 scrollbar-track-transparent'>

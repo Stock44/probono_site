@@ -3,8 +3,15 @@
 import React from 'react';
 import {type Organization} from '@prisma/client';
 import {Item} from 'react-stately';
-import {useRouter, useSelectedLayoutSegment, useSelectedLayoutSegments} from 'next/navigation';
+import {
+	notFound, usePathname,
+	useRouter,
+	useSearchParams,
+	useSelectedLayoutSegment,
+	useSelectedLayoutSegments,
+} from 'next/navigation';
 import Image from 'next/image';
+import invariant from 'ts-tiny-invariant';
 import Select from '@/components/select.tsx';
 
 export type OrganizationSelectProps = {
@@ -14,20 +21,33 @@ export type OrganizationSelectProps = {
 export default function OrganizationSelect(props: OrganizationSelectProps) {
 	const {organizations} = props;
 
-	const selectedOrganization = useSelectedLayoutSegments();
+	invariant(organizations.length > 0);
+
+	const searchParameters = useSearchParams();
+	let selectedOrganizationId = searchParameters.get('organization') ?? organizations[0].id;
+	if (typeof selectedOrganizationId === 'string') {
+		selectedOrganizationId = Number.parseInt(selectedOrganizationId, 10);
+	}
+
+	if (Number.isNaN(selectedOrganizationId)) {
+		notFound();
+	}
+
 	const router = useRouter();
+	const pathname = usePathname();
 
 	return (
 		<Select
 			aria-label='Selecciona la organización a ver.'
+			items={organizations}
 			popoverPlacement='bottom end'
 			placeholder='Selecciona una organización'
-			selectedKey={selectedOrganization[1]} onSelectionChange={id => {
-				router.push(id.toString());
+			selectedKey={selectedOrganizationId} onSelectionChange={id => {
+				router.push(`${pathname}?organization=${id}`);
 			}}>
 			{
-				organizations.map(organization => (
-					<Item key={organization.id} textValue={organization.name}>
+				organization => (
+					<Item textValue={organization.name}>
 						{
 							organization.logoUrl
 								? (
@@ -39,7 +59,7 @@ export default function OrganizationSelect(props: OrganizationSelectProps) {
 						}
 						{organization.name}
 					</Item>
-				))
+				)
 			}
 		</Select>
 	);
