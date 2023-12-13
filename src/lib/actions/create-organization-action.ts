@@ -1,3 +1,4 @@
+'use server';
 import {getSession} from '@auth0/nextjs-auth0';
 import {redirect} from 'next/navigation';
 import type {FormState} from '@/components/form.tsx';
