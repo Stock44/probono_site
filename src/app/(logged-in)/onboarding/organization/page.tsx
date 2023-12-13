@@ -1,32 +1,25 @@
 import React from 'react';
 import {redirect} from 'next/navigation';
+import {getSession} from '@auth0/nextjs-auth0';
 import OrganizationForm from '@/app/(logged-in)/onboarding/organization/organization-form.tsx';
-import {type OrganizationInit, organizationInitSchema} from '@/lib/schemas/organization.ts';
-import {type FormState} from '@/components/form.tsx';
-import {handleActionError} from '@/lib/handle-action-error.ts';
-import {decodeForm} from '@/lib/form-utils.ts';
-import {createOrganization} from '@/lib/models/organization.ts';
-import {getUserFromSession} from '@/lib/models/user.ts';
 import AnimatedLayoutContainer from '@/components/animated-layout-container.tsx';
+import prisma from '@/lib/prisma.ts';
+import createOrganizationAction from '@/lib/actions/create-organization-action.ts';
 
 export default async function OrganizationOnboardingPage() {
-	const user = await getUserFromSession();
+	const session = (await getSession())!;
+
+	const user = await prisma.user.findUnique({
+		where: {
+			authId: session.user.sub as string,
+		},
+	});
 
 	if (!user) {
 		redirect('/onboarding/user');
 	}
 
-	const action = async (state: FormState<OrganizationInit>, data: FormData) => {
-		'use server';
-		try {
-			const parsedData = await decodeForm(data, organizationInitSchema);
-			await createOrganization(user.id, parsedData);
-		} catch (error) {
-			return handleActionError(state, error);
-		}
-
-		redirect('/my');
-	};
+	const action = createOrganizationAction.bind(null, user.id);
 
 	return (
 		<AnimatedLayoutContainer>

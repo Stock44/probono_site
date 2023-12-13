@@ -143,14 +143,6 @@ export async function updateUser(id: number, update: UserUpdate) {
 			});
 		}
 
-		if (update.password) {
-			await management.users.update({
-				id: authId,
-			}, {
-				password: update.password,
-			});
-		}
-
 		await tx.user.update({
 			where: {
 				id,

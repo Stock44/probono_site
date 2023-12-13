@@ -11,7 +11,6 @@ export const userInitSchema = z.object({
 
 export const userUpdateSchema = userInitSchema.extend({
 	email: z.string().email(),
-	password: z.string(),
 }).partial();
 
 export type UserInit = z.infer<typeof userInitSchema>;

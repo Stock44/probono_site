@@ -1,14 +1,14 @@
 'use server';
 import {getSession} from '@auth0/nextjs-auth0';
-import {redirect} from 'next/navigation';
+import {revalidatePath} from 'next/cache';
 import type {FormState} from '@/components/form.tsx';
-import {type UserInit, userInitSchema, type UserUpdate, userUpdateSchema} from '@/lib/schemas/user.ts';
+import {type UserUpdate, userUpdateSchema} from '@/lib/schemas/user.ts';
 import prisma from '@/lib/prisma.ts';
 import {decodeForm} from '@/lib/form-utils.ts';
-import {createUser, updateUser} from '@/lib/models/user.ts';
+import {updateUser} from '@/lib/models/user.ts';
 import {handleActionError} from '@/lib/handle-action-error.ts';
 
-export default async function upsertUserAction(state: FormState<UserInit | UserUpdate>, data: FormData): Promise<FormState<UserInit | UserUpdate>> {
+export default async function updateUserAction(state: FormState< UserUpdate>, data: FormData): Promise<FormState<UserUpdate>> {
 	const session = await getSession();
 	if (!session) {
 		return {
@@ -36,12 +36,21 @@ export default async function upsertUserAction(state: FormState<UserInit | UserU
 			const parsedData = await decodeForm(data, userUpdateSchema);
 			await updateUser(user.id, parsedData);
 		} else {
-			const parsedData = await decodeForm(data, userInitSchema);
-			await createUser(session.user.sub as string, parsedData);
+			return {
+				...state,
+				success: false,
+				formErrors: ['No existing user found.'],
+			};
 		}
 	} catch (error) {
 		return handleActionError(state, error);
 	}
 
-	redirect('/onboarding/organization');
+	revalidatePath('/my/account');
+	return {
+		...state,
+		success: true,
+		formErrors: [],
+		fieldErrors: {},
+	};
 }
