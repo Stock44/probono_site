@@ -10,7 +10,7 @@ import {Item, type Key} from 'react-stately';
 import {List, Set} from 'immutable';
 import Save from '@material-design-icons/svg/round/save.svg';
 import Done from '@material-design-icons/svg/round/done.svg';
-import OdsSelector from '@/components/ods-selector.tsx';
+import OdsSelector from '@/app/(logged-in)/my/purpose/ods-selector.tsx';
 import Select from '@/components/select.tsx';
 import ComboBoxTagMultiSelect from '@/components/combo-box-tag-multi-select.tsx';
 import AgeGenderGroupSelector from '@/app/(logged-in)/my/purpose/age-gender-group-selector.tsx';

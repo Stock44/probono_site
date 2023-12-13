@@ -6,7 +6,7 @@ import {NumberField} from '@/components/number-field.tsx';
 import LabeledCheckbox from '@/components/labeled-checkbox.tsx';
 import Collapsible from '@/components/collapsible.tsx';
 import Separator from '@/components/separator.tsx';
-import ODSSelector from '@/components/ods-selector.tsx';
+import ODSSelector from '@/app/(logged-in)/my/purpose/ods-selector.tsx';
 import {Select} from '@/components/select.tsx';
 import Button from '@/components/button.tsx';
 

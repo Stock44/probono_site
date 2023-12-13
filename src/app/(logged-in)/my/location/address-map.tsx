@@ -1,7 +1,7 @@
 import React, {type ForwardedRef, useMemo} from 'react';
 import {type Map, Icon} from 'leaflet';
-import {CircleMarker, MapContainer, Marker, Popup, TileLayer, useMapEvents} from 'react-leaflet';
-import Location from '@/images/location.png';
+import {MapContainer, Marker, TileLayer, useMapEvents} from 'react-leaflet';
+import Location from 'public/location.png';
 
 type AddressMapProps = {
 	readonly selectedCoords: [number, number] | null;

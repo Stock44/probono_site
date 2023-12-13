@@ -1,11 +1,11 @@
 import React, {type ReactNode} from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import GeoStatsLogo from '@/images/logos/geostats.png';
-import GeoStatsLogoMark from '@/images/logos/geostats-logomark.png';
-import FacebookLogo from '@/images/logos/facebook.png';
-import InstagramLogo from '@/images/logos/instagram.png';
-import LinkedinLogo from '@/images/logos/linkedin.png';
+import GeoStatsLogo from 'public/logos/geostats.png';
+import GeoStatsLogoMark from 'public/logos/geostats-logomark.png';
+import FacebookLogo from 'public/logos/facebook.png';
+import InstagramLogo from 'public/logos/instagram.png';
+import LinkedinLogo from 'public/logos/linkedin.png';
 import SocialLink from '@/components/social-link.tsx';
 
 export type TopBarFooterLayoutProps = {

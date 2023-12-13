@@ -11,23 +11,23 @@ import {
 	useRadioGroup,
 	VisuallyHidden,
 } from 'react-aria';
-import ods1Logo from '@/images/ods-icons/1.png';
-import ods2Logo from '@/images/ods-icons/2.png';
-import ods3Logo from '@/images/ods-icons/3.png';
-import ods4Logo from '@/images/ods-icons/4.png';
-import ods5Logo from '@/images/ods-icons/5.png';
-import ods6Logo from '@/images/ods-icons/6.png';
-import ods7Logo from '@/images/ods-icons/7.png';
-import ods8Logo from '@/images/ods-icons/8.png';
-import ods9Logo from '@/images/ods-icons/9.png';
-import ods10Logo from '@/images/ods-icons/10.png';
-import ods11Logo from '@/images/ods-icons/11.png';
-import ods12Logo from '@/images/ods-icons/12.png';
-import ods13Logo from '@/images/ods-icons/13.png';
-import ods14Logo from '@/images/ods-icons/14.png';
-import ods15Logo from '@/images/ods-icons/15.png';
-import ods16Logo from '@/images/ods-icons/16.png';
-import ods17Logo from '@/images/ods-icons/17.png';
+import ods13Logo from 'public/ods-icons/13.png';
+import ods14Logo from 'public/ods-icons/14.png';
+import ods15Logo from 'public/ods-icons/15.png';
+import ods16Logo from 'public/ods-icons/16.png';
+import ods17Logo from 'public/ods-icons/17.png';
+import ods1Logo from 'public/ods-icons/1.png';
+import ods2Logo from 'public/ods-icons/2.png';
+import ods3Logo from 'public/ods-icons/3.png';
+import ods4Logo from 'public/ods-icons/4.png';
+import ods5Logo from 'public/ods-icons/5.png';
+import ods6Logo from 'public/ods-icons/6.png';
+import ods7Logo from 'public/ods-icons/7.png';
+import ods8Logo from 'public/ods-icons/8.png';
+import ods9Logo from 'public/ods-icons/9.png';
+import ods10Logo from 'public/ods-icons/10.png';
+import ods11Logo from 'public/ods-icons/11.png';
+import ods12Logo from 'public/ods-icons/12.png';
 import {cx} from '@/lib/cva.ts';
 
 type Ods = [number, string, StaticImageData];
