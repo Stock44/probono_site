@@ -1,0 +1,277 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["postgresqlExtensions"]
+}
+
+datasource db {
+  provider   = "postgresql"
+  url        = env("POSTGRES_URL") // uses connection pooling
+  extensions = [postgis()]
+  directUrl  = env("POSTGRES_URL_NON_POOLING") // uses a direct connection
+}
+
+model ActivityCategory {
+  id         Int        @id @default(autoincrement())
+  name       String
+  activities Activity[]
+}
+
+model Activity {
+  id            Int                      @id @default(autoincrement())
+  name          String
+  category      ActivityCategory         @relation(fields: [categoryId], references: [id])
+  categoryId    Int
+  organizations OrganizationToActivity[]
+}
+
+model OrganizationToActivity {
+  organization   Organization @relation(fields: [organizationId], references: [id])
+  organizationId Int
+
+  activity   Activity @relation(fields: [activityId], references: [id])
+  activityId Int
+
+  priority Int @unique
+
+  @@id([organizationId, activityId])
+}
+
+model State {
+  id              Int            @id @default(autoincrement())
+  name            String
+  abbreviatedName String
+  municipalities  Municipality[]
+}
+
+model Municipality {
+  id   Int    @id @default(autoincrement())
+  name String
+
+  state   State @relation(fields: [stateId], references: [id])
+  stateId Int
+
+  address Address[]
+  Sector  Sector[]
+
+  collaboratingOrganizations Organization[]
+}
+
+model Address {
+  id         Int    @id @default(autoincrement())
+  postalCode String
+  street     String
+  number     Int
+
+  location Unsupported("point")?
+
+  municipality   Municipality @relation(fields: [municipalityId], references: [id])
+  municipalityId Int
+
+  organization Organization?
+}
+
+enum Gender {
+  male
+  female
+  other
+}
+
+model AgeGroup {
+  id     Int  @id @default(autoincrement())
+  minAge Int
+  maxAge Int?
+
+  organizations OrganizationToAgeGroup[]
+}
+
+model OrganizationToAgeGroup {
+  organization   Organization @relation(fields: [organizationId], references: [id])
+  organizationId Int
+
+  ageGroup   AgeGroup @relation(fields: [ageGroupId], references: [id])
+  ageGroupId Int
+
+  gender Gender
+
+  @@id([organizationId, ageGroupId])
+}
+
+model Beneficiary {
+  id            Int            @id @default(autoincrement())
+  name          String
+  organizations Organization[]
+}
+
+model CorporationType {
+  id            Int            @id @default(autoincrement())
+  name          String
+  shortName     String?
+  organizations Organization[]
+}
+
+model EmployeeCountCategory {
+  id            Int            @id @default(autoincrement())
+  minCount      Int
+  maxCount      Int?
+  organizations Organization[]
+}
+
+model GovernmentOrganizationCategory {
+  id                      Int                      @id @default(autoincrement())
+  name                    String
+  governmentOrganizations GovernmentOrganization[]
+}
+
+model GovernmentOrganization {
+  id   Int    @id @default(autoincrement())
+  name String
+
+  category                         GovernmentOrganizationCategory @relation(fields: [governmentOrganizationCategoryId], references: [id])
+  governmentOrganizationCategoryId Int
+
+  collaboratingOrganizations Organization[]
+}
+
+model IncomeCategory {
+  id            Int            @id @default(autoincrement())
+  minIncome     Int
+  maxIncome     Int?
+  organizations Organization[]
+}
+
+model VolunteerCountCategory {
+  id            Int            @id @default(autoincrement())
+  minCount      Int
+  maxCount      Int?
+  organizations Organization[]
+}
+
+model WorkplaceType {
+  Id            Int            @id @default(autoincrement())
+  name          String
+  organizations Organization[]
+}
+
+enum DonationAuthStatus {
+  notAuthorized
+  authorized
+  inProgress
+  inRecovery
+}
+
+enum CluniStatus {
+  no
+  active
+  inactive
+  inProgress
+}
+
+model OrganizationCategory {
+  id           Int            @id @default(autoincrement())
+  name         String
+  Organization Organization[]
+}
+
+model ServiceCategory {
+  id      Int       @id @default(autoincrement())
+  name    String
+  Service Service[]
+}
+
+model Service {
+  id                    Int             @id @default(autoincrement())
+  name                  String
+  category              ServiceCategory @relation(fields: [categoryId], references: [id])
+  categoryId            Int
+  providerOrganizations Organization[]  @relation(name: "providedServices")
+}
+
+model Sector {
+  id   Int                     @id @default(autoincrement())
+  name String
+  geom Unsupported("geometry")
+
+  municipality   Municipality @relation(fields: [municipalityId], references: [id])
+  municipalityId Int
+
+  organizations Organization[]
+}
+
+model Organization {
+  id                     Int      @id @default(autoincrement())
+  name                   String
+  foundingYear           Int
+  phone                  String?
+  email                  String?
+  hasInvestmentAgreement Boolean?
+  logoUrl                String?
+  ods                    Int?
+  webpage                String?
+  facebook               String?
+  instagram              String?
+  twitter                String?
+  tiktok                 String?
+  youtube                String?
+  linkedIn               String?
+
+  isIncorporated     Boolean
+  wantsToIncorporate Boolean?
+
+  legalConcept       String?
+  incorporationYear  Int?
+  rfc                String?
+  donationAuthStatus DonationAuthStatus?
+  cluniStatus        CluniStatus?
+
+  address   Address? @relation(fields: [addressId], references: [id])
+  addressId Int?     @unique
+
+  employeeCountCategory   EmployeeCountCategory? @relation(fields: [employeeCountCategoryId], references: [id])
+  employeeCountCategoryId Int?
+
+  volunteerCountCategory   VolunteerCountCategory? @relation(fields: [volunteerCountCategoryId], references: [id])
+  volunteerCountCategoryId Int?
+
+  workplaceType   WorkplaceType? @relation(fields: [workplaceTypeId], references: [Id])
+  workplaceTypeId Int?
+
+  incomeCategory   IncomeCategory? @relation(fields: [incomeCategoryId], references: [id])
+  incomeCategoryId Int?
+
+  corporationType   CorporationType? @relation(fields: [corporationTypeId], references: [id])
+  corporationTypeId Int?
+
+  category   OrganizationCategory? @relation(fields: [categoryId], references: [id])
+  categoryId Int?
+
+  ageGroups OrganizationToAgeGroup[]
+
+  beneficiaries Beneficiary[]
+
+  collaboratingGovernmentOrganizations GovernmentOrganization[]
+  collaboratingMunicipalities          Municipality[]
+
+  providedServices Service[] @relation(name: "providedServices")
+
+  sectors Sector[]
+
+  activities OrganizationToActivity[]
+  owners     User[]
+}
+
+model User {
+  id     Int    @id @default(autoincrement())
+  authId String @unique
+  email  String @unique
+
+  givenName  String
+  familyName String
+
+  contactEmail String?
+  contactPhone String?
+
+  organizations Organization[]
+}
