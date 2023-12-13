@@ -7,7 +7,6 @@ import {createOrganization} from '@/lib/models/organization.ts';
 import {handleActionError} from '@/lib/handle-action-error.ts';
 
 export default async function createOrganizationAction(userId: number, state: FormState<OrganizationInit>, data: FormData): Promise<FormState<OrganizationInit>> {
-	'use server';
 	const session = await getSession();
 
 	if (!session) {
