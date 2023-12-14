@@ -101,9 +101,12 @@ export const getUserFromSessionWithOrganizations = cache(async () => {
  */
 export async function createUser(authId: string, init: UserInit) {
 	return prisma.$transaction(async tx => {
+		console.log('transaction');
 		const user = await management.users.get({
 			id: authId,
 		});
+
+		console.log(user);
 
 		return tx.user.create({
 			data: {
