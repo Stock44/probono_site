@@ -1,5 +1,5 @@
 import {type NextRequest, NextResponse} from 'next/server';
-import getMunicipalitiesByState from '@/lib/get-municipalities-by-state.ts';
+import {getMunicipalitiesByState} from '@/lib/models/municipality';
 
 // eslint-disable-next-line @typescript-eslint/naming-convention
 export const GET = async (request: NextRequest, {params}: {

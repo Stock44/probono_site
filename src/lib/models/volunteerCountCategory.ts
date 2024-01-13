@@ -1,7 +1,7 @@
 import {cache} from 'react';
 import prisma from '@/lib/prisma.ts';
 
-export default cache(async () => prisma.employeeCountCategory.findMany({
+export const getAllVolunteerCountCategories = cache(async () => prisma.volunteerCountCategory.findMany({
 	orderBy: {
 		minCount: 'asc',
 	},

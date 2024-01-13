@@ -2,8 +2,8 @@ import React from 'react';
 import {getSession} from '@auth0/nextjs-auth0';
 import {notFound} from 'next/navigation';
 import GeneralInfoForm from '@/app/(logged-in)/my/general/general-info-form.tsx';
-import getAllVolunteerCountCategories from '@/lib/get-all-volunteer-count-categories.ts';
-import getAllEmployeeCountCategories from '@/lib/get-all-employee-count-categories.ts';
+import {getAllVolunteerCountCategories} from '@/lib/models/volunteerCountCategory';
+import {getAllEmployeeCountCategories} from '@/lib/models/employeeCountCategory';
 import updateOrganizationAction from '@/lib/actions/update-organization-action.ts';
 import prisma from '@/lib/prisma.ts';
 

@@ -1,7 +1,7 @@
 import {cache} from 'react';
 import prisma from '@/lib/prisma.ts';
 
-export default cache(async (stateId: number) => prisma.municipality.findMany({
+export const getMunicipalitiesByState = cache(async (stateId: number) => prisma.municipality.findMany({
 	orderBy: {
 		name: 'asc',
 	},

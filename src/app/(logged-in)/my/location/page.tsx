@@ -2,7 +2,7 @@ import React from 'react';
 import {notFound} from 'next/navigation';
 import {getSession} from '@auth0/nextjs-auth0';
 import AddressInfoForm from '@/app/(logged-in)/my/location/address-info-form.tsx';
-import {getAllStates} from '@/lib/get-all-states.tsx';
+import {getAllStates} from '@/lib/models/state';
 import updateOrganizationAction from '@/lib/actions/update-organization-action.ts';
 import prisma from '@/lib/prisma.ts';
 
