@@ -2,7 +2,7 @@ import React from 'react';
 import {getSession} from '@auth0/nextjs-auth0';
 import {notFound} from 'next/navigation';
 import SectorsForm from '@/app/(logged-in)/my/sectors/sectors-form.tsx';
-import {getAllSectors} from '@/lib/models/sector';
+import {getAllSectors} from '@/lib/models/sector.ts';
 import prisma from '@/lib/prisma.ts';
 import updateOrganizationSectorsAction from '@/lib/actions/update-organization-sectors-action.ts';
 
