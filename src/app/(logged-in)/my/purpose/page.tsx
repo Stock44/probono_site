@@ -2,12 +2,10 @@ import React from 'react';
 import {notFound} from 'next/navigation';
 import {getSession} from '@auth0/nextjs-auth0';
 import PurposeInfoForm from './purpose-info-form.tsx';
-import {getAllOrganizationCategories} from '@/lib/get-all-organization-categories.ts';
-import {
-	getAllActivities,
-} from '@/lib/get-all-activities.ts';
-import {getAllBeneficiaries} from '@/lib/get-all-beneficiaries.ts';
-import {getAllAgeGroups} from '@/lib/get-all-age-groups.ts';
+import {getAllOrganizationCategories} from '@/lib/models/organization-category.ts';
+import {getAllActivities} from '@/lib/models/activity.ts';
+import {getAllBeneficiaries} from '@/lib/models/beneficiary.ts';
+import {getAllAgeGroups} from '@/lib/models/age-group.ts';
 import prisma from '@/lib/prisma.ts';
 import updateOrganizationAction from '@/lib/actions/update-organization-action.ts';
 
