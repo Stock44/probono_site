@@ -1,6 +1,5 @@
 'use client';
 import React from 'react';
-import {type EmployeeCountCategory, type Organization, type VolunteerCountCategory} from '@prisma/client';
 import Save from '@material-design-icons/svg/round/save.svg';
 import {Item} from 'react-stately';
 import Image from 'next/image';
@@ -15,6 +14,7 @@ import TikTokLogo from 'public/logos/tiktok.png';
 import LinkedInLogo from 'public/logos/linkedin.png';
 import InstagramLogo from 'public/logos/instagram.png';
 import FacebookLogo from 'public/logos/facebook.png';
+import {type EmployeeCountCategory, type IncomeCategory, type VolunteerCountCategory, type Organization} from '@prisma/client';
 import {NumberField} from '@/components/number-field.tsx';
 import OrganizationImagePicker from '@/app/(logged-in)/my/general/organization-image-picker.tsx';
 import TextField from '@/components/text-field.tsx';
@@ -24,19 +24,20 @@ import {organizationInitSchema, type OrganizationUpdate} from '@/lib/schemas/org
 import {formValidators} from '@/lib/form-utils.ts';
 import SubmitButton from '@/components/submit-button.tsx';
 import Separator from '@/components/separator.tsx';
+import {formatInMxn} from '@/lib/format-mxn.ts';
 
 export type GeneralInfoFormProps = {
 	readonly action: (state: FormState<OrganizationUpdate>, data: FormData) => Promise<FormState<OrganizationUpdate>>;
 	readonly employeeCountCategories: EmployeeCountCategory[];
 	readonly organization: Organization;
 	readonly volunteerCountCategories: VolunteerCountCategory[];
+	readonly incomeCategories: IncomeCategory[];
 };
 
 export default function GeneralInfoForm(props: GeneralInfoFormProps) {
-	const {organization, volunteerCountCategories, employeeCountCategories, action} = props;
+	const {organization, volunteerCountCategories, employeeCountCategories, incomeCategories, action} = props;
 
 	const validate = formValidators(organizationInitSchema);
-
 	return (
 		<Form
 			successToast={{
@@ -75,7 +76,9 @@ export default function GeneralInfoForm(props: GeneralInfoFormProps) {
 					/>
 					<NumberField
 						isRequired
-						icon={<CalendarMonth viewBox='0 0 24 24' className='h-4 w-4 fill-stone-600 group-focus-within:fill-stone-50'/>}
+						icon={<CalendarMonth
+							viewBox='0 0 24 24'
+							className='h-4 w-4 fill-stone-600 group-focus-within:fill-stone-50'/>}
 						label='Año de fundación'
 						formatOptions={{
 							useGrouping: false,
@@ -164,6 +167,31 @@ export default function GeneralInfoForm(props: GeneralInfoFormProps) {
 				</Select>
 			</div>
 
+			<div className='flex gap-x-4 items-end'>
+				<Select
+					label='¿Cuales son los Ingresos anuales de la organización?'
+					name='income'
+					items={incomeCategories}
+					className='flex-1'
+					validate={validate.incomeCategoryId}
+					defaultSelectedKey={organization.incomeCategoryId ?? undefined}
+				>
+					{
+						category => (
+							<Item>
+								{
+									category.maxIncome === null
+										? `Mas de ${formatInMxn(category.minIncome)}`
+										: (formatInMxn(category.minIncome) === formatInMxn(category.maxIncome)
+											? formatInMxn(category.minIncome)
+											: `${formatInMxn(category.minIncome)} a ${formatInMxn(category.maxIncome)}`)
+								}
+							</Item>
+						)
+					}
+				</Select>
+			</div>
+
 			<Separator/>
 
 			<h2 className='text-stone-200 text-lg mb-4'>
@@ -173,7 +201,10 @@ export default function GeneralInfoForm(props: GeneralInfoFormProps) {
 				<TextField
 					label='Facebook'
 					name='facebook'
-					icon={<Image src={FacebookLogo} alt='Facebook logo' height={16} width={16} className='group-focus-within:brightness-100 brightness-50'/>}
+					icon={<Image
+						src={FacebookLogo} alt='Facebook logo' height={16}
+						width={16}
+						className='group-focus-within:brightness-100 brightness-50'/>}
 					type='url'
 					className='grow basis-full sm:basis-5/12 mb-4'
 					validate={validate.facebook}
@@ -182,7 +213,10 @@ export default function GeneralInfoForm(props: GeneralInfoFormProps) {
 				<TextField
 					label='Instagram'
 					name='instagram'
-					icon={<Image src={InstagramLogo} alt='Instagram logo' height={16} width={16} className='group-focus-within:brightness-100 brightness-50'/>}
+					icon={<Image
+						src={InstagramLogo} alt='Instagram logo' height={16}
+						width={16}
+						className='group-focus-within:brightness-100 brightness-50'/>}
 					type='url'
 					className='grow basis-full sm:basis-5/12 mb-4'
 					validate={validate.instagram}
@@ -191,7 +225,10 @@ export default function GeneralInfoForm(props: GeneralInfoFormProps) {
 				<TextField
 					label='X (anteriormente Twitter)'
 					name='twitter'
-					icon={<Image src={XLogo} alt='X logo' height={16} width={16} className='group-focus-within:brightness-100 brightness-50'/>}
+					icon={<Image
+						src={XLogo} alt='X logo' height={16}
+						width={16}
+						className='group-focus-within:brightness-100 brightness-50'/>}
 					type='url'
 					className='grow basis-full sm:basis-5/12 mb-4'
 					validate={validate.twitter}
@@ -200,7 +237,10 @@ export default function GeneralInfoForm(props: GeneralInfoFormProps) {
 				<TextField
 					label='TikTok'
 					name='tiktok'
-					icon={<Image src={TikTokLogo} alt='TikTok logo' height={16} width={16} className='group-focus-within:brightness-100 brightness-50'/>}
+					icon={<Image
+						src={TikTokLogo} alt='TikTok logo' height={16}
+						width={16}
+						className='group-focus-within:brightness-100 brightness-50'/>}
 					type='url'
 					className='grow basis-full sm:basis-5/12 mb-4'
 					validate={validate.tiktok}
@@ -209,7 +249,10 @@ export default function GeneralInfoForm(props: GeneralInfoFormProps) {
 				<TextField
 					label='YouTube'
 					name='youtube'
-					icon={<Image src={YoutubeLogo} alt='Youtube logo' height={16} width={16} className='group-focus-within:brightness-100 brightness-50'/>}
+					icon={<Image
+						src={YoutubeLogo} alt='Youtube logo' height={16}
+						width={16}
+						className='group-focus-within:brightness-100 brightness-50'/>}
 					type='url'
 					className='flex-auto mb-4'
 					validate={validate.youtube}
@@ -218,7 +261,10 @@ export default function GeneralInfoForm(props: GeneralInfoFormProps) {
 				<TextField
 					label='LinkedIn'
 					name='linkedIn'
-					icon={<Image src={LinkedInLogo} alt='LinkedIn logo' height={16} width={16} className='group-focus-within:brightness-100 brightness-50'/>}
+					icon={<Image
+						src={LinkedInLogo} alt='LinkedIn logo' height={16}
+						width={16}
+						className='group-focus-within:brightness-100 brightness-50'/>}
 					type='url'
 					className='flex-auto mb-4'
 					validate={validate.linkedIn}
