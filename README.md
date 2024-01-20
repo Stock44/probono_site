@@ -37,7 +37,7 @@ Para trabajar en este proyecto es esencial que [descarguen git](https://git-scm.
 
 #### Editor
 
-En caso de no tener un IDE para trabajar, nuestra recomendación es [instalar VSCode](https://code.visualstudio.com/download) o instalar [Webstorm](https://www.jetbrains.com/webstorm/). Ambos son editores de código muy versátiles para trabajar con diferentes lenguajes de programación. Tienen extensiones que facilitan ciertos pasos en el proceso de desarrollo.
+En caso de no tener un IDE para trabajar, nuestra recomendación es instalar[VSCode](https://code.visualstudio.com/download) o instalar [Webstorm](https://www.jetbrains.com/webstorm/). Ambos son editores de código muy versátiles para trabajar con diferentes lenguajes de programación. Tienen extensiones que facilitan ciertos pasos en el proceso de desarrollo.
 
 #### Extensiones recomendadas
 
