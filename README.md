@@ -37,7 +37,7 @@ Para trabajar en este proyecto es esencial que [descarguen git](https://git-scm.
 
 #### Editor
 
-En caso de no tener un IDE para trabajar, nuestra recomendación es instalar[VSCode](https://code.visualstudio.com/download) o instalar [Webstorm](https://www.jetbrains.com/webstorm/). Ambos son editores de código muy versátiles para trabajar con diferentes lenguajes de programación. Tienen extensiones que facilitan ciertos pasos en el proceso de desarrollo.
+En caso de no tener un IDE para trabajar, nuestra recomendación es [instalar VSCode](https://code.visualstudio.com/download) o instalar [Webstorm](https://www.jetbrains.com/webstorm/). Ambos son editores de código muy versátiles para trabajar con diferentes lenguajes de programación. Tienen extensiones que facilitan ciertos pasos en el proceso de desarrollo.
 
 #### Extensiones recomendadas
 
@@ -87,6 +87,7 @@ Es por eso que se agrega a un archivo .env que no se puede subir, para obtenerlo
 Si se desean usar credenciales distintas a las de GeoStats, hay un archivo de ejemplo llamado `.env.example`.
 
 ### Setup actividades
+
 Las tareas o puntos para trabajar están en [Plataforma web GeoStats Probono](https://github.com/users/Stock44/projects/5), que se encuentra en la pestaña de proyectos en el repositorio en Github, ahí se pueden seleccionar tareas y asignartelas a tu usuario.
 
 Al seleccionarlas puedes ver una descripción y convertirlas en issue, esto permite agregar comentarios, entre otras cosas, como crear un branch y ligarlo con la tarea, para trabajar con el branch te da instrucciones al crearlo.
