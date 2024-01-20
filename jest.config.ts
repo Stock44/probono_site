@@ -25,9 +25,11 @@ const config: Config = {
 		'/.sql/',
 	],
 	moduleNameMapper: {
+		react: 'next/dist/compiled/react/cjs/react.development.js',
 		// eslint-disable-next-line @typescript-eslint/naming-convention
 		'@/(.*)$': '<rootDir>/src',
 	},
+	setupFilesAfterEnv: ['<rootDir>/src/lib/singleton.ts'],
 };
 
 export default createJestConfig(config);
