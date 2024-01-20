@@ -6,6 +6,7 @@ import {getAllVolunteerCountCategories} from '@/lib/models/volunteer-count-categ
 import {getAllEmployeeCountCategories} from '@/lib/models/employee-count-category.ts';
 import updateOrganizationAction from '@/lib/actions/update-organization-action.ts';
 import prisma from '@/lib/prisma.ts';
+import getAllIncomeCategories from '@/lib/get-all-income-categories.ts';
 
 export type GeneralPageProps = {
 	readonly searchParams: {
@@ -36,10 +37,11 @@ export default async function GeneralPage(props: GeneralPageProps) {
 
 	const volunteerCountCategories = await getAllVolunteerCountCategories();
 	const employeeCountCategories = await getAllEmployeeCountCategories();
+	const incomeCategories = await getAllIncomeCategories();
 
 	const action = updateOrganizationAction.bind(null, organization.id);
 
 	return (
-		<GeneralInfoForm action={action} organization={organization} volunteerCountCategories={volunteerCountCategories} employeeCountCategories={employeeCountCategories}/>
+		<GeneralInfoForm action={action} organization={organization} volunteerCountCategories={volunteerCountCategories} employeeCountCategories={employeeCountCategories} incomeCategories={incomeCategories}/>
 	);
 }
