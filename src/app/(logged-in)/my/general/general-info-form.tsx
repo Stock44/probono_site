@@ -1,12 +1,5 @@
 'use client';
 import React from 'react';
-import {
-	type EmployeeCountCategory,
-	type IncomeCategory,
-	type Organization,
-	Prisma,
-	type VolunteerCountCategory,
-} from '@prisma/client';
 import Save from '@material-design-icons/svg/round/save.svg';
 import {Item} from 'react-stately';
 import Image from 'next/image';
@@ -21,6 +14,7 @@ import TikTokLogo from 'public/logos/tiktok.png';
 import LinkedInLogo from 'public/logos/linkedin.png';
 import InstagramLogo from 'public/logos/instagram.png';
 import FacebookLogo from 'public/logos/facebook.png';
+import {type EmployeeCountCategory, type IncomeCategory, type VolunteerCountCategory, type Organization} from '@prisma/client';
 import {NumberField} from '@/components/number-field.tsx';
 import OrganizationImagePicker from '@/app/(logged-in)/my/general/organization-image-picker.tsx';
 import TextField from '@/components/text-field.tsx';
@@ -30,7 +24,7 @@ import {organizationInitSchema, type OrganizationUpdate} from '@/lib/schemas/org
 import {formValidators} from '@/lib/form-utils.ts';
 import SubmitButton from '@/components/submit-button.tsx';
 import Separator from '@/components/separator.tsx';
-import IncomeCategoryScalarFieldEnum = Prisma.IncomeCategoryScalarFieldEnum;
+import {formatInMxn} from '@/lib/format-mxn.ts';
 
 export type GeneralInfoFormProps = {
 	readonly action: (state: FormState<OrganizationUpdate>, data: FormData) => Promise<FormState<OrganizationUpdate>>;
@@ -39,14 +33,6 @@ export type GeneralInfoFormProps = {
 	readonly volunteerCountCategories: VolunteerCountCategory[];
 	readonly incomeCategories: IncomeCategory[];
 };
-
-function formatInMxn(value: number) {
-	const formatter = Intl.NumberFormat('es-MX', {
-		style: 'currency',
-		currency: 'MXN',
-	});
-	return formatter.format(value);
-}
 
 export default function GeneralInfoForm(props: GeneralInfoFormProps) {
 	const {organization, volunteerCountCategories, employeeCountCategories, incomeCategories, action} = props;

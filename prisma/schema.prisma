@@ -216,7 +216,6 @@ model Organization {
   tiktok                 String?
   youtube                String?
   linkedIn               String?
-  Approve                Boolean?
 
   isIncorporated     Boolean
   wantsToIncorporate Boolean?
