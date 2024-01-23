@@ -2,6 +2,8 @@ import {type CorporationType} from '@prisma/client';
 import {prismaMock} from '@/lib/singleton.ts';
 import {getAllCorporationTypes} from '@/lib/models/corporation-type.ts';
 
+jest.mock('react');
+
 test('getAllCorporationTypes should return corporation types', async () => {
 	const corporationTypes: CorporationType[] = [
 		{
