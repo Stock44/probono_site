@@ -15,6 +15,7 @@ import LinkedInLogo from 'public/logos/linkedin.png';
 import InstagramLogo from 'public/logos/instagram.png';
 import FacebookLogo from 'public/logos/facebook.png';
 import {type EmployeeCountCategory, type IncomeCategory, type VolunteerCountCategory, type Organization} from '@prisma/client';
+import styles from './ResponsiveForm.module.css';
 import {NumberField} from '@/components/number-field.tsx';
 import OrganizationImagePicker from '@/app/(logged-in)/my/general/organization-image-picker.tsx';
 import TextField from '@/components/text-field.tsx';

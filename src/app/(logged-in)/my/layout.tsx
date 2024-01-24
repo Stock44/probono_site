@@ -30,7 +30,7 @@ export default async function MyLayout(props: MyLayoutProps) {
 	}
 
 	return (
-		<div className='flex-1'>
+		<div className='flex flex-wrap'>
 			<div className='flex gap-8 max-w-7xl mx-auto w-full relative items-start'>
 				<div className='flex-none flex flex-col gap-2 sticky top-8'>
 					<p className='text-stone-300 font-bold text-sm mb-2 ps-2'>
