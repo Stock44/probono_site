@@ -3,71 +3,160 @@
  */
 import {fileTypeFromBlob} from 'file-type';
 import {put} from '@vercel/blob';
-import {mocked} from 'jest-mock';
-import {createOrganization} from '@/lib/models/organization.ts';
-import {type OrganizationInit} from '@/lib/schemas/organization.ts';
+import {CluniStatus, DonationAuthStatus} from '@prisma/client';
 import {prismaMock} from '@/lib/singleton.ts';
+import {createOrganization, updateOrganization} from '@/lib/models/organization.ts';
+import {type OrganizationInit, type OrganizationUpdate} from '@/lib/schemas/organization.ts';
 
 jest.mock('file-type');
 jest.mock('@vercel/blob');
 
-const mockedFileTypeFromBlob = mocked(fileTypeFromBlob);
-const mockedPut = mocked(put);
-
-describe('createOrganization function', () => {
-	const validMockOrganizationInit: OrganizationInit = {
-		address: null,
-		logo:
-      new File(['test'], 'filename.png', {type: 'image/png'}),
-		name: 'Test Organization',
-		employeeCountCategoryId: 1,
-		volunteerCountCategoryId: 2,
-		foundingYear: 2023,
-		isIncorporated: false,
-		incomeCategoryId: 3,
-		corporationTypeId: 4,
-		ageGroups: [
-			{ageGroupId: 1, gender: 'female'},
-		],
-		activities: [
-			{activityId: 1, priority: 1},
-		],
-		beneficiaries: [1, 2],
+describe('createOrganization', () => {
+	const logoExample = new File(['logo content'], 'logo.png', {type: 'image/png'});
+	const init: OrganizationInit = {
+		categoryId: 1,
+		cluniStatus: CluniStatus.no,
+		corporationTypeId: 2,
+		donationAuthStatus: DonationAuthStatus.authorized,
+		email: 'email@example.com',
+		employeeCountCategoryId: 3,
+		facebook: 'Facebook Example Page',
+		foundingYear: 2000,
+		hasInvestmentAgreement: true,
+		incomeCategoryId: 4,
+		incorporationYear: 2005,
+		instagram: 'Instagram Handle',
+		isIncorporated: true,
+		legalConcept: 'Legal Concept Example',
+		linkedIn: 'LinkedIn Example Account',
+		logo: logoExample,
+		logoUrl: 'http://example.com/logo.png',
+		ods: 12,
+		phone: '+1234567890',
+		rfc: 'rfc example string',
+		tiktok: 'TikTok Handle',
+		twitter: 'Twitter Handle',
+		volunteerCountCategoryId: 5,
+		wantsToIncorporate: true,
+		webpage: 'http://example.com',
+		youtube: 'YouTube Channel Link',
+		name: 'test org',
 	};
-	const invalidMockOrganizationInit: OrganizationInit = {
-		...validMockOrganizationInit,
-		logo: new File(['test'], 'filename.png', {type: 'image/invalid'}),
-	};
 
-	test('creates an organization with valid logo', async () => {
-		const validOwnerId = 1;
+	test('should return an error if logo image is not in a supported format', async () => {
+		const ownerId = 1;
 
-		const fileTypeResult = {
-			ext: 'png' as const,
-			mime: 'image/png' as const,
-		};
+		// Example File object for the logo
 
-		prismaMock.$transaction.mockResolvedValue({});
-		mockedFileTypeFromBlob.mockResolvedValue(fileTypeResult);
-		mockedPut.mockResolvedValue({
-			contentDisposition: 'sampleDisposition', contentType: 'image/png', pathname: '/directory/filename.png',
-			url: 'https://example.com/directory/filename.png',
-		});
-
-		await expect(createOrganization(validOwnerId, validMockOrganizationInit)).resolves.toStrictEqual({});
+		(fileTypeFromBlob as jest.Mock).mockResolvedValue(undefined);
+		await expect(createOrganization(ownerId, init)).rejects.toThrowError('Logo image is not in a supported image format');
 	});
 
-	test('throws error if the logo is not in a supported format', async () => {
-		const validOwnerId = 1;
+	test('should successfully create organization', async () => {
+		const ownerId = 1;
+		(fileTypeFromBlob as jest.Mock).mockResolvedValue({mime: 'image/jpeg', ext: 'jpg'});
+		(put as jest.Mock).mockResolvedValue({url: 'url_to_logo'});
 
-		const fileTypeResult = {
-			ext: 'gz' as const,
-			mime: 'image/tiff' as const,
+		prismaMock.$transaction.mockResolvedValueOnce({
+			id: 1,
+		});
+
+		await expect(createOrganization(ownerId, init)).resolves.toEqual({id: 1});
+	});
+});
+
+describe('updateOrganization', () => {
+	it('should return an error if logo image is not in a supported format', async () => {
+		const invalidLogo = new File(['logo content'], 'logo.tiff', {type: 'image/tiff'});
+		const organizationId = 1;
+		const update: OrganizationUpdate = {
+			logo: invalidLogo,
+			name: 'test org',
 		};
 
-		prismaMock.$transaction.mockResolvedValue({});
-		mockedFileTypeFromBlob.mockResolvedValue(fileTypeResult);
+		prismaMock.organization.findFirstOrThrow.mockResolvedValue({
+			id: 2,
+			categoryId: 1,
+			approved: false,
+			addressId: null,
+			workplaceTypeId: null,
+			cluniStatus: CluniStatus.no,
+			corporationTypeId: 2,
+			donationAuthStatus: DonationAuthStatus.authorized,
+			email: 'email@example.com',
+			employeeCountCategoryId: 3,
+			facebook: 'Facebook Example Page',
+			foundingYear: 2000,
+			hasInvestmentAgreement: true,
+			incomeCategoryId: 4,
+			incorporationYear: 2005,
+			instagram: 'Instagram Handle',
+			isIncorporated: true,
+			legalConcept: 'Legal Concept Example',
+			linkedIn: 'LinkedIn Example Account',
+			logoUrl: 'http://example.com/logo.png',
+			ods: 12,
+			phone: '+1234567890',
+			rfc: 'rfc example string',
+			tiktok: 'TikTok Handle',
+			twitter: 'Twitter Handle',
+			volunteerCountCategoryId: 5,
+			wantsToIncorporate: true,
+			webpage: 'http://example.com',
+			youtube: 'YouTube Channel Link',
+			name: 'test org',
+		});
 
-		await expect(createOrganization(validOwnerId, invalidMockOrganizationInit)).rejects.toThrow('Logo image is not in a supported image format');
+		(fileTypeFromBlob as jest.Mock).mockResolvedValue(undefined);
+
+		await expect(updateOrganization(organizationId, update)).rejects.toThrowError('Logo image is not in a supported image format');
+	});
+
+	it('should successfully update organization', async () => {
+		const organizationId = 1;
+		const logo = new File(['logo content'], 'logo.png', {type: 'image/png'});
+		const update = {
+			logo,
+			name: 'test org',
+		};
+		(fileTypeFromBlob as jest.Mock).mockResolvedValue({mime: 'image/jpeg', ext: 'jpg'});
+		(put as jest.Mock).mockResolvedValue({url: 'url_to_logo'});
+
+		prismaMock.organization.findFirstOrThrow.mockResolvedValue({
+			id: 2,
+			categoryId: 1,
+			approved: false,
+			addressId: null,
+			workplaceTypeId: null,
+			cluniStatus: CluniStatus.no,
+			corporationTypeId: 2,
+			donationAuthStatus: DonationAuthStatus.authorized,
+			email: 'email@example.com',
+			employeeCountCategoryId: 3,
+			facebook: 'Facebook Example Page',
+			foundingYear: 2000,
+			hasInvestmentAgreement: true,
+			incomeCategoryId: 4,
+			incorporationYear: 2005,
+			instagram: 'Instagram Handle',
+			isIncorporated: true,
+			legalConcept: 'Legal Concept Example',
+			linkedIn: 'LinkedIn Example Account',
+			logoUrl: 'http://example.com/logo.png',
+			ods: 12,
+			phone: '+1234567890',
+			rfc: 'rfc example string',
+			tiktok: 'TikTok Handle',
+			twitter: 'Twitter Handle',
+			volunteerCountCategoryId: 5,
+			wantsToIncorporate: true,
+			webpage: 'http://example.com',
+			youtube: 'YouTube Channel Link',
+			name: 'test org',
+		});
+		(fileTypeFromBlob as jest.Mock).mockResolvedValue({mime: 'image/jpeg', ext: 'jpg'});
+		(put as jest.Mock).mockResolvedValue({url: 'url_to_logo'});
+
+		await expect(updateOrganization(organizationId, update)).resolves.toBe(undefined);
 	});
 });

@@ -26,7 +26,7 @@ const config: Config = {
 	],
 	moduleNameMapper: {
 		// eslint-disable-next-line @typescript-eslint/naming-convention
-		'@/(.*)$': '<rootDir>/src',
+		'@/(.*)$': '<rootDir>/src/$1',
 	},
 	setupFilesAfterEnv: ['<rootDir>/src/lib/singleton.ts'],
 };
