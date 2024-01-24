@@ -26,8 +26,28 @@ const config: Config = {
 	],
 	moduleNameMapper: {
 		// eslint-disable-next-line @typescript-eslint/naming-convention
-		'@/(.*)$': '<rootDir>/src',
+		'@/(.*)$': '<rootDir>/src/$1',
 	},
+	setupFilesAfterEnv: ['<rootDir>/src/lib/singleton.ts'],
 };
 
-export default createJestConfig(config);
+// Overrides transformIgnorePatterns of generated values by next-jest
+// @ts-expect-error unknown type of args
+export default async function configFun(...args) {
+	const fn = createJestConfig(config);
+	// @ts-expect-error unknown type of args
+	// eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+	const result = await fn(...args);
+
+	// @ts-expect-error won't be undefined
+	result.transformIgnorePatterns = result.transformIgnorePatterns.map(pattern => {
+		if (pattern === '/node_modules/') {
+			return '/node_modules(?!/file-type|/token-types|/strtok3|/peek-readable)/';
+		}
+
+		return pattern;
+	});
+
+	return result;
+}
+// Export default createJestConfig(config);
