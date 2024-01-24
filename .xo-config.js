@@ -1,6 +1,6 @@
 module.exports = {
   extends: ["plugin:@next/next/recommended", "xo-react"],
-  ignores: ["./*"],
+  ignores: ["./*", "*__mocks__/*"],
   rules: {
     "react/require-default-props": "off",
     "react/prop-types": "off",
