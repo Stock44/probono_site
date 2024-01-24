@@ -160,3 +160,25 @@ describe('updateOrganization', () => {
 		await expect(updateOrganization(organizationId, update)).resolves.toBe(undefined);
 	});
 });
+//prismamock
+
+// json en variable
+
+// prismamock.org.findunique.calledwith()...
+
+/*expect(prismaMock.organization.findUnique).toHaveBeenCalledWith({
+    where: {
+        id: 2,
+    },
+});
+prismaMock.organization.findUnique.mockResolvedValue({
+    name: 'asdf',
+    id: 2,
+    ods: 15,
+    // 8/16 campos nulos
+});
+
+await expect(miFuncion()).resolves.toEqual(50);
+ktw-phmf-dzv
+
+*/

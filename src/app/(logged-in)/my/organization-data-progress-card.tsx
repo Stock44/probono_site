@@ -1,7 +1,28 @@
-'use client';
+
 import React from 'react';
 import {cx} from '@/lib/cva.ts';
+import  ProgressBar  from '@/components/progress-bar';
+import { countNullAttributes } from '@/lib/models/organization';
+import { Client } from 'pg';
 
+import {
+	getUserFromSessionWithOrganizations,
+} from '@/lib/models/user.ts';
+
+
+
+
+
+/*
+import {
+	notFound, usePathname,
+	useRouter,
+	useSearchParams,
+	useSelectedLayoutSegment,
+	useSelectedLayoutSegments,
+} from 'next/navigation';
+
+*/
 // eslint-disable-next-line complexity
 function getProgressClasses(progress: number) {
 	return cx(
@@ -34,9 +55,19 @@ export type OrganizationDataProgressCardProps = {
 	readonly className?: string;
 };
 
-export function OrganizationDataProgressCard(props: OrganizationDataProgressCardProps) {
+export async function OrganizationDataProgressCard(props: OrganizationDataProgressCardProps) {
 	const {className} = props;
-	const progress = 100;
+	//llamo a mi funcion de query
+	//.......
+	
+	const user = await getUserFromSessionWithOrganizations();
+	
+	const org =user!.organizations[0]
+	
+	console.log("org:",org.id, org.name)
+	
+	const progress = await countNullAttributes(org.id);
+
 	return (
 		<div className={cx('border border-stone-800 p-4 rounded col-span-4 w-96', className)}>
 			<h2 className='text-stone-300  mb-2 font-bold'>
@@ -45,6 +76,11 @@ export function OrganizationDataProgressCard(props: OrganizationDataProgressCard
 			<p className='text-stone-400 text-sm mb-4'>
 				El tener mas información sobre ustedes nos ayuda a ponerlos en el mapa.
 			</p>
+			<p className='text-stone-400 text-sm mb-4' > progreso:</p>
+			
+			<ProgressBar progress={progress}/>
+
+
 
 			{/* <Progress.Root */}
 			{/* 	value={progress} */}
