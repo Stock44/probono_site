@@ -19,12 +19,18 @@ const Popover = forwardRef((props: PopoverProps, ref: ForwardedRef<HTMLDivElemen
 		popoverRef,
 	}, state);
 
+	const combinedOverlayStyle = {
+		...popoverProps.style,
+		overflow: 'visible',
+	};
+
 	return (
 		<Overlay>
 			<div {...underlayProps} className='fixed inset-0'/>
 			<div
 				{...popoverProps}
 				ref={popoverRef}
+				style={combinedOverlayStyle}
 				className='bg-stone-900 border border-stone-500 p-1 rounded overflow-y-scroll scroll-smooth scrollbar-thumb-rounded scrollbar-track-transparent scrollbar-thin scrollbar-thumb-stone-50'
 			>
 				<svg
