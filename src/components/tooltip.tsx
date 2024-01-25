@@ -2,7 +2,7 @@ import React from 'react';
 import {mergeProps, useTooltip, type AriaTooltipProps} from 'react-aria';
 import type {TooltipTriggerState} from 'react-stately';
 
-type TooltipProps = {
+export type TooltipProps = {
 	readonly ariaTooltipProps: AriaTooltipProps;
 	readonly children: React.ReactNode;
 	readonly state?: TooltipTriggerState;
@@ -18,7 +18,6 @@ function Tooltip(props: TooltipProps) {
 				position: 'absolute',
 				left: '5px',
 				top: '100%',
-				maxWidth: 150,
 				marginTop: '10px',
 				backgroundColor: 'white',
 				color: 'black',
@@ -26,6 +25,7 @@ function Tooltip(props: TooltipProps) {
 				border: '1px solid gray',
 			}}
 			{...mergeProps(ariaTooltipProps, tooltipProps)}
+			className='bg-stone-900 border border-stone-500 p-1 rounded overflow-y-scroll scroll-smooth scrollbar-thumb-rounded scrollbar-track-transparent scrollbar-thin scrollbar-thumb-stone-50'
 		>
 			{children}
 		</span>
