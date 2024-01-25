@@ -1,10 +1,10 @@
 import Question from '@material-design-icons/svg/outlined/question_mark.svg';
 import React from 'react';
-import Button from './button';
-import Tooltip, { TooltipProps } from './tooltip';
+import Button from './button.tsx';
+import Tooltip, {type TooltipProps} from './tooltip.tsx';
 
 type HelpTooltipProps = {
-    readonly onClick?: React.MouseEventHandler<HTMLButtonElement>;
+	readonly onClick?: React.MouseEventHandler<HTMLButtonElement>;
 } & TooltipProps;
 
 function HelpTooltip(props: HelpTooltipProps) {
@@ -16,11 +16,8 @@ function HelpTooltip(props: HelpTooltipProps) {
 				<Question className='mt-1' width='148'/>
 				<div>
 					{children}
-                    {onClick && 
-                        <div className='flex justify-end mr-1 mt-2'>
-                            <Button variant='secondary'>Ayuda</Button>
-                        </div>
-                    }
+					{onClick
+                        && <div className='flex justify-end mr-1 mt-2'> <Button variant='secondary'>Ayuda</Button> </div>}
 				</div>
 			</div>
 		</Tooltip>
