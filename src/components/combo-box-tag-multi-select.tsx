@@ -38,7 +38,7 @@ export default function ComboBoxTagMultiSelect<T extends Record<string, unknown>
 	const filteredItems = useMemo(() => Seq(filteredKeys).map(key => collection.getItem(key)!.value!).toList(), [collection, filteredKeys]);
 
 	return (
-		<div className={cx('group', className)}>
+		<div className={cx('group w-fit', className)}>
 			{
 				label === undefined ? null : <p className='text-stone-300 text-sm group-focus-within:text-stone-50' id={id}>
 					{label}
@@ -61,6 +61,7 @@ export default function ComboBoxTagMultiSelect<T extends Record<string, unknown>
 				aria-labelledby={id}
 				placeholder={searchPlaceholder}
 				items={filteredItems} inputValue={filterText}
+				className='w-full'
 				onInputChange={setFilterText}
 				onSelectionChange={(key: Key) => {
 					if (key === null) {

@@ -37,7 +37,7 @@ export const BaseListBox = forwardRef(<T extends Record<string, unknown>>(props:
 
 			<ul
 				{...listBoxProps} ref={listBoxRef}
-				className={twMerge('rounded overflow-y-auto scroll-smooth scrollbar-track-transparent scrollbar-thumb-stone-50 scrollbar-thin scrollbar-thumb-rounded', className)}>
+				className={twMerge('rounded p-2 overflow-y-auto scroll-smooth scrollbar-track-transparent scrollbar-thumb-stone-50 scrollbar-thin scrollbar-thumb-rounded', className)}>
 				{[...state.collection].map(item => (
 					item.type === 'section'
 						? <ListBoxSection key={item.key} section={item} state={state}/>

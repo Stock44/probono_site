@@ -1,4 +1,4 @@
-import React, {type ForwardedRef, forwardRef, type RefObject} from 'react';
+import React, {type ForwardedRef, forwardRef} from 'react';
 import {type AriaPopoverProps, DismissButton, Overlay, usePopover} from 'react-aria';
 import type {OverlayTriggerState} from 'react-stately';
 import {useObjectRef} from '@react-aria/utils';
@@ -19,10 +19,11 @@ const Popover = forwardRef((props: PopoverProps, ref: ForwardedRef<HTMLDivElemen
 		popoverRef,
 	}, state);
 
-	const combinedOverlayStyle = {
-		...popoverProps.style,
-		overflow: 'visible',
-	};
+	// Const combinedOverlayStyle = {
+	// 	...popoverProps.style,
+	// 	overflow: 'visible',
+	// };
+	// style={combinedOverlayStyle}
 
 	return (
 		<Overlay>
@@ -30,15 +31,15 @@ const Popover = forwardRef((props: PopoverProps, ref: ForwardedRef<HTMLDivElemen
 			<div
 				{...popoverProps}
 				ref={popoverRef}
-				style={combinedOverlayStyle}
-				className='bg-stone-900 border border-stone-500 p-1 rounded overflow-y-scroll scroll-smooth scrollbar-thumb-rounded scrollbar-track-transparent scrollbar-thin scrollbar-thumb-stone-50'
+				className='bg-stone-900 border border-stone-500 rounded scroll-smooth scrollbar-thumb-rounded scrollbar-track-transparent scrollbar-thin scrollbar-thumb-stone-50'
 			>
 				<svg
 					{...arrowProps}
-					className='fill-stone-500 h-4 w-4 absolute data-[placement=top]:top-full data-[placement=top]:-translate-x-1/2
+					className='fill-stone-900 stroke-stone-500 stroke-[0.5px] h-4 w-4 absolute
+					 data-[placement=top]:top-full
 					 data-[placement=bottom]:bottom-full data-[placement=bottom]:-translate-x-1/2 data-[placement=bottom]:rotate-180
-					 data-[placement=left]:left-full data-[placement=left]:-translate-y-1/2 data-[placement=left]:-rotate-90
-					 data-[placement=right]:right-full data-[placement=right]:-translate-y-1/2 data-[placement=right]:rotate-90'
+					 data-[placement=left]:left-full data-[placement=left]:-rotate-90
+					 data-[placement=right]:right-full data-[placement=right]:rotate-90'
 					data-placement={placement}
 					viewBox='0 0 12 12'
 				>

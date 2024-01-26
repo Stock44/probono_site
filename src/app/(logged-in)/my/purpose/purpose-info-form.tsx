@@ -141,7 +141,7 @@ export default function PersonInfoForm(props: PurposeInfoFormProps) {
 			<Select
 				label='¿Cómo categorizarias a tu organización?' name='categoryId'
 				validate={validate.categoryId} items={organizationCategories}
-				className='w-full mb-4' defaultSelectedKey={organization.categoryId ?? undefined}
+				className='mb-4' defaultSelectedKey={organization.categoryId ?? undefined}
 			>
 				{
 					category => (
