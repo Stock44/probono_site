@@ -46,11 +46,11 @@ export function BaseComboBox<T extends Record<string, unknown>>(props: BaseCombo
 	}, state);
 
 	return (
-		<div className={cx('group', className)}>
+		<div className={cx('group w-fit', className)}>
 			<label
 				{...labelProps} className='text-stone-300 text-sm mb-1 group-focus-within:text-stone-50'>{props.label}</label>
 			<div
-				className='flex items-center text-stone-300 border border-stone-700 rounded bg-stone-950 group-focus-within:border-stone-50 '>
+				className='flex text-stone-300 border border-stone-700 rounded bg-stone-950 group-focus-within:border-stone-50 w-full'>
 				{icon}
 				<input
 					{...inputProps}
@@ -62,12 +62,11 @@ export function BaseComboBox<T extends Record<string, unknown>>(props: BaseCombo
 					ref={buttonObjectRef}
 					variant='text'
 				>
-					<ArrowDropDown/>
+					<ArrowDropDown aria-hidden='true' className='fill-current'/>
 				</Button>
 				{state.isOpen
 					? <Popover
 						ref={popoverObjectRef}
-						isNonModal
 						state={state}
 						triggerRef={inputObjectRef}
 						placement='bottom start'
@@ -77,7 +76,7 @@ export function BaseComboBox<T extends Record<string, unknown>>(props: BaseCombo
 							{...listBoxProps}
 							ref={listBoxObjectRef}
 							state={state}
-							className='h-full'
+							className='max-h-96'
 						/>
 					</Popover>
 					: null}

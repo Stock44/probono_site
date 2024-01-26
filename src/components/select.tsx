@@ -1,4 +1,4 @@
-import React, {type ForwardedRef, forwardRef, type ReactNode, useRef} from 'react';
+import React, {type ForwardedRef, forwardRef, type ReactNode} from 'react';
 import {useSelectState, type SelectStateOptions} from 'react-stately';
 import {useObjectRef} from '@react-aria/utils';
 import {useSelect, type AriaSelectProps, HiddenSelect, type Placement} from 'react-aria';
@@ -14,7 +14,7 @@ export type SelectProps<T extends Record<string, unknown>> = {
 	readonly popoverPlacement?: Placement;
 } & AriaSelectProps<T> & SelectStateOptions<T>;
 
-export default forwardRef(<T extends Record<string, unknown>>(props: SelectProps<T>, ref: ForwardedRef<HTMLButtonElement>) => {
+const Select = forwardRef(<T extends Record<string, unknown>>(props: SelectProps<T>, ref: ForwardedRef<HTMLButtonElement>) => {
 	const {
 		className,
 		label,
@@ -31,7 +31,6 @@ export default forwardRef(<T extends Record<string, unknown>>(props: SelectProps
 	const {selectedItem, isFocused, isOpen} = state;
 
 	const triggerRef = useObjectRef(ref);
-	const popoverRef = useRef<HTMLDivElement>(null);
 
 	const {
 		labelProps,
@@ -47,7 +46,7 @@ export default forwardRef(<T extends Record<string, unknown>>(props: SelectProps
 	}, state, triggerRef);
 
 	return (
-		<div className={className}>
+		<div className={cx('w-fit', className)}>
 			{
 				label && (
 					<div
@@ -63,19 +62,21 @@ export default forwardRef(<T extends Record<string, unknown>>(props: SelectProps
 			<HiddenSelect isDisabled={isDisabled} state={state} triggerRef={triggerRef} label={label} name={name}/>
 			<Button
 				{...triggerProps} ref={triggerRef} variant='outlined'
-				isDisabled={isDisabled}
-				className='w-full justify-between'>
-				{
-					selectedItem
-						? selectedItem.rendered
-						: (placeholder ?? 'Selecciona una opción')
-				}
+				isDisabled={isDisabled} className='w-full flex'
+			>
+				<span {...valueProps} className='grow text-left'>
+					{
+						selectedItem
+							? selectedItem.rendered
+							: (placeholder ?? 'Selecciona una opción')
+					}
+				</span>
 				<ArrowDropDown aria-hidden='true' className='fill-current'/>
 			</Button>
 			{
-				isOpen && <Popover ref={popoverRef} state={state} triggerRef={triggerRef} placement={popoverPlacement}>
+				isOpen && <Popover state={state} triggerRef={triggerRef} placement={popoverPlacement}>
 					{/** @ts-expect-error children not necessary **/}
-					<ListBox {...menuProps} state={state}/>
+					<ListBox {...menuProps} state={state} className='max-h-96'/>
 				</Popover>
 			}
 			{
@@ -86,3 +87,5 @@ export default forwardRef(<T extends Record<string, unknown>>(props: SelectProps
 		</div>
 	);
 });
+
+export default Select;
