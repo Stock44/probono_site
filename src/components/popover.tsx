@@ -1,4 +1,4 @@
-import React, {type ForwardedRef, forwardRef, type RefObject} from 'react';
+import React, {type ForwardedRef, forwardRef} from 'react';
 import {type AriaPopoverProps, DismissButton, Overlay, usePopover} from 'react-aria';
 import type {OverlayTriggerState} from 'react-stately';
 import {useObjectRef} from '@react-aria/utils';

@@ -1,4 +1,4 @@
-import React, {type ReactElement, type ReactNode} from 'react';
+import React, {type ReactElement} from 'react';
 import {type OverlayTriggerProps, useOverlayTriggerState} from 'react-stately';
 import {useOverlayTrigger} from 'react-aria';
 import Modal, {type ModalProps} from '@/components/modal.tsx';

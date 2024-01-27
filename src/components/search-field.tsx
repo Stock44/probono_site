@@ -1,7 +1,6 @@
 import React, {useRef} from 'react';
 import {type AriaSearchFieldProps, useSearchField} from 'react-aria';
 import {type SearchFieldProps as SearchFieldStateProps, useSearchFieldState} from 'react-stately';
-import {useObjectRef} from '@react-aria/utils';
 import Search from '@material-design-icons/svg/round/search.svg';
 import Close from '@material-design-icons/svg/round/close.svg';
 import Button from '@/components/button.tsx';
