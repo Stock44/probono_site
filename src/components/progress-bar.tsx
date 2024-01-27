@@ -5,7 +5,7 @@ interface ProgressBarProps {
 }
 
 const ProgressBar: React.FC<ProgressBarProps> = ({ progress }) => {
-  // Ensure progress is within [0, 100] range
+
   const clampedProgress = Math.max(0, Math.min(100, progress));
 
   return (
