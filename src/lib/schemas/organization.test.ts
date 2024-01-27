@@ -1,5 +1,4 @@
 import {CluniStatus, DonationAuthStatus, Gender} from '@prisma/client';
-import {SafeParseError, ZodError} from 'zod';
 import {organizationInitSchema, organizationUpdateSchema} from '@/lib/schemas/organization.ts';
 
 describe('organization init schema', () => {
