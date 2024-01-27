@@ -212,7 +212,6 @@ export async function updateOrganization(organizationId: number, update: Organiz
   
 export async function countNullAttributes(organizationId:number): Promise<number> {
 
-	//dado un id, dame la organización actual y sus datos
 	const organization = await prisma.organization.findUnique({
 		where: {
 		  id: organizationId,
@@ -232,15 +231,12 @@ export async function countNullAttributes(organizationId:number): Promise<number
 		  providedServices: true,
 		  sectors: true,
 		  activities: true,
-		  owners: true,
+		  owners: true,		  
 		},
 	  });
-
-	  
 	  console.log("ORGANIZATION DATA:",organization);
 	  var null_c=0;
 	  var total_c=0;
-	  //Las categorias que pueden ser nulas o arreglos vacios
 	  const keysArray = [
 		'id',
 		'name',
@@ -288,24 +284,19 @@ export async function countNullAttributes(organizationId:number): Promise<number
 	  ];
 
 	  if (organization !== null && typeof organization === 'object') {
-		//Un for que itera sobre el arreglo de atributos 
+
 		keysArray.forEach(key => {
 			total_c++;
-		//Extraemos el valor
+	
 		const organizationValue = organization[key as keyof typeof organization];
-		//Si el valor es nulo o si es un arreglo y es vacio, aumentamos el contador de nulos	
+	
 		  if (organizationValue === null || (Array.isArray(organizationValue) && organizationValue.length === 0)) {
 			null_c++;
 		  }
 		});
 	  }
-	  //Operación matemática sencilla para obtener el porcentaje de campos llenos y redondeado
-	  //hacia abajo
+
 	  const percent_done=((1-(null_c/total_c))*100) | 0
 
-
-	//console.log("null",null_c)
-	console.log("total:", total_c)
-	console.log("% done",percent_done )
 	  return(percent_done)
 }
