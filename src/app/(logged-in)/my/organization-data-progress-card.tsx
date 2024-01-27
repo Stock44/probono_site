@@ -57,14 +57,10 @@ export type OrganizationDataProgressCardProps = {
 
 export async function OrganizationDataProgressCard(props: OrganizationDataProgressCardProps) {
 	const {className} = props;
-	//llamo a mi funcion de query
-	//.......
 	
 	const user = await getUserFromSessionWithOrganizations();
 	
 	const org =user!.organizations[0]
-	
-	console.log("org:",org.id, org.name)
 	
 	const progress = await countNullAttributes(org.id);
 
