@@ -1,7 +1,7 @@
 'use client';
 import React, {useMemo, useState} from 'react';
 import dynamic from 'next/dynamic';
-import {type Address, type Municipality, type Organization, type Sector} from '@prisma/client';
+import {type Sector} from '@prisma/client';
 import {type Geometry} from 'geojson';
 import {Seq, Set} from 'immutable';
 import {Item, Section, useListData} from 'react-stately';
@@ -9,8 +9,6 @@ import Save from '@material-design-icons/svg/round/save.svg';
 import Remove from '@material-design-icons/svg/round/remove.svg';
 import ListBox from '@/components/list-box.tsx';
 import Button from '@/components/button.tsx';
-import type {FormState} from '@/components/form.tsx';
-import type {OrganizationUpdate} from '@/lib/schemas/organization.ts';
 import {type ServerActionResult} from '@/lib/server-action-result.ts';
 import {useToasts} from '@/components/toast.tsx';
 import LoadingSpinner from '@/components/loading-spinner.tsx';

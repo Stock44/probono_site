@@ -1,7 +1,6 @@
 import React from 'react';
 import {redirect} from 'next/navigation';
 import {getSession} from '@auth0/nextjs-auth0';
-import updateUserAction from '@/lib/actions/update-user-action.ts';
 import PasswordForm from '@/app/(logged-in)/my/account/password/password-form.tsx';
 import {type PasswordUpdate, passwordUpdateSchema} from '@/lib/schemas/password.ts';
 import {type FormState} from '@/components/form.tsx';
