@@ -7,6 +7,7 @@ import {CluniStatus, DonationAuthStatus} from '@prisma/client';
 import {prismaMock} from '@/lib/singleton.ts';
 import {createOrganization, updateOrganization} from '@/lib/models/organization.ts';
 import {type OrganizationInit, type OrganizationUpdate} from '@/lib/schemas/organization.ts';
+import { countNullAttributes } from '@/lib/models/organization.ts';
 
 jest.mock('file-type');
 jest.mock('@vercel/blob');
@@ -162,23 +163,84 @@ describe('updateOrganization', () => {
 });
 //prismamock
 
-// json en variable
 
-// prismamock.org.findunique.calledwith()...
+test("Most values are filled", async () => {
 
-/*expect(prismaMock.organization.findUnique).toHaveBeenCalledWith({
-    where: {
-        id: 2,
-    },
+	prismaMock.organization.findUnique.mockResolvedValue({
+		id: 444,
+		categoryId: 4,
+		approved: true,
+		addressId: 5,
+		workplaceTypeId: 4,
+		cluniStatus: null,
+		corporationTypeId: 5,
+		donationAuthStatus: null,
+		email: "",
+		employeeCountCategoryId: 3,
+		facebook: "",
+		foundingYear: 2000,
+		hasInvestmentAgreement: false,
+		incomeCategoryId: 4,
+		incorporationYear: 2022,
+		instagram: "",
+		isIncorporated: true,
+		legalConcept: "",
+		linkedIn: "",
+		logoUrl: 'http://example.com/logo.png',
+		ods: 33,
+		phone: "44",
+		rfc: "",
+		tiktok: "",
+		twitter: "",
+		volunteerCountCategoryId: 5,
+		wantsToIncorporate: true,
+		webpage: "",
+		youtube: "",
+		name: 'null test org',
+		
+		
+	});
+	await expect(countNullAttributes(444)).resolves.toEqual(95)
+
 });
-prismaMock.organization.findUnique.mockResolvedValue({
-    name: 'asdf',
-    id: 2,
-    ods: 15,
-    // 8/16 campos nulos
-});
+test("60% of data filled", async ()=>{
+	
+	//   26/43
+	prismaMock.organization.findUnique.mockResolvedValue({
+		id: 333,
+		categoryId: 1,
+		approved: false,
+		addressId: 4,
+		workplaceTypeId: 3,
+		cluniStatus: null,
+		corporationTypeId: 2,
+		donationAuthStatus: null,
+		email: null,
+		employeeCountCategoryId: 3,
+		facebook: null,
+		foundingYear: 2000,
+		hasInvestmentAgreement: null,
+		incomeCategoryId: 4,
+		incorporationYear: null,
+		instagram: null,
+		isIncorporated: true,
+		legalConcept: null,
+		linkedIn: null,
+		logoUrl: 'http://example.com/logo.png',
+		ods: null,
+		phone: null,
+		rfc: null,
+		tiktok: null,
+		twitter: null,
+		volunteerCountCategoryId: 5,
+		wantsToIncorporate: null,
+		webpage: null,
+		youtube: null,
+		name: 'null test org',
+		
+	});
 
-await expect(miFuncion()).resolves.toEqual(50);
-ktw-phmf-dzv
 
-*/
+	await (expect(countNullAttributes(333)).resolves.toEqual(60))
+
+})
