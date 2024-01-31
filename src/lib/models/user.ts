@@ -151,6 +151,37 @@ export async function createUser(authId: string, init: UserInit) {
 	});
 }
 
+export async function deleteUser(id: number) {
+	await prisma.$transaction(async tx => {
+		const {authId} = await tx.user.findUniqueOrThrow({
+			where: {
+				id,
+			},
+			select: {
+				authId: true,
+			},
+		});
+	
+		await prisma.organization.findUniqueOrThrow({
+			where: {
+				owners: {
+					id,
+				}
+			}
+		})
+
+		await management.users.delete({
+			id: authId,
+		});
+
+		await tx.user.delete({
+			where: {
+				id,
+			},
+		});
+	});
+}
+
 /**
  * Updates a user in the database and in the authentication service.
  *

@@ -9,6 +9,10 @@ export const userInitSchema = z.object({
 	contactPhone: phoneSchema.nullish(),
 });
 
+export const userDeleteSchema = z.object({
+	password: z.string(),
+});
+
 export const userUpdateSchema = userInitSchema.extend({
 	email: z.string().email(),
 }).partial();
@@ -16,3 +20,5 @@ export const userUpdateSchema = userInitSchema.extend({
 export type UserInit = z.infer<typeof userInitSchema>;
 
 export type UserUpdate = z.infer<typeof userUpdateSchema>;
+
+export type UserDelete = z.infer<typeof userDeleteSchema>;
