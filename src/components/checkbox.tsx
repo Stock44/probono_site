@@ -1,6 +1,5 @@
-import React, {type ForwardedRef, forwardRef, useRef} from 'react';
+import React, {useRef} from 'react';
 import {type AriaCheckboxProps, mergeProps, useCheckbox, useFocusRing, usePress, VisuallyHidden} from 'react-aria';
-import {useObjectRef} from '@react-aria/utils';
 import {useToggleState, type ToggleProps} from 'react-stately';
 import {cx} from '@/lib/cva.ts';
 

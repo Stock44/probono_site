@@ -1,7 +1,7 @@
 'use client';
 
 import Save from '@material-design-icons/svg/round/save.svg';
-import React, {useState} from 'react';
+import React from 'react';
 import {type User} from '@prisma/client';
 import Done from '@material-design-icons/svg/round/done.svg';
 import Key from '@material-design-icons/svg/round/key.svg';

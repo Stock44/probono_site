@@ -1,5 +1,5 @@
 import React, {type ReactNode} from 'react';
-import {notFound, redirect} from 'next/navigation';
+import {redirect} from 'next/navigation';
 import Feed from '@material-design-icons/svg/round/feed.svg';
 import Home from '@material-design-icons/svg/round/home.svg';
 import Person from '@material-design-icons/svg/round/person.svg';
@@ -10,7 +10,7 @@ import Map from '@material-design-icons/svg/round/map.svg';
 import MySectionLink from '@/app/(logged-in)/my/my-section-link.tsx';
 import Separator from '@/components/separator.tsx';
 import {OrganizationDataProgressCard} from '@/app/(logged-in)/my/organization-data-progress-card.tsx';
-import {getSessionUserOrganization, getUserFromSession} from '@/lib/models/user.ts';
+import {getUserFromSession} from '@/lib/models/user.ts';
 
 export type MyLayoutProps = {
 	readonly children: ReactNode;

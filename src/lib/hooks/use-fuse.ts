@@ -1,8 +1,7 @@
-import {useEffect, useMemo, useRef} from 'react';
-import Immutable, {type List} from 'immutable';
+import {useEffect, useRef} from 'react';
+import {type List} from 'immutable';
 import type Fuse from 'fuse.js';
 import {type IFuseOptions} from 'fuse.js';
-import Indexed = Immutable.Collection.Indexed;
 
 /**
  * Creates and initializes a Fuse instance lazily using the provided collection and options.

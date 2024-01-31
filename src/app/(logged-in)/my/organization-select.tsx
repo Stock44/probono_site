@@ -7,8 +7,6 @@ import {
 	notFound, usePathname,
 	useRouter,
 	useSearchParams,
-	useSelectedLayoutSegment,
-	useSelectedLayoutSegments,
 } from 'next/navigation';
 import Image from 'next/image';
 import invariant from 'ts-tiny-invariant';
