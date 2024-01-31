@@ -73,11 +73,7 @@ export async function OrganizationDataProgressCard(props: OrganizationDataProgre
 				El tener mas información sobre ustedes nos ayuda a ponerlos en el mapa.
 			</p>
 			<p className='text-stone-400 text-sm mb-4' > progreso:</p>
-			
-			<ProgressBar progress={progress}/>
-
-
-
+		<ProgressBar progress={progress}/>
 			{/* <Progress.Root */}
 			{/* 	value={progress} */}
 			{/* 	className='h-6 bg-stone-900 rounded-xl overflow-hidden' */}

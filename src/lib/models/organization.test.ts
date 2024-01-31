@@ -5,9 +5,8 @@ import {fileTypeFromBlob} from 'file-type';
 import {put} from '@vercel/blob';
 import {CluniStatus, DonationAuthStatus} from '@prisma/client';
 import {prismaMock} from '@/lib/singleton.ts';
-import {createOrganization, updateOrganization} from '@/lib/models/organization.ts';
+import {createOrganization, updateOrganization, countNullAttributes} from '@/lib/models/organization.ts';
 import {type OrganizationInit, type OrganizationUpdate} from '@/lib/schemas/organization.ts';
-import { countNullAttributes } from '@/lib/models/organization.ts';
 
 jest.mock('file-type');
 jest.mock('@vercel/blob');
@@ -161,11 +160,8 @@ describe('updateOrganization', () => {
 		await expect(updateOrganization(organizationId, update)).resolves.toBe(undefined);
 	});
 });
-//prismamock
 
-
-test("Most values are filled", async () => {
-
+test('Most values are filled', async () => {
 	prismaMock.organization.findUnique.mockResolvedValue({
 		id: 444,
 		categoryId: 4,
@@ -175,37 +171,32 @@ test("Most values are filled", async () => {
 		cluniStatus: null,
 		corporationTypeId: 5,
 		donationAuthStatus: null,
-		email: "",
+		email: '',
 		employeeCountCategoryId: 3,
-		facebook: "",
+		facebook: '',
 		foundingYear: 2000,
 		hasInvestmentAgreement: false,
 		incomeCategoryId: 4,
 		incorporationYear: 2022,
-		instagram: "",
+		instagram: '',
 		isIncorporated: true,
-		legalConcept: "",
-		linkedIn: "",
+		legalConcept: '',
+		linkedIn: '',
 		logoUrl: 'http://example.com/logo.png',
 		ods: 33,
-		phone: "44",
-		rfc: "",
-		tiktok: "",
-		twitter: "",
+		phone: '44',
+		rfc: '',
+		tiktok: '',
+		twitter: '',
 		volunteerCountCategoryId: 5,
 		wantsToIncorporate: true,
-		webpage: "",
-		youtube: "",
+		webpage: '',
+		youtube: '',
 		name: 'null test org',
-		
-		
 	});
-	await expect(countNullAttributes(444)).resolves.toEqual(95)
-
+	await expect(countNullAttributes(444)).resolves.toEqual(95);
 });
-test("60% of data filled", async ()=>{
-	
-	//   26/43
+test('60% of data filled', async () => {
 	prismaMock.organization.findUnique.mockResolvedValue({
 		id: 333,
 		categoryId: 1,
@@ -237,10 +228,6 @@ test("60% of data filled", async ()=>{
 		webpage: null,
 		youtube: null,
 		name: 'null test org',
-		
 	});
-
-
-	await (expect(countNullAttributes(333)).resolves.toEqual(60))
-
-})
+	await (expect(countNullAttributes(333)).resolves.toEqual(60));
+});

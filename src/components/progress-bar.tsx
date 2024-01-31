@@ -1,27 +1,21 @@
-import React from "react";
+import React from 'react';
 
-interface ProgressBarProps {
+type ProgressBarProps = {
   progress: number;
-}
+};
 
-const ProgressBar: React.FC<ProgressBarProps> = ({ progress }) => {
-
-  const clampedProgress = Math.max(0, Math.min(100, progress));
-
+export default function ProgressBar(props: ProgressBarProps) {
   return (
     <div>
-      
       <div
         style={{
-          width: `${clampedProgress}%`,
+          width: `${props.progress}%`,
           height: '30px',
           backgroundColor: '#77DD77',
           transition: 'width 0.5s ease-in-out',
         }}
       />
-      <p className='text-stone-400 text-sm mb-4'>{`${clampedProgress}% Completo`}</p>
+      <p className='text-stone-400 text-sm mb-4'>{`${props.progress}% Completo`}</p>
     </div>
   );
-};
-
-export default ProgressBar;
+}

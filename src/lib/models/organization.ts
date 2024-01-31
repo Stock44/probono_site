@@ -206,38 +206,39 @@ export async function updateOrganization(organizationId: number, update: Organiz
 		}
 	});
 }
+/**
+ * Count the amount of null attributes of an organization and return a percent value.
+ *
+ * @param {number} organizationId - The ID of the organization.
+ * @returns {promise<number>} A promise that resolves to the percent value fo attributes completed.
+ */
 
-
-
-  
-export async function countNullAttributes(organizationId:number): Promise<number> {
-
+export async function countNullAttributes(organizationId: number): Promise<number> {
 	const organization = await prisma.organization.findUnique({
 		where: {
-		  id: organizationId,
+			id: organizationId,
 		},
 		include: {
-		  address: true,
-		  employeeCountCategory: true,
-		  volunteerCountCategory: true,
-		  workplaceType: true,
-		  incomeCategory: true,
-		  corporationType: true,
-		  category: true,
-		  ageGroups: true,
-		  beneficiaries: true,
-		  collaboratingGovernmentOrganizations: true,
-		  collaboratingMunicipalities: true,
-		  providedServices: true,
-		  sectors: true,
-		  activities: true,
-		  owners: true,		  
+			address: true,
+			employeeCountCategory: true,
+			volunteerCountCategory: true,
+			workplaceType: true,
+			incomeCategory: true,
+			corporationType: true,
+			category: true,
+			ageGroups: true,
+			beneficiaries: true,
+			collaboratingGovernmentOrganizations: true,
+			collaboratingMunicipalities: true,
+			providedServices: true,
+			sectors: true,
+			activities: true,
+			owners: true,
 		},
-	  });
-	  console.log("ORGANIZATION DATA:",organization);
-	  var null_c=0;
-	  var total_c=0;
-	  const keysArray = [
+	});
+	let nullC = 0;
+	let totalC = 0;
+	const keysArray = [
 		'id',
 		'name',
 		'foundingYear',
@@ -281,22 +282,19 @@ export async function countNullAttributes(organizationId:number): Promise<number
 		'providedServices',
 		'sectors',
 		'activities',
-	  ];
+	];
 
-	  if (organization !== null && typeof organization === 'object') {
+	if (organization !== null && typeof organization === 'object') {
+		for (const key of keysArray) {
+			totalC++;
+			const organizationValue = organization[key as keyof typeof organization];
+			if (organizationValue === null || (Array.isArray(organizationValue) && organizationValue.length === 0)) {
+				nullC++;
+			}
+		}
+	}
 
-		keysArray.forEach(key => {
-			total_c++;
-	
-		const organizationValue = organization[key as keyof typeof organization];
-	
-		  if (organizationValue === null || (Array.isArray(organizationValue) && organizationValue.length === 0)) {
-			null_c++;
-		  }
-		});
-	  }
+	const percentDone = Math.trunc((1 - (nullC / totalC)) * 100);
 
-	  const percent_done=((1-(null_c/total_c))*100) | 0
-
-	  return(percent_done)
+	return percentDone;
 }
