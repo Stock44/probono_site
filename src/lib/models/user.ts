@@ -2,6 +2,7 @@ import {omit} from 'lodash';
 import {getSession} from '@auth0/nextjs-auth0';
 import {cache} from 'react';
 import {cookies} from 'next/headers';
+import {del} from '@vercel/blob';
 import {type UserInit, type UserUpdate} from '@/lib/schemas/user.ts';
 import prisma from '@/lib/prisma.ts';
 import {management} from '@/lib/auth0.ts';
@@ -161,7 +162,7 @@ export async function deleteUser(id: number) {
 				authId: true,
 			},
 		});
-	
+
 		await prisma.organization.findUniqueOrThrow({
 			where: {
 				owners: {
@@ -179,6 +180,47 @@ export async function deleteUser(id: number) {
 				id,
 			},
 		});
+
+		const userOrganizations = await tx.organization.findMany({
+			where: {
+				owners: {
+					some: {
+						authId,
+					},
+				},
+			},
+			include: {
+				owners: true,
+			},
+		});
+
+		for (const organization of userOrganizations) {
+			if (organization.owners.length === 1) {
+				await tx.organization.delete({
+					where: {
+						id: organization.id,
+					},
+				});
+
+				if (organization.logoUrl) {
+					await del(organization.logoUrl);
+				}
+
+			} else {
+				await tx.organization.update({
+					where: {
+						id: organization.id,
+					},
+					data: {
+						owners: {
+							disconnect: {
+								authId,
+							},
+						},
+					},
+				});
+			}
+		}
 	});
 }
 
