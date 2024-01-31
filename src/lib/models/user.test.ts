@@ -5,7 +5,7 @@ import {getSession} from '@auth0/nextjs-auth0';
 import {mocked} from 'jest-mock';
 import {management} from '@/lib/auth0.ts';
 import {prismaMock} from '@/lib/singleton.ts';
-import {createUser, getFirstSessionUserOrganization, updateUser} from '@/lib/models/user.ts';
+import {createUser, getFirstSessionUserOrganization, updateUser, deleteUser} from '@/lib/models/user.ts';
 
 jest.mock('@auth0/nextjs-auth0');
 jest.mock('@/lib/auth0.ts');
@@ -63,6 +63,20 @@ describe('createUser', () => {
 
 		expect(result).toEqual(expectedUser);
 		expect(management.users.get).toHaveBeenCalledWith({id: authId});
+		expect(prismaMock.$transaction).toHaveBeenCalledTimes(1);
+	});
+});
+
+describe('deleteUser', () => {
+	test('should delete a user from the database and the auth service', async () => {
+		const authId = 'test authId';
+		const id = 1;
+
+		// @ts-expect-error not required for test
+		prismaMock.user.findUniqueOrThrow.mockResolvedValue({authId});
+
+		await deleteUser(id);
+		expect(management.users.delete).toHaveBeenCalledWith({id: authId});
 		expect(prismaMock.$transaction).toHaveBeenCalledTimes(1);
 	});
 });
