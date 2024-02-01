@@ -129,9 +129,9 @@ describe('user update schema', () => {
 	});
 });
 
-describe ('user delete schema', () => {
+describe('user delete schema', () => {
 	const validPassword = {
-		password: 'xyz',
+		password: 'test',
 	};
 	test('parsing valid password should pass', () => {
 		expect(() => userDeleteSchema.parse(validPassword)).not.toThrow();
