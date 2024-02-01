@@ -1,5 +1,5 @@
 import {ZodError} from 'zod';
-import {userInitSchema, userUpdateSchema} from '@/lib/schemas/user.ts';
+import {userDeleteSchema, userInitSchema, userUpdateSchema} from '@/lib/schemas/user.ts';
 
 describe('user init schema', () => {
 	test('parsing a complete user init object should pass', () => {
@@ -129,3 +129,15 @@ describe('user update schema', () => {
 	});
 });
 
+describe ('user delete schema', () => {
+	const validPassword = {
+		password: 'xyz',
+	};
+	test('parsing valid password should pass', () => {
+		expect(() => userDeleteSchema.parse(validPassword)).not.toThrow();
+	});
+
+	test('parsing empty object should throw', () => {
+		expect(() => userDeleteSchema.parse({})).toThrow(ZodError);
+	});
+});
