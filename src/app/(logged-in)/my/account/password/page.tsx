@@ -3,7 +3,7 @@ import {redirect} from 'next/navigation';
 import {getSession} from '@auth0/nextjs-auth0';
 import PasswordForm from '@/app/(logged-in)/my/account/password/password-form.tsx';
 import {type PasswordUpdate, passwordUpdateSchema} from '@/lib/schemas/password.ts';
-import {type FormState} from '@/components/form.tsx';
+import {type FormState} from '@/components/form/form.tsx';
 import {decodeForm} from '@/lib/form-utils.ts';
 import {handleActionError} from '@/lib/handle-action-error.ts';
 import {authentication, management} from '@/lib/auth0.ts';

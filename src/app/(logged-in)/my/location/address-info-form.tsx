@@ -11,7 +11,7 @@ import Done from '@material-design-icons/svg/round/done.svg';
 import Select from '@/components/select.tsx';
 import TextField from '@/components/text-field.tsx';
 import {NumberField} from '@/components/number-field.tsx';
-import Form, {type FormState} from '@/components/form.tsx';
+import Form, {type FormState} from '@/components/form/form.tsx';
 import {formValidators} from '@/lib/form-utils.ts';
 import {addressInitSchema} from '@/lib/schemas/address.ts';
 import {geocodeAddress, reverseGeocode} from '@/lib/mapbox.ts';

@@ -1,10 +1,10 @@
 import React from 'react';
-import {getSession} from '@auth0/nextjs-auth0';
 import {notFound} from 'next/navigation';
 import SectorsForm from '@/app/(logged-in)/my/sectors/sectors-form.tsx';
 import {getAllSectors} from '@/lib/models/sector.ts';
 import prisma from '@/lib/prisma.ts';
 import updateOrganizationSectorsAction from '@/lib/actions/update-organization-sectors-action.ts';
+import {getUsersActiveOrganization} from '@/lib/models/user.ts';
 
 export type SectorsPageProps = {
 	readonly searchParams: {
@@ -13,22 +13,12 @@ export type SectorsPageProps = {
 };
 
 export default async function SectorsPage(props: SectorsPageProps) {
-	const {searchParams} = props;
-
-	const session = (await getSession())!;
-
-	const organizationId = searchParams.organization ? Number.parseInt(searchParams.organization, 10) : undefined;
-	const organization = await prisma.organization.findFirst({
+	const baseOrganization = await getUsersActiveOrganization();
+	const organizationSectors = await prisma.organization.findUniqueOrThrow({
 		where: {
-			id: organizationId,
-			owners: {
-				some: {
-					authId: session.user.sub as string,
-				},
-			},
+			id: baseOrganization.id,
 		},
 		select: {
-			id: true,
 			sectors: {
 				select: {
 					id: true,
@@ -36,6 +26,11 @@ export default async function SectorsPage(props: SectorsPageProps) {
 			},
 		},
 	});
+
+	const organization = {
+		...baseOrganization,
+		...organizationSectors,
+	};
 
 	if (!organization) {
 		notFound();

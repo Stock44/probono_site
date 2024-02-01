@@ -4,17 +4,17 @@ import NavigateNext from '@material-design-icons/svg/round/navigate_next.svg';
 import AddPhotoAlternate from '@material-design-icons/svg/round/add_photo_alternate.svg';
 import {NumberField} from '@/components/number-field.tsx';
 import TextField from '@/components/text-field.tsx';
-import Form, {type FormState} from '@/components/form.tsx';
+import Form, {type FormState} from '@/components/form/form.tsx';
 import FileDropZone from '@/components/file-drop-zone.tsx';
 import {type OrganizationInit, organizationInitSchema} from '@/lib/schemas/organization.ts';
 import {formValidators} from '@/lib/form-utils.ts';
 import SubmitButton from '@/components/submit-button.tsx';
 
-export type OrganizationFormProps = {
+export type OrganizationCreationFormProps = {
 	readonly action: (state: FormState<OrganizationInit>, data: FormData) => Promise<FormState<OrganizationInit>>;
 };
 
-export default function OrganizationForm(props: OrganizationFormProps) {
+export default function OrganizationCreationForm(props: OrganizationCreationFormProps) {
 	const {action} = props;
 	const validate = formValidators(organizationInitSchema);
 

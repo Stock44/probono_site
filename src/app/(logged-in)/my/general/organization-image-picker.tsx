@@ -9,7 +9,7 @@ import Modal from '@/components/modal.tsx';
 import ImageButton from '@/components/image-button.tsx';
 import Dialog from '@/components/dialog.tsx';
 import FileDropZone from '@/components/file-drop-zone.tsx';
-import Form, {type FormState} from '@/components/form.tsx';
+import Form, {type FormState} from '@/components/form/form.tsx';
 import {organizationInitSchema, type OrganizationUpdate} from '@/lib/schemas/organization.ts';
 import {formValidators} from '@/lib/form-utils.ts';
 import SubmitButton from '@/components/submit-button.tsx';

@@ -19,7 +19,7 @@ import {NumberField} from '@/components/number-field.tsx';
 import OrganizationImagePicker from '@/app/(logged-in)/my/general/organization-image-picker.tsx';
 import TextField from '@/components/text-field.tsx';
 import Select from '@/components/select.tsx';
-import Form, {type FormState} from '@/components/form.tsx';
+import Form, {type FormState} from '@/components/form/form.tsx';
 import {organizationInitSchema, type OrganizationUpdate} from '@/lib/schemas/organization.ts';
 import {formValidators} from '@/lib/form-utils.ts';
 import SubmitButton from '@/components/submit-button.tsx';

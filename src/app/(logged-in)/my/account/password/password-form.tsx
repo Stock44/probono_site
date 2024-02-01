@@ -2,7 +2,7 @@
 
 import Save from '@material-design-icons/svg/round/save.svg';
 import React, {useState} from 'react';
-import Form, {type FormState} from '@/components/form.tsx';
+import Form, {type FormState} from '@/components/form/form.tsx';
 import SubmitButton from '@/components/submit-button.tsx';
 import TextField from '@/components/text-field.tsx';
 import {formValidators} from '@/lib/form-utils.ts';

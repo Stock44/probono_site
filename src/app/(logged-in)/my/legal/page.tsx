@@ -5,6 +5,7 @@ import {getAllCorporationTypes} from '@/lib/models/corporation-type.ts';
 import LegalInfoForm from '@/app/(logged-in)/my/legal/legal-info-form.tsx';
 import updateOrganizationAction from '@/lib/actions/update-organization-action.ts';
 import prisma from '@/lib/prisma.ts';
+import {getUsersActiveOrganization} from '@/lib/models/user.ts';
 
 export type LegalFormPageProps = {
 	readonly searchParams: {
@@ -13,25 +14,7 @@ export type LegalFormPageProps = {
 };
 
 export default async function LegalFormPage(props: LegalFormPageProps) {
-	const {searchParams} = props;
-
-	const session = (await getSession())!;
-
-	const organizationId = searchParams.organization ? Number.parseInt(searchParams.organization, 10) : undefined;
-	const organization = await prisma.organization.findFirst({
-		where: {
-			id: organizationId,
-			owners: {
-				some: {
-					authId: session.user.sub as string,
-				},
-			},
-		},
-	});
-
-	if (!organization) {
-		notFound();
-	}
+	const organization = await getUsersActiveOrganization();
 
 	const action = updateOrganizationAction.bind(null, organization.id);
 

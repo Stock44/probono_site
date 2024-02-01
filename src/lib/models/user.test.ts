@@ -3,12 +3,17 @@
  */
 import {getSession} from '@auth0/nextjs-auth0';
 import {mocked} from 'jest-mock';
+import {cookies} from 'next/headers';
 import {management} from '@/lib/auth0.ts';
 import {prismaMock} from '@/lib/singleton.ts';
-import {createUser, getFirstSessionUserOrganization, updateUser} from '@/lib/models/user.ts';
+import {createUser, getFirstSessionUserOrganization, updateUser, getUsersActiveOrganization} from '@/lib/models/user.ts';
+
+jest.mock('@auth0/nextjs-auth0'); // Replace with your actual session management module
+jest.mock('@prisma/client');
 
 jest.mock('@auth0/nextjs-auth0');
 jest.mock('@/lib/auth0.ts');
+jest.mock('next/headers');
 
 describe('getFirstSessionUserOrganization', () => {
 	test('should return the first organization of the session user', async () => {
@@ -80,5 +85,111 @@ describe('updateUser', () => {
 
 		expect(management.users.update).toHaveBeenCalledWith({id: authId}, {email: update.email});
 		expect(prismaMock.$transaction).toHaveBeenCalledTimes(1);
+	});
+});
+
+const get = jest.fn();
+const cookiesMock = mocked(cookies);
+
+describe('getUsersActiveOrganiation', () => {
+	beforeEach(() => {
+		(getSession as jest.Mock).mockClear();
+		cookiesMock.mockClear();
+		get.mockClear();
+		// @ts-expect-error not needed for test
+		cookiesMock.mockReturnValue({
+			get,
+		});
+	});
+
+	it('throws an error if not authenticated', async () => {
+		(getSession as jest.Mock).mockResolvedValueOnce(null);
+
+		await expect(getUsersActiveOrganization()).rejects.toThrow('not authenticated');
+	});
+
+	it('returns an existing organization if organizationId is set', async () => {
+		const sessionData = {user: {sub: '123'}};
+		const organization = {
+			id: 1,
+			owners: [
+				{
+					authId: sessionData.user.sub,
+				},
+			],
+		};
+
+		// Mock session return object
+		(getSession as jest.Mock).mockResolvedValueOnce(sessionData);
+		get.mockReturnValueOnce({value: '1'});
+		// @ts-expect-error not needed for test
+		prismaMock.organization.findUnique.mockResolvedValueOnce(organization);
+
+		const result = await getUsersActiveOrganization();
+
+		expect(result).toEqual(organization);
+	});
+
+	it('returns the first organization if organizationId is not set', async () => {
+		const sessionData = {user: {sub: '123'}};
+		const organization = {
+			id: 1,
+			owners: [
+				{
+					authId: sessionData.user.sub,
+				},
+			],
+		};
+
+		// Mock session return object
+		(getSession as jest.Mock).mockResolvedValueOnce(sessionData);
+		get.mockReturnValueOnce(null);
+		// @ts-expect-error not needed for test
+		prismaMock.organization.findFirstOrThrow.mockResolvedValueOnce(organization);
+
+		const result = await getUsersActiveOrganization();
+
+		expect(result).toEqual(organization);
+	});
+	it('returns first organization and updates the cookie when provided organizationId is not associated with the user', async () => {
+		const sessionData = {user: {sub: '123'}};
+		const organization = {
+			id: 1,
+			owners: [
+				{
+					authId: sessionData.user.sub,
+				},
+			],
+		};
+
+		(getSession as jest.Mock).mockResolvedValueOnce(sessionData);
+		get.mockReturnValueOnce({value: '2'});
+		// @ts-expect-error not needed for test
+		prismaMock.organization.findFirstOrThrow.mockResolvedValueOnce(organization);
+
+		const result = await getUsersActiveOrganization();
+
+		expect(result).toEqual(organization);
+	});
+
+	it('returns first organization and updates the cookie when organizationId is not set', async () => {
+		const sessionData = {user: {sub: '123'}};
+		const organization = {
+			id: 1,
+			owners: [
+				{
+					authId: sessionData.user.sub,
+				},
+			],
+		};
+
+		(getSession as jest.Mock).mockResolvedValueOnce(sessionData);
+		get.mockReturnValueOnce(null);
+		// @ts-expect-error not needed for test
+		prismaMock.organization.findFirstOrThrow.mockResolvedValueOnce(organization);
+
+		const result = await getUsersActiveOrganization();
+
+		expect(result).toEqual(organization);
 	});
 });

@@ -1,7 +1,7 @@
 'use server';
 import {revalidatePath} from 'next/cache';
 import {getSession} from '@auth0/nextjs-auth0';
-import {type FormState} from '@/components/form.tsx';
+import {type FormState} from '@/components/form/form.tsx';
 import {type OrganizationUpdate, organizationUpdateSchema} from '@/lib/schemas/organization.ts';
 import {decodeForm} from '@/lib/form-utils.ts';
 import {updateOrganization} from '@/lib/models/organization.ts';

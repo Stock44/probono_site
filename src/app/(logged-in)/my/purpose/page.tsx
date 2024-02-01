@@ -8,6 +8,7 @@ import {getAllBeneficiaries} from '@/lib/models/beneficiary.ts';
 import {getAllAgeGroups} from '@/lib/models/age-group.ts';
 import prisma from '@/lib/prisma.ts';
 import updateOrganizationAction from '@/lib/actions/update-organization-action.ts';
+import {getUsersActiveOrganization} from '@/lib/models/user.ts';
 
 export type PurposePageProps = {
 	readonly searchParams: {
@@ -16,21 +17,12 @@ export type PurposePageProps = {
 };
 
 export default async function PurposePage(props: PurposePageProps) {
-	const {searchParams} = props;
-
-	const session = (await getSession())!;
-
-	const organizationId = searchParams.organization ? Number.parseInt(searchParams.organization, 10) : undefined;
-	const organization = await prisma.organization.findFirst({
+	const baseOrganization = await getUsersActiveOrganization();
+	const organizationIncludes = await prisma.organization.findUniqueOrThrow({
 		where: {
-			id: organizationId,
-			owners: {
-				some: {
-					authId: session.user.sub as string,
-				},
-			},
+			id: baseOrganization.id,
 		},
-		include: {
+		select: {
 			activities: {
 				include: {
 					activity: true,
@@ -45,9 +37,10 @@ export default async function PurposePage(props: PurposePageProps) {
 		},
 	});
 
-	if (!organization) {
-		notFound();
-	}
+	const organization = {
+		...baseOrganization,
+		...organizationIncludes,
+	};
 
 	const organizationCategories = await getAllOrganizationCategories();
 	const activities = await getAllActivities();

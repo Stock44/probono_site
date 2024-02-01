@@ -206,4 +206,3 @@ export async function updateOrganization(organizationId: number, update: Organiz
 		}
 	});
 }
-
