@@ -3,7 +3,6 @@
 import {getSession} from '@auth0/nextjs-auth0';
 import {cookies} from 'next/headers';
 import {revalidatePath} from 'next/cache';
-import {redirect} from 'next/navigation';
 import prisma from '@/lib/prisma.ts';
 
 export default async function updateActiveOrganization(id: number) {

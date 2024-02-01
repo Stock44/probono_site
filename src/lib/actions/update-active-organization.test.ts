@@ -10,6 +10,7 @@ import {prismaMock} from '@/lib/singleton.ts';
 
 jest.mock('@auth0/nextjs-auth0');
 jest.mock('next/headers');
+jest.mock('next/cache');
 
 const set = jest.fn();
 
