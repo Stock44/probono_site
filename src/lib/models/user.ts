@@ -194,33 +194,34 @@ export async function deleteUser(id: number) {
 			},
 		});
 
-		for (const organization of userOrganizations) {
-			if (organization.owners.length === 1) {
-				await tx.organization.delete({
-					where: {
-						id: organization.id,
-					},
-				});
+		await Promise.all(
+			userOrganizations.map(async organization => {
+				if (organization.owners.length === 1) {
+					await tx.organization.delete({
+						where: {
+							id: organization.id,
+						},
+					});
 
-				if (organization.logoUrl) {
-					await del(organization.logoUrl);
-				}
-
-			} else {
-				await tx.organization.update({
-					where: {
-						id: organization.id,
-					},
-					data: {
-						owners: {
-							disconnect: {
-								authId,
+					if (organization.logoUrl) {
+						await del(organization.logoUrl);
+					}
+				} else {
+					await tx.organization.update({
+						where: {
+							id: organization.id,
+						},
+						data: {
+							owners: {
+								disconnect: {
+									authId,
+								},
 							},
 						},
-					},
-				});
-			}
-		}
+					});
+				}
+			}),
+		);
 	});
 }
 
