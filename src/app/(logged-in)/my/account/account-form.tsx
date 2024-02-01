@@ -6,7 +6,7 @@ import {type User} from '@prisma/client';
 import Done from '@material-design-icons/svg/round/done.svg';
 import Key from '@material-design-icons/svg/round/key.svg';
 import {type UserUpdate, userUpdateSchema} from '@/lib/schemas/user.ts';
-import Form, {type FormState} from '@/components/form.tsx';
+import Form, {type FormState} from '@/components/form/form.tsx';
 import SubmitButton from '@/components/submit-button.tsx';
 import TextField from '@/components/text-field.tsx';
 import {formValidators} from '@/lib/form-utils.ts';

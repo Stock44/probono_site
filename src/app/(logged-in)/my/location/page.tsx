@@ -1,69 +1,49 @@
 import React from 'react';
-import {notFound} from 'next/navigation';
-import {getSession} from '@auth0/nextjs-auth0';
+import {type Address, type Municipality, type Organization} from '@prisma/client';
 import AddressInfoForm from '@/app/(logged-in)/my/location/address-info-form.tsx';
 import {getAllStates} from '@/lib/models/state.ts';
 import updateOrganizationAction from '@/lib/actions/update-organization-action.ts';
 import prisma from '@/lib/prisma.ts';
+import {getUsersActiveOrganization} from '@/lib/models/user.ts';
 
-export type LocationFormPageProps = {
-	readonly searchParams: {
-		readonly organization: string;
-	};
+type OrganizationWithAddress = Organization & {
+	address: Address & {
+		readonly municipality: Municipality;
+		readonly location: [number, number] | null;
+	} | null;
 };
 
-export default async function LocationFormPage(props: LocationFormPageProps) {
-	const {searchParams} = props;
+export default async function LocationFormPage() {
+	const baseOrganization = await getUsersActiveOrganization();
 
-	const session = (await getSession())!;
+	const organization: OrganizationWithAddress = {
+		...baseOrganization,
+		address: null,
+	};
 
-	const organizationId = searchParams.organization ? Number.parseInt(searchParams.organization, 10) : undefined;
-
-	const organization = await prisma.$transaction(async tx => {
-		const result = await prisma.organization.findFirst({
-			where: {
-				id: organizationId,
-				owners: {
-					some: {
-						authId: session.user.sub as string,
-					},
+	if (organization.addressId) {
+		organization.address = await prisma.$transaction(async tx => {
+			const baseAddress = await tx.address.findUniqueOrThrow({
+				where: {
+					id: organization.addressId!,
 				},
-			},
-			include: {
-				address: {
-					include: {
-						municipality: true,
-					},
+				include: {
+					municipality: true,
 				},
-			},
-		});
-
-		if (result?.address) {
+			});
 			const location = (await tx.$queryRaw<Array<{
 				location: [number, number];
 			}>>`select array [st_x(location::geometry), st_y(location::geometry)] as location
           from "Address" as a
                    join public."Organization" o on a.id = o."addressId"
-          where o.id = ${result.id}
+          where o.id = ${organization.id}
           limit 1;`);
 
 			return {
-				...result,
-				address: {
-					...result.address,
-					location: location.length > 0 ? location[0].location : null,
-				},
+				...baseAddress,
+				location: location[0].location,
 			};
-		}
-
-		return result ? {
-			...result,
-			address: null,
-		} : null;
-	});
-
-	if (!organization) {
-		notFound();
+		});
 	}
 
 	const states = await getAllStates();

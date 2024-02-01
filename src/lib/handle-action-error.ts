@@ -1,6 +1,6 @@
 'use server';
 import {ZodError} from 'zod';
-import {type FormState} from '@/components/form.tsx';
+import {type FormState} from '@/components/form/form.tsx';
 
 export async function handleActionError<T>(previousState: FormState<T>, error: unknown): Promise<FormState<T>> {
 	if (error instanceof ZodError) {

@@ -1,6 +1,7 @@
 import {omit} from 'lodash';
 import {getSession} from '@auth0/nextjs-auth0';
 import {cache} from 'react';
+import {cookies} from 'next/headers';
 import {type UserInit, type UserUpdate} from '@/lib/schemas/user.ts';
 import prisma from '@/lib/prisma.ts';
 import {management} from '@/lib/auth0.ts';
@@ -23,17 +24,50 @@ export const getFirstSessionUserOrganization = cache(async () => {
 	});
 });
 
-export const getSessionUserOrganization = cache(
-	async (id: number) => {
+/**
+ * Returns the active organization of the user. This is the first organization if no
+ * organization cookie has been set, or the organization specified in the cookie.
+ *
+ * @async
+ * @function getUsersActiveOrganization
+ * @returns {Promise<Organization>} The active organization.
+ * @throws {Error} If the user is not authenticated.
+ */
+export const getUsersActiveOrganization = cache(
+	async () => {
 		const session = await getSession();
 
 		if (!session) {
-			return null;
+			throw new Error('not authenticated');
 		}
 
-		return prisma.organization.findUnique({
+		const cookieStore = cookies();
+
+		const organizationId = cookieStore.get('organizationId');
+
+		if (organizationId) {
+			const organization = Number.parseInt(organizationId.value, 10);
+
+			const activeOrganization = await prisma.organization.findUnique({
+				where: {
+					id: organization,
+					owners: {
+						some: {
+							authId: session.user.sub as string,
+						},
+					},
+				},
+			});
+
+			if (activeOrganization) {
+				return activeOrganization;
+			}
+		}
+		// If we didn't find an organization with the id specified in the cookie associated with this user,
+		// lets instead use the first organization we find for this user.
+
+		const firstOrganization = await prisma.organization.findFirstOrThrow({
 			where: {
-				id,
 				owners: {
 					some: {
 						authId: session.user.sub as string,
@@ -41,7 +75,10 @@ export const getSessionUserOrganization = cache(
 				},
 			},
 		});
-	});
+
+		return firstOrganization;
+	},
+);
 
 export const getUserFromSession = cache(async () => {
 	const session = await getSession();
@@ -64,17 +101,17 @@ export const getUserFromSession = cache(async () => {
 	});
 });
 
-export const getUserFromSessionWithOrganizations = cache(async () => {
+export const getCurrentUserOrganizations = cache(async () => {
 	const session = await getSession();
 	if (!session) {
 		return null;
 	}
 
-	return prisma.user.findUnique({
+	const user = prisma.user.findUniqueOrThrow({
 		where: {
 			authId: session.user.sub as string,
 		},
-		include: {
+		select: {
 			organizations: {
 				select: {
 					id: true,
@@ -82,13 +119,10 @@ export const getUserFromSessionWithOrganizations = cache(async () => {
 					logoUrl: true,
 				},
 			},
-			_count: {
-				select: {
-					organizations: true,
-				},
-			},
 		},
 	});
+
+	return user.organizations();
 });
 
 /**
@@ -101,7 +135,6 @@ export const getUserFromSessionWithOrganizations = cache(async () => {
  */
 export async function createUser(authId: string, init: UserInit) {
 	return prisma.$transaction(async tx => {
-		console.log('transaction');
 		const user = await management.users.get({
 			id: authId,
 		});

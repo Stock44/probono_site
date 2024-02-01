@@ -30,6 +30,7 @@ export default function TopBarFooterLayout(props: TopBarFooterLayoutProps) {
 					</Link>
 					<div className='grow'/>
 					{topBarItems}
+
 				</div>
 			</header>
 			<div className='min-h-[calc(100vh-theme(spacing.16))] pb-32 pt-8 px-4'>{children}</div>

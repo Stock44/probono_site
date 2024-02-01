@@ -17,7 +17,7 @@ import AgeGenderGroupSelector from '@/app/(logged-in)/my/purpose/age-gender-grou
 import ActivityPrioritySelector from '@/app/(logged-in)/my/purpose/activity-priority-selector.tsx';
 import useImmutableListData from '@/lib/hooks/use-immutable-list-data.ts';
 import useSearchableListData from '@/lib/hooks/use-searchable-list-data.ts';
-import Form, {type FormState} from '@/components/form.tsx';
+import Form, {type FormState} from '@/components/form/form.tsx';
 import {formValidators} from '@/lib/form-utils.ts';
 import {organizationInitSchema, type OrganizationUpdate} from '@/lib/schemas/organization.ts';
 import SubmitButton from '@/components/submit-button.tsx';
