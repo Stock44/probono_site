@@ -4,8 +4,9 @@ import {del, put} from '@vercel/blob';
 import {type OrganizationInit, type OrganizationUpdate} from '@/lib/schemas/organization.ts';
 import prisma from '@/lib/prisma.ts';
 import {connectId} from '@/lib/models/util.ts';
+import {logoSchema} from '@/lib/schemas/logo.ts';
 
-const validImageTypes = new Set(['image/jpeg', 'image/png', 'image/webp']);
+const validImageTypes = new Set(['image/jpeg', 'image/png', 'image/webp', 'image/jpg']);
 
 /**
  * Create an [organizationId] with the given owner ID and [organizationId] initialization data.
@@ -17,15 +18,12 @@ const validImageTypes = new Set(['image/jpeg', 'image/png', 'image/webp']);
  */
 export async function createOrganization(ownerId: number, init: OrganizationInit) {
 	if (init.logo) {
+		logoSchema.parse(init.logo);
 		const logoFileType = await fileTypeFromBlob(init.logo);
 
-		if (logoFileType === undefined || !validImageTypes.has(logoFileType.mime)) {
-			throw new Error('Logo image is not in a supported image format');
-		}
-
-		const result = await put(`organizationLogos/${init.name}.${logoFileType.ext}`, init.logo, {
+		const result = await put(`organizationLogos/${init.name}.${logoFileType!.ext}`, init.logo, {
 			access: 'public',
-			contentType: logoFileType.mime,
+			contentType: logoFileType!.mime,
 		});
 
 		init.logoUrl = result.url;

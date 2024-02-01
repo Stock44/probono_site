@@ -6,19 +6,12 @@ import {
 	urlHostnameRefinement,
 } from '@/lib/schemas/util.ts';
 import {addressInitSchema} from '@/lib/schemas/address.ts';
+import { logoSchema } from './logo';
 
 const kb = 1000;
 
 export const organizationInitSchema = z.object({
-	logo: z.instanceof(File).superRefine((file, ctx) => {
-		if (file.size > 50 * kb) {
-			ctx.addIssue({
-				code: 'custom',
-				path: ['logo'],
-				message: 'El archivo no puede pesar más de 50 KB',
-			});
-		}
-	}).nullish(),
+	logo: logoSchema.nullish(),
 	// eslint-disable-next-line @typescript-eslint/naming-convention
 	name: z.string({invalid_type_error: 'Campo requerido'}),
 	foundingYear: z.coerce.number().int().lte((new Date()).getFullYear(), 'Fecha futura'),
