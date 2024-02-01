@@ -69,7 +69,7 @@ export default function OrganizationSelectorButton(props: OrganizationSelectorBu
 											<Item key={organization.organization.id}>
 												<div
 													className={cx(
-														'w-full p-1 text-stone-300 flex justify-between rounded',
+														'w-full p-2 text-stone-300 flex justify-between rounded border-b border-stone-700',
 														organization.organization.id === currentOrganization.id && 'font-bold',
 													)}>
 													{organization.organization.name}
@@ -78,7 +78,7 @@ export default function OrganizationSelectorButton(props: OrganizationSelectorBu
 										)
 										: (
 											<Item key='new' href='/new-organization'>
-												<div className='flex text-stone-300 p-1 justify-between rounded'>
+												<div className='flex text-stone-300 p-2 justify-between rounded hover:bg-stone-800'>
 													Nueva organización
 													<Add className='fill-current ml-1'/>
 												</div>

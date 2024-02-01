@@ -16,7 +16,7 @@ export default function OrganizationSelectorMenu(props: OrganizationSelectorMenu
 	const {menuProps} = useMenu(props, state, ref);
 
 	return (
-		<div {...menuProps} ref={ref} className='w-full p-2 divide-y divide-stone-700'>
+		<div {...menuProps} ref={ref} className='w-full p-2'>
 			{[...state.collection].map(item => (
 				<OrganizationSelectorItem key={item.key} item={item} state={state}/>
 			))}
