@@ -97,13 +97,13 @@ export default function SectorsForm(props: SectorFormProps) {
 				</Button>
 			</div>
 			<div
-				className='flex gap-4 h-[32rem]'>
+				className='flex-none lg:flex gap-4 h-[32rem]'>
 				<SectorsMap
 					sectors={sectors} selectedKeys={selectedSectorKeys} setSelectedKeys={key => {
 						setSelectedSectorKeys(key as Set<number>);
 					}}
 					className='h-full grow'/>
-				<div className='w-64 border border-stone-800 rounded px-2 py-3 overflow-y-scroll scroll-smooth scrollbar-thumb-rounded scrollbar-track-transparent scrollbar-thin scrollbar-thumb-stone-50'>
+				<div className='pb-4 h-[8rem] lg:h-auto w-full lg:w-64 border border-stone-800 rounded px-2 py-3 overflow-y-scroll scroll-smooth scrollbar-thumb-rounded scrollbar-track-transparent scrollbar-thin scrollbar-thumb-stone-50'>
 					<ListBox
 						items={selectedSectors} label='Sectores seleccionados'>
 						{

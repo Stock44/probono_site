@@ -30,7 +30,7 @@ export default function ActivityPrioritySelector(props: ActivityPrioritySelector
 			<ComboBox
 				aria-label='Ingresa el nombre de un actividad.'
 				placeholder='Escribe aquí para buscar'
-				className='mb-4'
+				className='mb-4 w-full'
 				label={label}
 				items={filteredItems} inputValue={filterText} menuTrigger='focus'
 				selectedKey={null}

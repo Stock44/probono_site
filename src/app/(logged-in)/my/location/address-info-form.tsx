@@ -161,7 +161,7 @@ export default function AddressInfoForm(props: AddressInfoFormProps) {
 					setCoords(address.center);
 					mapRef.current?.flyTo(address.center, 15);
 				}}/>
-			<div className='flex w-full gap-x-4 mb-4'>
+			<div className='flex-none lg:flex w-full gap-x-4 mb-4'>
 				<TextField
 					isRequired
 					name='streetName'
@@ -180,7 +180,7 @@ export default function AddressInfoForm(props: AddressInfoFormProps) {
 				/>
 				<NumberField
 					isRequired
-					label='Número' className='w-32'
+					label='Número' className='w-full lg:w-32'
 					name='extNumber'
 					validate={validate.number}
 					value={address.number}
@@ -200,7 +200,7 @@ export default function AddressInfoForm(props: AddressInfoFormProps) {
 					isRequired
 					label='Codigo postal'
 					name='postalCode'
-					className='w-32'
+					className='w-full lg:w-32'
 					value={address.postalCode}
 					onChange={value => {
 						setAddress(previous => ({
@@ -212,11 +212,11 @@ export default function AddressInfoForm(props: AddressInfoFormProps) {
 					}}
 				/>
 			</div>
-			<div className='flex mb-4 gap-x-4'>
+			<div className='flex-none lg:flex gap-x-4'>
 				<Select
 					isRequired
 					label='Estado' placeholder='Selecciona un estado' items={states}
-					className='basis-1/2'
+					className='basis-1/2 mb-4 w-full'
 					selectedKey={address.stateId}
 					onSelectionChange={selection => {
 						setAddress(previous => ({
@@ -238,7 +238,7 @@ export default function AddressInfoForm(props: AddressInfoFormProps) {
 					validate={validate.municipalityId}
 					isDisabled={municipalities === undefined}
 					label='Municipio' placeholder='Selecciona un municipio' items={municipalities ?? []}
-					className='basis-1/2' selectedKey={address.municipalityId}
+					className='basis-1/2 mb-4 w-full' selectedKey={address.municipalityId}
 					onSelectionChange={selection => {
 						setAddress(previous => ({
 							...previous,

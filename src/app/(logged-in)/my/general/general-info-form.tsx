@@ -46,7 +46,7 @@ export default function GeneralInfoForm(props: GeneralInfoFormProps) {
 				icon: <Done/>,
 			}}
 			action={action}>
-			<div className='flex items-end mb-4 gap-4'>
+			<div className='flex-none lg:flex items-end mb-4 gap-4'>
 				<div>
 					<h1 className='text-stone-200 text-4xl mb-2'>
 						Información general
@@ -61,12 +61,12 @@ export default function GeneralInfoForm(props: GeneralInfoFormProps) {
 				</SubmitButton>
 			</div>
 			<div/>
-			<div className='flex items-end gap-x-4 w-full'>
+			<div className='flex items-center gap-x-4 w-full'>
 				<OrganizationImagePicker
 					action={action}
 					organization={organization}
 					label='Selecciona un nuevo logo para tu organización'/>
-				<div className='flex grow gap-x-4 flex-wrap'>
+				<div className='flex-none lg:flex grow gap-x-4 flex-wrap'>
 					<TextField
 						isRequired
 						label='Nombre de la organización'
@@ -101,7 +101,7 @@ export default function GeneralInfoForm(props: GeneralInfoFormProps) {
 				</div>
 			</div>
 
-			<div className='flex gap-x-4 items-end'>
+			<div className='flex-none lg:flex gap-x-4 items-end'>
 				<TextField
 					label='Correo eléctronico de contacto'
 					icon={<Email viewBox='0 0 24 24' className='h-4 w-4 fill-stone-600 group-focus-within:fill-stone-50'/>}
@@ -122,11 +122,11 @@ export default function GeneralInfoForm(props: GeneralInfoFormProps) {
 				/>
 			</div>
 
-			<div className='flex gap-4 mb-4 items-end'>
+			<div className='flex-none lg:flex gap-4 items-end'>
 				<Select
 					label='¿Cuántos empleados remunerados economicamente tiene tu organización?'
 					name='employeeCountCategoryId'
-					items={employeeCountCategories} className='flex-1'
+					items={employeeCountCategories} className='flex-1 mb-4 w-full'
 					validate={validate.employeeCountCategoryId}
 					defaultSelectedKey={organization.employeeCountCategoryId ?? undefined}
 				>
@@ -148,7 +148,7 @@ export default function GeneralInfoForm(props: GeneralInfoFormProps) {
 					label='¿Cuántos voluntarios tiene tu organización?'
 					name='volunteerCountCategoryId'
 					items={volunteerCountCategories}
-					className='flex-1'
+					className='flex-1 w-full mb-4'
 					validate={validate.volunteerCountCategoryId}
 					defaultSelectedKey={organization.volunteerCountCategoryId ?? undefined}
 				>
@@ -198,7 +198,7 @@ export default function GeneralInfoForm(props: GeneralInfoFormProps) {
 			<h2 className='text-stone-200 text-lg mb-4'>
 				Redes sociales
 			</h2>
-			<div className='flex flex-wrap gap-x-4'>
+			<div className='flex-none md:flex flex-wrap gap-x-4'>
 				<TextField
 					label='Facebook'
 					name='facebook'
