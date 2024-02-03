@@ -7,17 +7,20 @@ import Psychology from '@material-design-icons/svg/round/psychology.svg';
 import Policy from '@material-design-icons/svg/round/policy.svg';
 import LocationOn from '@material-design-icons/svg/round/location_on.svg';
 import Map from '@material-design-icons/svg/round/map.svg';
+import type {Organization} from '@prisma/client';
 import MySectionLink from '@/app/(logged-in)/my/my-section-link.tsx';
 import Separator from '@/components/separator.tsx';
 import {OrganizationDataProgressCard} from '@/app/(logged-in)/my/organization-data-progress-card.tsx';
-import {getSessionUserOrganization, getUserFromSession} from '@/lib/models/user.ts';
+import {getUserFromSession} from '@/lib/models/user.ts';
+import {cx} from '@/lib/cva.ts';
 
 export type MyLayoutProps = {
 	readonly children: ReactNode;
+	readonly organization: Organization;
 };
 
 export default async function MyLayout(props: MyLayoutProps) {
-	const {children} = props;
+	const {children, organization} = props;
 
 	const user = await getUserFromSession();
 
@@ -50,7 +53,8 @@ export default async function MyLayout(props: MyLayoutProps) {
 				<div className='grow w-0'>
 					<div className='flex gap-4 pb-4 overflow-x-auto scrollbar-thin scrollbar-thumb-rounded scrollbar-thumb-stone-400 scrollbar-track-transparent'>
 						<OrganizationDataProgressCard className='shrink-0'/>
-						<div className='border border-stone-800 shrink-0 p-4 rounded col-span-4 w-96'>
+						<div
+							className={cx('border border-stone-800 shrink-0 p-4 rounded col-span-4 w-96 ', /* organization.approved && */ '')}>
 							<h2 className='text-stone-300  mb-2 font-bold'>
 								En espera de aprobación.
 							</h2>
