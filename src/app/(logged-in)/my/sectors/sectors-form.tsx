@@ -103,7 +103,7 @@ export default function SectorsForm(props: SectorFormProps) {
 						setSelectedSectorKeys(key as Set<number>);
 					}}
 					className='h-[32rem] grow'/>
-				<div className='pb-4 h-[28rem] lg:h-auto w-full lg:w-64 border border-stone-800 rounded px-2 py-3 overflow-y-scroll scroll-smooth scrollbar-thumb-rounded scrollbar-track-transparent scrollbar-thin scrollbar-thumb-stone-50'>
+				<div className='pb-4 h-[28rem] lg:h-[32rem] w-full lg:w-64 border border-stone-800 rounded px-2 py-3 overflow-y-scroll scroll-smooth scrollbar-thumb-rounded scrollbar-track-transparent scrollbar-thin scrollbar-thumb-stone-50'>
 					<ListBox
 						items={selectedSectors} label='Sectores seleccionados'>
 						{
