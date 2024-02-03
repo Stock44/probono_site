@@ -124,7 +124,7 @@ export default function PersonInfoForm(props: PurposeInfoFormProps) {
 					? beneficiaries.map(item => item.id)
 					: beneficiariesListData.selectedKeys as Set<number>)],
 			}}>
-			<div className='flex justify-between items-end mb-4'>
+			<div className='flex-none lg:flex justify-between items-end mb-4'>
 				<div>
 					<h1 className='text-stone-200 text-4xl mb-2'>
 						Propósito
@@ -141,7 +141,7 @@ export default function PersonInfoForm(props: PurposeInfoFormProps) {
 			<Select
 				label='¿Cómo categorizarias a tu organización?' name='categoryId'
 				validate={validate.categoryId} items={organizationCategories}
-				className='mb-4' defaultSelectedKey={organization.categoryId ?? undefined}
+				className='mb-4 w-full' defaultSelectedKey={organization.categoryId ?? undefined}
 			>
 				{
 					category => (
@@ -163,7 +163,7 @@ export default function PersonInfoForm(props: PurposeInfoFormProps) {
 			<ComboBoxTagMultiSelect
 				label='¿Quiénes son los principales beneficiarios de tu organización?'
 				searchPlaceholder='Escribe aquí para buscar'
-				className='mb-4'
+				className='mb-4 w-full'
 				items={beneficiariesListData.items} filteredKeys={beneficiariesListData.filteredKeys}
 				filterText={beneficiariesListData.filterText} setFilterText={beneficiariesListData.setFilterText}
 				selectedKeys={beneficiariesListData.selectedKeys} setSelectedKeys={beneficiariesListData.setSelectedKeys}

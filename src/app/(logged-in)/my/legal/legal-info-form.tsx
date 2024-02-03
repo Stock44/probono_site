@@ -124,7 +124,7 @@ export default function LegalInfoForm(props: LegalInfoFormProps) {
 				</Select>
 			</div>
 
-			<div className='flex gap-2 mb-4'>
+			<div className='flex-none lg:flex gap-2 mb-4'>
 				<TextField
 					label='RFC'
 					name='rfc'
@@ -149,14 +149,14 @@ export default function LegalInfoForm(props: LegalInfoFormProps) {
 				/>
 
 			</div>
-			<div className='flex gap-2'>
+			<div className='flex-none lg:flex gap-2'>
 				<Select
 					label='Estatus de CLUNI'
 					name='cluniStatus'
 					validate={validate.cluniStatus}
 					defaultSelectedKey={organization.cluniStatus ?? undefined}
 					isDisabled={!enabled}
-					className='grow basis-full sm:basis-5/12'
+					className='grow basis-full sm:basis-5/12 w-full mb-4'
 					placeholder='Selecciona un valor'
 					items={clunis}
 				>
@@ -170,7 +170,7 @@ export default function LegalInfoForm(props: LegalInfoFormProps) {
 				</Select>
 				<Select
 					label='Estatus de donataria autorizada'
-					className='grow basis-full sm:basis-5/12 mb-4'
+					className='grow basis-full sm:basis-5/12 mb-4 w-full'
 					name='donationAuthStatus'
 					validate={validate.donationAuthStatus}
 					defaultSelectedKey={organization.donationAuthStatus ?? undefined}
