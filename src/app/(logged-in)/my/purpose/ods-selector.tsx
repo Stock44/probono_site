@@ -101,7 +101,7 @@ export default function OdsSelector(props: OdsSelectorProps) {
 			<span {...labelProps} className='text-stone-300 text-sm'>
 				Selecciona el ODS que atiende tu organización
 			</span>
-			<div className='flex gap-2 flex-wrap mt-1'>
+			<div className='flex gap-4 flex-wrap mt-1 justify-around'>
 				{ods.map(ods => (
 					<OdsRadio key={ods[0]} state={state} ods={ods}/>
 				))}

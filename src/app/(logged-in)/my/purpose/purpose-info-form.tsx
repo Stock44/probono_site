@@ -8,7 +8,6 @@ import {
 } from '@prisma/client';
 import {Item, type Key} from 'react-stately';
 import {List, Set} from 'immutable';
-import Save from '@material-design-icons/svg/round/save.svg';
 import Done from '@material-design-icons/svg/round/done.svg';
 import OdsSelector from '@/app/(logged-in)/my/purpose/ods-selector.tsx';
 import Select from '@/components/select.tsx';
@@ -20,7 +19,7 @@ import useSearchableListData from '@/lib/hooks/use-searchable-list-data.ts';
 import Form, {type FormState} from '@/components/form/form.tsx';
 import {formValidators} from '@/lib/form-utils.ts';
 import {organizationInitSchema, type OrganizationUpdate} from '@/lib/schemas/organization.ts';
-import SubmitButton from '@/components/submit-button.tsx';
+import FormHeader from '@/components/form-header.tsx';
 
 export type PurposeInfoFormProps = {
 	readonly organizationCategories: OrganizationCategory[];
@@ -124,20 +123,7 @@ export default function PersonInfoForm(props: PurposeInfoFormProps) {
 					? beneficiaries.map(item => item.id)
 					: beneficiariesListData.selectedKeys as Set<number>)],
 			}}>
-			<div className='flex-none lg:flex justify-between items-end mb-4'>
-				<div>
-					<h1 className='text-stone-200 text-4xl mb-2'>
-						Propósito
-					</h1>
-					<p className='text-stone-300'>
-						Esta información nos dice lo que tu organización hace, su objetivo y a quienes beneficia.
-					</p>
-				</div>
-				<SubmitButton icon={<Save/>}>
-					Guardar
-				</SubmitButton>
-			</div>
-
+			<FormHeader title='Propósito' description='Lo que tu organización hace, su objetivo y a quiénes beneficia.'/>
 			<Select
 				label='¿Cómo categorizarias a tu organización?' name='categoryId'
 				validate={validate.categoryId} items={organizationCategories}

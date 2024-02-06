@@ -2,7 +2,6 @@
 import React, {useState} from 'react';
 import {CluniStatus, type CorporationType, DonationAuthStatus, type Organization} from '@prisma/client';
 import {Item} from 'react-stately';
-import Save from '@material-design-icons/svg/round/save.svg';
 import CalendarMonth from '@material-design-icons/svg/round/calendar_month.svg';
 import Done from '@material-design-icons/svg/round/done.svg';
 import Select from '@/components/select.tsx';
@@ -12,7 +11,7 @@ import TextField from '@/components/text-field.tsx';
 import Form, {type FormState} from '@/components/form/form.tsx';
 import {organizationInitSchema, type OrganizationUpdate} from '@/lib/schemas/organization.ts';
 import {formValidators} from '@/lib/form-utils.ts';
-import SubmitButton from '@/components/submit-button.tsx';
+import FormHeader from '@/components/form-header.tsx';
 
 const clunis = [
 	{
@@ -74,19 +73,7 @@ export default function LegalInfoForm(props: LegalInfoFormProps) {
 			action={action} staticValues={{
 				isIncorporated: enabled ? undefined : false,
 			}}>
-			<div className='flex justify-between items-end mb-4'>
-				<div>
-					<h1 className='text-stone-200 text-4xl mb-2'>
-						Datos legales
-					</h1>
-					<p className='text-stone-300'>
-						Aquí va la información legal de tu organización.
-					</p>
-				</div>
-				<SubmitButton icon={<Save/>}>
-					Guardar
-				</SubmitButton>
-			</div>
+			<FormHeader title='Datos legales' description='Información legal de tu organización.'/>
 			<Checkbox
 				name='isIncorporated'
 				value='true'
@@ -97,7 +84,7 @@ export default function LegalInfoForm(props: LegalInfoFormProps) {
 				}}>
 				La organización esta incorporada legalmente.
 			</Checkbox>
-			<div className='flex gap-2'>
+			<div className='flex gap-2 flex-wrap'>
 				<TextField
 					name='legalConcept'
 					defaultValue={organization.legalConcept ?? undefined}
@@ -112,7 +99,7 @@ export default function LegalInfoForm(props: LegalInfoFormProps) {
 					validate={validate.corporationTypeId}
 					isDisabled={!enabled}
 					label='Tipo'
-					className='basis-2/12 mb-4'
+					className='basis-full md:basis-2/12 mb-4'
 					items={corporationTypes}>
 					{
 						corporationType => (
@@ -124,14 +111,14 @@ export default function LegalInfoForm(props: LegalInfoFormProps) {
 				</Select>
 			</div>
 
-			<div className='flex-none lg:flex gap-2 mb-4'>
+			<div className='flex-none lg:flex gap-2'>
 				<TextField
 					label='RFC'
 					name='rfc'
 					validate={validate.rfc}
 					defaultValue={organization.rfc ?? undefined}
 					isDisabled={!enabled}
-					className='grow basis-8/12'
+					className='grow basis-8/12 mb-4'
 				/>
 				<NumberField
 					isDisabled={!enabled}
@@ -142,7 +129,7 @@ export default function LegalInfoForm(props: LegalInfoFormProps) {
 					validate={validate.incorporationYear}
 					defaultValue={organization.incorporationYear ?? undefined}
 					label='Año de incorporación'
-					className='basis-3/12'
+					className='basis-3/12 mb-4'
 					formatOptions={{
 						useGrouping: false,
 					}}

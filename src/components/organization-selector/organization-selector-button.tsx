@@ -19,7 +19,7 @@ export type OrganizationSelectorButtonProps = {
 } & Omit<AriaMenuProps<OrganizationOption>, 'items' | 'children'> & MenuTriggerProps;
 
 export default function OrganizationSelectorButton(props: OrganizationSelectorButtonProps) {
-	const {currentOrganization, items: organizations} = props;
+	const {currentOrganization, items: organizations, className} = props;
 
 	const state = useMenuTriggerState(props);
 
@@ -45,6 +45,7 @@ export default function OrganizationSelectorButton(props: OrganizationSelectorBu
 			<Button
 				{...menuTriggerProps}
 				ref={ref}
+				className={className}
 			>
 				{currentOrganization.name}
 				<ArrowDropDown/>

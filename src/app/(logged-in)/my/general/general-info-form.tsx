@@ -1,6 +1,5 @@
 'use client';
 import React from 'react';
-import Save from '@material-design-icons/svg/round/save.svg';
 import {Item} from 'react-stately';
 import Image from 'next/image';
 import CalendarMonth from '@material-design-icons/svg/round/calendar_month.svg';
@@ -22,9 +21,9 @@ import Select from '@/components/select.tsx';
 import Form, {type FormState} from '@/components/form/form.tsx';
 import {organizationInitSchema, type OrganizationUpdate} from '@/lib/schemas/organization.ts';
 import {formValidators} from '@/lib/form-utils.ts';
-import SubmitButton from '@/components/submit-button.tsx';
 import Separator from '@/components/separator.tsx';
 import {formatInMxn} from '@/lib/format-mxn.ts';
+import FormHeader from '@/components/form-header.tsx';
 
 export type GeneralInfoFormProps = {
 	readonly action: (state: FormState<OrganizationUpdate>, data: FormData) => Promise<FormState<OrganizationUpdate>>;
@@ -45,49 +44,39 @@ export default function GeneralInfoForm(props: GeneralInfoFormProps) {
 				icon: <Done/>,
 			}}
 			action={action}>
-			<div className='flex-none lg:flex items-end mb-4 gap-4'>
-				<div>
-					<h1 className='text-stone-200 text-4xl mb-2'>
-						Información general
-					</h1>
-					<p className='text-stone-300'>
-						Datos básicos sobre tu organización, como información de contacto y redes sociales.
-					</p>
+			<FormHeader title='Información general' description='Datos básicos sobre tu organización, como información de contacto y redes sociales.'/>
+			<div className='flex items-center gap-x-4 w-full flex-wrap'>
+				<div className='border rounded border-stone-700 w-full lg:w-auto flex justify-center items-center mb-4'>
+					<OrganizationImagePicker
+						action={action}
+						organization={organization}
+						label='Selecciona un nuevo logo para tu organización'/>
 				</div>
-				<div className='grow'/>
-				<SubmitButton icon={<Save/>}>
-					Guardar
-				</SubmitButton>
-			</div>
-			<div/>
-			<div className='flex items-center gap-x-4 w-full'>
-				<OrganizationImagePicker
-					action={action}
-					organization={organization}
-					label='Selecciona un nuevo logo para tu organización'/>
-				<div className='flex-none lg:flex grow gap-x-4 flex-wrap'>
-					<TextField
-						isRequired
-						label='Nombre de la organización'
-						className='grow mb-4'
-						name='name'
-						validate={validate.name}
-						defaultValue={organization.name}
-					/>
-					<NumberField
-						isRequired
-						icon={<CalendarMonth
-							viewBox='0 0 24 24'
-							className='h-4 w-4 fill-stone-600 group-focus-within:fill-stone-50'/>}
-						label='Año de fundación'
-						formatOptions={{
-							useGrouping: false,
-						}}
-						minValue={1900}
-						defaultValue={organization.foundingYear}
-						className='basis-2/12 mb-4'
-						validate={validate.foundingYear}
-					/>
+				<div className='grow'>
+					<div className='block lg:flex grow gap-x-4 flex-wrap'>
+						<TextField
+							isRequired
+							label='Nombre de la organización'
+							className='grow mb-4'
+							name='name'
+							validate={validate.name}
+							defaultValue={organization.name}
+						/>
+						<NumberField
+							isRequired
+							icon={<CalendarMonth
+								viewBox='0 0 24 24'
+								className='h-4 w-4 fill-stone-600 group-focus-within:fill-stone-50'/>}
+							label='Año de fundación'
+							formatOptions={{
+								useGrouping: false,
+							}}
+							minValue={1900}
+							defaultValue={organization.foundingYear}
+							className='basis-2/12 mb-4'
+							validate={validate.foundingYear}
+						/>
+					</div>
 					<TextField
 						label='Teléfono de contacto'
 						name='phone'
@@ -169,7 +158,7 @@ export default function GeneralInfoForm(props: GeneralInfoFormProps) {
 
 			<div className='flex gap-x-4 items-end'>
 				<Select
-					label='¿Cuales son los Ingresos anuales de la organización?'
+					label='¿Cuáles son los ingresos anuales de la organización?'
 					name='income'
 					items={incomeCategories}
 					className='flex-1'
