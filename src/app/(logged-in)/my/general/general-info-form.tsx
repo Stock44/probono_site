@@ -1,6 +1,5 @@
 'use client';
 import React from 'react';
-import Save from '@material-design-icons/svg/round/save.svg';
 import {Item} from 'react-stately';
 import Image from 'next/image';
 import CalendarMonth from '@material-design-icons/svg/round/calendar_month.svg';
@@ -22,9 +21,9 @@ import Select from '@/components/select.tsx';
 import Form, {type FormState} from '@/components/form/form.tsx';
 import {organizationInitSchema, type OrganizationUpdate} from '@/lib/schemas/organization.ts';
 import {formValidators} from '@/lib/form-utils.ts';
-import SubmitButton from '@/components/submit-button.tsx';
 import Separator from '@/components/separator.tsx';
 import {formatInMxn} from '@/lib/format-mxn.ts';
+import FormHeader from '@/components/form-header.tsx';
 
 export type GeneralInfoFormProps = {
 	readonly action: (state: FormState<OrganizationUpdate>, data: FormData) => Promise<FormState<OrganizationUpdate>>;
@@ -45,21 +44,7 @@ export default function GeneralInfoForm(props: GeneralInfoFormProps) {
 				icon: <Done/>,
 			}}
 			action={action}>
-			<div className='flex items-end mb-4 flex-wrap gap-3'>
-				<div className='w-full lg:w-auto'>
-					<h1 className='text-stone-200 text-4xl mb-2'>
-						Información general
-					</h1>
-					<p className='text-stone-300'>
-						Datos básicos sobre tu organización, como información de contacto y redes sociales.
-					</p>
-				</div>
-				<div className='grow hidden lg:block'/>
-				<SubmitButton icon={<Save/>}>
-					Guardar
-				</SubmitButton>
-			</div>
-			<div/>
+			<FormHeader title='Información general' description='Datos básicos sobre tu organización, como información de contacto y redes sociales.'/>
 			<div className='flex items-center gap-x-4 w-full flex-wrap'>
 				<div className='border rounded border-stone-700 w-full lg:w-auto flex justify-center items-center mb-4'>
 					<OrganizationImagePicker

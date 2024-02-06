@@ -142,8 +142,6 @@ export async function updateOrganization(organizationId: number, update: Organiz
 			});
 		}
 
-		console.log(update.address);
-
 		await tx.organization.update({
 			where: {
 				id: organizationId,
