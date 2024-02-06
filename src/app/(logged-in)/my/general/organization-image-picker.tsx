@@ -1,4 +1,4 @@
-import React, {type ForwardedRef, forwardRef, type ReactNode, useState} from 'react';
+import React, {type ForwardedRef, forwardRef, type ReactNode} from 'react';
 import {useOverlayTriggerState} from 'react-stately';
 import {useOverlayTrigger} from 'react-aria';
 import {type Organization} from '@prisma/client';
@@ -14,13 +14,13 @@ import {organizationInitSchema, type OrganizationUpdate} from '@/lib/schemas/org
 import {formValidators} from '@/lib/form-utils.ts';
 import SubmitButton from '@/components/submit-button.tsx';
 
-export type LogoSelectorProps = {
+export type OrganizationImagePickerProps = {
 	readonly label: ReactNode;
 	readonly organization: Organization;
 	readonly action: (state: FormState<OrganizationUpdate>, data: FormData) => Promise<FormState<OrganizationUpdate>>;
 };
 
-const OrganizationImagePicker = forwardRef((props: LogoSelectorProps, ref: ForwardedRef<HTMLImageElement>) => {
+const OrganizationImagePicker = forwardRef((props: OrganizationImagePickerProps, ref: ForwardedRef<HTMLImageElement>) => {
 	const {label, organization, action} = props;
 	const state = useOverlayTriggerState({});
 	const {triggerProps, overlayProps} = useOverlayTrigger({type: 'dialog'}, state);
@@ -34,7 +34,7 @@ const OrganizationImagePicker = forwardRef((props: LogoSelectorProps, ref: Forwa
 					? <Button {...triggerProps} className='' variant='secondary'>
 						<AddPhotoAlternate className='fill-current'/>
 					</Button>
-					: <div className='group relative mb-4 rounded flex-none'>
+					: <div className='group relative rounded flex-none'>
 						<ImageButton {...triggerProps} src={organization.logoUrl} alt='Imagen seleccionada' className='w-36 h-36'/>
 						<div className='text-stone-50 font-semibold absolute top-0 left-0 w-full h-full justify-center items-center hidden group-hover:flex group-hover:flex-col pointer-events-none'>
 							<AddPhotoAlternate className='fill-current'/>
