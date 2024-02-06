@@ -64,8 +64,8 @@ export default function SectorsForm(props: SectorFormProps) {
 
 	return (
 		<div className='grow'>
-			<div className='flex justify-between items-end mb-4'>
-				<div>
+			<div className='flex items-end mb-4 flex-wrap gap-3'>
+				<div className='w-full lg:w-auto'>
 					<h1 className='text-stone-200 text-4xl mb-2'>
 						Alcance geográfico
 					</h1>
@@ -73,6 +73,7 @@ export default function SectorsForm(props: SectorFormProps) {
 						¿En dónde trabaja tu organización?
 					</p>
 				</div>
+				<div className='grow hidden lg:block'/>
 				<Button
 					isDisabled={isLoading}
 					type='submit' onPress={async () => {
@@ -97,13 +98,13 @@ export default function SectorsForm(props: SectorFormProps) {
 				</Button>
 			</div>
 			<div
-				className='flex-none lg:flex gap-4 h-auto'>
+				className='flex gap-4 h-auto flex-wrap'>
 				<SectorsMap
 					sectors={sectors} selectedKeys={selectedSectorKeys} setSelectedKeys={key => {
 						setSelectedSectorKeys(key as Set<number>);
 					}}
-					className='h-[32rem] grow'/>
-				<div className='pb-4 h-[28rem] lg:h-[32rem] w-full lg:w-64 border border-stone-800 rounded px-2 py-3 overflow-y-scroll scroll-smooth scrollbar-thumb-rounded scrollbar-track-transparent scrollbar-thin scrollbar-thumb-stone-50'>
+					className='h-[32rem] grow mb-4'/>
+				<div className='h-[28rem] lg:h-[32rem] w-full lg:w-64 border border-stone-800 rounded px-2 py-3 overflow-y-scroll scroll-smooth scrollbar-thumb-rounded scrollbar-track-transparent scrollbar-thin scrollbar-thumb-stone-50'>
 					<ListBox
 						items={selectedSectors} label='Sectores seleccionados'>
 						{
