@@ -27,7 +27,7 @@ export default function MyOrganizationSidebar(props: MyOrganizationSidebarProps)
 	return (
 		<SidebarTrigger icon={<Menu className='fill-current'/>} variant='text' className={className}>
 			{
-				close => (
+				() => (
 					<div className='p-4 flex flex-col gap-2'>
 						<p className='text-stone-300 font-bold text-xs ps-2'>
 							Organización actual:

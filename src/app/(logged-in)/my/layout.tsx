@@ -33,8 +33,6 @@ type NavLinkDescription = {
 	icon: ReactNode;
 };
 
-const navigationLinks: NavLinkDescription[] = [];
-
 export default async function MyLayout(props: MyLayoutProps) {
 	const {children} = props;
 
