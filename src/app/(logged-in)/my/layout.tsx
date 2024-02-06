@@ -14,7 +14,6 @@ import GeoStatsLogo from 'public/logos/geostats.png';
 import FacebookLogo from 'public/logos/facebook.png';
 import InstagramLogo from 'public/logos/instagram.png';
 import LinkedinLogo from 'public/logos/linkedin.png';
-import Menu from '@material-design-icons/svg/round/menu.svg';
 import MySectionLink from '@/app/(logged-in)/my/my-section-link.tsx';
 import Separator from '@/components/separator.tsx';
 import {OrganizationDataProgressCard} from '@/app/(logged-in)/my/organization-data-progress-card.tsx';
@@ -22,7 +21,6 @@ import {getCurrentUserOrganizations, getUserFromSession, getUsersActiveOrganizat
 import OrganizationSelectorButton from '@/components/organization-selector/organization-selector-button.tsx';
 import AccountButton from '@/app/(logged-in)/onboarding/account-button.tsx';
 import SocialLink from '@/components/social-link.tsx';
-import SidebarTrigger from '@/components/sidebar-trigger.tsx';
 import MyOrganizationSidebarTrigger from '@/app/(logged-in)/my-organization-sidebar.tsx';
 
 export type MyLayoutProps = {
@@ -35,9 +33,7 @@ type NavLinkDescription = {
 	icon: ReactNode;
 };
 
-const navigationLinks: NavLinkDescription[] = [
-
-];
+const navigationLinks: NavLinkDescription[] = [];
 
 export default async function MyLayout(props: MyLayoutProps) {
 	const {children} = props;
@@ -72,11 +68,14 @@ export default async function MyLayout(props: MyLayoutProps) {
 					<div className='hidden lg:flex gap-2'>
 						{
 							organizations && organizations.length > 0
-              && <OrganizationSelectorButton items={organizations} currentOrganization={organization!}/>
+              && <OrganizationSelectorButton items={organizations} currentOrganization={organization}/>
 						}
 						<AccountButton/>
 					</div>
-					<MyOrganizationSidebarTrigger className='lg:hidden'/>
+					{
+						organizations && organizations.length > 0
+            && <MyOrganizationSidebarTrigger className='lg:hidden' organization={organization} organizations={organizations}/>
+					}
 				</div>
 			</header>
 			<div className='min-h-[calc(100vh-theme(spacing.16))] pb-32 pt-8 px-4'>
@@ -106,7 +105,8 @@ export default async function MyLayout(props: MyLayoutProps) {
 										En espera de aprobación.
 									</h2>
 									<p className='text-stone-400 text-sm mb-4'>
-										Tu organización aun no ha sido aprobada para que aparezca en el sitio. Esta no se podrá ver en el mapa
+										Tu organización aun no ha sido aprobada para que aparezca en el sitio. Esta no se podrá ver en el
+										mapa
 										hasta que sea aprobada.
 									</p>
 								</div>
@@ -133,7 +133,7 @@ export default async function MyLayout(props: MyLayoutProps) {
 						<SocialLink image={InstagramLogo} name='Instagram' href='https://www.instagram.com/geostats.mty/'/>
 						<SocialLink image={LinkedinLogo} name='Linkedin' href='https://www.linkedin.com/company/geo-stats/'/>
 					</div>
-					<div className='flex items-center gap-16 mx-auto w-fit mb-8'>
+					<div className='flex items-center gap-4 lg:gap-16 mx-auto w-fit mb-8 flex-col lg:flex-row'>
 						<p className='text-stone-400'>© 2023 GeoStats (o quien sea, TODO)</p>
 						<Link href='/terms' className='text-stone-400 hover:text-stone-300'>Terminos y condiciones</Link>
 						<Link href='/privacy-policy' className='text-stone-400 hover:text-stone-300'>Política de privacidad</Link>
