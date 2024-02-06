@@ -6,7 +6,6 @@ import {Item} from 'react-stately';
 import {useQuery} from 'react-query';
 import dynamic from 'next/dynamic';
 import {useDebounce} from 'usehooks-ts';
-import Save from '@material-design-icons/svg/round/save.svg';
 import Done from '@material-design-icons/svg/round/done.svg';
 import Select from '@/components/select.tsx';
 import TextField from '@/components/text-field.tsx';
@@ -16,7 +15,7 @@ import {formValidators} from '@/lib/form-utils.ts';
 import {addressInitSchema} from '@/lib/schemas/address.ts';
 import {geocodeAddress, reverseGeocode} from '@/lib/mapbox.ts';
 import {type OrganizationUpdate} from '@/lib/schemas/organization.ts';
-import SubmitButton from '@/components/submit-button.tsx';
+import FormHeader from '@/components/form-header.tsx';
 
 const AddressMap = dynamic(async () => import('@/app/(logged-in)/my/location/address-map.tsx'),
 	{
@@ -116,19 +115,7 @@ export default function AddressInfoForm(props: AddressInfoFormProps) {
 					location: coords,
 				} : undefined,
 			}}>
-			<div className='flex justify-between items-end mb-4'>
-				<div>
-					<h1 className='text-stone-200 text-4xl mb-2'>
-						Dirección
-					</h1>
-					<p className='text-stone-300'>
-						¿Dónde está ubicada tu organización?
-					</p>
-				</div>
-				<SubmitButton icon={<Save/>}>
-					Guardar
-				</SubmitButton>
-			</div>
+			<FormHeader title='Dirección' description='¿Dónde está ubicada tu organización?'/>
 			<AddressMap
 				initialZoom={organization.address?.location ? 15 : 11}
 				initialCoords={organization.address?.location ?? [25.68, -100.31]}
@@ -161,13 +148,13 @@ export default function AddressInfoForm(props: AddressInfoFormProps) {
 					setCoords(address.center);
 					mapRef.current?.flyTo(address.center, 15);
 				}}/>
-			<div className='flex-none lg:flex w-full gap-x-4 mb-4'>
+			<div className='flex-none lg:flex w-full gap-x-4'>
 				<TextField
 					isRequired
 					name='streetName'
 					validate={validate.street}
 					label='Calle'
-					className='grow'
+					className='grow mb-4'
 					value={address.street}
 					onChange={value => {
 						setAddress(previous => ({
@@ -180,7 +167,7 @@ export default function AddressInfoForm(props: AddressInfoFormProps) {
 				/>
 				<NumberField
 					isRequired
-					label='Número' className='w-full lg:w-32'
+					label='Número' className='w-full lg:w-32 mb-4'
 					name='extNumber'
 					validate={validate.number}
 					value={address.number}
@@ -200,7 +187,7 @@ export default function AddressInfoForm(props: AddressInfoFormProps) {
 					isRequired
 					label='Codigo postal'
 					name='postalCode'
-					className='w-full lg:w-32'
+					className='w-full lg:w-32 mb-4'
 					value={address.postalCode}
 					onChange={value => {
 						setAddress(previous => ({

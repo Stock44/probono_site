@@ -16,10 +16,11 @@ export default function Sidebar(props: SidebarProps) {
 
 	const {modalProps, underlayProps} = useModalOverlay(props, state, ref);
 
+	// High z-index required to overlay over Leaflet maps
 	return (
 		<Overlay>
 			<div
-				className='fixed z-10 top-0 left-0 bottom-0 right-0 bg-black/50 flex flex-row-reverse'
+				className='fixed z-[1000] top-0 left-0 bottom-0 right-0 bg-black/50 flex flex-row-reverse'
 				{...underlayProps}
 			>
 				<div
