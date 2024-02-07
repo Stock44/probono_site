@@ -23,8 +23,8 @@ export default function OnboardingClientLayout(props: LayoutContainerProps) {
 
 	return (
 		<div
-			className='bg-stone-950 text-stone-200 flex justify-center  place-items-start justify-items-start  mx-auto max-w-md mt-16'>
-			<motion.div layout className='bg-stone-950 border-stone-800 border rounded p-8 w-full h-fit overflow-hidden'>
+			className='bg-stone-950 text-stone-200 flex justify-center  place-items-start justify-items-start  mx-auto md:max-w-md'>
+			<motion.div layout className='bg-stone-950 border-stone-800 md:border rounded md:p-8 w-full h-fit overflow-hidden'>
 				<motion.div layout className='flex mb-4'>
 					{
 						[segments
@@ -35,7 +35,7 @@ export default function OnboardingClientLayout(props: LayoutContainerProps) {
 										<Link
 											href={`/onboarding/${segment ?? ''}`}
 											className={cx(
-												'block text-center p-2',
+												'p-2 flex justify-center items-center h-16 md:h-auto text-sm md:text-base',
 												isSelected && 'text-stone-50',
 												!isSelected && 'text-stone-400 hover:text-stone-50 ',
 												segment === 'organization' && isOrganizationTabDisabled && 'pointer-events-none text-stone-600',
@@ -53,7 +53,9 @@ export default function OnboardingClientLayout(props: LayoutContainerProps) {
 							})]
 					}
 				</motion.div>
-				{children}
+				<div className='p-4 md:p-0'>
+					{children}
+				</div>
 			</motion.div>
 		</div>
 	);

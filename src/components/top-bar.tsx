@@ -14,7 +14,7 @@ export type TopBarProps = {
 export default function TopBar(props: TopBarProps) {
 	const {children} = props;
 
-	const [showBar, setShowBar] = useState(false);
+	const [showBar, setShowBar] = useState(true);
 
 	useScrollPosition(({prevPos, currPos}) => {
 		console.log(currPos.y);
