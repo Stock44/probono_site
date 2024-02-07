@@ -12,6 +12,7 @@
   "dependencies": {
     "@auth0/nextjs-auth0": "^3.5.0",
     "@material-design-icons/svg": "^0.14.13",
+    "@n8tb1t/use-scroll-position": "^2.0.3",
     "@prisma/client": "^5.8.1",
     "@react-aria/form": "^3.0.1",
     "@react-aria/toast": "^3.0.0-beta.7",
