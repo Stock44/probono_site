@@ -17,23 +17,25 @@ export default function TopBar(props: TopBarProps) {
 	const [showBar, setShowBar] = useState(true);
 
 	useScrollPosition(({prevPos, currPos}) => {
-		console.log(currPos.y);
-		if (currPos.y === 0 && !showBar) {
-			setShowBar(true);
-		} else if (prevPos.y < currPos.y && !showBar) {
-			setShowBar(true);
-		} else if (prevPos.y > currPos.y && showBar) {
+		if (currPos.y <= 32 || prevPos.y > currPos.y) {
+			if (!showBar) {
+				setShowBar(true);
+			}
+		} else if (prevPos.y < currPos.y && showBar) {
 			setShowBar(false);
 		}
-	}, [showBar]);
+	}, [showBar], undefined, true);
 
 	return (
 		<motion.header
 			className={cx(
-				'fixed z-[1000] backdrop-blur right-0 left-0 w-full h-16 border-b border-stone-800 px-4',
+				'fixed z-[1100] backdrop-blur right-0 left-0 w-full h-16 border-b border-stone-800 px-4',
 			)}
 			animate={{
 				top: showBar ? 0 : -64,
+			}}
+			initial={{
+				top: 0,
 			}}
 		>
 			<div className='max-w-7xl mx-auto h-full justify-between items-center flex gap-2'>

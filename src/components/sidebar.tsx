@@ -23,7 +23,7 @@ export default function Sidebar(props: SidebarProps) {
 
 			{/** @ts-expect-error react-aria doesn't use animation props **/ }
 			<motion.div
-				className='fixed z-[1000] top-0 left-0 bottom-0 right-0 flex flex-row-reverse'
+				className='fixed z-[1200] top-0 left-0 bottom-0 right-0 flex flex-row-reverse'
 				animate={{
 					background: 'rgba(0,0,0,0.5)',
 				}}
