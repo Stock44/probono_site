@@ -34,13 +34,13 @@ export default function OrganizationCreationForm(props: OrganizationCreationForm
 				}
 				className='basis-full mb-4 w-full'
 			/>
-			<div className='flex gap-2'>
+			<div className='flex gap-2 flex-wrap'>
 				<TextField
 					isRequired
 					label='Nombre'
 					name='name'
 					validate={validate.name}
-					className='grow basis-9/12 mb-4'
+					className='grow mb-4'
 				/>
 				<NumberField
 					isRequired
@@ -51,7 +51,7 @@ export default function OrganizationCreationForm(props: OrganizationCreationForm
 					formatOptions={{
 						useGrouping: false,
 					}}
-					className='w-32 mb-4'
+					className='w-full sm:w-32 mb-4'
 				/>
 			</div>
 

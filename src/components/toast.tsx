@@ -117,7 +117,7 @@ function ToastRegion(props: ToastRegionProps) {
 			{...omit(regionProps, ['onAnimationEnd', 'onAnimationStart', 'onDragStart', 'onDragEnd', 'onDrag'])}
 			ref={ref}
 			layout
-			className='fixed bottom-4 right-4 flex flex-col gap-4 outline-none'
+			className='fixed bottom-4 right-4 flex flex-col gap-4 outline-none z-[1050]'
 		>
 			<AnimatePresence>
 				{
