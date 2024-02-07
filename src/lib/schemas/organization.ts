@@ -1,17 +1,17 @@
 import z from 'zod';
 import {DonationAuthStatus, CluniStatus, Gender} from '@prisma/client';
+import {imageSchema} from './image.ts';
 import {
 	json,
 	phoneSchema,
 	urlHostnameRefinement,
 } from '@/lib/schemas/util.ts';
 import {addressInitSchema} from '@/lib/schemas/address.ts';
-import { logoSchema } from './logo';
 
 const kb = 1000;
 
 export const organizationInitSchema = z.object({
-	logo: logoSchema.nullish(),
+	logo: imageSchema.nullish(),
 	// eslint-disable-next-line @typescript-eslint/naming-convention
 	name: z.string({invalid_type_error: 'Campo requerido'}),
 	foundingYear: z.coerce.number().int().lte((new Date()).getFullYear(), 'Fecha futura'),
