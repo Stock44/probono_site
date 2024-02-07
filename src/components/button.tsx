@@ -12,7 +12,20 @@ export type ButtonProps = {
 export default forwardRef((props: ButtonProps, ref: ForwardedRef<HTMLButtonElement>) => {
 	const {children} = props;
 	const buttonRef = useObjectRef(ref);
-	const {buttonProps} = useButton(props, buttonRef);
+	const {buttonProps} = useButton({
+		...props,
+		// Workaround for react/react-aria #1513
+		onPress(event) {
+			if (event.pointerType === 'mouse' || event.pointerType === 'keyboard') {
+				props.onPress?.(event);
+				return;
+			}
+
+			setTimeout(() => {
+				props.onPress?.(event);
+			}, 1);
+		},
+	}, buttonRef);
 	return (
 		<button
 			{...buttonProps}
