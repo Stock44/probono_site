@@ -14,8 +14,6 @@ export type FileDropZoneProps = {
 	readonly error?: string;
 } & FormValidationProps<File | undefined> & Omit<ComponentProps<'input'>, 'type' | 'accept' | 'ref'>;
 
-const Kb = 1024;
-
 const imageMimeTypes = new Set<string>(['image/png', 'image/jpg', 'image/jpeg', 'image/webp']);
 
 export default function FileDropZone(props: FileDropZoneProps) {
