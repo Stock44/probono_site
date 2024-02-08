@@ -1,4 +1,4 @@
-import React, {type ForwardedRef, forwardRef, type ReactNode} from 'react';
+import React, {type ForwardedRef, forwardRef, type ReactNode, useState} from 'react';
 import {useOverlayTriggerState} from 'react-stately';
 import {useOverlayTrigger} from 'react-aria';
 import {type Organization} from '@prisma/client';
@@ -11,7 +11,6 @@ import Dialog from '@/components/dialog.tsx';
 import FileDropZone from '@/components/file-drop-zone.tsx';
 import Form, {type FormState} from '@/components/form/form.tsx';
 import {organizationInitSchema, type OrganizationUpdate} from '@/lib/schemas/organization.ts';
-import {formValidators} from '@/lib/form-utils.ts';
 import SubmitButton from '@/components/submit-button.tsx';
 
 export type OrganizationImagePickerProps = {
@@ -25,7 +24,7 @@ const OrganizationImagePicker = forwardRef((props: OrganizationImagePickerProps,
 	const state = useOverlayTriggerState({});
 	const {triggerProps, overlayProps} = useOverlayTrigger({type: 'dialog'}, state);
 	const {close} = state;
-	const validate = formValidators(organizationInitSchema);
+	const [error, setError] = useState<string>();
 
 	return (
 		<>
@@ -48,7 +47,12 @@ const OrganizationImagePicker = forwardRef((props: OrganizationImagePickerProps,
 							<Modal state={state}>
 								<Dialog {...overlayProps} title={label}>
 									<Form
-										action={action}>
+										action={action}
+										successToast={{
+											title: 'Se ha guardado exitosamente el logo.',
+											variant: 'success',
+										}}
+									>
 										<FileDropZone
 											className='w-full h-full mb-4' label={
 												<>
@@ -58,7 +62,22 @@ const OrganizationImagePicker = forwardRef((props: OrganizationImagePickerProps,
 													</div>
 												</>
 											} name='logo'
-											validate={validate.logo}/>
+											error={error}
+											acceptedMimeTypes={['image/jpeg', 'image/jpg', 'image/webp', 'image/png']}
+											onChange={async event => {
+												if (event.target.files && event.target.files.length === 0) {
+													return;
+												}
+
+												const result = await organizationInitSchema.unwrap().shape.logo.safeParseAsync(event.target.files![0]);
+
+												if (result.success) {
+													setError(undefined);
+												} else {
+													setError(result.error.issues[0].message);
+												}
+											}}
+										/>
 										<div className='flex justify-between gap-4'>
 											<Button variant='secondary' onPress={close}>
 												Cancelar

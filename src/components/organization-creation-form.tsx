@@ -23,7 +23,7 @@ export default function OrganizationCreationForm(props: OrganizationCreationForm
 			action={action}
 		>
 			<FileDropZone
-				acceptedFileTypes={['image/png', 'image/jpeg', 'image/jpeg']}
+				acceptedMimeTypes={['image/png', 'image/jpeg', 'image/jpeg']}
 				validate={validate.logo}
 				name='logo'
 				label={

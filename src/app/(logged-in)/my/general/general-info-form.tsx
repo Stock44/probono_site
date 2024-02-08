@@ -159,7 +159,7 @@ export default function GeneralInfoForm(props: GeneralInfoFormProps) {
 			<div className='flex gap-x-4 items-end'>
 				<Select
 					label='¿Cuáles son los ingresos anuales de la organización?'
-					name='income'
+					name='incomeCategoryId'
 					items={incomeCategories}
 					className='flex-1'
 					validate={validate.incomeCategoryId}

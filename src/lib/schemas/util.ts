@@ -97,3 +97,18 @@ export function json<Schema extends z.ZodTypeAny>(schema: Schema) {
 		}
 	}).pipe(schema).or(schema);
 }
+
+/**
+ * Unwraps a branded Zod object schema.
+ *
+ * @param {Schema | z.ZodBranded<Schema, Brand>} schema - The Zod object schema or the branded Zod object schema to unbrand.
+ *
+ * @returns {Schema} - The unbranded Zod object schema.
+ */
+export function unbrandObjectSchema<Schema extends z.AnyZodObject, Brand extends string>(schema: Schema | z.ZodBranded<Schema, Brand>): Schema {
+	if ('unwrap' in schema) {
+		return schema.unwrap();
+	}
+
+	return schema;
+}

@@ -1,24 +1,25 @@
-import React, {type ChangeEvent, type ReactNode, useRef, useState} from 'react';
+import React, {type ChangeEvent, type ComponentProps, type ReactNode, useRef, useState} from 'react';
 import {type FileDropItem, mergeProps, useDrop, useFocusRing} from 'react-aria';
 import {type FormValidationProps, useFormValidation} from '@react-aria/form';
 import {useFormValidationState} from '@react-stately/form';
-import {type MimeType} from 'file-type';
 import Image from 'next/image';
+import {omit} from 'lodash';
 import {cx} from '@/lib/cva.ts';
 
 export type FileDropZoneProps = {
 	readonly className?: string;
 	readonly name?: string;
 	readonly label?: ReactNode;
-	readonly acceptedFileTypes?: MimeType[];
-} & FormValidationProps<File | undefined>;
+	readonly acceptedMimeTypes?: string[];
+	readonly error?: string;
+} & FormValidationProps<File | undefined> & Omit<ComponentProps<'input'>, 'type' | 'accept' | 'ref'>;
 
 const Kb = 1024;
 
-const imageMimeTypes = new Set<MimeType>(['image/png', 'image/jpeg', 'image/webp']);
+const imageMimeTypes = new Set<string>(['image/png', 'image/jpg', 'image/jpeg', 'image/webp']);
 
 export default function FileDropZone(props: FileDropZoneProps) {
-	const {label, className, acceptedFileTypes, name} = props;
+	const {label, className, acceptedMimeTypes, error} = props;
 
 	const [file, setFile] = useState<File>();
 
@@ -59,6 +60,10 @@ export default function FileDropZone(props: FileDropZoneProps) {
 	});
 
 	const inputChangeHandler = (event: ChangeEvent<HTMLInputElement>) => {
+		if (props.onChange) {
+			props.onChange(event);
+		}
+
 		if (event.target.files === null || event.target.files.length === 0) {
 			return;
 		}
@@ -89,13 +94,13 @@ export default function FileDropZone(props: FileDropZoneProps) {
 			onClick={dropZoneClickHandler}
 		>
 			<input
+				{...omit(props, ['className'])}
 				ref={inputRef}
-				name={name}
 				type='file' className='hidden'
-				accept={acceptedFileTypes?.join(',')}
+				accept={acceptedMimeTypes?.join(',')}
 				onChange={inputChangeHandler}
 			/>
-			{!isInvalid && file && imageMimeTypes.has(file.type as MimeType) && <Image src={URL.createObjectURL(file)} alt='Submitted image' height={128} width={128}/>}
+			{!isInvalid && file && imageMimeTypes.has(file.type) && <Image src={URL.createObjectURL(file)} alt='Submitted image' height={128} width={128}/>}
 			<div className='text-stone-500 mt-2'>
 				{
 					file
@@ -105,9 +110,9 @@ export default function FileDropZone(props: FileDropZoneProps) {
 			</div>
 
 			{
-				isInvalid && (
+				(error ?? isInvalid) && (
 					<div className='text-red-400 mt-2'>
-						{validationErrors.join(' ')}
+						{error ?? validationErrors.join(' ')}
 					</div>
 				)
 			}
