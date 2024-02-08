@@ -70,6 +70,7 @@ export default function GeneralInfoForm(props: GeneralInfoFormProps) {
 							label='Año de fundación'
 							formatOptions={{
 								useGrouping: false,
+								maximumFractionDigits: 0,
 							}}
 							minValue={1900}
 							defaultValue={organization.foundingYear}

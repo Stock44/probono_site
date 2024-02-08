@@ -24,7 +24,6 @@ export default function imageSchema(maxSize: number) {
 		const fileStart = new Uint8Array(await blob.slice(0, 100).arrayBuffer());
 		const logoFileTypes = Set(filetypemime(fileStart));
 
-		console.log([...logoFileTypes]);
 		if (logoFileTypes.intersect(validImageTypes).isEmpty()) {
 			ctx.addIssue({
 				code: 'custom',

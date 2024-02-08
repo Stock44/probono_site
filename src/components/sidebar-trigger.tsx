@@ -22,8 +22,6 @@ export default function SidebarTrigger(props: SidebarTriggerProps) {
 		state,
 	);
 
-	console.log(overlayProps);
-
 	return (
 		<>
 			<Button {...props} {...triggerProps}>
