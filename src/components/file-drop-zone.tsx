@@ -94,7 +94,7 @@ export default function FileDropZone(props: FileDropZoneProps) {
 			onClick={dropZoneClickHandler}
 		>
 			<input
-				{...omit(props, ['className'])}
+				{...omit(props, ['className', 'acceptedMimeTypes', 'label', 'error'])}
 				ref={inputRef}
 				type='file' className='hidden'
 				accept={acceptedMimeTypes?.join(',')}
