@@ -1,37 +1,21 @@
 import {omit} from 'lodash';
-import {fileTypeFromBlob} from 'file-type';
 import {del, put} from '@vercel/blob';
+import {filetypeextension} from 'magic-bytes.js';
+import {type Organization} from '@prisma/client';
 import {type OrganizationInit, type OrganizationUpdate} from '@/lib/schemas/organization.ts';
 import prisma from '@/lib/prisma.ts';
 import {connectId} from '@/lib/models/util.ts';
 
-const validImageTypes = new Set(['image/jpeg', 'image/png', 'image/webp']);
-
 /**
- * Create an [organizationId] with the given owner ID and [organizationId] initialization data.
+ * Creates a new organization with the specified owner and initialization data.
  *
- * @param {number} ownerId - The ID of the owner. Must be a positive integer.
- * @param {OrganizationInit} init - The [organizationId] initialization data. Must be an object.
- * @returns {Promise} A promise that resolves to the created [organizationId] object.
- * @throws {Error} If the logo image is not in a supported image format.
+ * @param {number} ownerId - The ID of the owner for the organization.
+ * @param {OrganizationInit} init - The initialization data for the organization.
+ * @returns {Promise<Organization>} - A promise that resolves to the created organization.
+ * @throws {Error} - If the file extension for the logo is not found.
  */
-export async function createOrganization(ownerId: number, init: OrganizationInit) {
-	if (init.logo) {
-		const logoFileType = await fileTypeFromBlob(init.logo);
-
-		if (logoFileType === undefined || !validImageTypes.has(logoFileType.mime)) {
-			throw new Error('Logo image is not in a supported image format');
-		}
-
-		const result = await put(`organizationLogos/${init.name}.${logoFileType.ext}`, init.logo, {
-			access: 'public',
-			contentType: logoFileType.mime,
-		});
-
-		init.logoUrl = result.url;
-	}
-
-	return prisma.$transaction(async tx => {
+export async function createOrganization(ownerId: number, init: OrganizationInit): Promise<Organization> {
+	const organization = await prisma.$transaction(async tx => {
 		const organization = await tx.organization.create({
 			data: {
 				...omit(init,
@@ -86,6 +70,31 @@ export async function createOrganization(ownerId: number, init: OrganizationInit
 
 		return organization;
 	});
+
+	if (init.logo) {
+		const fileStart = new Uint8Array(await init.logo.slice(0, 100).arrayBuffer());
+
+		const extensions = filetypeextension(fileStart);
+
+		if (extensions.length === 0) {
+			throw new Error('Can\'t find correct extension for file.');
+		}
+
+		const result = await put(`organizationLogos/${organization.id}-${Date.now().valueOf()}.${extensions[0]}`, init.logo, {
+			access: 'public',
+		});
+
+		return prisma.organization.update({
+			where: {
+				id: organization.id,
+			},
+			data: {
+				logoUrl: result.url,
+			},
+		});
+	}
+
+	return organization;
 }
 
 /**
@@ -97,35 +106,7 @@ export async function createOrganization(ownerId: number, init: OrganizationInit
  * @throws {Error} - Throws an error if the logo image is not in a supported format.
  */
 export async function updateOrganization(organizationId: number, update: OrganizationUpdate) {
-	return prisma.$transaction(async tx => {
-		if (update.logo) {
-			const logoFileType = await fileTypeFromBlob(update.logo);
-
-			if (logoFileType === undefined || !validImageTypes.has(logoFileType.mime)) {
-				throw new Error('Logo image is not in a supported image format');
-			}
-
-			const {logoUrl: currentLogoUrl} = await tx.organization.findFirstOrThrow({
-				where: {
-					id: organizationId,
-				},
-				select: {
-					logoUrl: true,
-				},
-			});
-
-			if (currentLogoUrl) {
-				await del(currentLogoUrl);
-			}
-
-			const result = await put(`organizationLogos/${update.name}.${logoFileType.ext}`, update.logo, {
-				access: 'public',
-				contentType: logoFileType.mime,
-			});
-
-			update.logoUrl = result.url;
-		}
-
+	await prisma.$transaction(async tx => {
 		if (update.ageGroups) {
 			await tx.organizationToAgeGroup.deleteMany({
 				where: {
@@ -203,4 +184,40 @@ export async function updateOrganization(organizationId: number, update: Organiz
                          where o.id = ${organizationId}`;
 		}
 	});
+
+	if (update.logo) {
+		const fileStart = new Uint8Array(await update.logo.slice(0, 100).arrayBuffer());
+
+		const extensions = filetypeextension(fileStart);
+
+		if (extensions.length === 0) {
+			throw new Error('Can\'t find correct extension for file.');
+		}
+
+		const {logoUrl: currentLogoUrl} = await prisma.organization.findFirstOrThrow({
+			where: {
+				id: organizationId,
+			},
+			select: {
+				logoUrl: true,
+			},
+		});
+
+		if (currentLogoUrl) {
+			await del(currentLogoUrl);
+		}
+
+		const result = await put(`organizationLogos/${organizationId}-${Date.now().valueOf()}.${extensions[0]}`, update.logo, {
+			access: 'public',
+		});
+
+		return prisma.organization.update({
+			where: {
+				id: organizationId,
+			},
+			data: {
+				logoUrl: result.url,
+			},
+		});
+	}
 }

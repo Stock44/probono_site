@@ -1,5 +1,5 @@
 'use client';
-import React from 'react';
+import React, {useState} from 'react';
 import NavigateNext from '@material-design-icons/svg/round/navigate_next.svg';
 import AddPhotoAlternate from '@material-design-icons/svg/round/add_photo_alternate.svg';
 import {NumberField} from '@/components/number-field.tsx';
@@ -17,14 +17,14 @@ export type OrganizationCreationFormProps = {
 export default function OrganizationCreationForm(props: OrganizationCreationFormProps) {
 	const {action} = props;
 	const validate = formValidators(organizationInitSchema);
+	const [error, setError] = useState<string>();
 
 	return (
 		<Form
 			action={action}
 		>
 			<FileDropZone
-				acceptedFileTypes={['image/png', 'image/jpeg', 'image/jpeg']}
-				validate={validate.logo}
+				acceptedMimeTypes={['image/png', 'image/jpeg', 'image/jpeg']}
 				name='logo'
 				label={
 					<>
@@ -33,6 +33,20 @@ export default function OrganizationCreationForm(props: OrganizationCreationForm
 					</>
 				}
 				className='basis-full mb-4 w-full'
+				error={error}
+				onChange={async event => {
+					if (event.target.files && event.target.files.length === 0) {
+						return;
+					}
+
+					const result = await organizationInitSchema.unwrap().shape.logo.safeParseAsync(event.target.files![0]);
+
+					if (result.success) {
+						setError(undefined);
+					} else {
+						setError(result.error.issues[0].message);
+					}
+				}}
 			/>
 			<div className='flex gap-2 flex-wrap'>
 				<TextField

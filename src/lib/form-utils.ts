@@ -1,4 +1,5 @@
 import type z from 'zod';
+import {unbrandObjectSchema} from '@/lib/schemas/util.ts';
 
 /**
  * Preprocesses a form value, changing empty strings into null values.
@@ -39,33 +40,32 @@ export const decodeForm = async <Schema extends z.ZodTypeAny>(
 	const data = Object.fromEntries([...formData].map(([key, value]) => [key, preprocessFormValue(value)]));
 
 	// eslint-disable-next-line @typescript-eslint/no-unsafe-return
-	return schema.parse(data) as z.infer<Schema>;
+	return schema.parseAsync(data);
 };
 
 /**
- * Returns a set of form validators for a given schema.
+ * Returns a set of form validators for a given schema. Does not support async form validators.
  *
  * @param {Schema} schema - The schema object to generate validators for.
  * @returns An object containing validators for each property in the schema.
  */
-export function formValidators<Schema extends z.AnyZodObject>(schema: Schema) {
-	const schemas = schema.shape as {
+export function formValidators<Schema extends z.AnyZodObject>(schema: Schema | z.ZodBranded<Schema, any>) {
+	const schemas = unbrandObjectSchema(schema).shape as {
 		[K in keyof Schema['shape']]: z.ZodSchema;
 	};
 
-	return Object.fromEntries(Object.entries(schemas).map(
-		([key, validator]) =>
-			[
-				key,
-				(value: unknown) => {
-					const result = validator.safeParse(preprocessFormValue(value));
-					// If (key === 'entryHour' || key === 'exitHour') {
-					// 	console.log(result);
-					// }
+	return Object.fromEntries(Object.entries(schemas)
+		.map(
+			([key, validator]) =>
+				[
+					key,
+					(value: unknown) => {
+						const result = validator.safeParse(preprocessFormValue(value));
 
-					return result.success ? null : result.error.issues.map(issue => issue.message).join(' ');
-				},
-			])) as {
+						return result.success ? null : result.error.issues.map(issue => issue.message).join(' ');
+					},
+				]),
+	) as {
 		[K in keyof Schema['shape']]: (value: unknown) => null | string;
 	};
 }

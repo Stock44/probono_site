@@ -1,5 +1,6 @@
 import z from 'zod';
 import {DonationAuthStatus, CluniStatus, Gender} from '@prisma/client';
+import imageSchema from './image.ts';
 import {
 	json,
 	phoneSchema,
@@ -7,18 +8,8 @@ import {
 } from '@/lib/schemas/util.ts';
 import {addressInitSchema} from '@/lib/schemas/address.ts';
 
-const kb = 1000;
-
-export const organizationInitSchema = z.object({
-	logo: z.instanceof(File).superRefine((file, ctx) => {
-		if (file.size > 50 * kb) {
-			ctx.addIssue({
-				code: 'custom',
-				path: ['logo'],
-				message: 'El archivo no puede pesar más de 50 KB',
-			});
-		}
-	}).nullish(),
+const organizationSchema = z.object({
+	logo: imageSchema(400).nullish(),
 	// eslint-disable-next-line @typescript-eslint/naming-convention
 	name: z.string({invalid_type_error: 'Campo requerido'}),
 	foundingYear: z.coerce.number().int().lte((new Date()).getFullYear(), 'Fecha futura'),
@@ -64,7 +55,9 @@ export const organizationInitSchema = z.object({
 	address: json(addressInitSchema).nullish(),
 });
 
-export const organizationUpdateSchema = organizationInitSchema.partial();
+export const organizationInitSchema = organizationSchema.brand<'OrganizationInit'>();
+
+export const organizationUpdateSchema = organizationSchema.partial().brand<'OrganizationUpdate'>();
 
 export type OrganizationInit = z.infer<typeof organizationInitSchema>;
 
