@@ -1,6 +1,7 @@
 'use server';
 import {getSession} from '@auth0/nextjs-auth0';
 import {redirect} from 'next/navigation';
+import {cookies} from 'next/headers';
 import type {FormState} from '@/components/form/form.tsx';
 import {type OrganizationInit, organizationInitSchema} from '@/lib/schemas/organization.ts';
 import {decodeForm} from '@/lib/form-utils.ts';
@@ -20,10 +21,11 @@ export default async function createOrganizationAction(userId: number, state: Fo
 
 	try {
 		const parsedData = await decodeForm(data, organizationInitSchema);
-		await createOrganization(userId, parsedData);
+		const organization = await createOrganization(userId, parsedData);
+		cookies().set('organizationId', organization.id.toString());
 	} catch (error) {
 		return handleActionError(state, error);
 	}
 
-	redirect('/my');
+	redirect('/my/general');
 }
