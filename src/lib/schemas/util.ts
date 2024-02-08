@@ -1,5 +1,11 @@
 import z from 'zod';
 
+/**
+ * Converts an empty string to null.
+ *
+ * @param {unknown} arg - The input value to be converted.
+ * @return {unknown} - The converted value. If the input is not a string or if it is not empty, the input value is returned as is. If the input is an empty string, null is returned.
+ */
 export function emptyStringToNull(arg: unknown) {
 	if (typeof arg !== 'string') {
 		return arg;
@@ -19,6 +25,13 @@ export const phoneSchema = z
 
 export const emptyStringToNullSchema = z.string().transform(emptyStringToNull);
 
+/**
+ * Refines the URL hostname based on a provided hostname.
+ *
+ * @param {string} hostname - The base hostname to compare against.
+ *
+ * @return {function} - A Zod refinement function that takes a URL and a Zod RefinementCtx and refines the URL hostname.
+ */
 export function urlHostnameRefinement(hostname: string) {
 	const hostnames = new Set([`${hostname}.com`, `www.${hostname}.com`]);
 	return (url: string, ctx: z.RefinementCtx) => {
@@ -60,7 +73,7 @@ export function formInputSchema<Schema extends z.ZodTypeAny>(schema: Schema) {
 }
 
 export const boolean = z.literal('')
-	.transform(value => false).or(z.coerce.boolean());
+	.transform(() => false).or(z.coerce.boolean());
 
 /**
  * Parse a JSON string into an object of a given schema.
@@ -70,7 +83,7 @@ export const boolean = z.literal('')
  *
  * @param {Schema} schema - The Zod schema to validate the parsed object against
  *
- * @returns {Schema} - The parsed object if it matches the schema, otherwise the original schema
+ * @returns {Schema} - The parsed object
  */
 export function json<Schema extends z.ZodTypeAny>(schema: Schema) {
 	return z.string().transform((value, ctx) => {
