@@ -44,7 +44,7 @@ export default function Home() {
 								Bono</h1>
 							<p className='text-base mb-6 mx-auto lg:mx-0'>Únete a nuestra plataforma y muestra el impacto que tiene tu
 								organización.</p>
-							<LinkButton href='/api/auth/register' className='mx-auto lg:mx-0' size='lg'>
+							<LinkButton href='/api/auth/signup?returnTo=/my' className='mx-auto lg:mx-0' size='lg'>
 								Regístrate ahora
 							</LinkButton>
 						</div>
@@ -133,7 +133,7 @@ export default function Home() {
 					<h2 className='text-stone-50 font-bold text-3xl mx-auto w-fit mb-8 text-center'>
 						¡Únete a nuestra plataforma y empieza a mostrar tu impacto hoy!
 					</h2>
-					<LinkButton href='/api/auth/register' className='mx-auto' size='lg'>
+					<LinkButton href='/api/auth/signup?returnTo=/my' className='mx-auto' size='lg'>
 						Únirme ahora
 					</LinkButton>
 				</div>
