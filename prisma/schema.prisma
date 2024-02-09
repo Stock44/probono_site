@@ -34,7 +34,7 @@ model OrganizationToActivity {
   activity   Activity @relation(fields: [activityId], references: [id])
   activityId Int
 
-  priority Int @unique
+  priority Int
 
   @@id([organizationId, activityId])
 }
@@ -217,7 +217,7 @@ model Organization {
   youtube                String?
   linkedIn               String?
 
-  approved               Boolean @default(false)
+  approved Boolean @default(false)
 
   isIncorporated     Boolean
   wantsToIncorporate Boolean?
