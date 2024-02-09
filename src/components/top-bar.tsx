@@ -46,7 +46,7 @@ export default function TopBar(props: TopBarProps) {
 						className='mx-auto my-4'
 						alt='geostats logo'
 					/>
-					[GeoStats]
+					[GeoStats] | Pro Bono
 				</Link>
 				<div className='grow'/>
 				{children}
