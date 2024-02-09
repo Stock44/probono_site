@@ -16,7 +16,7 @@ export type TopBarFooterLayoutProps = {
 export default function TopBarFooterLayout(props: TopBarFooterLayoutProps) {
 	const {children, topBarItems} = props;
 	return (
-		<div className='min-h-screen min-w-full'>
+		<div className='min-h-screen min-w-full border-b'>
 			<header className='w-full h-16 border-b border-stone-800 px-4'>
 				<div className='max-w-7xl mx-auto h-full items-center flex gap-2'>
 					<Link href='/' className='flex items-center gap-2 text-md font-bold text-stone-50'>

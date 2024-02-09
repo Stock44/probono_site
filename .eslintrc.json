@@ -21,7 +21,8 @@
 		"react/jsx-closing-tag-location": "off",
 		"react/jsx-no-bind": "off",
 		"@typescript-eslint/no-unnecessary-type-assertion": "off",
-		"@typescript-eslint/no-unsafe-call": "off"
+		"@typescript-eslint/no-unsafe-call": "off",
+		"no-irregular-whitespace": "off"
 	},
 	"extends": [
 		"plugin:@next/next/recommended",
