@@ -17,7 +17,7 @@ export default function TopBar(props: TopBarProps) {
 	const [showBar, setShowBar] = useState(true);
 
 	useScrollPosition(({prevPos, currPos}) => {
-		if (currPos.y <= 32 || prevPos.y > currPos.y) {
+		if (currPos.y <= 64 || prevPos.y > currPos.y) {
 			if (!showBar) {
 				setShowBar(true);
 			}
