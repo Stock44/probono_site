@@ -204,3 +204,57 @@ export async function updateOrganization(organizationId: number, update: Organiz
 		});
 	}
 }
+
+/**
+ * Deletes organizations and related records.
+ *
+ * @param {number[]} ids - An array of organization IDs to delete.
+ * @return {Promise<void>} - A Promise that resolves when the organizations and related records have been deleted.
+ */
+export async function deleteOrganizations(ids: number[]): Promise<void> {
+	// Get organizations that have a logo
+	const organizations = await prisma.organization.findMany({
+		where: {
+			id: {
+				in: ids,
+			},
+			logoUrl: {
+				not: null,
+			},
+		},
+		select: {
+			logoUrl: true,
+		},
+	});
+
+	// Store logo url into an array to delete
+	const logosToDelete = organizations.map(({logoUrl}) => logoUrl!);
+
+	// Delete organizations and related records
+	await prisma.$transaction([
+		prisma.organizationToActivity.deleteMany({
+			where: {
+				organizationId: {
+					in: ids,
+				},
+			},
+		}),
+		prisma.organizationToAgeGroup.deleteMany({
+			where: {
+				organizationId: {
+					in: ids,
+				},
+			},
+		}),
+		prisma.organization.deleteMany({
+			where: {
+				id: {
+					in: ids,
+				},
+			},
+		}),
+	]);
+
+	// Delete logos after organizations have been deleted.
+	await del(logosToDelete);
+}

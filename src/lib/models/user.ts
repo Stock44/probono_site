@@ -2,10 +2,10 @@ import {omit} from 'lodash';
 import {getSession} from '@auth0/nextjs-auth0';
 import {cache} from 'react';
 import {cookies} from 'next/headers';
-import {del} from '@vercel/blob';
 import {type UserInit, type UserUpdate} from '@/lib/schemas/user.ts';
 import prisma from '@/lib/prisma.ts';
 import {management} from '@/lib/auth0.ts';
+import {deleteOrganizations} from '@/lib/models/organization.ts';
 
 export const getFirstSessionUserOrganization = cache(async () => {
 	const session = await getSession();
@@ -67,7 +67,7 @@ export const getUsersActiveOrganization = cache(
 		// If we didn't find an organization with the id specified in the cookie associated with this user,
 		// lets instead use the first organization we find for this user.
 
-		const firstOrganization = await prisma.organization.findFirstOrThrow({
+		return prisma.organization.findFirstOrThrow({
 			where: {
 				owners: {
 					some: {
@@ -76,8 +76,6 @@ export const getUsersActiveOrganization = cache(
 				},
 			},
 		});
-
-		return firstOrganization;
 	},
 );
 
@@ -152,76 +150,57 @@ export async function createUser(authId: string, init: UserInit) {
 	});
 }
 
-export async function deleteUser(id: number) {
-	await prisma.$transaction(async tx => {
-		const {authId} = await tx.user.findUniqueOrThrow({
-			where: {
-				id,
-			},
-			select: {
-				authId: true,
-			},
-		});
+/**
+ * Deletes a user from the system.
+ *
+ * @param {number} id - The ID of the user to delete.
+ *
+ * @return {Promise<void>} - A promise that resolves when the user is successfully deleted.
+ */
+export async function deleteUser(id: number): Promise<void> {
+	const {authId} = await prisma.user.findUniqueOrThrow({
+		where: {
+			id,
+		},
+		select: {
+			authId: true,
+		},
+	});
 
-		await prisma.organization.findUniqueOrThrow({
-			where: {
-				owners: {
+	await management.users.delete({
+		id: authId,
+	});
+
+	// Get all organizations related to this user, along with their number of owners.
+	const organizationsToDelete = await prisma.organization.findMany({
+		where: {
+			owners: {
+				some: {
 					id,
-				}
-			}
-		})
-
-		await management.users.delete({
-			id: authId,
-		});
-
-		await tx.user.delete({
-			where: {
-				id,
-			},
-		});
-
-		const userOrganizations = await tx.organization.findMany({
-			where: {
-				owners: {
-					some: {
-						authId,
-					},
 				},
 			},
-			include: {
-				owners: true,
+		},
+		select: {
+			id: true,
+			_count: {
+				select: {
+					owners: true,
+				},
 			},
-		});
+		},
+	});
 
-		await Promise.all(
-			userOrganizations.map(async organization => {
-				if (organization.owners.length === 1) {
-					await tx.organization.delete({
-						where: {
-							id: organization.id,
-						},
-					});
+	// Filter to only organizations which have a single owner (this user), and map to their ids.
+	const organizationsToDeleteIds = organizationsToDelete
+		.filter(({_count: {owners}}) => owners === 1)
+		.map(({id}) => id);
 
-					if (organization.logoUrl) {
-						await del(organization.logoUrl);
-					}
-				} else {
-					await tx.organization.update({
-						where: {
-							id: organization.id,
-						},
-						data: {
-							owners: {
-								disconnect: {
-									authId,
-								},
-							},
-						},
-					});
-				}
-			}),
-		);
+	await deleteOrganizations(organizationsToDeleteIds);
+
+	await prisma.user.delete({
+		where: {
+			id,
+		},
 	});
 }
 
