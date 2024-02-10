@@ -18,7 +18,7 @@ export default function MainLayout(props: MainLayoutProps) {
 				<LinkButton href='/api/auth/login?returnTo=/my' variant='secondary' className='hidden lg:block'>
 					Iniciar sesión
 				</LinkButton>
-				<LinkButton href='/api/auth/register?returnTo=/my' className='hidden lg:block'>
+				<LinkButton href='/api/auth/signup?returnTo=/my' className='hidden lg:block'>
 					Registro
 				</LinkButton>
 				<SidebarTrigger icon={<Menu className='fill-current'/>} variant='text' className='lg:hidden'>
