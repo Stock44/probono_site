@@ -20,7 +20,7 @@ export default async function UserOnboardingPage() {
 			<p className='text-stone-300 mb-2'>
 				Para empezar, necesitamos unos pocos datos básicos sobre ti.
 			</p>
-			<UserForm user={user ?? undefined} defaultEmail={session.user.email as string} action={upsertUserAction}/>
+			<UserForm user={user ?? undefined} defaultEmail={session.user.email as string} defaultFamilyName={session.user.family_name as string} defaultGivenName={session.user.given_name as string} action={upsertUserAction}/>
 		</AnimatedLayoutContainer>
 	);
 }

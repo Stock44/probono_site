@@ -14,6 +14,8 @@ export type UserOnboardingFormProps = {
 } | {
 	readonly action: (state: FormState<UserInit>, data: FormData) => Promise<FormState<UserInit>>;
 	readonly defaultEmail: string;
+	readonly defaultFamilyName: string;
+	readonly defaultGivenName: string;
 };
 
 export default function UserOnboardingForm(props: UserOnboardingFormProps) {
@@ -21,6 +23,8 @@ export default function UserOnboardingForm(props: UserOnboardingFormProps) {
 
 	const user = 'user' in props ? props.user : undefined;
 	const defaultEmail = 'defaultEmail' in props ? props.defaultEmail : undefined;
+	const defaultFamilyName = 'defaultFamilyName' in props ? props.defaultFamilyName : undefined;
+	const defaultGivenName = 'defaultGivenName' in props ? props.defaultGivenName : undefined;
 
 	const validate = formValidators(userInitSchema);
 
@@ -33,7 +37,7 @@ export default function UserOnboardingForm(props: UserOnboardingFormProps) {
 				name='givenName'
 				label='Nombre(s)'
 				validate={validate.givenName}
-				defaultValue={user?.givenName}
+				defaultValue={user?.givenName ?? defaultGivenName ?? ''}
 			/>
 			<TextField
 				isRequired
@@ -41,7 +45,7 @@ export default function UserOnboardingForm(props: UserOnboardingFormProps) {
 				name='familyName'
 				label='Apellido(s)'
 				validate={validate.familyName}
-				defaultValue={user?.familyName}
+				defaultValue={user?.familyName ?? defaultFamilyName ?? ''}
 			/>
 			<TextField
 				className='mb-4'
