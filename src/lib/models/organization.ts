@@ -4,7 +4,6 @@ import {filetypeextension} from 'magic-bytes.js';
 import {type Organization} from '@prisma/client';
 import {type OrganizationInit, type OrganizationUpdate} from '@/lib/schemas/organization.ts';
 import prisma from '@/lib/prisma.ts';
-import {connectId} from '@/lib/models/util.ts';
 
 /**
  * Creates a new organization with the specified owner and initialization data.
@@ -17,19 +16,10 @@ import {connectId} from '@/lib/models/util.ts';
 export async function createOrganization(ownerId: number, init: OrganizationInit): Promise<Organization> {
 	const organization = await prisma.$transaction(async tx => {
 		const organization = await tx.organization.create({
+			// @ts-expect-error type mismatched when using ids directly and at the same time using create to connect records
 			data: {
 				...omit(init,
-					'logo',
-					'employeeCountCategoryId',
-					'volunteerCountCategoryId',
-					'workplaceTypeId',
-					'incomeCategoryId',
-					'corporationTypeId',
-					'categoryId'),
-				employeeCountCategory: connectId(init.employeeCountCategoryId),
-				volunteerCountCategory: connectId(init.volunteerCountCategoryId),
-				incomeCategory: connectId(init.incomeCategoryId),
-				corporationType: connectId(init.corporationTypeId),
+					['logo']),
 				address: init.address
 					? {
 						create: init.address,
@@ -106,6 +96,7 @@ export async function createOrganization(ownerId: number, init: OrganizationInit
  * @throws {Error} - Throws an error if the logo image is not in a supported format.
  */
 export async function updateOrganization(organizationId: number, update: OrganizationUpdate) {
+	console.log(update);
 	await prisma.$transaction(async tx => {
 		if (update.ageGroups) {
 			await tx.organizationToAgeGroup.deleteMany({
@@ -127,19 +118,11 @@ export async function updateOrganization(organizationId: number, update: Organiz
 			where: {
 				id: organizationId,
 			},
+			// @ts-expect-error type mismatched when using ids directly and at the same time using create to connect records
 			data: {
 				...omit(update,
-					'logo',
-					'categoryId',
-					'employeeCountCategoryId',
-					'volunteerCountCategoryId',
-					'incomeCategoryId',
-					'corporationTypeId'),
-				employeeCountCategory: connectId(update.employeeCountCategoryId),
-				volunteerCountCategory: connectId(update.volunteerCountCategoryId),
-				incomeCategory: connectId(update.incomeCategoryId),
-				corporationType: connectId(update.corporationTypeId),
-				category: connectId(update.categoryId),
+					['logo'],
+				),
 				address: update.address
 					? {
 						upsert: {
@@ -211,7 +194,7 @@ export async function updateOrganization(organizationId: number, update: Organiz
 			access: 'public',
 		});
 
-		return prisma.organization.update({
+		await prisma.organization.update({
 			where: {
 				id: organizationId,
 			},

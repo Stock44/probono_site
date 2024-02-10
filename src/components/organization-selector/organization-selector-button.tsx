@@ -59,7 +59,7 @@ export default function OrganizationSelectorButton(props: OrganizationSelectorBu
 								const id = Number.parseInt(key as string, 10);
 								if (!Number.isNaN(id)) {
 									await updateActiveOrganization(id);
-									window.location.reload();
+									window.location.href = '/my';
 								}
 							}}
 						>
