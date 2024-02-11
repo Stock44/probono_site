@@ -57,18 +57,6 @@ export default function AccountForm(props: AccountFormProps) {
 
 			<TextField label='Correo electrónico' name='email' validate={validate.email} defaultValue={user.email}/>
 
-			<Separator/>
-			<div style={{display: 'flex', flexDirection: 'row', gap: '10px'}}>
-				<LinkButton className='mb-4' variant='outlined' href='/my/account/password' size='lg'>
-					<Key className='me-1 fill-current'/>
-					Cambiar contraseña
-				</LinkButton>
-
-				<LinkButton className='mb-4' variant='outlined' href='/my/account/delete' size='lg'>
-					<Alert className='me-1 fill-current'/>
-					Eliminar cuenta
-				</LinkButton>
-			</div>
 		</Form>
 
 	);

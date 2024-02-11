@@ -1,13 +1,16 @@
+'use client';
 import React, {type ReactNode, useRef} from 'react';
 import {type AriaDialogProps, useDialog} from 'react-aria';
+import {cx} from '@/lib/cva.ts';
 
 export type DialogProps = {
 	readonly title?: ReactNode;
 	readonly children: ReactNode;
+	readonly className?: string;
 } & AriaDialogProps;
 
 export default function Dialog(props: DialogProps) {
-	const {title, children} = props;
+	const {title, children, className} = props;
 
 	const ref = useRef(null);
 
@@ -18,7 +21,7 @@ export default function Dialog(props: DialogProps) {
 			{
 				title === undefined
 					? null
-					: <h3 {...titleProps} className='text-stone-300 text-lg mb-2'>
+					: <h3 {...titleProps} className={cx('text-stone-300 font-bold text-2xl mb-2', className)}>
 						{title}
 					</h3>
 			}
