@@ -17,11 +17,11 @@ export default function Dialog(props: DialogProps) {
 	const {dialogProps, titleProps} = useDialog(props, ref);
 
 	return (
-		<div {...dialogProps} ref={ref} className='outline-none'>
+		<div {...dialogProps} ref={ref} className={cx('outline-none text-stone-300', className)}>
 			{
 				title === undefined
 					? null
-					: <h3 {...titleProps} className={cx('text-stone-300 font-bold text-2xl mb-2', className)}>
+					: <h3 {...titleProps} className='font-bold text-2xl mb-2'>
 						{title}
 					</h3>
 			}

@@ -1,6 +1,6 @@
 'use client';
 import React, {type ReactNode} from 'react';
-import Modal from '@/components/modal.tsx';
+import Modal from '@/components/modal/modal.tsx';
 import useRouterModalState from '@/lib/router-modal-state.ts';
 
 export type RouterModalProps = {

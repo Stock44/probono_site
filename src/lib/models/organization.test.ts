@@ -6,6 +6,8 @@ import {put} from '@vercel/blob';
 import {mocked} from 'jest-mock';
 import {filetypeextension, filetypemime} from 'magic-bytes.js';
 import {pick} from 'lodash';
+import {PrismaClient} from '@prisma/client';
+import {getOrganizationsWithSoleOwner} from './organization';
 import {
 	organizationInitSchema,
 	organizationUpdateSchema,
@@ -118,6 +120,47 @@ describe('updateOrganization function tests', () => {
 		(filetypeextension as jest.Mock).mockReturnValueOnce([]);
 		const organization = await organizationUpdateSchema.parseAsync(update);
 		await expect(updateOrganization(organizationId, {...organization, logo: mockLogo})).rejects.toThrow('Can\'t find correct extension for file.');
+	});
+});
+jest.mock('@prisma/client');
+
+describe('getOrganizationsWithSoleOwner function', () => {
+	let prisma: any;
+
+	beforeEach(() => {
+		prisma = new PrismaClient();
+		(prisma.organization.findMany as jest.Mock).mockClear();
+	});
+
+	it('should return organizations with a sole owner when a valid userID is provided', async () => {
+		const userId = 1;
+		const expectedResponse = [{
+			id: 1,
+			_count: {
+				owners: 1,
+			},
+		}];
+
+		(prisma.organization.findMany as jest.Mock).mockResolvedValue(expectedResponse);
+		const result = await getOrganizationsWithSoleOwner(userId);
+		expect(prisma.organization.findMany).toHaveBeenCalledWith({
+			where: {
+				owners: {
+					some: {
+						id: userId,
+					},
+				},
+			},
+			select: {
+				id: true,
+				_count: {
+					select: {
+						owners: true,
+					},
+				},
+			},
+		});
+		expect(result).toEqual(expectedResponse);
 	});
 });
 

@@ -23,8 +23,6 @@ export const GET = handleAuth({
 			});
 		}
 
-		console.log(session);
-
 		const handler = handleLogin({
 			authorizationParams: {
 				max_age: 0,

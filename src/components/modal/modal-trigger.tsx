@@ -1,13 +1,15 @@
+'use client';
 import React, {type ReactElement, type ReactNode} from 'react';
 import {type OverlayTriggerProps, useOverlayTriggerState} from 'react-stately';
 import {useOverlayTrigger} from 'react-aria';
-import Modal, {type ModalProps} from '@/components/modal.tsx';
+import Modal, {type ModalProps} from '@/components/modal/modal.tsx';
 import Button from '@/components/button.tsx';
 import {type ButtonVariantProps} from '@/components/variants/button.tsx';
+import {modalContext} from '@/components/modal/modal-context.ts';
 
 export type ModalTriggerProps = {
 	readonly className?: string;
-	readonly children: (close: () => void) => ReactElement;
+	readonly children: ReactElement;
 	readonly label: ReactNode;
 } & OverlayTriggerProps & Omit<ModalProps, 'state' | 'children'> & ButtonVariantProps;
 
@@ -23,7 +25,11 @@ export default function ModalTrigger(props: ModalTriggerProps) {
 				state.isOpen
 						&& (
 							<Modal state={state}>
-								{React.cloneElement(children(state.close), overlayProps)}
+								{React.cloneElement(
+									<modalContext.Provider value={state.close}>
+										{children}
+									</modalContext.Provider>
+									, overlayProps)}
 							</Modal>
 						)
 			}

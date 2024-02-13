@@ -5,7 +5,7 @@ import {type Organization} from '@prisma/client';
 import AddPhotoAlternate from '@material-design-icons/svg/round/add_photo_alternate.svg';
 import Save from '@material-design-icons/svg/round/save.svg';
 import Button from '@/components/button.tsx';
-import Modal from '@/components/modal.tsx';
+import Modal from '@/components/modal/modal.tsx';
 import ImageButton from '@/components/image-button.tsx';
 import Dialog from '@/components/dialog.tsx';
 import FileDropZone from '@/components/file-drop-zone.tsx';
