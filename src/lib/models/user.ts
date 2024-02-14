@@ -8,24 +8,6 @@ import prisma from '@/lib/prisma.ts';
 import {management} from '@/lib/auth0.ts';
 import {deleteOrganizations, getUsersDependantOrganizations} from '@/lib/models/organization.ts';
 
-export const getFirstSessionUserOrganization = cache(async () => {
-	const session = await getSession();
-
-	if (!session) {
-		return null;
-	}
-
-	return prisma.organization.findFirst({
-		where: {
-			owners: {
-				some: {
-					authId: session.user.sub as string,
-				},
-			},
-		},
-	});
-});
-
 /**
  * Returns the active organization of the user. This is the first organization if no
  * organization cookie has been set, or the organization specified in the cookie.

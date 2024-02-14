@@ -10,7 +10,6 @@ import {management} from '@/lib/auth0.ts';
 import {prismaMock} from '@/lib/singleton.ts';
 import {
 	createUser,
-	getFirstSessionUserOrganization,
 	updateUser,
 	getUsersActiveOrganization,
 	deleteUser, getUserFromSession, getCurrentUserOrganizations,
@@ -26,31 +25,6 @@ jest.mock('@/lib/auth0.ts');
 jest.mock('next/headers');
 
 jest.mock('@/lib/models/organization.ts');
-
-describe('getFirstSessionUserOrganization', () => {
-	test('should return the first organization of the session user', async () => {
-		const expectedOrganization = {id: 1, name: 'test organization'};
-		mocked(getSession).mockResolvedValue({user: {sub: 'test sub'}});
-		// @ts-expect-error not required for test
-		prismaMock.organization.findFirst.mockResolvedValue(expectedOrganization);
-
-		const result = await getFirstSessionUserOrganization();
-
-		expect(result).toEqual(expectedOrganization);
-		expect(getSession).toHaveBeenCalledTimes(1);
-		expect(prismaMock.organization.findFirst).toHaveBeenCalledWith({
-			where: {
-				owners: {
-					some: {
-						authId: 'test sub',
-					},
-				},
-			},
-		});
-	});
-});
-
-// Other functions can be tested in a similar manner...
 
 describe('createUser', () => {
 	test('should create a new user with the provided authId and init data', async () => {
