@@ -80,6 +80,14 @@ export const getUsersActiveOrganization = cache(
 	},
 );
 
+/**
+ * Retrieve user information from Auth0 session.
+ *
+ * @async
+ * @function getUserFromSession
+ * @param {Array} args - The optional NextRequest and NextResponse objects to be used for getSession, if available.
+ * @returns {Promise<User | null>} - The user object if session exists, otherwise null.
+ */
 export const getUserFromSession = cache(async (...args: [] | [NextRequest, NextResponse]) => {
 	const session = await getSession(...args);
 
@@ -101,6 +109,14 @@ export const getUserFromSession = cache(async (...args: [] | [NextRequest, NextR
 	});
 });
 
+/**
+ * Fetches the organizations associated with the current user.
+ *
+ * @function getCurrentUserOrganizations
+ * @async
+ * @returns {Promise<Organization[] | null>} - A promise that resolves to an array of organizations or null if the user is not authenticated.
+ * @throws {Error} - If the user cannot be found or if an error occurs during the database query.
+ */
 export const getCurrentUserOrganizations = cache(async () => {
 	const session = await getSession();
 	if (!session) {
