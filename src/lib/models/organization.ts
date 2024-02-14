@@ -96,7 +96,6 @@ export async function createOrganization(ownerId: number, init: OrganizationInit
  * @throws {Error} - Throws an error if the logo image is not in a supported format.
  */
 export async function updateOrganization(organizationId: number, update: OrganizationUpdate) {
-	console.log(update);
 	await prisma.$transaction(async tx => {
 		if (update.ageGroups) {
 			await tx.organizationToAgeGroup.deleteMany({
