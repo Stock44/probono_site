@@ -7,7 +7,7 @@ import {mocked} from 'jest-mock';
 import {filetypeextension, filetypemime} from 'magic-bytes.js';
 import {pick} from 'lodash';
 import {PrismaClient} from '@prisma/client';
-import {getOrganizationsWithSoleOwner} from './organization';
+import {getUsersDependantOrganizations} from './organization';
 import {
 	organizationInitSchema,
 	organizationUpdateSchema,
@@ -142,7 +142,7 @@ describe('getOrganizationsWithSoleOwner function', () => {
 		}];
 
 		(prisma.organization.findMany as jest.Mock).mockResolvedValue(expectedResponse);
-		const result = await getOrganizationsWithSoleOwner(userId);
+		const result = await getUsersDependantOrganizations(userId);
 		expect(prisma.organization.findMany).toHaveBeenCalledWith({
 			where: {
 				owners: {

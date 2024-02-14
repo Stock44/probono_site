@@ -263,14 +263,14 @@ export async function deleteOrganizations(ids: number[]): Promise<void> {
  * Retrieves organizations that have a sole owner with the provided user ID.
  *
  * @param {number} userId - The ID of the user.
- * @returns {Promise<Object[]>} - A Promise that resolves to an array of objects representing the organizations with the provided user as their sole owner.
+ * @returns {Promise<Organization[]>} - A Promise that resolves to an array of objects representing the organizations with the provided user as their sole owner.
  *
  * @example
  * const organizations = await getOrganizationsWithSoleOwner(123);
  * console.log(organizations);
  * // Output: [{ id: 1, _count: { owners: 1 } }, { id: 2, _count: { owners: 1 } }]
  */
-export async function getOrganizationsWithSoleOwner(userId: number) {
+export async function getUsersDependantOrganizations(userId: number): Promise<Array<Organization & {_count: {owners: number}}>> {
 	return prisma.organization.findMany({
 		where: {
 			owners: {

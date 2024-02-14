@@ -1,11 +1,11 @@
-import { omit } from "lodash";
-import { getSession } from "@auth0/nextjs-auth0";
-import { cache } from "react";
-import { cookies } from "next/headers";
-import { type UserInit, type UserUpdate } from "@/lib/schemas/user.ts";
-import prisma from "@/lib/prisma.ts";
-import { management } from "@/lib/auth0.ts";
-import { deleteOrganizations, getOrganizationsWithSoleOwner } from "@/lib/models/organization.ts";
+import {omit} from 'lodash';
+import {getSession} from '@auth0/nextjs-auth0';
+import {cache} from 'react';
+import {cookies} from 'next/headers';
+import {type UserInit, type UserUpdate} from '@/lib/schemas/user.ts';
+import prisma from '@/lib/prisma.ts';
+import {management} from '@/lib/auth0.ts';
+import {deleteOrganizations, getUsersDependantOrganizations} from '@/lib/models/organization.ts';
 
 export const getFirstSessionUserOrganization = cache(async () => {
 	const session = await getSession();
@@ -172,7 +172,7 @@ export async function deleteUser(id: number): Promise<void> {
 	});
 
 	// Get all organizations related to this user, along with their number of owners.
-	const organizationsToDelete = await getOrganizationsWithSoleOwner(id);
+	const organizationsToDelete = await getUsersDependantOrganizations(id);
 
 	// Filter to only organizations which have a single owner (this user), and map to their ids.
 	const organizationsToDeleteIds = organizationsToDelete
@@ -181,11 +181,19 @@ export async function deleteUser(id: number): Promise<void> {
 
 	await deleteOrganizations(organizationsToDeleteIds);
 
-	await prisma.user.delete({
-		where: {
-			id,
-		},
-	});
+	await prisma.$transaction(
+		[
+			prisma.userReauthentication.deleteMany({
+				where: {
+					userId: id,
+				},
+			}),
+			prisma.user.delete({
+				where: {
+					id,
+				},
+			}),
+		]);
 }
 
 /**
