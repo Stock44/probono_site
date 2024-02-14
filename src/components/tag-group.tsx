@@ -1,10 +1,10 @@
-import React, { type ForwardedRef, forwardRef, useRef } from "react";
-import { type AriaTagGroupProps, type AriaTagProps, useFocusRing, useTag, useTagGroup } from "react-aria";
-import { Set } from "immutable";
-import { useObjectRef } from "@react-aria/utils";
-import { type Key, type ListState, type Node, useListState } from "react-stately";
-import Close from "@material-design-icons/svg/round/close.svg";
-import Button from "@/components/button.tsx";
+import React, {type ForwardedRef, forwardRef, useRef} from 'react';
+import {type AriaTagGroupProps, type AriaTagProps, useFocusRing, useTag, useTagGroup} from 'react-aria';
+import {Set} from 'immutable';
+import {useObjectRef} from '@react-aria/utils';
+import {type Key, type ListState, type Node, useListState} from 'react-stately';
+import Close from '@material-design-icons/svg/round/close.svg';
+import Button from '@/components/button.tsx';
 
 export type TagGroupProps<T extends Record<string, unknown>> = {
 	readonly className?: string;

@@ -7,14 +7,12 @@ import {mocked} from 'jest-mock';
 import {filetypeextension, filetypemime} from 'magic-bytes.js';
 import {pick} from 'lodash';
 import {type Organization} from '@prisma/client';
-import {getUsersDependantOrganizations} from '@/lib/models/organization.ts';
 import {
 	organizationInitSchema,
 	organizationUpdateSchema,
 } from '@/lib/schemas/organization.ts';
-import {createOrganization, updateOrganization} from '@/lib/models/organization.ts';
+import {createOrganization, updateOrganization, getUsersDependantOrganizations} from '@/lib/models/organization.ts';
 import {prismaMock} from '@/lib/singleton.ts';
-import prisma from '@/lib/prisma';
 
 jest.mock('@vercel/blob');
 jest.mock('magic-bytes.js');
@@ -87,7 +85,10 @@ describe('createOrganization function', () => {
 	it('throws error on unknown file extension for logo', async () => {
 		mocked(filetypeextension).mockReturnValueOnce([]);
 		const organization = await organizationInitSchema.parseAsync(mockOrganization);
-		await expect(createOrganization(ownerId, {...organization, logo: mockLogo})).rejects.toThrow('Can\'t find correct extension for file.');
+		await expect(createOrganization(ownerId, {
+			...organization,
+			logo: mockLogo,
+		})).rejects.toThrow('Can\'t find correct extension for file.');
 	});
 });
 
@@ -120,7 +121,10 @@ describe('updateOrganization function tests', () => {
 	it('throws error on unknown file extension for logo', async () => {
 		(filetypeextension as jest.Mock).mockReturnValueOnce([]);
 		const organization = await organizationUpdateSchema.parseAsync(update);
-		await expect(updateOrganization(organizationId, {...organization, logo: mockLogo})).rejects.toThrow('Can\'t find correct extension for file.');
+		await expect(updateOrganization(organizationId, {
+			...organization,
+			logo: mockLogo,
+		})).rejects.toThrow('Can\'t find correct extension for file.');
 	});
 });
 jest.mock('@prisma/client');
@@ -135,7 +139,7 @@ describe('getOrganizationsWithSoleOwner function', () => {
 			},
 		}];
 
-		// @ts-expect-error
+		// @ts-expect-error typings not needed for test
 		prismaMock.organization.findMany.mockResolvedValue(expectedResponse);
 		const result = await getUsersDependantOrganizations(userId);
 		expect(prismaMock.organization.findMany).toHaveBeenCalledWith({
@@ -170,12 +174,7 @@ describe('getUsersDependantOrganizations()', () => {
 
 		// Sample data to be returned by the findMany function
 		// @ts-expect-error not needed for test
-		const sampleData: Array<Organization & {_count: {owners: number}}> = [{
-      	id: 123,
-      	_count: {
-      		owners: 3,
-      	},
-		}];
+		const sampleData: Array<Organization & {_count: {owners: number}}> = [{id: 123, _count: {owners: 3}}];
 
 		// Setting what our prisma findMany mock should return
 		findManyMock.mockResolvedValue(sampleData);

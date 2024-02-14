@@ -51,7 +51,7 @@ export default function AccountDeletionDialog(props: AccountDeletionDialogProps)
 				<Button variant='secondary' onPress={closeModal}>
 					Cancelar
 				</Button>
-				<ALinkButton href={`/api/auth/reauth?returnTo=/my/account/delete`} variant='outlined' className='text-red-400 font-bold'>
+				<ALinkButton href='/api/auth/reauth?returnTo=/my/account/delete' variant='outlined' className='text-red-400 font-bold'>
 					Confirmar
 				</ALinkButton>
 			</div>
