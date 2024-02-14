@@ -6,6 +6,7 @@ import Dialog from '@/components/dialog.tsx';
 import Button from '@/components/button.tsx';
 import {useCloseModal} from '@/components/modal/modal-context.ts';
 import ALinkButton from '@/components/a-link-button.tsx';
+import LoadingSpinner from '@/components/loading-spinner.tsx';
 
 export type AccountDeletionDialogProps = {
 	readonly userId: number;
@@ -24,21 +25,27 @@ export default function AccountDeletionDialog(props: AccountDeletionDialogProps)
 		<Dialog title={<span className='text-red-400'>Borrar mi cuenta</span>}>
 			¿Estás seguro de que quieres borrar tu cuenta?
 			{
-				data && (
-					<div className='mt-4'>
-						{data.length > 1 && 'Se borrarán las siguientes organizaciones:'}
-						{data.length === 1 && 'Se borrará la siguiente organización:'}
-						<ul className='list-disc list-inside'>
-							{
-								data.map(organization => (
-									<li key={organization.id}>
-										{organization.name}
-									</li>
-								))
-							}
-						</ul>
-					</div>
-				)
+				data
+					? (
+						<div className='mt-4'>
+							{data.length > 1 && 'Se borrarán las siguientes organizaciones:'}
+							{data.length === 1 && 'Se borrará la siguiente organización:'}
+							<ul className='list-disc list-inside'>
+								{
+									data.map(organization => (
+										<li key={organization.id}>
+											{organization.name}
+										</li>
+									))
+								}
+							</ul>
+						</div>
+					)
+					: (
+						<div className='h-16 flex items-center justify-center mt-4'>
+							<LoadingSpinner/>
+						</div>
+					)
 			}
 			<div className='mt-4 flex justify-between'>
 				<Button variant='secondary' onPress={closeModal}>

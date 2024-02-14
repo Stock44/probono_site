@@ -9,6 +9,7 @@ import {getUserFromSession} from '@/lib/models/user.ts';
 import Separator from '@/components/separator.tsx';
 import LinkButton from '@/components/link-button.tsx';
 import ModalTrigger from '@/components/modal/modal-trigger.tsx';
+import HashSpyToaster from '@/components/hash-spy-toaster.tsx';
 
 const AccountDeletionDialog = dynamic(
 	async () =>
@@ -53,6 +54,17 @@ export default async function AccountPage() {
 				}>
 				<AccountDeletionDialog userId={user.id}/>
 			</ModalTrigger>
+
+			<HashSpyToaster
+				toast={{
+					title: 'Tiempo de autenticación excedido, intentálo nuevamente.',
+					variant: 'error',
+				}} hash='expired'/>
+			<HashSpyToaster
+				toast={{
+					title: 'Ha ocurrido un error interno.',
+					variant: 'error',
+				}} hash='unknown-error'/>
 		</main>
 	);
 }
