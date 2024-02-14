@@ -138,8 +138,6 @@ export async function createUser(authId: string, init: UserInit) {
 			id: authId,
 		});
 
-		console.log(user);
-
 		return tx.user.create({
 			data: {
 				...init,
