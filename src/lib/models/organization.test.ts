@@ -125,13 +125,6 @@ describe('updateOrganization function tests', () => {
 jest.mock('@prisma/client');
 
 describe('getOrganizationsWithSoleOwner function', () => {
-	let prisma: any;
-
-	beforeEach(() => {
-		prisma = new PrismaClient();
-		(prisma.organization.findMany as jest.Mock).mockClear();
-	});
-
 	it('should return organizations with a sole owner when a valid userID is provided', async () => {
 		const userId = 1;
 		const expectedResponse = [{
@@ -141,9 +134,10 @@ describe('getOrganizationsWithSoleOwner function', () => {
 			},
 		}];
 
-		(prisma.organization.findMany as jest.Mock).mockResolvedValue(expectedResponse);
+		// @ts-expect-error
+		prismaMock.organization.findMany.mockResolvedValue(expectedResponse);
 		const result = await getUsersDependantOrganizations(userId);
-		expect(prisma.organization.findMany).toHaveBeenCalledWith({
+		expect(prismaMock.organization.findMany).toHaveBeenCalledWith({
 			where: {
 				owners: {
 					some: {
@@ -151,8 +145,7 @@ describe('getOrganizationsWithSoleOwner function', () => {
 					},
 				},
 			},
-			select: {
-				id: true,
+			include: {
 				_count: {
 					select: {
 						owners: true,
