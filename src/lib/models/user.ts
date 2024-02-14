@@ -2,27 +2,11 @@ import {omit} from 'lodash';
 import {getSession} from '@auth0/nextjs-auth0';
 import {cache} from 'react';
 import {cookies} from 'next/headers';
+import {type NextRequest, type NextResponse} from 'next/server';
 import {type UserInit, type UserUpdate} from '@/lib/schemas/user.ts';
 import prisma from '@/lib/prisma.ts';
 import {management} from '@/lib/auth0.ts';
-
-export const getFirstSessionUserOrganization = cache(async () => {
-	const session = await getSession();
-
-	if (!session) {
-		return null;
-	}
-
-	return prisma.organization.findFirst({
-		where: {
-			owners: {
-				some: {
-					authId: session.user.sub as string,
-				},
-			},
-		},
-	});
-});
+import {deleteOrganizations, getUsersDependantOrganizations} from '@/lib/models/organization.ts';
 
 /**
  * Returns the active organization of the user. This is the first organization if no
@@ -66,7 +50,7 @@ export const getUsersActiveOrganization = cache(
 		// If we didn't find an organization with the id specified in the cookie associated with this user,
 		// lets instead use the first organization we find for this user.
 
-		const firstOrganization = await prisma.organization.findFirstOrThrow({
+		return prisma.organization.findFirstOrThrow({
 			where: {
 				owners: {
 					some: {
@@ -75,13 +59,19 @@ export const getUsersActiveOrganization = cache(
 				},
 			},
 		});
-
-		return firstOrganization;
 	},
 );
 
-export const getUserFromSession = cache(async () => {
-	const session = await getSession();
+/**
+ * Retrieve user information from Auth0 session.
+ *
+ * @async
+ * @function getUserFromSession
+ * @param {Array} args - The optional NextRequest and NextResponse objects to be used for getSession, if available.
+ * @returns {Promise<User | null>} - The user object if session exists, otherwise null.
+ */
+export const getUserFromSession = cache(async (...args: [] | [NextRequest, NextResponse]) => {
+	const session = await getSession(...args);
 
 	if (!session) {
 		return null;
@@ -101,6 +91,14 @@ export const getUserFromSession = cache(async () => {
 	});
 });
 
+/**
+ * Fetches the organizations associated with the current user.
+ *
+ * @function getCurrentUserOrganizations
+ * @async
+ * @returns {Promise<Organization[] | null>} - A promise that resolves to an array of organizations or null if the user is not authenticated.
+ * @throws {Error} - If the user cannot be found or if an error occurs during the database query.
+ */
 export const getCurrentUserOrganizations = cache(async () => {
 	const session = await getSession();
 	if (!session) {
@@ -139,8 +137,6 @@ export async function createUser(authId: string, init: UserInit) {
 			id: authId,
 		});
 
-		console.log(user);
-
 		return tx.user.create({
 			data: {
 				...init,
@@ -149,6 +145,54 @@ export async function createUser(authId: string, init: UserInit) {
 			},
 		});
 	});
+}
+
+/**
+ * Deletes a user from the system.
+ *
+ * @param {number} id - The ID of the user to delete.
+ *
+ * @return {Promise<void>} - A promise that resolves when the user is successfully deleted.
+ */
+export async function deleteUser(id: number): Promise<void> {
+	const {authId} = await prisma.user.findUniqueOrThrow({
+		where: {
+			id,
+		},
+		select: {
+			authId: true,
+		},
+	});
+
+	await management.users.delete({
+		id: authId,
+	});
+
+	// Get all organizations related to this user, along with their number of owners.
+	const organizationsToDelete = await getUsersDependantOrganizations(id);
+
+	if (organizationsToDelete.length > 0) {
+		// Filter to only organizations which have a single owner (this user), and map to their ids.
+		const organizationsToDeleteIds = organizationsToDelete
+			.filter(({_count: {owners}}) => owners === 1)
+			.map(({id}) => id);
+
+		await deleteOrganizations(organizationsToDeleteIds);
+	}
+
+	await prisma.$transaction(
+		[
+			prisma.userReauthentication.deleteMany({
+				where: {
+					userId: id,
+				},
+			}),
+			prisma.user.delete({
+				where: {
+					id,
+				},
+			}),
+		]);
 }
 
 /**

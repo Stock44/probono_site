@@ -6,11 +6,12 @@ import {put} from '@vercel/blob';
 import {mocked} from 'jest-mock';
 import {filetypeextension, filetypemime} from 'magic-bytes.js';
 import {pick} from 'lodash';
+import {type Organization} from '@prisma/client';
 import {
 	organizationInitSchema,
 	organizationUpdateSchema,
 } from '@/lib/schemas/organization.ts';
-import {createOrganization, updateOrganization} from '@/lib/models/organization.ts';
+import {createOrganization, updateOrganization, getUsersDependantOrganizations} from '@/lib/models/organization.ts';
 import {prismaMock} from '@/lib/singleton.ts';
 
 jest.mock('@vercel/blob');
@@ -84,7 +85,10 @@ describe('createOrganization function', () => {
 	it('throws error on unknown file extension for logo', async () => {
 		mocked(filetypeextension).mockReturnValueOnce([]);
 		const organization = await organizationInitSchema.parseAsync(mockOrganization);
-		await expect(createOrganization(ownerId, {...organization, logo: mockLogo})).rejects.toThrow('Can\'t find correct extension for file.');
+		await expect(createOrganization(ownerId, {
+			...organization,
+			logo: mockLogo,
+		})).rejects.toThrow('Can\'t find correct extension for file.');
 	});
 });
 
@@ -117,7 +121,96 @@ describe('updateOrganization function tests', () => {
 	it('throws error on unknown file extension for logo', async () => {
 		(filetypeextension as jest.Mock).mockReturnValueOnce([]);
 		const organization = await organizationUpdateSchema.parseAsync(update);
-		await expect(updateOrganization(organizationId, {...organization, logo: mockLogo})).rejects.toThrow('Can\'t find correct extension for file.');
+		await expect(updateOrganization(organizationId, {
+			...organization,
+			logo: mockLogo,
+		})).rejects.toThrow('Can\'t find correct extension for file.');
+	});
+});
+jest.mock('@prisma/client');
+
+describe('getOrganizationsWithSoleOwner function', () => {
+	it('should return organizations with a sole owner when a valid userID is provided', async () => {
+		const userId = 1;
+		const expectedResponse = [{
+			id: 1,
+			_count: {
+				owners: 1,
+			},
+		}];
+
+		// @ts-expect-error typings not needed for test
+		prismaMock.organization.findMany.mockResolvedValue(expectedResponse);
+		const result = await getUsersDependantOrganizations(userId);
+		expect(prismaMock.organization.findMany).toHaveBeenCalledWith({
+			where: {
+				owners: {
+					some: {
+						id: userId,
+					},
+				},
+			},
+			include: {
+				_count: {
+					select: {
+						owners: true,
+					},
+				},
+			},
+		});
+		expect(result).toEqual(expectedResponse);
+	});
+});
+
+jest.mock('@/lib/prisma', () => ({
+	organization: {
+		findMany: jest.fn(),
+	},
+}));
+
+describe('getUsersDependantOrganizations()', () => {
+	it('should return organization data if it exists with the userId provided', async () => {
+		const findManyMock = prismaMock.organization.findMany as jest.Mock;
+
+		// Sample data to be returned by the findMany function
+		// @ts-expect-error not needed for test
+		const sampleData: Array<Organization & {_count: {owners: number}}> = [{id: 123, _count: {owners: 3}}];
+
+		// Setting what our prisma findMany mock should return
+		findManyMock.mockResolvedValue(sampleData);
+
+		const result = await getUsersDependantOrganizations(1);
+
+		expect(findManyMock).toHaveBeenCalledTimes(1);
+		expect(findManyMock).toHaveBeenCalledWith({
+			where: {
+				owners: {
+					some: {
+						id: 1,
+					},
+				},
+			},
+			include: {
+				_count: {
+					select: {
+						owners: true,
+					},
+				},
+			},
+		});
+		expect(result).toBe(sampleData);
+	});
+
+	// You will need to adjust the test case according to the error handling in the getUsersDependantOrganizations function
+	it('should throw an error when database call fails', async () => {
+		const findManyMock = prismaMock.organization.findMany as jest.Mock;
+		findManyMock.mockRejectedValue(new Error('Database error'));
+
+		// We wrap our async function inside a function for jest to properly handle the promise rejection
+		const wrapper = async () => getUsersDependantOrganizations(1);
+
+		await expect(wrapper()).rejects.toThrowError('Database error');
+		expect(findManyMock).toHaveBeenCalledTimes(1);
 	});
 });
 

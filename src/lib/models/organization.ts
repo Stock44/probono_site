@@ -96,7 +96,6 @@ export async function createOrganization(ownerId: number, init: OrganizationInit
  * @throws {Error} - Throws an error if the logo image is not in a supported format.
  */
 export async function updateOrganization(organizationId: number, update: OrganizationUpdate) {
-	console.log(update);
 	await prisma.$transaction(async tx => {
 		if (update.ageGroups) {
 			await tx.organizationToAgeGroup.deleteMany({
@@ -203,4 +202,88 @@ export async function updateOrganization(organizationId: number, update: Organiz
 			},
 		});
 	}
+}
+
+/**
+ * Deletes organizations and related records.
+ *
+ * @param {number[]} ids - An array of organization IDs to delete.
+ * @return {Promise<void>} - A Promise that resolves when the organizations and related records have been deleted.
+ */
+export async function deleteOrganizations(ids: number[]): Promise<void> {
+	// Get organizations that have a logo
+	const organizations = await prisma.organization.findMany({
+		where: {
+			id: {
+				in: ids,
+			},
+			logoUrl: {
+				not: null,
+			},
+		},
+		select: {
+			logoUrl: true,
+		},
+	});
+
+	// Store logo url into an array to delete
+	const logosToDelete = organizations.map(({logoUrl}) => logoUrl!);
+
+	// Delete organizations and related records
+	await prisma.$transaction([
+		prisma.organizationToActivity.deleteMany({
+			where: {
+				organizationId: {
+					in: ids,
+				},
+			},
+		}),
+		prisma.organizationToAgeGroup.deleteMany({
+			where: {
+				organizationId: {
+					in: ids,
+				},
+			},
+		}),
+		prisma.organization.deleteMany({
+			where: {
+				id: {
+					in: ids,
+				},
+			},
+		}),
+	]);
+
+	// Delete logos after organizations have been deleted.
+	await del(logosToDelete);
+}
+
+/**
+ * Retrieves organizations that have a sole owner with the provided user ID.
+ *
+ * @param {number} userId - The ID of the user.
+ * @returns {Promise<Organization[]>} - A Promise that resolves to an array of objects representing the organizations with the provided user as their sole owner.
+ *
+ * @example
+ * const organizations = await getOrganizationsWithSoleOwner(123);
+ * console.log(organizations);
+ * // Output: [{ id: 1, _count: { owners: 1 } }, { id: 2, _count: { owners: 1 } }]
+ */
+export async function getUsersDependantOrganizations(userId: number): Promise<Array<Organization & {_count: {owners: number}}>> {
+	return prisma.organization.findMany({
+		where: {
+			owners: {
+				some: {
+					id: userId,
+				},
+			},
+		},
+		include: {
+			_count: {
+				select: {
+					owners: true,
+				},
+			},
+		},
+	});
 }

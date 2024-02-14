@@ -4,8 +4,8 @@ import GeoStatsLogoMark from 'public/logos/geostats-logomark.png';
 import labnl from '@/app/(main)/labnl_vignette.webp';
 import labnl_mobile from '@/app/(main)/labnl_vignette_mobile.webp';
 import map from '@/app/(main)/map.jpg';
-import LinkButton from '@/components/link-button.tsx';
 import Dropdown from '@/components/dropdown.tsx';
+import ALinkButton from '@/components/a-link-button.tsx';
 
 export default function Home() {
 	const common = {alt: 'LabNL', sizes: '100vw'};
@@ -44,9 +44,9 @@ export default function Home() {
 								Bono</h1>
 							<p className='text-base mb-6 mx-auto lg:mx-0'>Únete a nuestra plataforma y muestra el impacto que tiene tu
 								organización.</p>
-							<LinkButton href='/api/auth/signup?returnTo=/my' className='mx-auto lg:mx-0' size='lg'>
+							<ALinkButton href='/api/auth/signup?returnTo=/my' className='mx-auto lg:mx-0' size='lg'>
 								Regístrate ahora
-							</LinkButton>
+							</ALinkButton>
 						</div>
 
 					</div>
@@ -68,9 +68,9 @@ export default function Home() {
 						Buscamos estandarizar y recopilar datos de las organizaciones Pro Bono para democratizar la generación y el
 						acceso a la información.
 					</p>
-					<LinkButton href='https://geostatsmty.com/' variant='outlined' size='lg' className='mx-auto'>
+					<ALinkButton href='https://geostatsmty.com/' variant='outlined' size='lg' className='mx-auto'>
 						Conocer más
-					</LinkButton>
+					</ALinkButton>
 
 				</div>
 
@@ -133,9 +133,9 @@ export default function Home() {
 					<h2 className='text-stone-50 font-bold text-3xl mx-auto w-fit mb-8 text-center'>
 						¡Únete a nuestra plataforma y empieza a mostrar tu impacto hoy!
 					</h2>
-					<LinkButton href='/api/auth/signup?returnTo=/my' className='mx-auto' size='lg'>
+					<ALinkButton href='/api/auth/signup?returnTo=/my' className='mx-auto' size='lg'>
 						Únirme ahora
-					</LinkButton>
+					</ALinkButton>
 				</div>
 			</div>
 		</div>

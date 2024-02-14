@@ -5,6 +5,7 @@ import React from 'react';
 import {type User} from '@prisma/client';
 import Done from '@material-design-icons/svg/round/done.svg';
 import Key from '@material-design-icons/svg/round/key.svg';
+import Alert from '@material-design-icons/svg/round/delete.svg';
 import {type UserUpdate, userUpdateSchema} from '@/lib/schemas/user.ts';
 import Form, {type FormState} from '@/components/form/form.tsx';
 import SubmitButton from '@/components/submit-button.tsx';
@@ -56,11 +57,6 @@ export default function AccountForm(props: AccountFormProps) {
 
 			<TextField label='Correo electrónico' name='email' validate={validate.email} defaultValue={user.email}/>
 
-			<Separator/>
-			<LinkButton className='mb-4' variant='outlined' href='/my/account/password' size='lg'>
-				<Key className='me-1 fill-current'/>
-				Cambiar contraseña
-			</LinkButton>
 		</Form>
 
 	);
