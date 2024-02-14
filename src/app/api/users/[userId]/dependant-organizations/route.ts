@@ -1,7 +1,7 @@
 import {NextResponse} from 'next/server';
 import {notFound} from 'next/navigation';
 import {withApiAuthRequired} from '@auth0/nextjs-auth0';
-import {getOrganizationsWithSoleOwner} from '@/lib/models/organization.ts';
+import {getUsersDependantOrganizations} from '@/lib/models/organization.ts';
 import {getUserFromSession} from '@/lib/models/user.ts';
 
 // eslint-disable-next-line @typescript-eslint/naming-convention
@@ -20,7 +20,7 @@ export const GET = withApiAuthRequired(async (request, {params}) => {
 		notFound();
 	}
 
-	const organizations = await getOrganizationsWithSoleOwner(id);
+	const organizations = await getUsersDependantOrganizations(id);
 
 	return NextResponse.json(organizations);
 });

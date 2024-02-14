@@ -1,16 +1,19 @@
-import {getSession, withApiAuthRequired} from '@auth0/nextjs-auth0';
+import {withApiAuthRequired} from '@auth0/nextjs-auth0';
 import {notFound, redirect} from 'next/navigation';
 import {NextResponse} from 'next/server';
-import {getUserFromSession} from '@/lib/models/user.ts';
+import {deleteUser, getUserFromSession} from '@/lib/models/user.ts';
+import {
+	consumeUserReauthentication,
+	ReauthenticationExpiredError,
+} from '@/lib/models/user-reauthentication.ts';
 
+// eslint-disable-next-line @typescript-eslint/naming-convention
 export const GET = withApiAuthRequired(async (request, {params}) => {
-	const userId = Number.parseInt(params!.userId, 10);
+	const userId = Number.parseInt(params!.userId as string, 10);
 
 	if (Number.isNaN(userId)) {
 		notFound();
 	}
-
-	const session = await getSession();
 
 	const user = await getUserFromSession();
 
@@ -26,7 +29,17 @@ export const GET = withApiAuthRequired(async (request, {params}) => {
 		});
 	}
 
-	console.log('deleting user?');
+	try {
+		await consumeUserReauthentication();
+	} catch (error) {
+		if (error instanceof ReauthenticationExpiredError) {
+			redirect('/my/account#expired');
+		}
+
+		redirect('/my/account#unknown-error');
+	}
+
+	await deleteUser(user.id);
 
 	return redirect('/');
 });
