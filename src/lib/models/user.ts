@@ -2,6 +2,7 @@ import {omit} from 'lodash';
 import {getSession} from '@auth0/nextjs-auth0';
 import {cache} from 'react';
 import {cookies} from 'next/headers';
+import {type NextRequest, type NextResponse} from 'next/server';
 import {type UserInit, type UserUpdate} from '@/lib/schemas/user.ts';
 import prisma from '@/lib/prisma.ts';
 import {management} from '@/lib/auth0.ts';
@@ -79,8 +80,8 @@ export const getUsersActiveOrganization = cache(
 	},
 );
 
-export const getUserFromSession = cache(async () => {
-	const session = await getSession();
+export const getUserFromSession = cache(async (...args: [] | [NextRequest, NextResponse]) => {
+	const session = await getSession(...args);
 
 	if (!session) {
 		return null;

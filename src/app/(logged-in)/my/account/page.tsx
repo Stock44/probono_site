@@ -62,9 +62,14 @@ export default async function AccountPage() {
 				}} hash='expired'/>
 			<HashSpyToaster
 				toast={{
-					title: 'Ha ocurrido un error interno.',
+					title: 'No se ha podido borrar tu cuenta, intentálo nuevamente.',
 					variant: 'error',
 				}} hash='unknown-error'/>
+			<HashSpyToaster
+				toast={{
+					title: 'Necesitas autenticarte primero.',
+					variant: 'error',
+				}} hash='no-reauth'/>
 		</main>
 	);
 }
