@@ -275,5 +275,16 @@ model User {
   contactEmail String?
   contactPhone String?
 
-  organizations Organization[]
+  organizations     Organization[]
+  reauthentications UserReauthentication[]
+}
+
+model UserReauthentication {
+  id Int @id @default(autoincrement())
+
+  user   User @relation(fields: [userId], references: [id])
+  userId Int
+
+  time     DateTime
+  consumed Boolean
 }
