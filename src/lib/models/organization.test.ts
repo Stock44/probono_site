@@ -6,14 +6,15 @@ import {put} from '@vercel/blob';
 import {mocked} from 'jest-mock';
 import {filetypeextension, filetypemime} from 'magic-bytes.js';
 import {pick} from 'lodash';
-import {PrismaClient} from '@prisma/client';
-import {getUsersDependantOrganizations} from './organization';
+import {type Organization} from '@prisma/client';
+import {getUsersDependantOrganizations} from '@/lib/models/organization.ts';
 import {
 	organizationInitSchema,
 	organizationUpdateSchema,
 } from '@/lib/schemas/organization.ts';
 import {createOrganization, updateOrganization} from '@/lib/models/organization.ts';
 import {prismaMock} from '@/lib/singleton.ts';
+import prisma from '@/lib/prisma';
 
 jest.mock('@vercel/blob');
 jest.mock('magic-bytes.js');
@@ -154,6 +155,63 @@ describe('getOrganizationsWithSoleOwner function', () => {
 			},
 		});
 		expect(result).toEqual(expectedResponse);
+	});
+});
+
+jest.mock('@/lib/prisma', () => ({
+	organization: {
+		findMany: jest.fn(),
+	},
+}));
+
+describe('getUsersDependantOrganizations()', () => {
+	it('should return organization data if it exists with the userId provided', async () => {
+		const findManyMock = prismaMock.organization.findMany as jest.Mock;
+
+		// Sample data to be returned by the findMany function
+		// @ts-expect-error not needed for test
+		const sampleData: Array<Organization & {_count: {owners: number}}> = [{
+      	id: 123,
+      	_count: {
+      		owners: 3,
+      	},
+		}];
+
+		// Setting what our prisma findMany mock should return
+		findManyMock.mockResolvedValue(sampleData);
+
+		const result = await getUsersDependantOrganizations(1);
+
+		expect(findManyMock).toHaveBeenCalledTimes(1);
+		expect(findManyMock).toHaveBeenCalledWith({
+			where: {
+				owners: {
+					some: {
+						id: 1,
+					},
+				},
+			},
+			include: {
+				_count: {
+					select: {
+						owners: true,
+					},
+				},
+			},
+		});
+		expect(result).toBe(sampleData);
+	});
+
+	// You will need to adjust the test case according to the error handling in the getUsersDependantOrganizations function
+	it('should throw an error when database call fails', async () => {
+		const findManyMock = prismaMock.organization.findMany as jest.Mock;
+		findManyMock.mockRejectedValue(new Error('Database error'));
+
+		// We wrap our async function inside a function for jest to properly handle the promise rejection
+		const wrapper = async () => getUsersDependantOrganizations(1);
+
+		await expect(wrapper()).rejects.toThrowError('Database error');
+		expect(findManyMock).toHaveBeenCalledTimes(1);
 	});
 });
 

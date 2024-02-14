@@ -9,7 +9,13 @@ jest.mock('./prisma.ts', () => ({
 
 beforeEach(() => {
 	mockReset(prismaMock);
-	prismaMock.$transaction.mockImplementation(async func => func(prismaMock));
+	prismaMock.$transaction.mockImplementation(async func => {
+		if (typeof func === 'function') {
+			return func(prismaMock);
+		}
+
+		return Promise.all(func);
+	});
 });
 
 export const prismaMock = prisma as unknown as DeepMockProxy<PrismaClient>;
