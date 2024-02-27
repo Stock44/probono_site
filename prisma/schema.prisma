@@ -3,14 +3,13 @@
 
 generator client {
   provider        = "prisma-client-js"
-  previewFeatures = ["postgresqlExtensions"]
+  previewFeatures = ["postgresqlExtensions", "driverAdapters"]
 }
 
 datasource db {
   provider   = "postgresql"
   url        = env("DATABASE_URL") // uses connection pooling
   extensions = [postgis()]
-  directUrl  = env("DIRECT_URL") // uses a direct connection
 }
 
 model ActivityCategory {
