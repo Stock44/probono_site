@@ -29,33 +29,33 @@ export default function AccountForm(props: AccountFormProps) {
 				icon: <Done/>,
 			}}
 			action={action}>
-			<div className='flex items-end mb-4 gap-4'>
+			<div className='flex items-end mb-4 gap-4 flex-wrap justify-between '>
 				<div>
-					<h1 className='text-stone-200 text-4xl mb-2'>
+					<h1 className='text-stone-200 text-4xl mb-2 '>
 						Mi cuenta
 					</h1>
 					<p className='text-stone-300'>
 						Aquí puedes actualizar datos sobre tu cuenta.
 					</p>
 				</div>
-				<div className='grow'/>
-				<SubmitButton icon={<Save/>}>
-					Guardar
-				</SubmitButton>
-			</div>
-			<div/>
-			<div className='w-full'>
-				<div className='flex gap-x-4 mb-4'>
-					<TextField isRequired label='Nombre(s)' name='givenName' defaultValue={user.givenName} validate={validate.givenName} className='grow'/>
-					<TextField isRequired label='Apellido(s)' name='familyName' defaultValue={user.familyName} validate={validate.familyName} className='grow'/>
+				<div>
+					<SubmitButton icon={<Save/>}>
+						Guardar
+					</SubmitButton>
 				</div>
-				<div className='flex gap-x-4 mb-4'>
-					<TextField label='Correo electrónico de contacto' name='contactEmail' defaultValue={user.contactEmail ?? ''} validate={validate.contactEmail} className='grow'/>
-					<TextField label='Télefono de contacto' name='contactPhone' defaultValue={user.contactPhone ?? ''} validate={validate.contactPhone} className='grow'/>
+			</div>
+			<div className='w-full'>
+				<div className='flex-none min-[467px]:flex gap-x-4 mb-4 flex-wrap mx-auto'>
+					<TextField isRequired label='Nombre(s)' name='givenName' defaultValue={user.givenName} validate={validate.givenName} className='grow mb-2'/>
+					<TextField isRequired label='Apellido(s)' name='familyName' defaultValue={user.familyName} validate={validate.familyName} className='grow mb-2 '/>
+				</div>
+				<div className='flex-none min-[467px]:flex gap-x-4 mb-4 flex-wrap mx-auto'>
+					<TextField label='Correo electrónico de contacto' name='contactEmail' defaultValue={user.contactEmail ?? ''} validate={validate.contactEmail} className='grow mb-2'/>
+					<TextField label='Télefono de contacto' name='contactPhone' defaultValue={user.contactPhone ?? ''} validate={validate.contactPhone} className='grow mb-2'/>
 				</div>
 			</div>
 
-			<TextField label='Correo electrónico' name='email' validate={validate.email} defaultValue={user.email}/>
+			<TextField label='Correo electrónico' name='email' validate={validate.email} defaultValue={user.email} className='mb-2'/>
 
 		</Form>
 
