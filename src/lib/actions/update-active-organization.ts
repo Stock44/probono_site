@@ -1,14 +1,14 @@
 'use server';
 
-import {getSession} from '@auth0/nextjs-auth0';
 import {cookies} from 'next/headers';
 import {revalidatePath} from 'next/cache';
 import prisma from '@/lib/prisma.ts';
+import {getUserFromSession} from '@/lib/models/user.ts';
 
 export default async function updateActiveOrganization(id: number) {
-	const session = await getSession();
+	const user = await getUserFromSession();
 
-	if (!session) {
+	if (!user) {
 		return null;
 	}
 
@@ -17,7 +17,7 @@ export default async function updateActiveOrganization(id: number) {
 			id,
 			owners: {
 				some: {
-					authId: session.user.sub as string,
+					id: user.id,
 				},
 			},
 		},
@@ -25,7 +25,7 @@ export default async function updateActiveOrganization(id: number) {
 		where: {
 			owners: {
 				some: {
-					authId: session.user.sub as string,
+					id: user.id,
 				},
 			},
 		},
