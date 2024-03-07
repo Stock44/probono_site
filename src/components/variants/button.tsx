@@ -5,8 +5,8 @@ const buttonVariants = cva({
 	base: 'flex items-center justify-center rounded disabled:cursor-default w-fit',
 	variants: {
 		size: {
-			xs: 'text-xs',
-			sm: 'text-sm',
+			xs: 'text-xs px-1',
+			sm: 'text-sm px-1',
 			md: 'p-1',
 			lg: 'p-2 text-lg',
 			xl: 'p-2 text-xl',

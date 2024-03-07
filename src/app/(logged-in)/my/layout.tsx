@@ -6,6 +6,7 @@ import Person from '@material-design-icons/svg/round/person.svg';
 import Psychology from '@material-design-icons/svg/round/psychology.svg';
 import Policy from '@material-design-icons/svg/round/policy.svg';
 import LocationOn from '@material-design-icons/svg/round/location_on.svg';
+import Group from '@material-design-icons/svg/round/group.svg';
 import Map from '@material-design-icons/svg/round/map.svg';
 import Menu from '@material-design-icons/svg/round/menu.svg';
 import MySectionLink from '@/app/(logged-in)/my/my-section-link.tsx';
@@ -57,7 +58,9 @@ export default async function MyLayout(props: MyLayoutProps) {
 						</p>
 						{
 							organizations.length > 0
-              && <OrganizationSelectorButton items={organizations} currentOrganization={organization} className='w-full flex justify-between'/>
+              && <OrganizationSelectorButton
+              	items={organizations} currentOrganization={organization}
+              	className='w-full flex justify-between'/>
 						}
 						<MySectionLink icon={<Home/>} root='/my' className='mt-4'>Inicio</MySectionLink>
 						<MySectionLink icon={<Person/>} root='/my' slug='account'>Mi cuenta</MySectionLink>
@@ -69,6 +72,7 @@ export default async function MyLayout(props: MyLayoutProps) {
 						<MySectionLink icon={<Policy/>} root='/my' slug='legal'>Datos legales</MySectionLink>
 						<MySectionLink icon={<LocationOn/>} root='/my' slug='location'>Ubicación</MySectionLink>
 						<MySectionLink icon={<Map/>} root='/my' slug='sectors'>Alcance geografico</MySectionLink>
+						<MySectionLink icon={<Group/>} root='/my' slug='members'>Miembros</MySectionLink>
 
 						<LinkButton href='/api/auth/logout' className='mt-4 w-full' variant='outlined'>Cerrar sesión</LinkButton>
 					</div>
@@ -91,6 +95,7 @@ export default async function MyLayout(props: MyLayoutProps) {
 							<MySectionLink icon={<Policy/>} root='/my' slug='legal'>Datos legales</MySectionLink>
 							<MySectionLink icon={<LocationOn/>} root='/my' slug='location'>Ubicación</MySectionLink>
 							<MySectionLink icon={<Map/>} root='/my' slug='sectors'>Alcance geografico</MySectionLink>
+							<MySectionLink icon={<Group/>} root='/my' slug='members'>Miembros</MySectionLink>
 						</div>
 						<div className='grow w-0'>
 							<div
