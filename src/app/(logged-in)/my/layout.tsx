@@ -58,9 +58,7 @@ export default async function MyLayout(props: MyLayoutProps) {
 						</p>
 						{
 							organizations.length > 0
-              && <OrganizationSelectorButton
-              	items={organizations} currentOrganization={organization}
-              	className='w-full flex justify-between'/>
+              && <OrganizationSelectorButton items={organizations} currentOrganization={organization} className='w-full flex justify-between'/>
 						}
 						<MySectionLink icon={<Home/>} root='/my' className='mt-4'>Inicio</MySectionLink>
 						<MySectionLink icon={<Person/>} root='/my' slug='account'>Mi cuenta</MySectionLink>

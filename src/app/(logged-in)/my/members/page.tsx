@@ -1,5 +1,5 @@
 import React from 'react';
-import { getUserFromSession, getUsersActiveOrganization} from '@/lib/models/user.ts';
+import {getUserFromSession, getUsersActiveOrganization} from '@/lib/models/user.ts';
 import {getOrganizationOwners} from '@/lib/models/organization.ts';
 import UsersList from '@/app/(logged-in)/my/members/users-list.tsx';
 
