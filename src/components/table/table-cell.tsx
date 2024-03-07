@@ -12,7 +12,7 @@ export type TableCellProps<T> = {
 export default function TableCell<T>(props: TableCellProps<T>) {
 	const {cell, state} = props;
 
-	const cellRef = useRef<HTMLTableDataCellElement>(null);
+	const cellRef = useRef<HTMLTableCellElement>(null);
 
 	const {gridCellProps} = useTableCell(
 		{node: cell},

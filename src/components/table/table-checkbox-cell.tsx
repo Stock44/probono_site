@@ -11,7 +11,7 @@ export type TableCheckboxCellProps<T> = {
 
 export default function TableCheckboxCell<T>(props: TableCheckboxCellProps<T>) {
 	const {cell, state} = props;
-	const cellRef = useRef<HTMLTableDataCellElement>(null);
+	const cellRef = useRef<HTMLTableCellElement>(null);
 	const {gridCellProps} = useTableCell(
 		{node: cell},
 		state,
