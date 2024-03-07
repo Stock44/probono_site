@@ -6,10 +6,10 @@ const buttonVariants = cva({
 	variants: {
 		size: {
 			xs: 'text-xs px-1',
-			sm: 'text-sm px-1',
-			md: 'p-1',
-			lg: 'p-2 text-lg',
-			xl: 'p-3 text-xl',
+			sm: 'text-sm p-1',
+			md: 'p-2',
+			lg: 'p-3 text-lg',
+			xl: 'p-4 text-xl',
 		},
 		variant: {
 			primary: 'font-bold bg-stone-100 text-stone-950 hover:bg-stone-300 hover:text-stone-800 disabled:bg-stone-500 disabled:text-stone-800',

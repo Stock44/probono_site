@@ -22,7 +22,7 @@ export const getUsersActiveOrganization = cache(
 		const session = await getSession();
 
 		if (!session) {
-			throw new Error('not authenticated');
+			throw new Error('Not authenticated');
 		}
 
 		const cookieStore = cookies();

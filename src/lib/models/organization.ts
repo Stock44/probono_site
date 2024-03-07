@@ -6,6 +6,31 @@ import {type OrganizationInit, type OrganizationUpdate} from '@/lib/schemas/orga
 import prisma from '@/lib/prisma.ts';
 
 /**
+ * Checks whether a user is authorized for a given organization.
+ *
+ * @param {number} organizationId - The ID of the organization to check authorization for.
+ * @param {number} userId - The ID of the user to check authorization for.
+ * @returns {boolean} - True if the user is authorized for the organization, otherwise false.
+ */
+export async function userAuthorizedForOrganization(userId: number, organizationId: number) {
+	const authorized = await prisma.organization.findFirst({
+		where: {
+			id: organizationId,
+			owners: {
+				some: {
+					id: userId,
+				},
+			},
+		},
+		select: {
+			id: true,
+		},
+	});
+
+	return Boolean(authorized);
+}
+
+/**
  * Creates a new organization with the specified owner and initialization data.
  *
  * @param {number} ownerId - The ID of the owner for the organization.
