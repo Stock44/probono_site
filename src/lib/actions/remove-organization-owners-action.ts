@@ -5,7 +5,7 @@ import prisma from '@/lib/prisma.ts';
 import {getUserFromSession} from '@/lib/models/user.ts';
 import {userAuthorizedForOrganization} from '@/lib/models/organization.ts';
 
-export default async function deleteOrganizationOwnersAction(organizationId: number, owners: number[]): Promise<ServerActionResult> {
+export default async function removeOrganizationOwnersAction(organizationId: number, owners: number[]): Promise<ServerActionResult> {
 	const user = await getUserFromSession();
 	if (!user) {
 		return {

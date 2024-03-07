@@ -18,10 +18,12 @@ type StaticValues<T> = {
 	readonly [K in keyof T]?: T[K];
 };
 
+export type FormAction<T> = (previousState: FormState<T>, data: FormData) => Promise<FormState<T>>;
+
 export type FormProps<T> = {
 	readonly children: ReactNode;
 	readonly className?: string;
-	readonly action: (previousState: FormState<T>, data: FormData) => Promise<FormState<T>>;
+	readonly action: FormAction<T>;
 	readonly successToast?: ToastContent;
 	readonly staticValues?: StaticValues<T>;
 };

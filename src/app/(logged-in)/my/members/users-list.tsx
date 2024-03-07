@@ -11,13 +11,17 @@ import Table from '@/components/table/table.tsx';
 import {
 	type OrganizationOwnerAddition,
 } from '@/lib/schemas/organization-owner-addition.ts';
-import Form, {type FormState} from '@/components/form/form.tsx';
-import {formValidators} from '@/lib/form-utils.ts';
+import Form, {type FormAction} from '@/components/form/form.tsx';
+import {type ServerActionResult} from '@/lib/server-action-result.ts';
+import {useToasts} from '@/components/toast.tsx';
+import LoadingSpinner from '@/components/loading-spinner.tsx';
+import SubmitButton from '@/components/submit-button.tsx';
 
 export type UsersListProps = {
 	readonly currentUser: User;
 	readonly users: User[];
-	readonly addOwnerAction: (formState: FormState<OrganizationOwnerAddition>, data: FormData) => Promise<FormState<OrganizationOwnerAddition>>;
+	readonly addOwnerAction: FormAction<OrganizationOwnerAddition>;
+	readonly removeOwnersAction: (owners: number[]) => Promise<ServerActionResult>;
 };
 
 export default function UsersList(props: UsersListProps) {
@@ -25,6 +29,7 @@ export default function UsersList(props: UsersListProps) {
 		currentUser,
 		users,
 		addOwnerAction,
+		removeOwnersAction,
 	} = props;
 
 	const [selectedUsers, setSelectedUsers] = useState<Selection>(new Set<Key>());
@@ -34,6 +39,41 @@ export default function UsersList(props: UsersListProps) {
 		{name: 'Apellido(s)', key: 'familyName'},
 		{name: 'Correo', key: 'email'},
 	];
+
+	const toasts = useToasts();
+
+	const [deletePending, setDeletePending] = useState(false);
+
+	const onRemoveUsers = async () => {
+		const usersToRemove = selectedUsers === 'all' ? users.map(user => user.id) : [...selectedUsers] as number[];
+
+		setDeletePending(true);
+
+		try {
+			const result = await removeOwnersAction(usersToRemove);
+
+			if (result.success) {
+				toasts.add({
+					title: 'Se han quitado los usuarios exitosamente',
+				}, {
+					timeout: 5000,
+				});
+			} else {
+				toasts.add({
+					title: result.name ?? 'Ha ocurrido un error',
+					description: result.message,
+					variant: 'error',
+				});
+			}
+		} catch {
+			toasts.add({
+				title: 'Ha ocurrido un error',
+				variant: 'error',
+			});
+		}
+
+		setDeletePending(false);
+	};
 
 	return (
 		<>
@@ -46,17 +86,35 @@ export default function UsersList(props: UsersListProps) {
 						name='email'
 						validate={email => email === currentUser.email ? 'No te puedes agregar a ti mismo.' : undefined}
 					/>
-					<Button variant='secondary' size='sm' type='submit'>
-						<Add className='fill-current'/> <span className='hidden md:inline'>Agregar</span>
-					</Button>
+					<SubmitButton variant='secondary' size='sm' icon={<Add className='fill-current'/>}>
+						<span className='hidden md:inline'>Agregar</span>
+					</SubmitButton>
 				</Form>
-				<Button variant='destructive' size='sm' isDisabled={selectedUsers !== 'all' && selectedUsers.size === 0}>
-					<Delete className='fill-current'/>
+				<Button
+					variant='destructive' size='sm'
+					isDisabled={deletePending || (selectedUsers !== 'all' && selectedUsers.size === 0)}
+					onPress={onRemoveUsers}>
+					{
+						deletePending
+							? (
+								<LoadingSpinner className='m-1'/>
+							)
+							: (
+								<Delete className='fill-current'/>
+							)
+					}
 				</Button>
 			</div>
 
 			<div className='border border-stone-700 rounded min-h-96 text-stone-300 overflow-y-auto'>
-				<Table showSelectionCheckboxes className='w-full' selectionMode='multiple' selectionBehavior='toggle'>
+				<Table
+					showSelectionCheckboxes
+					selectedKeys={selectedUsers}
+					className='w-full'
+					selectionMode='multiple'
+					selectionBehavior='toggle'
+					onSelectionChange={setSelectedUsers}
+				>
 					<TableHeader columns={columns}>
 						{
 							column => (

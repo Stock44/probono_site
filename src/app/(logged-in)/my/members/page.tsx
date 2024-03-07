@@ -3,6 +3,7 @@ import {getUserFromSession, getUsersActiveOrganization} from '@/lib/models/user.
 import {getOrganizationOwners} from '@/lib/models/organization.ts';
 import UsersList from '@/app/(logged-in)/my/members/users-list.tsx';
 import addOrganizationOwnerAction from '@/lib/actions/add-organization-owner-action.ts';
+import removeOrganizationOwnersAction from '@/lib/actions/remove-organization-owners-action.ts';
 
 export default async function MembersPage() {
 	const user = (await getUserFromSession())!;
@@ -13,7 +14,9 @@ export default async function MembersPage() {
 
 	const ownersWithoutUser = owners.filter(owner => owner.id !== user.id);
 
-	const action = addOrganizationOwnerAction.bind(null, organization.id);
+	const addOwnerAction = addOrganizationOwnerAction.bind(null, organization.id);
+
+	const removeOwnersAction = removeOrganizationOwnersAction.bind(null, organization.id);
 
 	return (
 		<div>
@@ -23,7 +26,7 @@ export default async function MembersPage() {
 			<p className='text-stone-300 mb-4'>
 				Aquí puedes controlar quién puede acceder a y modificar los datos de tu organización
 			</p>
-			<UsersList currentUser={user} users={ownersWithoutUser} addOwnerAction={action}/>
+			<UsersList currentUser={user} users={ownersWithoutUser} addOwnerAction={addOwnerAction} removeOwnersAction={removeOwnersAction}/>
 		</div>
 	);
 }
