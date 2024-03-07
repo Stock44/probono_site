@@ -26,7 +26,7 @@ export default function TableCheckboxCell<T>(props: TableCheckboxCellProps<T>) {
 		<td
 			{...gridCellProps}
 			ref={cellRef}
-			className='px-4'
+			className='px-4 border-y border-stone-800'
 		>
 			<Checkbox {...checkboxProps}/>
 		</td>

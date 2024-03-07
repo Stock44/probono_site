@@ -16,7 +16,7 @@ export default function TableRowGroup<T>(props: TableRowGroupProps) {
 	return (
 		<Element
 			{...rowGroupProps}
-			className={cx(Element === 'thead' && 'border-b border-stone-700')}
+			className={cx(Element === 'thead' && 'border-b border-stone-700 bg-stone-900')}
 		>
 			{children}
 		</Element>

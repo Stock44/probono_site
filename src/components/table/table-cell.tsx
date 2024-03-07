@@ -27,7 +27,7 @@ export default function TableCell<T>(props: TableCellProps<T>) {
 			{...mergeProps(gridCellProps, focusProps)}
 			ref={cellRef}
 			className={cx(
-				'p-4 outline-none',
+				'p-4 outline-none border-y border-stone-800',
 				isFocusVisible && 'shadow-stone-500',
 			)}
 		>

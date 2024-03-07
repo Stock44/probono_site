@@ -32,11 +32,11 @@ export default function UsersList(props: UsersListProps) {
 		<>
 			<div className='flex items-stretch gap-4 mb-4'>
 				<TextField className='flex-1 min-w-0 overflow-hidden' placeholder='Correo electrónico del usuario' type='email'/>
-				<Button variant='outlined' size='sm'>
+				<Button variant='secondary' size='sm'>
 					<Add className='fill-current'/> <span className='hidden md:inline'>Agregar</span>
 				</Button>
 				<Button variant='destructive' size='sm' isDisabled={selectedUsers !== 'all' && selectedUsers.size === 0}>
-					<Delete/>
+					<Delete className='fill-current'/>
 				</Button>
 			</div>
 
