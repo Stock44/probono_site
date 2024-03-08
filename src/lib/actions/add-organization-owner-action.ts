@@ -11,6 +11,7 @@ import {decodeForm} from '@/lib/form-utils.ts';
 import {getUserFromSession} from '@/lib/models/user.ts';
 import prisma from '@/lib/prisma.ts';
 import {userAuthorizedForOrganization} from '@/lib/models/organization.ts';
+import email from '@/lib/email.ts';
 
 export default async function addOrganizationOwnerAction(organizationId: number, state: FormState<OrganizationOwnerAddition>, data: FormData): Promise<FormState<OrganizationOwnerAddition>> {
 	const user = await getUserFromSession();
@@ -32,11 +33,11 @@ export default async function addOrganizationOwnerAction(organizationId: number,
 	}
 
 	try {
-		const {email} = await decodeForm(data, organizationOwnerAdditionSchema);
+		const {email: recipient} = await decodeForm(data, organizationOwnerAdditionSchema);
 
 		const user = await prisma.user.findUnique({
 			where: {
-				email,
+				email: recipient,
 			},
 		});
 
@@ -52,6 +53,11 @@ export default async function addOrganizationOwnerAction(organizationId: number,
 						},
 					},
 				},
+			});
+		} else {
+			await email(recipient, {
+				subject: 'Hello ✔',
+				html: '<b>Hello world?</b>',
 			});
 		}
 	} catch (error) {
