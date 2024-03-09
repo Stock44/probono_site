@@ -1,6 +1,8 @@
 'use server';
 
 import {revalidatePath} from 'next/cache';
+import {render} from '@react-email/render';
+import {createElement} from 'react';
 import {type FormState} from '@/components/form/form.tsx';
 import {
 	type OrganizationOwnerAddition,
@@ -12,6 +14,7 @@ import {getUserFromSession} from '@/lib/models/user.ts';
 import prisma from '@/lib/prisma.ts';
 import {userAuthorizedForOrganization} from '@/lib/models/organization.ts';
 import email from '@/lib/email.ts';
+import OrganizationInvitationEmail from '@/emails/organization-invitation.tsx';
 
 export default async function addOrganizationOwnerAction(organizationId: number, state: FormState<OrganizationOwnerAddition>, data: FormData): Promise<FormState<OrganizationOwnerAddition>> {
 	const user = await getUserFromSession();
@@ -35,13 +38,13 @@ export default async function addOrganizationOwnerAction(organizationId: number,
 	try {
 		const {email: recipient} = await decodeForm(data, organizationOwnerAdditionSchema);
 
-		const user = await prisma.user.findUnique({
+		const recipientUser = await prisma.user.findUnique({
 			where: {
 				email: recipient,
 			},
 		});
 
-		if (user) {
+		if (recipientUser) {
 			await prisma.organization.update({
 				where: {
 					id: organizationId,
@@ -49,15 +52,28 @@ export default async function addOrganizationOwnerAction(organizationId: number,
 				data: {
 					owners: {
 						connect: {
-							id: user.id,
+							id: recipientUser.id,
 						},
 					},
 				},
 			});
 		} else {
+			const organization = await prisma.organization.findUniqueOrThrow({
+				where: {
+					id: organizationId,
+				},
+			});
+			const html = render(createElement(OrganizationInvitationEmail, {
+				organizationLogoUrl: organization.logoUrl ?? '',
+				organizationName: organization.name,
+				senderEmail: user.email,
+				senderName: `${user.givenName} ${user.familyName}`,
+				inviteId: 1,
+			}));
+
 			await email(recipient, {
-				subject: 'Hello ✔',
-				html: '<b>Hello world?</b>',
+				subject: `Invitación a ${organization.name}`,
+				html,
 			});
 		}
 	} catch (error) {
