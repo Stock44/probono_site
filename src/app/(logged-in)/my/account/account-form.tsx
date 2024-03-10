@@ -12,10 +12,34 @@ import FormHeader from '@/components/form-header.tsx';
 export type AccountFormProps = {
 	readonly action: (state: FormState<UserUpdate>, data: FormData) => Promise<FormState<UserUpdate>>;
 	readonly user: User;
+	readonly sessionType: string;
 };
+
+function ShowUpdateMail(props: {
+
+	readonly sessionType: string;
+	readonly validate: any;
+	readonly user: User;
+}) {
+	if (props.sessionType === 'google') {
+		return null;
+	}
+
+	return (
+		<TextField
+			label='Correo electrónico'
+			name='email'
+			validate={props.validate.email}
+			defaultValue={props.user.email}
+			className='mb-2'
+		/>
+	);
+}
 
 export default function AccountForm(props: AccountFormProps) {
 	const {action, user} = props;
+	const sessionType = props.sessionType;
+
 	const validate = formValidators(userUpdateSchema);
 	return (
 		<Form
@@ -36,7 +60,7 @@ export default function AccountForm(props: AccountFormProps) {
 				</div>
 			</div>
 
-			<TextField label='Correo electrónico' name='email' validate={validate.email} defaultValue={user.email} className='mb-2'/>
+			{ShowUpdateMail({sessionType, validate, user})}
 
 		</Form>
 

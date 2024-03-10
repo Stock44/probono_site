@@ -21,6 +21,7 @@ export default async function AccountPage() {
 			};
 		}
 
+
 		console.log(session.user);
 
 		try {
@@ -43,6 +44,13 @@ export default async function AccountPage() {
 
 		redirect('/my/account');
 	};
+
+	const session = await getSession();
+	const sessionType = session?.user?.sub.split('-')[0] as string;
+
+	if (sessionType == 'google') {
+		redirect('/my/account')
+	}
 
 	return (
 		<main className='w-full'>
