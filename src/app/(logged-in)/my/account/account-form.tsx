@@ -12,7 +12,7 @@ import FormHeader from '@/components/form-header.tsx';
 export type AccountFormProps = {
 	readonly action: (state: FormState<UserUpdate>, data: FormData) => Promise<FormState<UserUpdate>>;
 	readonly user: User;
-	readonly SessionType: string;
+	readonly sessionType: string;
 };
 
 function ShowUpdateMail(props: {
@@ -38,7 +38,8 @@ function ShowUpdateMail(props: {
 
 export default function AccountForm(props: AccountFormProps) {
 	const {action, user} = props;
-	const sessionType = props.SessionType;
+	const sessionType = props.sessionType;
+
 	const validate = formValidators(userUpdateSchema);
 	return (
 		<Form

@@ -21,6 +21,7 @@ export default async function AccountPage() {
 			};
 		}
 
+
 		console.log(session.user);
 
 		try {

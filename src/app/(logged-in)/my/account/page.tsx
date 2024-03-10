@@ -45,7 +45,7 @@ export default async function AccountPage() {
 
 	return (
 		<main className='w-full'>
-			<AccountForm action={updateUserAction} user={user} SessionType={sessionType}/>
+			<AccountForm action={updateUserAction} user={user} sessionType={sessionType}/>
 			<Separator/>
 			<div className='flex-row gap-10'>
 				{ShowChangeUserPassword({sessionType})}
