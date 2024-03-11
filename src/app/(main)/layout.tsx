@@ -23,7 +23,7 @@ export default function MainLayout(props: MainLayoutProps) {
 				</LinkButton>
 				<SidebarTrigger icon={<Menu className='fill-current'/>} variant='text' className='lg:hidden'>
 					<div className='p-4'>
-						<LinkButton href='/api/auth/register?returnTo=/my' variant='primary' className='w-full'>
+						<LinkButton href='/api/auth/signup?returnTo=/my' variant='primary' className='w-full'>
 							Registro
 						</LinkButton>
 						<LinkButton href='/api/auth/login?returnTo=/my' variant='outlined' className='w-full mb-4'>
