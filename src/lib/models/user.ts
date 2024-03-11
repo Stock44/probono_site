@@ -174,7 +174,6 @@ export async function deleteUser(id: number): Promise<void> {
 	if (organizationsToDelete.length > 0) {
 		// Filter to only organizations which have a single owner (this user), and map to their ids.
 		const organizationsToDeleteIds = organizationsToDelete
-			.filter(({_count: {owners}}) => owners === 1)
 			.map(({id}) => id);
 
 		await deleteOrganizations(organizationsToDeleteIds);

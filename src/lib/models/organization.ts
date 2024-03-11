@@ -304,7 +304,7 @@ export async function deleteOrganizations(ids: number[]): Promise<void> {
 export async function getUsersDependantOrganizations(userId: number): Promise<Array<Organization & {
 	_count: {owners: number};
 }>> {
-	return prisma.organization.findMany({
+	const organizations = await prisma.organization.findMany({
 		where: {
 			owners: {
 				some: {
@@ -320,6 +320,8 @@ export async function getUsersDependantOrganizations(userId: number): Promise<Ar
 			},
 		},
 	});
+
+	return organizations.filter(organization => organization._count.owners === 1);
 }
 
 export async function getOrganizationOwners(organizationId: number): Promise<User[]> {
