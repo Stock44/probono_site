@@ -1,7 +1,7 @@
 .next/*
 .public/*
 .node_modules/*
-.env.local
+.env.development
 .eslintrc.json
 .nvmrc
 .prettierrc.json
