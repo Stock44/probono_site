@@ -174,7 +174,7 @@ describe('getUsersDependantOrganizations()', () => {
 
 		// Sample data to be returned by the findMany function
 		// @ts-expect-error not needed for test
-		const sampleData: Array<Organization & {_count: {owners: number}}> = [{id: 123, _count: {owners: 3}}];
+		const sampleData: Array<Organization & {_count: {owners: number}}> = [{id: 123, _count: {owners: 1}}];
 
 		// Setting what our prisma findMany mock should return
 		findManyMock.mockResolvedValue(sampleData);
@@ -198,7 +198,7 @@ describe('getUsersDependantOrganizations()', () => {
 				},
 			},
 		});
-		expect(result).toBe(sampleData);
+		expect(result).toStrictEqual(sampleData);
 	});
 
 	// You will need to adjust the test case according to the error handling in the getUsersDependantOrganizations function

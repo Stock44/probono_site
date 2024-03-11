@@ -242,7 +242,7 @@ describe('deleteUser function', () => {
 
 	it('does not delete organizations when user is not the only owner', async () => {
 		// @ts-expect-error not needed for test
-		mocked(getUsersDependantOrganizations).mockResolvedValue([{id: 2, _count: {owners: 2}}, {id: 3, _count: {owners: 1}}]);
+		mocked(getUsersDependantOrganizations).mockResolvedValue([{id: 3, _count: {owners: 1}}]);
 
 		await deleteUser(userId);
 
