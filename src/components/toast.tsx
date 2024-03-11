@@ -5,7 +5,7 @@ import {type AriaToastProps, type AriaToastRegionProps, useToast, useToastRegion
 import {AnimatePresence, motion, type Variants} from 'framer-motion';
 import {omit} from 'lodash';
 import Close from '@material-design-icons/svg/round/close.svg';
-import Button from '@/components/button.tsx';
+import Button from '@/components/button/button.tsx';
 import {cx} from '@/lib/cva.ts';
 
 export type ToastContent = {

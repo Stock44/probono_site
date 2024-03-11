@@ -2,8 +2,8 @@ import React, {type ReactNode} from 'react';
 import Menu from '@material-design-icons/svg/round/menu.svg';
 import TopBar from '@/components/top-bar.tsx';
 import Footer from '@/components/footer.tsx';
-import LinkButton from '@/components/link-button.tsx';
 import SidebarTrigger from '@/components/sidebar-trigger.tsx';
+import ALinkButton from '@/components/button/a-link-button.tsx';
 
 export type MainLayoutProps = {
 	readonly children: ReactNode;
@@ -15,20 +15,20 @@ export default function MainLayout(props: MainLayoutProps) {
 	return (
 		<div>
 			<TopBar>
-				<LinkButton href='/api/auth/login?returnTo=/my' variant='secondary' className='hidden lg:block'>
+				<ALinkButton href='/api/auth/login?returnTo=/my' variant='secondary' className='hidden lg:block'>
 					Iniciar sesión
-				</LinkButton>
-				<LinkButton href='/api/auth/signup?returnTo=/my' className='hidden lg:block'>
+				</ALinkButton>
+				<ALinkButton href='/api/auth/signup?returnTo=/my' className='hidden lg:block'>
 					Registro
-				</LinkButton>
+				</ALinkButton>
 				<SidebarTrigger icon={<Menu className='fill-current'/>} variant='text' className='lg:hidden'>
 					<div className='p-4'>
-						<LinkButton href='/api/auth/signup?returnTo=/my' variant='primary' className='w-full'>
-							Registro
-						</LinkButton>
-						<LinkButton href='/api/auth/login?returnTo=/my' variant='outlined' className='w-full mb-4'>
+						<ALinkButton href='/api/auth/login?returnTo=/my' variant='outlined' className='w-full mb-4'>
 							Iniciar sesión
-						</LinkButton>
+						</ALinkButton>
+						<ALinkButton href='/api/auth/signup?returnTo=/my' variant='primary' className='w-full'>
+							Registro
+						</ALinkButton>
 					</div>
 				</SidebarTrigger>
 			</TopBar>

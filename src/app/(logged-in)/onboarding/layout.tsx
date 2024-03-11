@@ -3,7 +3,7 @@ import {redirect} from 'next/navigation';
 import {getUserFromSession} from '@/lib/models/user.ts';
 import OnboardingClientLayout from '@/app/(logged-in)/onboarding/onboarding-client-layout.tsx';
 import TopBar from '@/components/top-bar.tsx';
-import LinkButton from '@/components/link-button.tsx';
+import LinkButton from '@/components/button/link-button.tsx';
 import Footer from '@/components/footer.tsx';
 
 export type OnboardingLayoutProps = {
@@ -21,9 +21,7 @@ export default async function OnboardingLayout(props: OnboardingLayoutProps) {
 	return (
 		<div>
 			<TopBar>
-				<div className='p-4'>
-					<LinkButton href='/api/auth/logout' variant='secondary'>Cerrar sesión</LinkButton>
-				</div>
+				<LinkButton href='/api/auth/logout' variant='secondary'>Cerrar sesión</LinkButton>
 			</TopBar>
 			<div className='min-h-[calc(100vh-theme(spacing.16))] md:pt-16 mt-16'>
 				<OnboardingClientLayout isOrganizationTabDisabled={!user}>

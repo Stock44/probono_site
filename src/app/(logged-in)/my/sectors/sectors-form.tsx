@@ -8,7 +8,7 @@ import {Item, Section, useListData} from 'react-stately';
 import Save from '@material-design-icons/svg/round/save.svg';
 import Remove from '@material-design-icons/svg/round/remove.svg';
 import ListBox from '@/components/list-box.tsx';
-import Button from '@/components/button.tsx';
+import Button from '@/components/button/button.tsx';
 import {type ServerActionResult} from '@/lib/server-action-result.ts';
 import {useToasts} from '@/components/toast.tsx';
 import LoadingSpinner from '@/components/loading-spinner.tsx';

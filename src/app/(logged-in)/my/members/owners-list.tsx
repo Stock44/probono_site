@@ -6,7 +6,7 @@ import {Cell, Column, type Key, Row, type Selection, TableBody, TableHeader} fro
 import Add from '@material-design-icons/svg/round/add.svg';
 import Delete from '@material-design-icons/svg/round/delete.svg';
 import TextField from '@/components/text-field.tsx';
-import Button from '@/components/button.tsx';
+import Button from '@/components/button/button.tsx';
 import Table from '@/components/table/table.tsx';
 import {
 	type OrganizationOwnerAddition,
@@ -78,7 +78,10 @@ export default function OwnersList(props: OwnersListProps) {
 	return (
 		<>
 			<div className='flex items-start gap-4 mb-4'>
-				<Form action={addOwnerAction} className='flex-1 flex items-start gap-4'>
+				<Form
+					action={addOwnerAction} className='flex-1 flex items-start gap-4' successToast={{
+						title: 'Invitación enviada correctamente',
+					}}>
 					<TextField
 						className='flex-1 min-w-0 overflow-hidden'
 						placeholder='Ingresa un correo para agregarlo a la organización'
@@ -86,12 +89,12 @@ export default function OwnersList(props: OwnersListProps) {
 						name='email'
 						validate={email => email === currentUser.email ? 'No te puedes agregar a ti mismo.' : undefined}
 					/>
-					<SubmitButton variant='secondary' size='sm' icon={<Add className='fill-current'/>}>
+					<SubmitButton variant='secondary' className='w-fit' icon={<Add className='fill-current'/>}>
 						<span className='hidden md:inline'>Agregar</span>
 					</SubmitButton>
 				</Form>
 				<Button
-					variant='destructive' size='sm'
+					variant='destructive'
 					isDisabled={deletePending || (selectedUsers !== 'all' && selectedUsers.size === 0)}
 					onPress={onRemoveUsers}>
 					{

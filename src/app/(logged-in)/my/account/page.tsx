@@ -7,7 +7,7 @@ import AccountForm from '@/app/(logged-in)/my/account/account-form.tsx';
 import updateUserAction from '@/lib/actions/update-user-action.ts';
 import {getUserFromSession} from '@/lib/models/user.ts';
 import Separator from '@/components/separator.tsx';
-import LinkButton from '@/components/link-button.tsx';
+import LinkButton from '@/components/button/link-button.tsx';
 import ModalTrigger from '@/components/modal/modal-trigger.tsx';
 import HashSpyToaster from '@/components/hash-spy-toaster.tsx';
 

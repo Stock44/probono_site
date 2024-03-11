@@ -2,7 +2,7 @@ import React from 'react';
 import {getSession} from '@auth0/nextjs-auth0';
 import {redirect} from 'next/navigation';
 import {consumeOrganizationInvitation, isInvitationValid} from '@/lib/models/organization-invitation.ts';
-import LinkButton from '@/components/link-button.tsx';
+import LinkButton from '@/components/button/link-button.tsx';
 import {getUserFromSession} from '@/lib/models/user.ts';
 
 export type InvitePageProps = {

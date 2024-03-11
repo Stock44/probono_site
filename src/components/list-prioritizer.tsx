@@ -4,7 +4,7 @@ import {type Key} from 'react-stately';
 import DragHandle from '@material-design-icons/svg/round/drag_handle.svg';
 import Remove from '@material-design-icons/svg/round/remove.svg';
 import Spacer from '@/components/spacer.tsx';
-import Button from '@/components/button.tsx';
+import Button from '@/components/button/button.tsx';
 import useReorderableListState, {type ReorderableListStateProps} from '@/lib/hooks/use-reorderable-list-state.ts';
 import {cx} from '@/lib/cva.ts';
 

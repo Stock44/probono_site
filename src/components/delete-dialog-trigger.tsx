@@ -3,8 +3,7 @@ import React from 'react';
 import Delete from '@material-design-icons/svg/round/delete.svg';
 import Dialog from '@/components/dialog.tsx';
 import ModalTrigger from '@/components/modal/modal-trigger.tsx';
-import LinkButton from '@/components/link-button.tsx';
-import {useCloseModal} from '@/components/modal/modal-context.ts';
+import LinkButton from '@/components/button/link-button.tsx';
 
 export default function DeleteDialogTrigger() {
 	return (

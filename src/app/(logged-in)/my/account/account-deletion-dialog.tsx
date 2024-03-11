@@ -3,9 +3,9 @@ import React from 'react';
 import {useQuery} from 'react-query';
 import {type Organization} from '@prisma/client';
 import Dialog from '@/components/dialog.tsx';
-import Button from '@/components/button.tsx';
+import Button from '@/components/button/button.tsx';
 import {useCloseModal} from '@/components/modal/modal-context.ts';
-import ALinkButton from '@/components/a-link-button.tsx';
+import ALinkButton from '@/components/button/a-link-button.tsx';
 import LoadingSpinner from '@/components/loading-spinner.tsx';
 
 export type AccountDeletionDialogProps = {

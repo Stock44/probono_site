@@ -3,7 +3,7 @@ import {type AriaComboBoxProps, useComboBox} from 'react-aria';
 import {type ComboBoxState, type ComboBoxStateOptions, useComboBoxState} from 'react-stately';
 import ArrowDropDown from '@material-design-icons/svg/round/arrow_drop_down.svg';
 import {BaseListBox} from '@/components/list-box.tsx';
-import Button from '@/components/button.tsx';
+import Button from '@/components/button/button.tsx';
 import Popover from '@/components/popover.tsx';
 import {cx} from '@/lib/cva.ts';
 

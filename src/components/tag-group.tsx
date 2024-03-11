@@ -4,7 +4,7 @@ import {Set} from 'immutable';
 import {useObjectRef} from '@react-aria/utils';
 import {type Key, type ListState, type Node, useListState} from 'react-stately';
 import Close from '@material-design-icons/svg/round/close.svg';
-import Button from '@/components/button.tsx';
+import Button from '@/components/button/button.tsx';
 
 export type TagGroupProps<T extends Record<string, unknown>> = {
 	readonly className?: string;

@@ -6,7 +6,7 @@ import {type Organization} from '@prisma/client';
 import ArrowDropDown from '@material-design-icons/svg/round/arrow_drop_down.svg';
 import Add from '@material-design-icons/svg/round/add.svg';
 import type OrganizationOption from '@/components/organization-selector/organization-option.ts';
-import Button from '@/components/button.tsx';
+import Button from '@/components/button/button.tsx';
 import OrganizationSelectorMenu from '@/components/organization-selector/organization-selector-menu.tsx';
 import Popover from '@/components/popover.tsx';
 import {cx} from '@/lib/cva.ts';
