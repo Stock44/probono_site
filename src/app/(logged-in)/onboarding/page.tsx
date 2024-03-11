@@ -1,6 +1,6 @@
 import React from 'react';
 import NavigateNext from '@material-design-icons/svg/round/navigate_next.svg';
-import LinkButton from '@/components/link-button.tsx';
+import LinkButton from '@/components/button/link-button.tsx';
 import AnimatedLayoutContainer from '@/components/animated-layout-container.tsx';
 
 export type OnboardingPageProps = {

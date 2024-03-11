@@ -1,7 +1,7 @@
 import React, {type ReactNode} from 'react';
 import Link, {type LinkProps} from 'next/link';
 import {type VariantProps} from 'cva';
-import buttonVariant from '@/components/variants/button.tsx';
+import buttonVariant from '@/components/button/button-variants.tsx';
 
 export type LinkButtonProps = {
 	readonly children: ReactNode;

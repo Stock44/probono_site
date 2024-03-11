@@ -3,8 +3,8 @@ import React, {type ReactElement, type ReactNode} from 'react';
 import {type OverlayTriggerProps, useOverlayTriggerState} from 'react-stately';
 import {useOverlayTrigger} from 'react-aria';
 import {AnimatePresence} from 'framer-motion';
-import Button from '@/components/button.tsx';
-import {type ButtonVariantProps} from '@/components/variants/button.tsx';
+import Button from '@/components/button/button.tsx';
+import {type ButtonVariantProps} from '@/components/button/button-variants.tsx';
 import Sidebar from '@/components/sidebar.tsx';
 
 export type SidebarTriggerProps = {

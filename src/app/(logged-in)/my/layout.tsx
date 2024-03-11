@@ -18,7 +18,7 @@ import AccountButton from '@/app/(logged-in)/onboarding/account-button.tsx';
 import TopBar from '@/components/top-bar.tsx';
 import Footer from '@/components/footer.tsx';
 import SidebarTrigger from '@/components/sidebar-trigger.tsx';
-import LinkButton from '@/components/link-button.tsx';
+import LinkButton from '@/components/button/link-button.tsx';
 
 export type MyLayoutProps = {
 	readonly children: ReactNode;

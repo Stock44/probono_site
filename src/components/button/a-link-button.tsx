@@ -1,6 +1,6 @@
 import React, {type ComponentProps, type ReactNode} from 'react';
 import {type VariantProps} from 'cva';
-import buttonVariant from '@/components/variants/button.tsx';
+import buttonVariant from '@/components/button/button-variants.tsx';
 
 // eslint-disable-next-line @typescript-eslint/naming-convention
 export type ALinkButtonProps = {

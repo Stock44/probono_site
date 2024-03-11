@@ -3,7 +3,7 @@ import React, {type ForwardedRef, forwardRef, type ReactNode} from 'react';
 import {type AriaButtonOptions, useButton} from 'react-aria';
 import {useObjectRef} from '@react-aria/utils';
 import {type VariantProps} from '@/lib/cva.ts';
-import buttonVariant from '@/components/variants/button.tsx';
+import buttonVariant from '@/components/button/button-variants.tsx';
 
 export type ButtonProps = {
 	readonly children?: ReactNode;

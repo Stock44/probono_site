@@ -30,7 +30,7 @@ export default function OnboardingClientLayout(props: LayoutContainerProps) {
 	return (
 		<div
 			className='bg-stone-950 text-stone-200 flex justify-center  place-items-start justify-items-start  mx-auto md:max-w-md'>
-			<motion.div layout className='bg-stone-950 border-stone-800 md:border rounded md:p-8 w-full h-fit overflow-hidden'>
+			<motion.div layout className='bg-stone-950 border-stone-800 md:border rounded md:p-8 w-full h-fit overflow-hidden mb-16'>
 				<motion.div layout className='flex mb-4'>
 					{
 						[segments

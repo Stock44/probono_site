@@ -1,7 +1,7 @@
 import React, {type ReactElement, type ReactNode} from 'react';
 import {type OverlayTriggerProps, useOverlayTriggerState} from 'react-stately';
 import {mergeProps, type Placement, useOverlayTrigger} from 'react-aria';
-import Button, {type ButtonProps} from '@/components/button.tsx';
+import Button, {type ButtonProps} from '@/components/button/button.tsx';
 import Popover from '@/components/popover.tsx';
 
 export type PopoverButtonTriggerProps = {

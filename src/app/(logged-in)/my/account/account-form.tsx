@@ -4,15 +4,11 @@ import Save from '@material-design-icons/svg/round/save.svg';
 import React from 'react';
 import {type User} from '@prisma/client';
 import Done from '@material-design-icons/svg/round/done.svg';
-import Key from '@material-design-icons/svg/round/key.svg';
-import Alert from '@material-design-icons/svg/round/delete.svg';
 import {type UserUpdate, userUpdateSchema} from '@/lib/schemas/user.ts';
 import Form, {type FormState} from '@/components/form/form.tsx';
 import SubmitButton from '@/components/submit-button.tsx';
 import TextField from '@/components/text-field.tsx';
 import {formValidators} from '@/lib/form-utils.ts';
-import Separator from '@/components/separator.tsx';
-import LinkButton from '@/components/link-button.tsx';
 
 export type AccountFormProps = {
 	readonly action: (state: FormState<UserUpdate>, data: FormData) => Promise<FormState<UserUpdate>>;

@@ -3,7 +3,7 @@ import {useSelectState, type SelectStateOptions} from 'react-stately';
 import {useObjectRef} from '@react-aria/utils';
 import {useSelect, type AriaSelectProps, HiddenSelect, type Placement} from 'react-aria';
 import ArrowDropDown from '@material-design-icons/svg/round/arrow_drop_down.svg';
-import Button from '@/components/button.tsx';
+import Button from '@/components/button/button.tsx';
 import Popover from '@/components/popover.tsx';
 import ListBox from '@/components/list-box.tsx';
 import {cx} from '@/lib/cva.ts';

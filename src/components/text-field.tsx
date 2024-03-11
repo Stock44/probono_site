@@ -36,9 +36,9 @@ export default forwardRef((props: TextFieldProps, ref: ForwardedRef<HTMLInputEle
 			}
 
 			<div
-				className='border rounded border-stone-700 flex items-center px-1 gap-1 group-focus-within:border-stone-50 group-data-[disabled=true]:border-stone-800'>
+				className='border rounded border-stone-700 flex items-center px-2 gap-2 group-focus-within:border-stone-50 group-data-[disabled=true]:border-stone-800'>
 				{icon}
-				<input {...inputProps} ref={inputRef} className='bg-transparent py-1 placeholder:text-stone-500 grow outline-none text-stone-100 disabled:text-stone-600 disabled:cursor-not-allowed'/>
+				<input {...inputProps} ref={inputRef} className='bg-transparent py-2 placeholder:text-stone-500 grow outline-none text-stone-100 disabled:text-stone-600 disabled:cursor-not-allowed'/>
 			</div>
 			{
 				description === undefined

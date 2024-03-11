@@ -5,7 +5,7 @@ import labnl from '@/app/(main)/labnl_vignette.webp';
 import labnl_mobile from '@/app/(main)/labnl_vignette_mobile.webp';
 import map from '@/app/(main)/map.jpg';
 import Dropdown from '@/components/dropdown.tsx';
-import ALinkButton from '@/components/a-link-button.tsx';
+import ALinkButton from '@/components/button/a-link-button.tsx';
 
 export default function Home() {
 	const common = {alt: 'LabNL', sizes: '100vw'};
