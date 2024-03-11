@@ -1,6 +1,5 @@
 'use server';
 import {getSession} from '@auth0/nextjs-auth0';
-import {redirect} from 'next/navigation';
 import type {FormState} from '@/components/form/form.tsx';
 import {type UserInit, userInitSchema, type UserUpdate, userUpdateSchema} from '@/lib/schemas/user.ts';
 import prisma from '@/lib/prisma.ts';
@@ -43,5 +42,10 @@ export default async function upsertUserAction(state: FormState<UserInit | UserU
 		return handleActionError(state, error);
 	}
 
-	redirect('/onboarding/organization');
+	return {
+		...state,
+		success: true,
+		formErrors: [],
+		fieldErrors: {},
+	};
 }

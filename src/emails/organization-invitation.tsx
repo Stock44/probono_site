@@ -59,7 +59,7 @@ export default function OrganizationInvitationEmail(props: OrganizationInvitatio
 								<Button
 									className='p-2 text-sm bg-stone-50 text-stone-950 rounded font-bold mx-auto'
 									target='_blank'
-									href={`${baseUrl}/organizationInvite/${inviteId}`}>
+									href={`${baseUrl}/invite/${inviteId}`}>
 									Únirme ahora
 								</Button>
 							</Section>

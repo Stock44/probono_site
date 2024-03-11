@@ -15,6 +15,10 @@ import prisma from '@/lib/prisma.ts';
 import {userAuthorizedForOrganization} from '@/lib/models/organization.ts';
 import email from '@/lib/email.ts';
 import OrganizationInvitationEmail from '@/emails/organization-invitation.tsx';
+import {
+	activeOrganizationInvitationExists,
+	createOrganizationInvitation,
+} from '@/lib/models/organization-invitation.ts';
 
 export default async function addOrganizationOwnerAction(organizationId: number, state: FormState<OrganizationOwnerAddition>, data: FormData): Promise<FormState<OrganizationOwnerAddition>> {
 	const user = await getUserFromSession();
@@ -58,17 +62,32 @@ export default async function addOrganizationOwnerAction(organizationId: number,
 				},
 			});
 		} else {
+			const {email: recipient} = await decodeForm(data, organizationOwnerAdditionSchema);
+
+			if (await activeOrganizationInvitationExists(recipient, organizationId)) {
+				return {
+					...state,
+					success: false,
+					fieldErrors: {
+						email: ['Ya se ha enviado una invitación a este usuario.'],
+					},
+				};
+			}
+
+			const invite = await createOrganizationInvitation(recipient, organizationId, user.id);
+
 			const organization = await prisma.organization.findUniqueOrThrow({
 				where: {
 					id: organizationId,
 				},
 			});
+
 			const html = render(createElement(OrganizationInvitationEmail, {
 				organizationLogoUrl: organization.logoUrl ?? '',
 				organizationName: organization.name,
 				senderEmail: user.email,
 				senderName: `${user.givenName} ${user.familyName}`,
-				inviteId: 1,
+				inviteId: invite.id,
 			}));
 
 			await email(recipient, {

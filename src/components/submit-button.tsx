@@ -1,3 +1,4 @@
+'use client';
 import React, {type ReactNode} from 'react';
 import {useFormStatus} from 'react-dom';
 import Button, {type ButtonProps} from '@/components/button.tsx';
@@ -5,7 +6,7 @@ import LoadingSpinner from '@/components/loading-spinner.tsx';
 
 export type SubmitButtonProps = {
 	readonly children: ReactNode;
-	readonly icon: ReactNode;
+	readonly icon?: ReactNode;
 	readonly iconPlacement?: 'left' | 'right';
 } & Omit<ButtonProps, 'type'>;
 

@@ -17,17 +17,17 @@ import {useToasts} from '@/components/toast.tsx';
 import LoadingSpinner from '@/components/loading-spinner.tsx';
 import SubmitButton from '@/components/submit-button.tsx';
 
-export type UsersListProps = {
+export type OwnersListProps = {
 	readonly currentUser: User;
-	readonly users: User[];
+	readonly owners: User[];
 	readonly addOwnerAction: FormAction<OrganizationOwnerAddition>;
 	readonly removeOwnersAction: (owners: number[]) => Promise<ServerActionResult>;
 };
 
-export default function UsersList(props: UsersListProps) {
+export default function OwnersList(props: OwnersListProps) {
 	const {
 		currentUser,
-		users,
+		owners,
 		addOwnerAction,
 		removeOwnersAction,
 	} = props;
@@ -45,7 +45,7 @@ export default function UsersList(props: UsersListProps) {
 	const [deletePending, setDeletePending] = useState(false);
 
 	const onRemoveUsers = async () => {
-		const usersToRemove = selectedUsers === 'all' ? users.map(user => user.id) : [...selectedUsers] as number[];
+		const usersToRemove = selectedUsers === 'all' ? owners.map(user => user.id) : [...selectedUsers] as number[];
 
 		setDeletePending(true);
 
@@ -124,7 +124,7 @@ export default function UsersList(props: UsersListProps) {
 							)
 						}
 					</TableHeader>
-					<TableBody items={users}>
+					<TableBody items={owners}>
 						{
 							item => (
 								<Row>

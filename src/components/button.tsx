@@ -1,3 +1,4 @@
+'use client';
 import React, {type ForwardedRef, forwardRef, type ReactNode} from 'react';
 import {type AriaButtonOptions, useButton} from 'react-aria';
 import {useObjectRef} from '@react-aria/utils';

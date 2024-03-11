@@ -291,8 +291,9 @@ model UserReauthentication {
 }
 
 model OrganizationInvitation {
-  id    String @id @default(uuid()) @db.Uuid
-  email String
+  id        String   @id @default(uuid()) @db.Uuid
+  timestamp DateTime @default(now()) @db.Timestamptz
+  recipient String
 
   senderId Int
   sender   User @relation(fields: [senderId], references: [id])
