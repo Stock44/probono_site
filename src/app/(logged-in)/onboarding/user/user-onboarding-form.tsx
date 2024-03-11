@@ -2,6 +2,7 @@
 import React from 'react';
 import {type User} from '@prisma/client';
 import NavigateNext from '@material-design-icons/svg/round/navigate_next.svg';
+import {useSearchParams} from 'next/navigation';
 import TextField from '@/components/text-field.tsx';
 import Form, {type FormState} from '@/components/form/form.tsx';
 import {type UserInit, userInitSchema, type UserUpdate} from '@/lib/schemas/user.ts';

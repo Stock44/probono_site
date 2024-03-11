@@ -7,7 +7,9 @@ import {getSession} from '@auth0/nextjs-auth0';
 import {mocked} from 'jest-mock';
 import updateActiveOrganization from '@/lib/actions/update-active-organization.ts';
 import {prismaMock} from '@/lib/singleton.ts';
+import {getUserFromSession} from '@/lib/models/user.ts';
 
+jest.mock('@/lib/models/user.ts');
 jest.mock('@auth0/nextjs-auth0');
 jest.mock('next/headers');
 jest.mock('next/cache');
@@ -36,16 +38,16 @@ describe('updateActiveOrganization function', () => {
 	});
 
 	it('Sets the organization id in the cookies if the organization is found', async () => {
-		const mockSession = {user: {sub: 'mockSub'}};
 		const mockOrganization = {id: 42};
 
-		mocked(getSession).mockResolvedValueOnce(mockSession);
+		// @ts-expect-error not needed for test
+		mocked(getUserFromSession).mockResolvedValueOnce({id: 32});
 		// @ts-expect-error not needed for test
 		prismaMock.organization.findUnique.mockResolvedValueOnce(mockOrganization);
 
 		await updateActiveOrganization(42);
 
-		expect(getSession).toHaveBeenCalled();
+		expect(getUserFromSession).toHaveBeenCalled();
 		expect(prismaMock.organization.findUnique).toHaveBeenCalled();
 		expect(cookies().set).toHaveBeenCalledWith('organizationId', '42');
 	});
@@ -54,14 +56,15 @@ describe('updateActiveOrganization function', () => {
 		const mockSession = {user: {sub: 'mockSub'}};
 		const mockOrganization = {id: 5};
 
-		mocked(getSession).mockResolvedValueOnce(mockSession);
+		// @ts-expect-error not needed for test
+		mocked(getUserFromSession).mockResolvedValueOnce({id: 32});
 		prismaMock.organization.findUnique.mockResolvedValueOnce(null);
 		// @ts-expect-error not needed for test
 		prismaMock.organization.findFirstOrThrow.mockResolvedValueOnce(mockOrganization);
 
 		await updateActiveOrganization(32);
 
-		expect(getSession).toHaveBeenCalled();
+		expect(getUserFromSession).toHaveBeenCalled();
 		expect(prismaMock.organization.findUnique).toHaveBeenCalled();
 		expect(prismaMock.organization.findFirstOrThrow).toHaveBeenCalled();
 		expect(cookies().set).toHaveBeenCalledWith('organizationId', '5');

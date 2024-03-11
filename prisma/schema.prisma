@@ -259,8 +259,9 @@ model Organization {
 
   sectors Sector[]
 
-  activities OrganizationToActivity[]
-  owners     User[]
+  activities             OrganizationToActivity[]
+  owners                 User[]
+  OrganizationInvitation OrganizationInvitation[]
 }
 
 model User {
@@ -274,8 +275,9 @@ model User {
   contactEmail String?
   contactPhone String?
 
-  organizations     Organization[]
-  reauthentications UserReauthentication[]
+  organizations          Organization[]
+  reauthentications      UserReauthentication[]
+  OrganizationInvitation OrganizationInvitation[]
 }
 
 model UserReauthentication {
@@ -286,4 +288,21 @@ model UserReauthentication {
 
   time     DateTime
   consumed Boolean
+}
+
+model OrganizationInvitation {
+  id        String   @id @default(uuid()) @db.Uuid
+  timestamp DateTime @default(now()) @db.Timestamptz
+  recipient String
+
+  senderId Int
+  sender   User @relation(fields: [senderId], references: [id])
+
+  organization   Organization @relation(fields: [organizationId], references: [id])
+  organizationId Int
+}
+
+model InvitationBlock {
+  id    Int    @id @default(autoincrement())
+  email String @unique
 }

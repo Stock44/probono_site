@@ -1,9 +1,34 @@
 import {omit} from 'lodash';
 import {del, put} from '@vercel/blob';
 import {filetypeextension} from 'magic-bytes.js';
-import {type Organization} from '@prisma/client';
+import {type Organization, type User} from '@prisma/client';
 import {type OrganizationInit, type OrganizationUpdate} from '@/lib/schemas/organization.ts';
 import prisma from '@/lib/prisma.ts';
+
+/**
+ * Checks whether a user is authorized for a given organization.
+ *
+ * @param {number} organizationId - The ID of the organization to check authorization for.
+ * @param {number} userId - The ID of the user to check authorization for.
+ * @returns {boolean} - True if the user is authorized for the organization, otherwise false.
+ */
+export async function userAuthorizedForOrganization(userId: number, organizationId: number) {
+	const authorized = await prisma.organization.findFirst({
+		where: {
+			id: organizationId,
+			owners: {
+				some: {
+					id: userId,
+				},
+			},
+		},
+		select: {
+			id: true,
+		},
+	});
+
+	return Boolean(authorized);
+}
 
 /**
  * Creates a new organization with the specified owner and initialization data.
@@ -51,10 +76,10 @@ export async function createOrganization(ownerId: number, init: OrganizationInit
 		});
 
 		if (init.address) {
-			await tx.$queryRaw`update "Address" 
-                         set location=point(${init.address.location[0]}, ${init.address.location[1]})
-                         from "Address" as a
-                                  join "Organization" as o on a.id = o."addressId"
+			await tx.$queryRaw`update "Address"
+                         set location=point(${init.address.location[0]}, ${init.address.location[1]}) from "Address" as a
+                                  join "Organization" as o
+                         on a.id = o."addressId"
                          where o.id = ${organization.id}`;
 		}
 
@@ -159,10 +184,10 @@ export async function updateOrganization(organizationId: number, update: Organiz
 		});
 
 		if (update.address) {
-			await tx.$queryRaw`update "Address" 
-                         set location=point(${update.address.location[0]}, ${update.address.location[1]})
-                         from "Address" as a
-                                  join "Organization" as o on a.id = o."addressId"
+			await tx.$queryRaw`update "Address"
+                         set location=point(${update.address.location[0]}, ${update.address.location[1]}) from "Address" as a
+                                  join "Organization" as o
+                         on a.id = o."addressId"
                          where o.id = ${organizationId}`;
 		}
 	});
@@ -231,6 +256,13 @@ export async function deleteOrganizations(ids: number[]): Promise<void> {
 
 	// Delete organizations and related records
 	await prisma.$transaction([
+		prisma.organizationInvitation.deleteMany({
+			where: {
+				organizationId: {
+					in: ids,
+				},
+			},
+		}),
 		prisma.organizationToActivity.deleteMany({
 			where: {
 				organizationId: {
@@ -269,7 +301,9 @@ export async function deleteOrganizations(ids: number[]): Promise<void> {
  * console.log(organizations);
  * // Output: [{ id: 1, _count: { owners: 1 } }, { id: 2, _count: { owners: 1 } }]
  */
-export async function getUsersDependantOrganizations(userId: number): Promise<Array<Organization & {_count: {owners: number}}>> {
+export async function getUsersDependantOrganizations(userId: number): Promise<Array<Organization & {
+	_count: {owners: number};
+}>> {
 	return prisma.organization.findMany({
 		where: {
 			owners: {
@@ -286,4 +320,15 @@ export async function getUsersDependantOrganizations(userId: number): Promise<Ar
 			},
 		},
 	});
+}
+
+export async function getOrganizationOwners(organizationId: number): Promise<User[]> {
+	return prisma.organization.findUniqueOrThrow({
+		where: {
+			id: organizationId,
+		},
+		select: {
+			owners: true,
+		},
+	}).owners();
 }

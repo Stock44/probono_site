@@ -22,7 +22,7 @@ export const getUsersActiveOrganization = cache(
 		const session = await getSession();
 
 		if (!session) {
-			throw new Error('not authenticated');
+			throw new Error('Not authenticated');
 		}
 
 		const cookieStore = cookies();
@@ -185,6 +185,11 @@ export async function deleteUser(id: number): Promise<void> {
 			prisma.userReauthentication.deleteMany({
 				where: {
 					userId: id,
+				},
+			}),
+			prisma.organizationInvitation.deleteMany({
+				where: {
+					senderId: id,
 				},
 			}),
 			prisma.user.delete({

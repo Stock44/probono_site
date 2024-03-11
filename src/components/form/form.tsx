@@ -18,9 +18,12 @@ type StaticValues<T> = {
 	readonly [K in keyof T]?: T[K];
 };
 
+export type FormAction<T> = (previousState: FormState<T>, data: FormData) => Promise<FormState<T>>;
+
 export type FormProps<T> = {
 	readonly children: ReactNode;
-	readonly action: (previousState: FormState<T>, data: FormData) => Promise<FormState<T>>;
+	readonly className?: string;
+	readonly action: FormAction<T>;
 	readonly successToast?: ToastContent;
 	readonly staticValues?: StaticValues<T>;
 };
@@ -54,7 +57,7 @@ function processStaticValues<T>(staticValues: StaticValues<T> | undefined): Arra
 }
 
 export default function Form<T>(props: FormProps<T>) {
-	const {children, action, staticValues, successToast} = props;
+	const {children, action, staticValues, successToast, className} = props;
 	const [state, formAction] = useFormState(action, {
 		success: false,
 		formErrors: [],
@@ -69,7 +72,7 @@ export default function Form<T>(props: FormProps<T>) {
 	const processedStaticValues = useMemo(() => processStaticValues(staticValues), [staticValues]);
 
 	return (
-		<form action={formAction}>
+		<form action={formAction} className={className}>
 			{processedStaticValues.map(([key, value]) => (
 				<input key={key} readOnly hidden name={key} value={value}/>
 			))}

@@ -1,7 +1,7 @@
 'use client';
 import React, {type ReactNode} from 'react';
 import {motion} from 'framer-motion';
-import {useSelectedLayoutSegment} from 'next/navigation';
+import {useSearchParams, useSelectedLayoutSegment} from 'next/navigation';
 import Link from 'next/link';
 import {cx} from '@/lib/cva.ts';
 
@@ -19,6 +19,12 @@ const segments = [
 export default function OnboardingClientLayout(props: LayoutContainerProps) {
 	const {children, isOrganizationTabDisabled} = props;
 
+	const searchParameters = useSearchParams();
+
+	const inviteId = searchParameters.get('inviteId');
+
+	const inviteParameter = inviteId ? `?inviteId=${inviteId}` : '';
+
 	const selectedSegment = useSelectedLayoutSegment();
 
 	return (
@@ -33,7 +39,7 @@ export default function OnboardingClientLayout(props: LayoutContainerProps) {
 								return (
 									<div key={segment} className='grow'>
 										<Link
-											href={`/onboarding/${segment ?? ''}`}
+											href={`/onboarding/${segment ?? ''}${inviteParameter}`}
 											className={cx(
 												'p-2 flex justify-center items-center h-16 md:h-auto text-sm md:text-base',
 												isSelected && 'text-stone-50',

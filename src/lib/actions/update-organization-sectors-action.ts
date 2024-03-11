@@ -1,16 +1,24 @@
 'use server';
 import {revalidatePath} from 'next/cache';
-import {getSession} from '@auth0/nextjs-auth0';
 import type {ServerActionResult} from '@/lib/server-action-result.ts';
 import prisma from '@/lib/prisma.ts';
+import {getUserFromSession} from '@/lib/models/user.ts';
+import {userAuthorizedForOrganization} from '@/lib/models/organization.ts';
 
 export default async function updateOrganizationSectorsAction(organizationId: number, sectorIds: number[]): Promise<ServerActionResult> {
-	const session = await getSession();
+	const user = await getUserFromSession();
 
-	if (!session) {
+	if (!user) {
 		return {
 			success: false,
 			message: 'Not authenticated',
+		};
+	}
+
+	if (!(await userAuthorizedForOrganization(user.id, organizationId))) {
+		return {
+			success: false,
+			message: 'Not authorized to modify organization',
 		};
 	}
 
@@ -20,7 +28,7 @@ export default async function updateOrganizationSectorsAction(organizationId: nu
 				id: organizationId,
 				owners: {
 					some: {
-						authId: session.user.sub as string,
+						id: user.id,
 					},
 				},
 			},

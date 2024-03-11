@@ -3,7 +3,17 @@ import NavigateNext from '@material-design-icons/svg/round/navigate_next.svg';
 import LinkButton from '@/components/link-button.tsx';
 import AnimatedLayoutContainer from '@/components/animated-layout-container.tsx';
 
-export default function OnboardingPage() {
+export type OnboardingPageProps = {
+	readonly searchParams: {
+		readonly inviteId?: string;
+	};
+};
+
+export default function OnboardingPage(props: OnboardingPageProps) {
+	const {searchParams} = props;
+
+	const nextHref = searchParams.inviteId ? `/onboarding/user?inviteId=${searchParams.inviteId}` : '/onboarding/user';
+
 	return (
 		<AnimatedLayoutContainer>
 			<h1 className='text-2xl text-stone-50 mb-2'>Hola!</h1>
@@ -24,7 +34,7 @@ export default function OnboardingPage() {
 				Antes de nada, queremos conocer más sobre ti y tu organización.
 			</p>
 
-			<LinkButton href='/onboarding/user' className='ms-auto'>
+			<LinkButton href={nextHref} className='ms-auto'>
 				Continuar <NavigateNext/>
 			</LinkButton>
 		</AnimatedLayoutContainer>
