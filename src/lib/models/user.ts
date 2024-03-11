@@ -187,6 +187,11 @@ export async function deleteUser(id: number): Promise<void> {
 					userId: id,
 				},
 			}),
+			prisma.organizationInvitation.deleteMany({
+				where: {
+					senderId: id,
+				},
+			}),
 			prisma.user.delete({
 				where: {
 					id,

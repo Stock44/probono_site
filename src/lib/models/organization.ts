@@ -256,6 +256,13 @@ export async function deleteOrganizations(ids: number[]): Promise<void> {
 
 	// Delete organizations and related records
 	await prisma.$transaction([
+		prisma.organizationInvitation.deleteMany({
+			where: {
+				organizationId: {
+					in: ids,
+				},
+			},
+		}),
 		prisma.organizationToActivity.deleteMany({
 			where: {
 				organizationId: {
