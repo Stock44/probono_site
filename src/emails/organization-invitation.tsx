@@ -14,7 +14,7 @@ import {
 	Img, Preview,
 } from '@react-email/components';
 
-export const baseUrl = process.env.BASE_URL ?? 'http://localhost:3000';
+export const baseUrl = process.env.VERCEL_URL ?? 'http://localhost:3000';
 
 export type OrganizationInvitationEmailProps = {
 	readonly organizationLogoUrl: string;
