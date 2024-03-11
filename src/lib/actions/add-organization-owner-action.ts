@@ -90,10 +90,19 @@ export default async function addOrganizationOwnerAction(organizationId: number,
 				inviteId: invite.id,
 			}));
 
-			await email(recipient, {
-				subject: `Invitación a ${organization.name}`,
-				html,
-			});
+			try {
+				await email(recipient, {
+					subject: `Invitación a ${organization.name}`,
+					html,
+				});
+			} catch (error) {
+				await prisma.organizationInvitation.delete({
+					where: {
+						id: invite.id,
+					},
+				});
+				throw error;
+			}
 		}
 	} catch (error) {
 		return handleActionError(state, error);

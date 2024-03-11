@@ -91,7 +91,7 @@ describe('getUsersActiveOrganiation', () => {
 	it('throws an error if not authenticated', async () => {
 		(getSession as jest.Mock).mockResolvedValueOnce(null);
 
-		await expect(getUsersActiveOrganization()).rejects.toThrow('not authenticated');
+		await expect(getUsersActiveOrganization()).rejects.toThrow('Not authenticated');
 	});
 
 	it('returns an existing organization if organizationId is set', async () => {
