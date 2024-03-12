@@ -41,6 +41,8 @@ export default async function SectorsPage(props: SectorsPageProps) {
 	const action = updateOrganizationSectorsAction.bind(null, organization.id);
 
 	return (
-		<SectorsForm sectors={sectors} organization={organization} action={action}/>
+		<main className='w-full'>
+			<SectorsForm sectors={sectors} organization={organization} action={action}/>
+		</main>
 	);
 }

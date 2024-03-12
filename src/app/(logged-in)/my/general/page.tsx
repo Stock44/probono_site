@@ -16,6 +16,8 @@ export default async function GeneralPage() {
 	const action = updateOrganizationAction.bind(null, organization.id);
 
 	return (
-		<GeneralInfoForm action={action} organization={organization} volunteerCountCategories={volunteerCountCategories} employeeCountCategories={employeeCountCategories} incomeCategories={incomeCategories}/>
+		<main className='w-full'>
+			<GeneralInfoForm action={action} organization={organization} volunteerCountCategories={volunteerCountCategories} employeeCountCategories={employeeCountCategories} incomeCategories={incomeCategories}/>
+		</main>
 	);
 }

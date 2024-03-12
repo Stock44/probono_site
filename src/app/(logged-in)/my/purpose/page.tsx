@@ -1,6 +1,4 @@
 import React from 'react';
-import {notFound} from 'next/navigation';
-import {getSession} from '@auth0/nextjs-auth0';
 import PurposeInfoForm from './purpose-info-form.tsx';
 import {getAllOrganizationCategories} from '@/lib/models/organization-category.ts';
 import {getAllActivities} from '@/lib/models/activity.ts';
@@ -50,6 +48,8 @@ export default async function PurposePage(props: PurposePageProps) {
 	const action = updateOrganizationAction.bind(null, organization.id);
 
 	return (
-		<PurposeInfoForm action={action} organization={organization} organizationCategories={organizationCategories} activities={activities} beneficiaries={beneficiaries} ageGroups={ageGroups}/>
+		<main className='w-full'>
+			<PurposeInfoForm action={action} organization={organization} organizationCategories={organizationCategories} activities={activities} beneficiaries={beneficiaries} ageGroups={ageGroups}/>
+		</main>
 	);
 }

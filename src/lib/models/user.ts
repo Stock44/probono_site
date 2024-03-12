@@ -3,10 +3,13 @@ import {getSession} from '@auth0/nextjs-auth0';
 import {cache} from 'react';
 import {cookies} from 'next/headers';
 import {type NextRequest, type NextResponse} from 'next/server';
+import {Organization, Prisma} from '@prisma/client';
 import {type UserInit, type UserUpdate} from '@/lib/schemas/user.ts';
 import prisma from '@/lib/prisma.ts';
 import {management} from '@/lib/auth0.ts';
 import {deleteOrganizations, getUsersDependantOrganizations} from '@/lib/models/organization.ts';
+import OrganizationInclude = Prisma.OrganizationInclude;
+import OrganizationGetPayload = Prisma.OrganizationGetPayload;
 
 /**
  * Returns the active organization of the user. This is the first organization if no
@@ -18,7 +21,7 @@ import {deleteOrganizations, getUsersDependantOrganizations} from '@/lib/models/
  * @throws {Error} If the user is not authenticated.
  */
 export const getUsersActiveOrganization = cache(
-	async () => {
+	async <Args extends Omit<Prisma.OrganizationDefaultArgs, 'where'>> (args?: Args): Promise<OrganizationGetPayload<Args>> => {
 		const session = await getSession();
 
 		if (!session) {
@@ -33,6 +36,7 @@ export const getUsersActiveOrganization = cache(
 			const organization = Number.parseInt(organizationId.value, 10);
 
 			const activeOrganization = await prisma.organization.findUnique({
+				...args,
 				where: {
 					id: organization,
 					owners: {
@@ -44,13 +48,14 @@ export const getUsersActiveOrganization = cache(
 			});
 
 			if (activeOrganization) {
-				return activeOrganization;
+				return (activeOrganization as OrganizationGetPayload<Args>);
 			}
 		}
 		// If we didn't find an organization with the id specified in the cookie associated with this user,
 		// lets instead use the first organization we find for this user.
 
-		return prisma.organization.findFirstOrThrow({
+		return (await prisma.organization.findFirstOrThrow({
+			...args,
 			where: {
 				owners: {
 					some: {
@@ -58,7 +63,7 @@ export const getUsersActiveOrganization = cache(
 					},
 				},
 			},
-		});
+		})) as OrganizationGetPayload<Args>;
 	},
 );
 

@@ -51,6 +51,8 @@ export default async function LocationFormPage() {
 	const action = updateOrganizationAction.bind(null, organization.id);
 
 	return (
-		<AddressInfoForm states={states} organization={organization} action={action}/>
+		<main className='w-full'>
+			<AddressInfoForm states={states} organization={organization} action={action}/>
+		</main>
 	);
 }

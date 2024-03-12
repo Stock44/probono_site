@@ -10,8 +10,6 @@ import Group from '@material-design-icons/svg/round/group.svg';
 import Map from '@material-design-icons/svg/round/map.svg';
 import Menu from '@material-design-icons/svg/round/menu.svg';
 import MySectionLink from '@/app/(logged-in)/my/my-section-link.tsx';
-import Separator from '@/components/separator.tsx';
-import {OrganizationDataProgressCard} from '@/app/(logged-in)/my/organization-data-progress-card.tsx';
 import {getCurrentUserOrganizations, getUserFromSession, getUsersActiveOrganization} from '@/lib/models/user.ts';
 import OrganizationSelectorButton from '@/components/organization-selector/organization-selector-button.tsx';
 import AccountButton from '@/app/(logged-in)/onboarding/account-button.tsx';
@@ -95,24 +93,7 @@ export default async function MyLayout(props: MyLayoutProps) {
 							<MySectionLink icon={<Map/>} root='/my' slug='sectors'>Alcance geografico</MySectionLink>
 							<MySectionLink icon={<Group/>} root='/my' slug='members'>Miembros</MySectionLink>
 						</div>
-						<div className='grow w-0'>
-							<div
-								className='flex gap-4 pb-4 overflow-x-auto scrollbar-thin scrollbar-thumb-rounded scrollbar-thumb-stone-400 scrollbar-track-transparent'>
-								<OrganizationDataProgressCard className='shrink-0'/>
-								<div className='border border-stone-800 shrink-0 p-4 rounded col-span-4 w-96'>
-									<h2 className='text-stone-300  mb-2 font-bold'>
-										En espera de aprobación.
-									</h2>
-									<p className='text-stone-400 text-sm mb-4'>
-										Tu organización aun no ha sido aprobada para que aparezca en el sitio. Esta no se podrá ver en el
-										mapa
-										hasta que sea aprobada.
-									</p>
-								</div>
-							</div>
-							<Separator className='mt-4'/>
-							{children}
-						</div>
+						{children}
 					</div>
 				</div>
 			</div>
