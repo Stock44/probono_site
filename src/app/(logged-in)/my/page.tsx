@@ -3,14 +3,12 @@ import Image from 'next/image';
 import {omit, pick} from 'lodash';
 import {getUsersActiveOrganization} from '@/lib/models/user.ts';
 
-export async function countNullModelAttributes(model: Record<string, unknown> & {
+async function countNullModelAttributes(model: Record<string, unknown> & {
 	id: unknown;
 	_count?: Record<string, number>;
 }): Promise<[number, number]> {
 	let total = 0;
 	let nulls = 0;
-
-	console.log(model);
 
 	if (model._count) {
 		for (const value of Object.values(model._count)) {

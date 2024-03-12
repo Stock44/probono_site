@@ -18,8 +18,8 @@ export default async function LegalFormPage(props: LegalFormPageProps) {
 	const corporationTypes = await getAllCorporationTypes();
 
 	return (
-    <main className='w-full'>
-      <LegalInfoForm corporationTypes={corporationTypes} organization={organization} action={action}/>
-    </main>
+		<main className='w-full'>
+			<LegalInfoForm corporationTypes={corporationTypes} organization={organization} action={action}/>
+		</main>
 	);
 }
