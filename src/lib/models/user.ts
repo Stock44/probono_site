@@ -8,17 +8,16 @@ import {type UserInit, type UserUpdate} from '@/lib/schemas/user.ts';
 import prisma from '@/lib/prisma.ts';
 import {management} from '@/lib/auth0.ts';
 import {deleteOrganizations, getUsersDependantOrganizations} from '@/lib/models/organization.ts';
-import OrganizationInclude = Prisma.OrganizationInclude;
 import OrganizationGetPayload = Prisma.OrganizationGetPayload;
 
 /**
- * Returns the active organization of the user. This is the first organization if no
- * organization cookie has been set, or the organization specified in the cookie.
+ * Retrieves the active organization for the current user.
  *
  * @async
- * @function getUsersActiveOrganization
- * @returns {Promise<Organization>} The active organization.
- * @throws {Error} If the user is not authenticated.
+ * @template Args - The type of arguments for retrieving the organization.
+ * @param {Args} [args] - Optional arguments for retrieving the organization.
+ * @returns {Promise<OrganizationGetPayload<Args>>} - A promise that resolves with the active organization.
+ * @throws {Error} - If the user is not authenticated.
  */
 export const getUsersActiveOrganization = cache(
 	async <Args extends Omit<Prisma.OrganizationDefaultArgs, 'where'>> (args?: Args): Promise<OrganizationGetPayload<Args>> => {

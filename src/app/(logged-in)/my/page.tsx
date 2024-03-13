@@ -1,10 +1,29 @@
 import React from 'react';
 import Image from 'next/image';
 import {omit, pick} from 'lodash';
+import dynamic from 'next/dynamic';
+import Feed from '@material-design-icons/svg/round/feed.svg';
+import Psychology from '@material-design-icons/svg/round/psychology.svg';
+import Policy from '@material-design-icons/svg/round/policy.svg';
+import LocationOn from '@material-design-icons/svg/round/location_on.svg';
+import Map from '@material-design-icons/svg/round/map.svg';
+import Group from '@material-design-icons/svg/round/group.svg';
 import {getUsersActiveOrganization} from '@/lib/models/user.ts';
+import {getAddress} from '@/lib/models/address.ts';
+import DashboardTile from '@/app/(logged-in)/my/dashboard-tile.tsx';
+import SectorsList from '@/app/(logged-in)/my/sectors-list.tsx';
+import MembersList from '@/app/(logged-in)/my/members-list.tsx';
+
+const LocationMap = dynamic(async () => import('@/app/(logged-in)/my/location-map.tsx'), {
+	ssr: false,
+	loading() {
+		return (
+			<div className='h-48 animate-pulse bg-stone-800 mb-2'/>
+		);
+	},
+});
 
 async function countNullModelAttributes(model: Record<string, unknown> & {
-	id: unknown;
 	_count?: Record<string, number>;
 }): Promise<[number, number]> {
 	let total = 0;
@@ -19,7 +38,9 @@ async function countNullModelAttributes(model: Record<string, unknown> & {
 		}
 	}
 
-	for (const value of Object.values(omit(model, ['_count', 'id']))) {
+	console.log(model);
+
+	for (const value of Object.values(omit(model, ['_count']))) {
 		total++;
 		if (value === null) {
 			nulls++;
@@ -32,7 +53,8 @@ async function countNullModelAttributes(model: Record<string, unknown> & {
 export default async function MyStartPage() {
 	const organization = await getUsersActiveOrganization({
 		include: {
-			address: true,
+			owners: true,
+			sectors: true,
 			_count: {
 				select: {
 					ageGroups: true,
@@ -44,7 +66,9 @@ export default async function MyStartPage() {
 		},
 	});
 
-	const [nulls, totals] = await countNullModelAttributes(omit(organization, ['approved', 'isIncorporated']));
+	const address = organization.addressId ? await getAddress(organization.addressId) : null;
+
+	const [nulls, totals] = await countNullModelAttributes(omit(organization, ['id', 'wantsToIncorporate', 'approved', 'isIncorporated', 'sectors', 'owners', 'workplaceTypeId', 'hasInvestmentAgreement']));
 
 	const [purposeNulls, purposeTotals] = await countNullModelAttributes(pick(organization, [
 		'categoryId',
@@ -83,7 +107,7 @@ export default async function MyStartPage() {
 		<main className='w-full'>
 			<div className='text-stone-300 w-full grid gap-4 grid-cols-1 md:grid-cols-3'>
 				<div
-					className='border border-stone-700 p-8 rounded md:col-span-3 flex gap-8 items-center flex-wrap justify-center md:justify-start'>
+					className='border border-stone-800 p-8 rounded md:col-span-3 flex gap-8 items-center flex-wrap justify-center md:justify-start'>
 					{
 						organization.logoUrl && (
 							<Image src={organization.logoUrl} alt='Organization logo' width={64} height={64}/>
@@ -93,6 +117,22 @@ export default async function MyStartPage() {
 						{organization.name}
 					</h1>
 					<div className='grow hidden md:block'/>
+					<div className='basis-5/12 md:basis-auto'>
+						<h3 className='text-sm text-stone-400 text-center md:text-left'>
+							Miembro(s)
+						</h3>
+						<p className='text-2xl font-bold text-center md:text-left'>
+							{organization.owners.length}
+						</p>
+					</div>
+					<div className='basis-5/12 md:basis-auto'>
+						<h3 className='text-sm text-stone-400 text-center md:text-left'>
+							Campos llenados
+						</h3>
+						<p className='text-2xl font-bold text-center md:text-left'>
+							{totals - nulls} / {totals}
+						</p>
+					</div>
 					<div className='basis-5/12 md:basis-auto'>
 						<h3 className='text-sm text-stone-400 text-center md:text-left'>
 							Estatus de aprobación
@@ -105,58 +145,45 @@ export default async function MyStartPage() {
 							}
 						</p>
 					</div>
-					<div className='basis-5/12 md:basis-auto'>
-						<h3 className='text-sm text-stone-400 text-center md:text-left'>
-							Campos llenados
-						</h3>
-						<p className='text-2xl font-bold text-center md:text-left'>
-							{totals - nulls} / {totals}
-						</p>
-					</div>
+
 				</div>
-				<div className='border border-stone-700 p-4 rounded'>
-					<h2 className='text-stone-200 font-bold mb-2'>
-						Información general
-					</h2>
+				<DashboardTile title='Tu información general' href='/my/general' icon={<Feed className='fill-current'/>}>
 					<h3 className='text-xs text-stone-400 text-center md:text-left'>
 						Campos llenados
 					</h3>
 					<p className='text-lg font-bold text-center md:text-left'>
 						{generalTotals - generalNulls} / {generalTotals}
 					</p>
-				</div>
-				<div className='border border-stone-700 p-4 rounded'>
-					<h2 className='text-stone-200 font-bold mb-2'>
-						Tu propósito
-					</h2>
+				</DashboardTile>
+				<DashboardTile title='Tu propósito' href='/my/purpose' icon={<Psychology className='fill-current'/>}>
 					<h3 className='text-xs text-stone-400 text-center md:text-left'>
 						Campos llenados
 					</h3>
 					<p className='text-lg font-bold text-center md:text-left'>
 						{purposeTotals - purposeNulls} / {purposeTotals}
 					</p>
-				</div>
-				<div className='border border-stone-700 p-4 rounded'>
-					<h2 className='text-stone-200 font-bold mb-2'>
-						Tus datos legales
-					</h2>
+				</DashboardTile>
+				<DashboardTile title='Tus datos legales' href='/my/legal' icon={<Policy className='fill-current'/>}>
 					<h3 className='text-xs text-stone-400 text-center md:text-left'>
 						Campos llenados
 					</h3>
 					<p className='text-lg font-bold text-center md:text-left'>
 						{legalTotals - legalNulls} / {legalTotals}
 					</p>
-				</div>
-				<div className='border border-stone-700 p-4 rounded'>
-					<h2 className='text-stone-200 font-bold mb-2'>
-						Tu ubicación
-					</h2>
+				</DashboardTile>
+				<DashboardTile title='Tu ubicación' href='/my/location' icon={<LocationOn className='fill-current'/>}>
 					{
-						organization.address
+						address
 							? (
-								<div>
-									{organization.address.number} {organization.address.street}
-								</div>
+								<>
+									<div className='rounded overflow-hidden'>
+										<LocationMap location={address.location} className='h-48 mb-4'/>
+									</div>
+									<p className='text-base'>
+										{address.street} {address.number}
+									</p>
+								</>
+
 							)
 							: (
 								<p>
@@ -164,15 +191,24 @@ export default async function MyStartPage() {
 								</p>
 							)
 					}
-				</div>
-				<div className='border border-stone-700 p-4 rounded'>
-					<h2 className='text-stone-200 font-bold mb-2'>
-						Tu alcance geográfico
-					</h2>
-					<h3 className='font-bold md:text-left'>
-						{organization._count.sectors} sectores
-					</h3>
-				</div>
+				</DashboardTile>
+				<DashboardTile title='Tu alcance geográfico' href='/my/sectors' icon={<Map className='fill-current'/>}>
+					{
+						organization.sectors.length === 0
+							? (
+								<h3 className='font-bold md:text-left'>
+									No has agregado sectores.
+								</h3>
+							)
+							: (
+								<SectorsList sectors={organization.sectors}/>
+							)
+					}
+
+				</DashboardTile>
+				<DashboardTile title='Miembros' href='/my/members' icon={<Group className='fill-current'/>}>
+					<MembersList members={organization.owners}/>
+				</DashboardTile>
 			</div>
 		</main>
 	);

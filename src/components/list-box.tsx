@@ -1,3 +1,4 @@
+'use client';
 import React, {type ForwardedRef, forwardRef} from 'react';
 import {type AriaListBoxProps, mergeProps, useFocusRing, useListBox, useListBoxSection, useOption} from 'react-aria';
 import {type Node} from '@react-types/shared';
@@ -100,7 +101,7 @@ function Option<T extends Record<string, unknown>>(props: OptionProps<T>) {
 
 	// Get props for the option element
 	const ref = React.useRef(null);
-	const {isSelected, optionProps, isFocused} = useOption({key: item.key}, state, ref);
+	const {isSelected, optionProps, isFocused, allowsSelection} = useOption({key: item.key}, state, ref);
 
 	// Determine whether we should show a keyboard
 	// focus ring for accessibility
@@ -112,8 +113,8 @@ function Option<T extends Record<string, unknown>>(props: OptionProps<T>) {
 			ref={ref}
 			className={cx('text-stone-300 p-2 border rounded border-transparent outline-none cursor-pointer data-[focus-visible=true]:border-stone-50',
 				isSelected && 'bg-stone-50 text-stone-800',
-				!isSelected && 'hover:bg-stone-800',
-				isFocused && !isSelected && 'bg-stone-900')}
+				allowsSelection && !isSelected && 'hover:bg-stone-800',
+				allowsSelection && isFocused && !isSelected && 'bg-stone-900')}
 			data-focus-visible={isFocusVisible}
 		>
 			{item.rendered}

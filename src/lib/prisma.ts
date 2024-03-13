@@ -6,14 +6,27 @@ import ws from 'ws';
 
 dotenv.config();
 
-neonConfig.webSocketConstructor = ws;
+// eslint-disable-next-line import/no-mutable-exports
+let prisma: PrismaClient;
 
-const connectionString = `${process.env.DATABASE_URL}`;
+if (process.env.NODE_ENV === 'production') {
+	neonConfig.webSocketConstructor = ws;
 
-const pool = new Pool({connectionString});
+	const connectionString = `${process.env.DATABASE_URL}`;
 
-const adapter = new PrismaNeon(pool);
+	const pool = new Pool({connectionString});
 
-const prisma = new PrismaClient({adapter});
+	const adapter = new PrismaNeon(pool);
+
+	prisma = new PrismaClient({adapter});
+} else {
+	const prismaClientSingleton = () => new PrismaClient();
+
+	// @ts-expect-error untyped
+	prisma = globalThis.prismaGlobal as PrismaClient ?? prismaClientSingleton();
+
+	// @ts-expect-error untyped
+	globalThis.prismaGlobal = prisma;
+}
 
 export default prisma;
