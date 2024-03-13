@@ -1,14 +1,13 @@
 'use client';
 
-import Save from '@material-design-icons/svg/round/save.svg';
 import React from 'react';
 import {type User} from '@prisma/client';
 import Done from '@material-design-icons/svg/round/done.svg';
 import {type UserUpdate, userUpdateSchema} from '@/lib/schemas/user.ts';
 import Form, {type FormState} from '@/components/form/form.tsx';
-import SubmitButton from '@/components/submit-button.tsx';
 import TextField from '@/components/text-field.tsx';
 import {formValidators} from '@/lib/form-utils.ts';
+import FormHeader from '@/components/form-header.tsx';
 
 export type AccountFormProps = {
 	readonly action: (state: FormState<UserUpdate>, data: FormData) => Promise<FormState<UserUpdate>>;
@@ -25,21 +24,7 @@ export default function AccountForm(props: AccountFormProps) {
 				icon: <Done/>,
 			}}
 			action={action}>
-			<div className='flex items-end mb-4 gap-4 flex-wrap justify-between '>
-				<div>
-					<h1 className='text-stone-200 text-4xl mb-2 '>
-						Mi cuenta
-					</h1>
-					<p className='text-stone-300'>
-						Aquí puedes actualizar datos sobre tu cuenta.
-					</p>
-				</div>
-				<div>
-					<SubmitButton icon={<Save/>}>
-						Guardar
-					</SubmitButton>
-				</div>
-			</div>
+			<FormHeader title='Mi cuenta' description='Aquí puedes actualizar datos sobre tu cuenta.'/>
 			<div className='w-full'>
 				<div className='flex-none min-[467px]:flex gap-x-4 mb-4 flex-wrap mx-auto'>
 					<TextField isRequired label='Nombre(s)' name='givenName' defaultValue={user.givenName} validate={validate.givenName} className='grow mb-2'/>

@@ -28,7 +28,7 @@ export default async function MembersPage() {
 	const removeOwnersAction = removeOrganizationOwnersAction.bind(null, organization.id);
 
 	return (
-		<div>
+		<main className='w-full'>
 			<h1 className='text-stone-200 text-4xl mb-2'>
 				Miembros de la organización
 			</h1>
@@ -47,6 +47,6 @@ export default async function MembersPage() {
 					</>
 				)
 			}
-		</div>
+		</main>
 	);
 }

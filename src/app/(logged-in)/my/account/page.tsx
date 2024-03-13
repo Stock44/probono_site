@@ -23,7 +23,7 @@ export default async function AccountPage() {
 	}
 
 	return (
-		<main>
+		<main className='w-full'>
 			<AccountForm action={updateUserAction} user={user}/>
 			<Separator/>
 			<div style={{display: 'flex', flexDirection: 'row', gap: '10px'}}>

@@ -45,7 +45,7 @@ export default async function AccountPage() {
 	};
 
 	return (
-		<main>
+		<main className='w-full'>
 			<h1 className='text-stone-200 text-4xl mb-2'>
 				Cambio de contraseña
 			</h1>
