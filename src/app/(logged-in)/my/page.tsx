@@ -13,10 +13,6 @@ import {getAddress} from '@/lib/models/address.ts';
 import DashboardTile from '@/app/(logged-in)/my/dashboard-tile.tsx';
 import SectorsList from '@/app/(logged-in)/my/sectors-list.tsx';
 import MembersList from '@/app/(logged-in)/my/members-list.tsx';
-<<<<<<< HEAD
-import Paper from '@/components/paper/paper.tsx';
-=======
->>>>>>> a48affe (Remove redundant SQL insert code)
 
 const LocationMap = dynamic(async () => import('@/app/(logged-in)/my/location-map.tsx'), {
 	ssr: false,
@@ -43,10 +39,13 @@ async function countNullModelAttributes(model: Record<string, unknown> & {
 	}
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 	console.log(model);
 
 >>>>>>> a48affe (Remove redundant SQL insert code)
+=======
+>>>>>>> b1d2fb6 (Add new Organizations page, update necessary components)
 	for (const value of Object.values(omit(model, ['_count']))) {
 		total++;
 		if (value === null) {

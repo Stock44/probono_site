@@ -1,5 +1,6 @@
 import prisma from '@/lib/prisma.ts';
 
+
 export async function getAddress(id: number) {
 	const baseAddress = await prisma.address.findUnique({
 		where: {
