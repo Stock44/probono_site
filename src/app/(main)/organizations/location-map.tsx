@@ -1,0 +1,28 @@
+'use client';
+
+import React from 'react';
+import {MapContainer} from 'react-leaflet';
+import GeostatsTileLayer from '@/components/geostats-tile-layer.tsx';
+import LocationMarker from '@/components/location-marker.tsx';
+
+export type LocationMapProps = {
+	readonly organizations: Array<{
+		id: number;
+		location: [number, number];
+	}>;
+	readonly className?: string;
+};
+
+export default function LocationMap(props: LocationMapProps) {
+	const {organizations, className} = props;
+	return (
+		<MapContainer center={[25.68, -100.31]} className={className} zoom={12}>
+			{
+				organizations.map(organization => (
+					<LocationMarker key={organization.id} position={organization.location}/>
+				))
+			}
+			<GeostatsTileLayer/>
+		</MapContainer>
+	);
+}

@@ -38,8 +38,6 @@ async function countNullModelAttributes(model: Record<string, unknown> & {
 		}
 	}
 
-	console.log(model);
-
 	for (const value of Object.values(omit(model, ['_count']))) {
 		total++;
 		if (value === null) {
