@@ -105,17 +105,17 @@ export default async function MyStartPage() {
 		<main className='w-full'>
 			<div className='text-stone-300 w-full grid gap-4 grid-cols-1 md:grid-cols-3'>
 				<div
-					className='border border-stone-800 p-8 rounded md:col-span-3 flex gap-8 items-center flex-wrap justify-center md:justify-start'>
+					className='border border-stone-800 p-8 rounded md:col-span-3 flex gap-8 items-center flex-wrap md:flex-nowrap justify-center md:justify-start'>
 					{
 						organization.logoUrl && (
 							<Image src={organization.logoUrl} alt='Organization logo' width={64} height={64}/>
 						)
 					}
-					<h1 className='text-stone-200 text-4xl font-bold basis-5/12 md:basis-auto'>
+					<h1 className='text-stone-200 text-4xl font-bold md:basis-auto truncate'>
 						{organization.name}
 					</h1>
 					<div className='grow hidden md:block'/>
-					<div className='basis-5/12 md:basis-auto'>
+					<div className='basis-5/12 md:basis-auto flex-none'>
 						<h3 className='text-sm text-stone-400 text-center md:text-left'>
 							Miembro(s)
 						</h3>
@@ -123,7 +123,7 @@ export default async function MyStartPage() {
 							{organization.owners.length}
 						</p>
 					</div>
-					<div className='basis-5/12 md:basis-auto'>
+					<div className='basis-5/12 md:basis-auto flex-none'>
 						<h3 className='text-sm text-stone-400 text-center md:text-left'>
 							Campos llenados
 						</h3>
@@ -131,7 +131,7 @@ export default async function MyStartPage() {
 							{totals - nulls} / {totals}
 						</p>
 					</div>
-					<div className='basis-5/12 md:basis-auto'>
+					<div className='basis-5/12 md:basis-auto flex-none'>
 						<h3 className='text-sm text-stone-400 text-center md:text-left'>
 							Estatus de aprobación
 						</h3>
