@@ -1,4 +1,5 @@
-import React from 'react';
+'use client';
+import React, {useEffect, useRef, useState} from 'react';
 import {type Address, type Organization} from '@prisma/client';
 import Image from 'next/image';
 import Email from '@material-design-icons/svg/round/email.svg';
@@ -18,10 +19,36 @@ export type OrganizationCardProps = {
 
 export default function OrganizationCard(props: OrganizationCardProps) {
 	const {organization} = props;
+
+	const [position, setPosition] = useState<[number, number]>([0, 0]);
+
+	const container = useRef<HTMLDivElement>(null);
+
+	useEffect(() => {
+		const listener = (event: MouseEvent) => {
+			setPosition([event.clientX, event.clientY]);
+		};
+
+		window.addEventListener('mousemove', listener);
+		return () => {
+			window.removeEventListener('mousemove', listener);
+		};
+	}, []);
 	return (
 		<div
+			ref={container}
 			key={organization.id}
-			className='flex-1 flex flex-col text-stone-300 border border-stone-800 rounded p-4 gap-x-4 gap-y-4 max-w-96 min-w-64'>
+			className='relative flex-1 flex flex-col text-stone-300
+			border border-stone-800 rounded p-4 gap-x-4 gap-y-4 max-w-96
+			 min-w-64 overflow-hidden hover:border-stone-700 transition-colors'>
+			<svg
+				viewBox='0 0 4 4'
+				className='fill-stone-900 absolute w-96 h-96 blur-3xl -z-10' style={{
+					top: position[1] - (container.current?.getBoundingClientRect().top ?? 0) - 192,
+					left: position[0] - (container.current?.getBoundingClientRect().left ?? 0) - 192,
+				}}>
+				<circle r={2} cx={2} cy={2}/>
+			</svg>
 			<div className='flex items-center gap-4 mb-4'>
 				<div className='w-16 h-16 border border-stone-800 rounded p-4 flex-none'>
 					{
