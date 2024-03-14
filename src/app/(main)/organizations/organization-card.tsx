@@ -21,9 +21,9 @@ export default function OrganizationCard(props: OrganizationCardProps) {
 	return (
 		<div
 			key={organization.id}
-			className='flex-1 flex flex-col text-stone-300 border border-stone-800 rounded p-4 gap-x-4 gap-y-4 max-w-96 min-w-56'>
+			className='flex-1 flex flex-col text-stone-300 border border-stone-800 rounded p-4 gap-x-4 gap-y-4 max-w-96 min-w-64'>
 			<div className='flex items-center gap-4 mb-4'>
-				<div className='w-16 h-16 border border-stone-800 rounded p-4'>
+				<div className='w-16 h-16 border border-stone-800 rounded p-4 flex-none'>
 					{
 						organization.logoUrl && (
 							<div className='overflow-hidden h-full w-full flex items-center justify-center'>
@@ -35,7 +35,7 @@ export default function OrganizationCard(props: OrganizationCardProps) {
 						)
 					}
 				</div>
-				<h2 className='text-2xl font-bold'>
+				<h2 className='text-2xl font-bold truncate flex-1'>
 					{organization.name}
 				</h2>
 			</div>
