@@ -10,9 +10,7 @@ import XLogo from 'public/logos/x.png';
 import TikTokLogo from 'public/logos/tiktok.png';
 import LinkedInLogo from 'public/logos/linkedin.png';
 import YoutubeLogo from 'public/logos/youtube.png';
-import Public from '@material-design-icons/svg/round/public.svg';
 import SocialLink from '@/components/social-link.tsx';
-import Paper from '@/components/paper/paper.tsx';
 
 export type OrganizationCardProps = {
 	readonly organization: Organization & {address: Address | null};
@@ -20,15 +18,12 @@ export type OrganizationCardProps = {
 
 export default function OrganizationCard(props: OrganizationCardProps) {
 	const {organization} = props;
-
 	return (
-		<Paper
-			hoverEffect
-			className='relative flex-1 flex flex-col
-			gap-x-4 gap-y-4 max-w-96
-			 min-w-64'>
+		<div
+			key={organization.id}
+			className='flex-1 flex flex-col text-stone-300 border border-stone-800 rounded p-4 gap-x-4 gap-y-4 max-w-96 min-w-56'>
 			<div className='flex items-center gap-4 mb-4'>
-				<div className='w-16 h-16 border border-stone-800 rounded p-4 flex-none'>
+				<div className='w-16 h-16 border border-stone-800 rounded p-4'>
 					{
 						organization.logoUrl && (
 							<div className='overflow-hidden h-full w-full flex items-center justify-center'>
@@ -40,7 +35,7 @@ export default function OrganizationCard(props: OrganizationCardProps) {
 						)
 					}
 				</div>
-				<h2 className='text-2xl font-bold truncate flex-1'>
+				<h2 className='text-2xl font-bold'>
 					{organization.name}
 				</h2>
 			</div>
@@ -68,17 +63,6 @@ export default function OrganizationCard(props: OrganizationCardProps) {
 				}
 
 				{
-					organization.webpage && (
-						<>
-							<div>
-								<Public className='fill-current mx-auto'/>
-							</div>
-							{organization.webpage}
-						</>
-					)
-				}
-
-				{
 					organization.address && (
 						<>
 							<div>
@@ -89,7 +73,7 @@ export default function OrganizationCard(props: OrganizationCardProps) {
 					)
 				}
 			</div>
-			<div className='col-span-2 flex flex-wrap gap-x-2 gap-y-8 mt-4 mb-2 w-full justify-evenly'>
+			<div className='col-span-2 flex flex-wrap gap-x-2 gap-y-8 my-2 w-full justify-evenly'>
 				{
 					organization.facebook && (
 						<SocialLink
@@ -139,6 +123,6 @@ export default function OrganizationCard(props: OrganizationCardProps) {
 					)
 				}
 			</div>
-		</Paper>
+		</div>
 	);
 }
