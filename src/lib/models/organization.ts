@@ -1,11 +1,9 @@
 import {omit} from 'lodash';
 import {del, put} from '@vercel/blob';
 import {filetypeextension} from 'magic-bytes.js';
-import {type Organization, Prisma, type User} from '@prisma/client';
-import {List} from 'immutable';
+import {type Organization, type Prisma, type User} from '@prisma/client';
 import {type OrganizationInit, type OrganizationUpdate} from '@/lib/schemas/organization.ts';
 import prisma from '@/lib/prisma.ts';
-import BatchPayload = Prisma.BatchPayload;
 
 export async function getApprovedOrganizationLocations() {
 	const result = (
@@ -271,11 +269,8 @@ export async function updateOrganization(organizationId: number, update: Organiz
 		},
 	}));
 
-<<<<<<< HEAD
+if (organization.addressId && update.address) {
 	if (update.address) {
-=======
-	if (organization.addressId && update.address) {
->>>>>>> 19bc29d (Add functions to get approved organization info)
 		console.log(`updating organization ${organization.id}`);
 		operations.push(prisma.$queryRaw`update "Address" as a
                                      set location=point(${update.address.location[0]}, ${update.address.location[1]})

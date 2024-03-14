@@ -1,7 +1,7 @@
 'use client';
 
-import React from 'react';
-import {Marker} from 'react-leaflet';
+import React, {type ReactNode} from 'react';
+import {Marker, Tooltip} from 'react-leaflet';
 import {Icon} from 'leaflet';
 import Location from 'public/location.png';
 
@@ -13,9 +13,28 @@ const locationIcon = new Icon({
 
 export type LocationMarkerProps = {
 	readonly position: [number, number];
+	readonly popup?: ReactNode;
 };
 
 export default function LocationMarker(props: LocationMarkerProps) {
-	const {position} = props;
-	return <Marker position={position} icon={locationIcon}/>;
+	const {position, popup} = props;
+	return (
+		<Marker
+			position={position} icon={locationIcon}
+			eventHandlers={{
+				// Mouseover(event) {
+				// 	event.target.openPopup();
+				// },
+				// mouseout(event) {
+				// 	event.target.closePopup();
+				// },
+			}}
+		>
+			{
+				popup && (
+					<Tooltip offset={[-2, -28]} direction='top'>{popup}</Tooltip>
+				)
+			}
+		</Marker>
+	);
 }
