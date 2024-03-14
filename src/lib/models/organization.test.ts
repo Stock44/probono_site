@@ -104,7 +104,7 @@ describe('updateOrganization function tests', () => {
 
 	it('completes successfully with valid update data', async () => {
 		// @ts-expect-error updateOrganization only selects the logoUrl field for this query
-		prismaMock.organization.findFirstOrThrow.mockResolvedValueOnce(pick(mockOrganization, ['logoUrl']));
+		prismaMock.organization.findUniqueOrThrow.mockResolvedValueOnce(pick(mockOrganization, ['logoUrl']));
 
 		await updateOrganization(organizationId, await organizationUpdateSchema.parseAsync(update));
 

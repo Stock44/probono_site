@@ -47,8 +47,10 @@ export default function OrganizationSelectorButton(props: OrganizationSelectorBu
 				ref={ref}
 				className={className}
 			>
-				{currentOrganization.name}
-				<ArrowDropDown/>
+				<span className='truncate flex-1'>
+					{currentOrganization.name}
+				</span>
+				<ArrowDropDown className='inline'/>
 			</Button>
 			{
 				state.isOpen && (
@@ -70,7 +72,7 @@ export default function OrganizationSelectorButton(props: OrganizationSelectorBu
 											<Item key={organization.organization.id}>
 												<div
 													className={cx(
-														'w-full p-2 text-stone-300 flex justify-between rounded border-b border-stone-700',
+														'w-full p-2 text-stone-300 rounded border-b border-stone-700 max-w-64 truncate',
 														organization.organization.id === currentOrganization.id && 'font-bold',
 													)}>
 													{organization.organization.name}

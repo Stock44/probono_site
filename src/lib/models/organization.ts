@@ -1,9 +1,50 @@
 import {omit} from 'lodash';
 import {del, put} from '@vercel/blob';
 import {filetypeextension} from 'magic-bytes.js';
-import {type Organization, type User} from '@prisma/client';
+import {type Organization, type Prisma, type User} from '@prisma/client';
 import {type OrganizationInit, type OrganizationUpdate} from '@/lib/schemas/organization.ts';
 import prisma from '@/lib/prisma.ts';
+
+export async function getApprovedOrganizationLocations() {
+	const result = (
+		await prisma.$queryRaw`
+        select o.id                                 as id,
+               array [a.location[0], a.location[1]] as location
+        from "Organization" as o
+                 join "Address" as a on o."addressId" = a.id
+        where o.approved = true;
+    `
+	);
+
+	return result as Array<{
+		id: number;
+		location?: [number, number];
+	}>;
+}
+
+export async function getApprovedOrganizationInfo() {
+	const locations = await getApprovedOrganizationLocations();
+	const organizations = await prisma.organization.findMany({
+		where: {
+			approved: true,
+		},
+		include: {
+			address: true,
+		},
+		orderBy: {
+			name: 'desc',
+		},
+	});
+	console.log(locations);
+
+	const addressMap = new Map(locations.map(location => [location.id, location.location] as const));
+	console.log(addressMap);
+
+	return organizations.map(organization => ({
+		...organization,
+		location: addressMap.get(organization.id),
+	}));
+}
 
 /**
  * Checks whether a user is authorized for a given organization.
@@ -77,10 +118,9 @@ export async function createOrganization(ownerId: number, init: OrganizationInit
 
 		if (init.address) {
 			await tx.$queryRaw`update "Address"
-                         set location=point(${init.address.location[0]}, ${init.address.location[1]}) from "Address" as a
-                                  join "Organization" as o
-                         on a.id = o."addressId"
-                         where o.id = ${organization.id}`;
+                         set location=point(${init.address.location[0]}, ${init.address.location[1]})
+                         from "Organization" as o
+                         where (o."addressId" = ${organization.addressId} and o.id = ${organization.id})`;
 		}
 
 		return organization;
@@ -121,76 +161,84 @@ export async function createOrganization(ownerId: number, init: OrganizationInit
  * @throws {Error} - Throws an error if the logo image is not in a supported format.
  */
 export async function updateOrganization(organizationId: number, update: OrganizationUpdate) {
-	await prisma.$transaction(async tx => {
-		if (update.ageGroups) {
-			await tx.organizationToAgeGroup.deleteMany({
-				where: {
-					organizationId,
-				},
-			});
-		}
-
-		if (update.activities) {
-			await tx.organizationToActivity.deleteMany({
-				where: {
-					organizationId,
-				},
-			});
-		}
-
-		await tx.organization.update({
-			where: {
-				id: organizationId,
-			},
-			// @ts-expect-error type mismatched when using ids directly and at the same time using create to connect records
-			data: {
-				...omit(update,
-					['logo'],
-				),
-				address: update.address
-					? {
-						upsert: {
-							update: omit(update.address, 'location'),
-							create: omit(update.address, 'location'),
-						},
-					}
-					: undefined,
-				ageGroups: update.ageGroups
-					? {
-						createMany: {
-							data: update.ageGroups.map(item => ({
-								ageGroupId: item.ageGroupId,
-								gender: item.gender,
-							})),
-						},
-					}
-					: undefined,
-				activities: update.activities
-					? {
-						createMany: {
-							data: update.activities.map((item, idx) => ({
-								activityId: item.activityId,
-								priority: idx,
-							})),
-						},
-					}
-					: undefined,
-				beneficiaries: update.beneficiaries ? {
-					set: update.beneficiaries.map(id => ({
-						id,
-					})),
-				} : undefined,
-			},
-		});
-
-		if (update.address) {
-			await tx.$queryRaw`update "Address"
-                         set location=point(${update.address.location[0]}, ${update.address.location[1]}) from "Address" as a
-                                  join "Organization" as o
-                         on a.id = o."addressId"
-                         where o.id = ${organizationId}`;
-		}
+	const organization = await prisma.organization.findUniqueOrThrow({
+		where: {
+			id: organizationId,
+		},
 	});
+
+	const operations: Array<Prisma.PrismaPromise<any>> = [];
+
+	if (update.ageGroups) {
+		operations.push(prisma.organizationToAgeGroup.deleteMany({
+			where: {
+				organizationId,
+			},
+		}));
+	}
+
+	if (update.activities) {
+		operations.push(prisma.organizationToActivity.deleteMany({
+			where: {
+				organizationId,
+			},
+		}));
+	}
+
+	operations.push(prisma.organization.update({
+		where: {
+			id: organizationId,
+		},
+		// @ts-expect-error type mismatched when using ids directly and at the same time using create to connect records
+		data: {
+			...omit(update,
+				['logo'],
+			),
+			address: update.address
+				? {
+					upsert: {
+						update: omit(update.address, 'location'),
+						create: omit(update.address, 'location'),
+					},
+				}
+				: undefined,
+			ageGroups: update.ageGroups
+				? {
+					createMany: {
+						data: update.ageGroups.map(item => ({
+							ageGroupId: item.ageGroupId,
+							gender: item.gender,
+						})),
+					},
+				}
+				: undefined,
+			activities: update.activities
+				? {
+					createMany: {
+						data: update.activities.map((item, idx) => ({
+							activityId: item.activityId,
+							priority: idx,
+						})),
+					},
+				}
+				: undefined,
+			beneficiaries: update.beneficiaries ? {
+				set: update.beneficiaries.map(id => ({
+					id,
+				})),
+			} : undefined,
+		},
+	}));
+
+	if (update.address) {
+		console.log(`updating organization ${organization.id}`);
+		operations.push(prisma.$queryRaw`update "Address" as a
+                                     set location=point(${update.address.location[0]}, ${update.address.location[1]})
+                                     from "Organization" as o
+                                     where (o."addressId" = a.id and o.id = ${organization.id})`);
+	}
+
+	await prisma.$transaction(operations);
 
 	if (update.logo) {
 		const fileStart = new Uint8Array(await update.logo.slice(0, 100).arrayBuffer());
@@ -201,17 +249,8 @@ export async function updateOrganization(organizationId: number, update: Organiz
 			throw new Error('Can\'t find correct extension for file.');
 		}
 
-		const {logoUrl: currentLogoUrl} = await prisma.organization.findFirstOrThrow({
-			where: {
-				id: organizationId,
-			},
-			select: {
-				logoUrl: true,
-			},
-		});
-
-		if (currentLogoUrl) {
-			await del(currentLogoUrl);
+		if (organization.logoUrl) {
+			await del(organization.logoUrl);
 		}
 
 		const result = await put(`organizationLogos/${organizationId}-${Date.now().valueOf()}.${extensions[0]}`, update.logo, {

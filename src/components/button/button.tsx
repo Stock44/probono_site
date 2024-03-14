@@ -32,6 +32,8 @@ export default forwardRef((props: ButtonProps, ref: ForwardedRef<HTMLButtonEleme
 			{...buttonProps}
 			ref={buttonRef}
 			className={buttonVariant(props)}
-		>{children}</button>
+		>
+			{children}
+		</button>
 	);
 });

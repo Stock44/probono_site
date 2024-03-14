@@ -45,7 +45,7 @@ export default async function MyLayout(props: MyLayoutProps) {
 				<div className='hidden lg:flex gap-2'>
 					{
 						organizations && organizations.length > 0
-            && <OrganizationSelectorButton items={organizations} currentOrganization={organization}/>
+            && <OrganizationSelectorButton items={organizations} currentOrganization={organization} className='max-w-64'/>
 					}
 					<AccountButton/>
 				</div>
@@ -56,7 +56,7 @@ export default async function MyLayout(props: MyLayoutProps) {
 						</p>
 						{
 							organizations.length > 0
-              && <OrganizationSelectorButton items={organizations} currentOrganization={organization} className='w-full flex justify-between'/>
+              && <OrganizationSelectorButton items={organizations} currentOrganization={organization} className='w-full max-w-48 flex justify-between'/>
 						}
 						<MySectionLink icon={<Home/>} root='/my' className='mt-4'>Inicio</MySectionLink>
 						<MySectionLink icon={<Person/>} root='/my' slug='account'>Mi cuenta</MySectionLink>
