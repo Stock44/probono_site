@@ -38,14 +38,8 @@ async function countNullModelAttributes(model: Record<string, unknown> & {
 		}
 	}
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
 	console.log(model);
 
->>>>>>> a48affe (Remove redundant SQL insert code)
-=======
->>>>>>> b1d2fb6 (Add new Organizations page, update necessary components)
 	for (const value of Object.values(omit(model, ['_count']))) {
 		total++;
 		if (value === null) {
@@ -112,14 +106,11 @@ export default async function MyStartPage() {
 	return (
 		<main className='w-full'>
 			<div className='text-stone-300 w-full grid gap-4 grid-cols-1 md:grid-cols-3'>
-<<<<<<< HEAD
 				<Paper
 					hoverEffect
 					className='md:col-span-3 flex gap-8 items-center flex-wrap md:flex-nowrap justify-center md:justify-start '>
-=======
 				<div
 					className='border border-stone-800 p-8 rounded md:col-span-3 flex gap-8 items-center flex-wrap justify-center md:justify-start'>
->>>>>>> a48affe (Remove redundant SQL insert code)
 					{
 						organization.logoUrl && (
 							<Image src={organization.logoUrl} alt='Organization logo' width={64} height={64}/>
@@ -147,22 +138,6 @@ export default async function MyStartPage() {
 					</div>
 					<div className='basis-5/12 md:basis-auto flex-none'>
 						<h3 className='text-sm text-stone-400 text-center md:text-left'>
-							Miembro(s)
-						</h3>
-						<p className='text-2xl font-bold text-center md:text-left'>
-							{organization.owners.length}
-						</p>
-					</div>
-					<div className='basis-5/12 md:basis-auto'>
-						<h3 className='text-sm text-stone-400 text-center md:text-left'>
-							Campos llenados
-						</h3>
-						<p className='text-2xl font-bold text-center md:text-left'>
-							{totals - nulls} / {totals}
-						</p>
-					</div>
-					<div className='basis-5/12 md:basis-auto'>
-						<h3 className='text-sm text-stone-400 text-center md:text-left'>
 							Estatus de aprobación
 						</h3>
 						<p className='text-2xl font-bold text-center md:text-left'>
@@ -174,11 +149,7 @@ export default async function MyStartPage() {
 						</p>
 					</div>
 
-<<<<<<< HEAD
-				</Paper>
-=======
 				</div>
->>>>>>> a48affe (Remove redundant SQL insert code)
 				<DashboardTile title='Tu información general' href='/my/general' icon={<Feed className='fill-current'/>}>
 					<h3 className='text-xs text-stone-400 text-center md:text-left'>
 						Campos llenados
