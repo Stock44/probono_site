@@ -6,6 +6,7 @@ import labnl_mobile from '@/app/(main)/labnl_vignette_mobile.webp';
 import map from '@/app/(main)/map.jpg';
 import Dropdown from '@/components/dropdown.tsx';
 import ALinkButton from '@/components/button/a-link-button.tsx';
+import Paper from '@/components/paper/paper.tsx';
 
 export default function Home() {
 	const common = {alt: 'LabNL', sizes: '100vw'};
@@ -40,11 +41,13 @@ export default function Home() {
 					className='lg:absolute lg:top-0 lg:bottom-0 lg:left-0 lg:right-0 -mt-16 lg:mt-0 text-stone-50  lg:z-10 flex flex-col justify-end lg:justify-center px-4 text-center lg:text-left'>
 					<div className='w-full max-w-7xl mx-auto'>
 						<div className='lg:ml-32 max-w-xl mx-auto lg:mx-0'>
-							<h1 className='font-bold text-3xl lg:text-5xl mb-6 mx-auto lg:mx-0'>Empodera a tu organización Pro
+							<h1 className='font-bold text-3xl lg:text-5xl mb-8 mx-auto lg:mx-0'>Empodera a tu organización Pro
 								Bono</h1>
-							<p className='text-base mb-6 mx-auto lg:mx-0'>Únete a nuestra plataforma y muestra el impacto que tiene tu
+							<p className='text-base mb-8 mx-auto lg:mx-0'>Únete a nuestra plataforma y muestra el impacto que tiene tu
 								organización.</p>
-							<ALinkButton href='/api/auth/signup?returnTo=/my' className='mx-auto lg:mx-0' size='lg'>
+							<ALinkButton
+								href='/api/auth/signup?returnTo=/my' className='mx-auto lg:mx-0  glow shadow-stone-50/20'
+								size='lg'>
 								Regístrate ahora
 							</ALinkButton>
 						</div>
@@ -54,10 +57,7 @@ export default function Home() {
 				</div>
 			</div>
 			<div className='max-w-7xl mx-auto text-stone-300 px-2'>
-				<h2 className='text-stone-50 mx-auto w-fit text-center font-bold text-3xl mb-12'>
-					¿Quiénes somos?
-				</h2>
-				<div className='mx-auto mb-48 w-fit'>
+				<Paper className='mx-auto mb-48 w-full' spacing='xl'>
 					<Image src={GeoStatsLogoMark} alt='GeoStats Logomark' width={96} height={96} className='mx-auto mb-8'/>
 					<p className='w-fit text-center mx-auto mb-8'>
 						Nosotros somos <span className='font-bold'>[GeoStats]</span>.
@@ -71,8 +71,7 @@ export default function Home() {
 					<ALinkButton href='https://geostatsmty.com/' variant='outlined' size='lg' className='mx-auto'>
 						Conocer más
 					</ALinkButton>
-
-				</div>
+				</Paper>
 
 				<h2 className='text-stone-50 mx-auto w-fit text-center font-bold text-3xl mb-12'>
 					¿Cómo funciona?
@@ -82,30 +81,30 @@ export default function Home() {
 					manera sencilla.
 				</p>
 				<div className='text-stone-300 grid grid-cols-1 lg:grid-cols-3 gap-4 mb-48'>
-					<div className='border border-stone-800 rounded p-4 flex items-center gap-2'>
+					<Paper hoverEffect className='flex items-center gap-2'>
 						<p className='font-bold text-2xl'>
 							1.
 						</p>
 						<h3>
 							Registrate en la plataforma creando una cuenta.
 						</h3>
-					</div>
-					<div className='border border-stone-800 rounded p-4 flex items-center gap-2'>
+					</Paper>
+					<Paper hoverEffect className='flex items-center gap-2'>
 						<p className='font-bold text-2xl'>
 							2.
 						</p>
 						<h3>
 							Proporciona información básica sobre la organización.
 						</h3>
-					</div>
-					<div className='border border-stone-800 rounded p-4 flex items-center gap-2'>
+					</Paper>
+					<Paper hoverEffect className='flex items-center gap-2'>
 						<p className='font-bold text-2xl'>
 							3.
 						</p>
 						<h3>
 							Llena los formularios y crea un perfil más completo de tu organización.
 						</h3>
-					</div>
+					</Paper>
 				</div>
 				<h2 className='text-stone-50 mx-auto w-fit text-center font-bold text-3xl mb-8'>
 					¿Por qué registrarse?
@@ -126,7 +125,8 @@ export default function Home() {
 
 			</div>
 			<div className='relative h-[600px] border-stone-700 flex justify-center items-center p-8'>
-				<div className='absolute -z-10 top-0 bottom-0 left-0 right-0 overflow-hidden brightness-50 bg-gradient-to-b from-stone-950 to-transparent'>
+				<div
+					className='absolute -z-10 top-0 bottom-0 left-0 right-0 overflow-hidden brightness-50 bg-gradient-to-b from-stone-950 to-transparent'>
 					<Image src={map} alt='Background map' width={600} height={600} className='object-cover w-full h-full'/>
 				</div>
 				<div className='my-auto'>

@@ -41,7 +41,7 @@ export function BaseDropdown(props: BaseDropdownProps) {
 	return (
 		<div className={cx('overflow-hidden rounded border border-stone-800', className)}>
 			<div
-				className='font-bold text-stone-50 border-b border-stone-800 p-2 flex cursor-pointer' onClick={() => {
+				className='font-bold text-stone-50 border-b border-stone-800 p-2 flex cursor-pointer hover:bg-stone-900 transition-colors' onClick={() => {
 					onToggle(!isOpen);
 				}}>
 				<div className='grow'>

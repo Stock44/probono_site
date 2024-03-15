@@ -52,7 +52,7 @@ export default function SectorsMap(props: SectorsMapProps) {
 	const time = useMemo(() => Date.now(), []);
 
 	return (
-		<MapContainer key={time} scrollWheelZoom worldCopyJump center={[25.68, -100.31]} zoom={11} className={cx('rounded border border-stone-800', className)}>
+		<MapContainer key={time} scrollWheelZoom worldCopyJump center={[25.68, -100.31]} zoom={11} className={cx('rounded border border-stone-800 glow-2xl', className)}>
 			<GeostatsTileLayer/>
 			{
 				sectors.map(sector => (

@@ -46,12 +46,12 @@ const Select = forwardRef(<T extends Record<string, unknown>>(props: SelectProps
 	}, state, triggerRef);
 
 	return (
-		<div className={cx('w-fit', className)}>
+		<div className={cx('w-fit group', className)}>
 			{
 				label && (
 					<div
 						{...labelProps} data-disabled={isDisabled} className={cx(
-							'text-stone-400 text-sm mb-1 data-[disabled=true]:text-stone-500'
+							'text-stone-400 text-sm mb-1 data-[disabled=true]:text-stone-500 transition-color'
 							, (isFocused || isOpen) && 'text-stone-50',
 							isRequired && 'after:content-["*"] after:ms-0.5',
 						)}>
@@ -62,7 +62,7 @@ const Select = forwardRef(<T extends Record<string, unknown>>(props: SelectProps
 			<HiddenSelect isDisabled={isDisabled} state={state} triggerRef={triggerRef} label={label} name={name}/>
 			<Button
 				{...triggerProps} ref={triggerRef} variant='outlined'
-				isDisabled={isDisabled} className='w-full flex'
+				isDisabled={isDisabled} className={cx('w-full flex group-focus-within:glow', isOpen && 'glow-sm shadow-stone-800 border-stone-50')}
 			>
 				<span {...valueProps} className='grow text-left'>
 					{

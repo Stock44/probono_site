@@ -48,9 +48,9 @@ export function BaseComboBox<T extends Record<string, unknown>>(props: BaseCombo
 	return (
 		<div className={cx('group w-fit', className)}>
 			<label
-				{...labelProps} className='text-stone-300 text-sm mb-1 group-focus-within:text-stone-50'>{props.label}</label>
+				{...labelProps} className='text-stone-300 text-sm mb-1 group-focus-within:text-stone-50 transition-colors'>{props.label}</label>
 			<div
-				className='flex text-stone-300 border border-stone-700 rounded bg-stone-950 group-focus-within:border-stone-50 w-full'>
+				className='flex group-focus-within:glow-sm group-focus-within:shadow-stone-800 text-stone-300 border border-stone-700 rounded bg-stone-950 group-focus-within:border-stone-50 w-full transition-all'>
 				{icon}
 				<input
 					{...inputProps}

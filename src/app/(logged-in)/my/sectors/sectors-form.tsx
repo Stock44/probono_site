@@ -12,12 +12,13 @@ import Button from '@/components/button/button.tsx';
 import {type ServerActionResult} from '@/lib/server-action-result.ts';
 import {useToasts} from '@/components/toast.tsx';
 import LoadingSpinner from '@/components/loading-spinner.tsx';
+import Paper from '@/components/paper/paper.tsx';
 
 const SectorsMap = dynamic(async () => import('@/app/(logged-in)/my/sectors/sectors-map.tsx'),
 	{
 		ssr: false,
 		loading(props) {
-			return <div className='w-full h-full animate-pulse bg-stone-900 rounded'/>;
+			return <div className='h-[32rem] grow mb-4 animate-pulse bg-stone-900 rounded'/>;
 		},
 	});
 
@@ -76,6 +77,7 @@ export default function SectorsForm(props: SectorFormProps) {
 				<div className='grow hidden lg:block'/>
 				<Button
 					isDisabled={isLoading}
+					className='glow-xl shadow-stone-700'
 					type='submit' onPress={async () => {
 						setIsLoading(true);
 						const result = await action([...selectedSectorKeys]);
@@ -98,13 +100,13 @@ export default function SectorsForm(props: SectorFormProps) {
 				</Button>
 			</div>
 			<div
-				className='flex gap-4 h-auto flex-wrap'>
+				className='flex gap-4 h-auto flex-wrap my-8'>
 				<SectorsMap
 					sectors={sectors} selectedKeys={selectedSectorKeys} setSelectedKeys={key => {
 						setSelectedSectorKeys(key as Set<number>);
 					}}
-					className='h-[32rem] grow mb-4'/>
-				<div className='h-[28rem] lg:h-[32rem] w-full lg:w-64 border border-stone-800 rounded px-2 py-3 overflow-y-scroll scroll-smooth scrollbar-thumb-rounded scrollbar-track-transparent scrollbar-thin scrollbar-thumb-stone-50'>
+					className='h-[32rem] grow'/>
+				<Paper className='h-[28rem] lg:h-[32rem] w-full lg:w-64 overflow-y-scroll  scrollbar-thumb-rounded scrollbar-track-transparent scrollbar-thin scrollbar-thumb-stone-50'>
 					<ListBox
 						items={selectedSectors} label='Sectores seleccionados'>
 						{
@@ -131,7 +133,7 @@ export default function SectorsForm(props: SectorFormProps) {
 							)
 						}
 					</ListBox>
-				</div>
+				</Paper>
 
 			</div>
 
