@@ -13,6 +13,7 @@ import {getAddress} from '@/lib/models/address.ts';
 import DashboardTile from '@/app/(logged-in)/my/dashboard-tile.tsx';
 import SectorsList from '@/app/(logged-in)/my/sectors-list.tsx';
 import MembersList from '@/app/(logged-in)/my/members-list.tsx';
+import Paper from '@/components/paper/paper.tsx';
 
 const LocationMap = dynamic(async () => import('@/app/(logged-in)/my/location-map.tsx'), {
 	ssr: false,
@@ -109,8 +110,11 @@ export default async function MyStartPage() {
 				<Paper
 					hoverEffect
 					className='md:col-span-3 flex gap-8 items-center flex-wrap md:flex-nowrap justify-center md:justify-start '>
+<<<<<<< HEAD
 				<div
 					className='border border-stone-800 p-8 rounded md:col-span-3 flex gap-8 items-center flex-wrap justify-center md:justify-start'>
+=======
+>>>>>>> c90b635 (Implement new UI improvements and introduce Paper component)
 					{
 						organization.logoUrl && (
 							<Image src={organization.logoUrl} alt='Organization logo' width={64} height={64}/>
@@ -149,7 +153,7 @@ export default async function MyStartPage() {
 						</p>
 					</div>
 
-				</div>
+				</Paper>
 				<DashboardTile title='Tu información general' href='/my/general' icon={<Feed className='fill-current'/>}>
 					<h3 className='text-xs text-stone-400 text-center md:text-left'>
 						Campos llenados
