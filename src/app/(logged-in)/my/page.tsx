@@ -13,6 +13,7 @@ import {getAddress} from '@/lib/models/address.ts';
 import DashboardTile from '@/app/(logged-in)/my/dashboard-tile.tsx';
 import SectorsList from '@/app/(logged-in)/my/sectors-list.tsx';
 import MembersList from '@/app/(logged-in)/my/members-list.tsx';
+import Paper from '@/components/paper/paper.tsx';
 
 const LocationMap = dynamic(async () => import('@/app/(logged-in)/my/location-map.tsx'), {
 	ssr: false,
@@ -104,8 +105,9 @@ export default async function MyStartPage() {
 	return (
 		<main className='w-full'>
 			<div className='text-stone-300 w-full grid gap-4 grid-cols-1 md:grid-cols-3'>
-				<div
-					className='border border-stone-800 p-8 rounded md:col-span-3 flex gap-8 items-center flex-wrap md:flex-nowrap justify-center md:justify-start'>
+				<Paper
+					hoverEffect
+					className='md:col-span-3 flex gap-8 items-center flex-wrap md:flex-nowrap justify-center md:justify-start '>
 					{
 						organization.logoUrl && (
 							<Image src={organization.logoUrl} alt='Organization logo' width={64} height={64}/>
@@ -144,7 +146,7 @@ export default async function MyStartPage() {
 						</p>
 					</div>
 
-				</div>
+				</Paper>
 				<DashboardTile title='Tu información general' href='/my/general' icon={<Feed className='fill-current'/>}>
 					<h3 className='text-xs text-stone-400 text-center md:text-left'>
 						Campos llenados

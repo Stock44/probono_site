@@ -77,8 +77,18 @@ function OdsRadio(props: OdsRadioProps) {
 			</VisuallyHidden>
 			<div
 				aria-hidden='true'
-				className={cx('relative group rounded', isFocusVisible && 'ring-2 ring-stone-50')}>
-				<Image className={cx(isSelected && 'brightness-50', 'group-hover:brightness-75 rounded')} draggable='false' width={128} alt={name} src={image}/>
+				className={cx(
+					'relative group rounded transition-all',
+					isFocusVisible && 'ring-2 ring-stone-50',
+					isSelected && 'glow-xl shadow-stone-50/20',
+				)}>
+				<Image
+					className={cx(
+						'transition-all rounded',
+						isSelected && 'brightness-90 scale-[101%]',
+						!isSelected && 'brightness-75 saturate-50 group-hover:brightness-90',
+					)} draggable='false' width={128}
+					alt={name} src={image}/>
 				{isSelected ? <CheckCircle className='absolute bottom-1 right-1 fill-stone-50'/> : null}
 			</div>
 		</label>
@@ -91,15 +101,15 @@ export type OdsSelectorProps = {
 } & RadioGroupProps & AriaRadioGroupProps;
 
 export default function OdsSelector(props: OdsSelectorProps) {
-	const {className} = props;
+	const {className, label} = props;
 
 	const state = useRadioGroupState(props);
 	const {radioGroupProps, labelProps} = useRadioGroup(props, state);
 
 	return (
 		<div {...radioGroupProps} className={className}>
-			<span {...labelProps} className='text-stone-300 text-sm'>
-				Selecciona el ODS que atiende tu organización
+			<span {...labelProps} className='text-stone-400 text-sm'>
+				{label}
 			</span>
 			<div className='flex gap-4 flex-wrap mt-1 justify-around'>
 				{ods.map(ods => (

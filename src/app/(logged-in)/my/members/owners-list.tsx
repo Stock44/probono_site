@@ -16,6 +16,7 @@ import {type ServerActionResult} from '@/lib/server-action-result.ts';
 import {useToasts} from '@/components/toast.tsx';
 import LoadingSpinner from '@/components/loading-spinner.tsx';
 import SubmitButton from '@/components/submit-button.tsx';
+import Paper from '@/components/paper/paper.tsx';
 
 export type OwnersListProps = {
 	readonly currentUser: User;
@@ -83,7 +84,7 @@ export default function OwnersList(props: OwnersListProps) {
 						title: 'Invitación enviada correctamente',
 					}}>
 					<TextField
-						className='flex-1 min-w-0 overflow-hidden'
+						className='flex-1 min-w-0'
 						placeholder='Ingresa un correo para agregarlo a la organización'
 						type='email'
 						name='email'
@@ -95,6 +96,7 @@ export default function OwnersList(props: OwnersListProps) {
 				</Form>
 				<Button
 					variant='destructive'
+					className='flex-none'
 					isDisabled={deletePending || (selectedUsers !== 'all' && selectedUsers.size === 0)}
 					onPress={onRemoveUsers}>
 					{
@@ -109,7 +111,7 @@ export default function OwnersList(props: OwnersListProps) {
 				</Button>
 			</div>
 
-			<div className='border border-stone-700 rounded min-h-96 text-stone-300 overflow-y-auto'>
+			<Paper className='min-h-96 overflow-y-auto glow-lg' spacing='none'>
 				<Table
 					showSelectionCheckboxes
 					selectedKeys={selectedUsers}
@@ -143,7 +145,7 @@ export default function OwnersList(props: OwnersListProps) {
 						}
 					</TableBody>
 				</Table>
-			</div>
+			</Paper>
 		</>
 
 	);

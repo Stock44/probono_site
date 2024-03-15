@@ -15,6 +15,7 @@ export default function ALinkButton(props: ALinkButtonProps) {
 	// eslint-disable-next-line react/jsx-no-target-blank
 		<a rel='noreferrer' {...props} className={buttonVariant(props)}>
 			{children}
+
 		</a>
 	);
 }

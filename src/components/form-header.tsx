@@ -20,7 +20,7 @@ export default function FormHeader(props: FormHeaderProps) {
 				</p>
 			</div>
 			<div className='grow hidden lg:block'/>
-			<SubmitButton icon={<Save/>}>
+			<SubmitButton icon={<Save/>} className='glow-xl shadow-stone-700'>
 				Guardar
 			</SubmitButton>
 		</div>

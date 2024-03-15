@@ -35,10 +35,8 @@ export async function getApprovedOrganizationInfo() {
 			name: 'desc',
 		},
 	});
-	console.log(locations);
 
 	const addressMap = new Map(locations.map(location => [location.id, location.location] as const));
-	console.log(addressMap);
 
 	return organizations.map(organization => ({
 		...organization,

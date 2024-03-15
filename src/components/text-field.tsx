@@ -29,16 +29,16 @@ export default forwardRef((props: TextFieldProps, ref: ForwardedRef<HTMLInputEle
 				label && (
 					<label
 						{...labelProps} className={cx(
-							'text-stone-400 text-sm block mb-1 group-focus-within:text-stone-50 group-data-[disabled=true]:text-stone-500',
+							'text-stone-400 text-sm block mb-1 group-focus-within:text-stone-50 group-data-[disabled=true]:text-stone-500 transition-colors',
 							isRequired && 'after:content-["*"] after:ml-0.5',
 						)}>{label}</label>
 				)
 			}
 
 			<div
-				className='border rounded border-stone-700 flex items-center px-2 gap-2 group-focus-within:border-stone-50 group-data-[disabled=true]:border-stone-800'>
+				className='border rounded border-stone-700 flex items-center px-2 gap-2 group-focus-within:border-stone-50 group-data-[disabled=true]:border-stone-800 group-focus-within:glow-sm shadow-stone-800 transition-all'>
 				{icon}
-				<input {...inputProps} ref={inputRef} className='bg-transparent py-2 placeholder:text-stone-500 grow outline-none text-stone-100 disabled:text-stone-600 disabled:cursor-not-allowed'/>
+				<input {...inputProps} ref={inputRef} className='bg-transparent py-2 placeholder:text-stone-500 grow outline-none text-stone-100 disabled:text-stone-600 disabled:cursor-not-allowed min-w-0'/>
 			</div>
 			{
 				description === undefined
