@@ -1,5 +1,4 @@
-'use client';
-import React, {useEffect, useRef, useState} from 'react';
+import React from 'react';
 import {type Address, type Organization} from '@prisma/client';
 import Image from 'next/image';
 import Email from '@material-design-icons/svg/round/email.svg';
@@ -12,6 +11,7 @@ import TikTokLogo from 'public/logos/tiktok.png';
 import LinkedInLogo from 'public/logos/linkedin.png';
 import YoutubeLogo from 'public/logos/youtube.png';
 import SocialLink from '@/components/social-link.tsx';
+import Paper from '@/components/paper/paper.tsx';
 
 export type OrganizationCardProps = {
 	readonly organization: Organization & {address: Address | null};
@@ -20,35 +20,12 @@ export type OrganizationCardProps = {
 export default function OrganizationCard(props: OrganizationCardProps) {
 	const {organization} = props;
 
-	const [position, setPosition] = useState<[number, number]>([0, 0]);
-
-	const container = useRef<HTMLDivElement>(null);
-
-	useEffect(() => {
-		const listener = (event: MouseEvent) => {
-			setPosition([event.clientX, event.clientY]);
-		};
-
-		window.addEventListener('mousemove', listener);
-		return () => {
-			window.removeEventListener('mousemove', listener);
-		};
-	}, []);
 	return (
-		<div
-			ref={container}
-			key={organization.id}
-			className='relative flex-1 flex flex-col text-stone-300
-			border border-stone-800 rounded p-4 gap-x-4 gap-y-4 max-w-96
-			 min-w-64 overflow-hidden hover:border-stone-700 transition-colors'>
-			<svg
-				viewBox='0 0 4 4'
-				className='fill-stone-900 absolute w-96 h-96 blur-3xl -z-10' style={{
-					top: position[1] - (container.current?.getBoundingClientRect().top ?? 0) - 192,
-					left: position[0] - (container.current?.getBoundingClientRect().left ?? 0) - 192,
-				}}>
-				<circle r={2} cx={2} cy={2}/>
-			</svg>
+		<Paper
+			hoverEffect
+			className='relative flex-1 flex flex-col
+			gap-x-4 gap-y-4 max-w-96
+			 min-w-64'>
 			<div className='flex items-center gap-4 mb-4'>
 				<div className='w-16 h-16 border border-stone-800 rounded p-4 flex-none'>
 					{
@@ -150,6 +127,6 @@ export default function OrganizationCard(props: OrganizationCardProps) {
 					)
 				}
 			</div>
-		</div>
+		</Paper>
 	);
 }
