@@ -51,7 +51,9 @@ export default function OrganizationCard(props: OrganizationCardProps) {
 							<div>
 								<Email className='fill-current mx-auto'/>
 							</div>
-							{organization.email}
+							<p className='truncate'>
+								{organization.email}
+							</p>
 						</>
 					)
 				}
@@ -62,7 +64,9 @@ export default function OrganizationCard(props: OrganizationCardProps) {
 							<div>
 								<Phone className='fill-current mx-auto'/>
 							</div>
-							{organization.phone}
+							<p className='truncate'>
+								{organization.phone}
+							</p>
 						</>
 					)
 				}
@@ -73,7 +77,9 @@ export default function OrganizationCard(props: OrganizationCardProps) {
 							<div>
 								<Public className='fill-current mx-auto'/>
 							</div>
-							{organization.webpage}
+							<p className='truncate'>
+								{organization.webpage}
+							</p>
 						</>
 					)
 				}
@@ -84,7 +90,9 @@ export default function OrganizationCard(props: OrganizationCardProps) {
 							<div>
 								<LocationOn className='fill-current mx-auto'/>
 							</div>
-							{organization.address.street} {organization.address.number}
+							<p className='truncate'>
+								{organization.address.street} {organization.address.number}
+							</p>
 						</>
 					)
 				}
