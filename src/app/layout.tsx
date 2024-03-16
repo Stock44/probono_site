@@ -7,8 +7,8 @@ import ClientProviders from '@/app/client-providers.tsx';
 import {ToastProvider} from '@/components/toast.tsx';
 
 export const metadata: Metadata = {
-	title: 'probono',
-	description: 'probono',
+	title: 'GeoStats Pro Bono',
+	description: 'Plataforma GeoStats Pro Bono',
 };
 
 export type RootLayoutProps = {
