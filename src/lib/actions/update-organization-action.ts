@@ -35,6 +35,7 @@ export default async function updateOrganizationAction(organizationId: number, s
 	}
 
 	revalidatePath('/my');
+	revalidatePath('/organizations');
 
 	return {
 		...state,
