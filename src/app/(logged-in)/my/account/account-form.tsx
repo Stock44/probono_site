@@ -13,7 +13,6 @@ export type AccountFormProps = {
 	readonly action: (state: FormState<UserUpdate>, data: FormData) => Promise<FormState<UserUpdate>>;
 	readonly user: User;
 	readonly sessionType: string;
-	readonly SessionType: string;
 };
 
 
