@@ -52,7 +52,15 @@ export default function SectorsMap(props: SectorsMapProps) {
 	const time = useMemo(() => Date.now(), []);
 
 	return (
+<<<<<<< HEAD
+<<<<<<< HEAD
 		<MapContainer key={time} scrollWheelZoom worldCopyJump center={[25.68, -100.31]} zoom={11} className={cx('rounded border border-stone-800 glow-2xl', className)}>
+=======
+		<MapContainer key={time} scrollWheelZoom worldCopyJump center={[25.68, -100.31]} zoom={11} className={cx('rounded border border-stone-800', className)}>
+>>>>>>> a48affe (Remove redundant SQL insert code)
+=======
+		<MapContainer key={time} scrollWheelZoom worldCopyJump center={[25.68, -100.31]} zoom={11} className={cx('rounded border border-stone-800 glow-2xl', className)}>
+>>>>>>> c90b635 (Implement new UI improvements and introduce Paper component)
 			<GeostatsTileLayer/>
 			{
 				sectors.map(sector => (

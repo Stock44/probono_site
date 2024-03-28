@@ -3,11 +3,11 @@ import {redirect} from 'next/navigation';
 import Key from '@material-design-icons/svg/round/key.svg';
 import Delete from '@material-design-icons/svg/round/delete.svg';
 import dynamic from 'next/dynamic';
+import {getSession} from '@auth0/nextjs-auth0';
 import AccountForm from '@/app/(logged-in)/my/account/account-form.tsx';
 import updateUserAction from '@/lib/actions/update-user-action.ts';
 import {getUserFromSession} from '@/lib/models/user.ts';
 import Separator from '@/components/separator.tsx';
-import { getSession } from '@auth0/nextjs-auth0';
 import LinkButton from '@/components/button/link-button.tsx';
 import ModalTrigger from '@/components/modal/modal-trigger.tsx';
 import HashSpyToaster from '@/components/hash-spy-toaster.tsx';
@@ -45,7 +45,7 @@ export default async function AccountPage() {
 
 	return (
 		<main className='w-full'>
-			<AccountForm action={updateUserAction} user={user} SessionType={sessionType}/>
+			<AccountForm action={updateUserAction} user={user} sessionType={sessionType}/>
 			<Separator/>
 			<div className='flex-row gap-10'>
 				{ShowChangeUserPassword({sessionType})}
