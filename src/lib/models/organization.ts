@@ -44,6 +44,45 @@ export async function getApprovedOrganizationInfo() {
 	}));
 }
 
+export async function getApprovedOrganizationLocations() {
+	const result = (
+		await prisma.$queryRaw`
+        select o.id                                 as id,
+               array [a.location[0], a.location[1]] as location
+        from "Organization" as o
+                 join "Address" as a on o."addressId" = a.id
+        where o.approved = true;
+    `
+	);
+
+	return result as Array<{
+		id: number;
+		location?: [number, number];
+	}>;
+}
+
+export async function getApprovedOrganizationInfo() {
+	const locations = await getApprovedOrganizationLocations();
+	const organizations = await prisma.organization.findMany({
+		where: {
+			approved: true,
+		},
+		include: {
+			address: true,
+		},
+		orderBy: {
+			name: 'desc',
+		},
+	});
+
+	const addressMap = new Map(locations.map(location => [location.id, location.location] as const));
+
+	return organizations.map(organization => ({
+		...organization,
+		location: addressMap.get(organization.id),
+	}));
+}
+
 /**
  * Checks whether a user is authorized for a given organization.
  *
@@ -228,6 +267,7 @@ export async function updateOrganization(organizationId: number, update: Organiz
 		},
 	}));
 
+if (organization.addressId && update.address) {
 	if (update.address) {
 		console.log(`updating organization ${organization.id}`);
 		operations.push(prisma.$queryRaw`update "Address" as a

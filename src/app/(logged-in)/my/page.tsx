@@ -39,6 +39,8 @@ async function countNullModelAttributes(model: Record<string, unknown> & {
 		}
 	}
 
+	console.log(model);
+
 	for (const value of Object.values(omit(model, ['_count']))) {
 		total++;
 		if (value === null) {
@@ -108,6 +110,11 @@ export default async function MyStartPage() {
 				<Paper
 					hoverEffect
 					className='md:col-span-3 flex gap-8 items-center flex-wrap md:flex-nowrap justify-center md:justify-start '>
+<<<<<<< HEAD
+				<div
+					className='border border-stone-800 p-8 rounded md:col-span-3 flex gap-8 items-center flex-wrap justify-center md:justify-start'>
+=======
+>>>>>>> c90b635 (Implement new UI improvements and introduce Paper component)
 					{
 						organization.logoUrl && (
 							<Image src={organization.logoUrl} alt='Organization logo' width={64} height={64}/>
