@@ -3,6 +3,7 @@ import {redirect} from 'next/navigation';
 import Key from '@material-design-icons/svg/round/key.svg';
 import Delete from '@material-design-icons/svg/round/delete.svg';
 import dynamic from 'next/dynamic';
+import {getSession} from '@auth0/nextjs-auth0';
 import AccountForm from '@/app/(logged-in)/my/account/account-form.tsx';
 import updateUserAction from '@/lib/actions/update-user-action.ts';
 import {getUserFromSession} from '@/lib/models/user.ts';
@@ -18,21 +19,30 @@ const AccountDeletionDialog = dynamic(
 
 export default async function AccountPage() {
 	const user = await getUserFromSession();
+
+	const session = await getSession();
+	const sessionType = session?.user?.sub.split('|')[0] as string;
+
 	if (!user) {
 		redirect('/onboarding/user');
 	}
 
 	return (
 		<main className='w-full'>
-			<AccountForm action={updateUserAction} user={user}/>
+			<AccountForm action={updateUserAction} user={user} sessionType={sessionType}/>
 			<Separator/>
-			<div style={{display: 'flex', flexDirection: 'row', gap: '10px'}}>
-				<LinkButton className='mb-4' variant='outlined' href='/my/account/password' size='lg'>
-					<Key className='me-1 fill-current'/>
-					Cambiar contraseña
-				</LinkButton>
+			<div className='flex-row gap-10'>
+				{sessionType === 'auth0'
+					? <>
+						<LinkButton className='mb-4' variant='outlined' href='/my/account/password' size='lg'>
+							<Key className='me-1 fill-current'/>
+							Cambiar contraseña
+						</LinkButton>
+						<Separator/>
+					</>
+					: null}
+
 			</div>
-			<Separator/>
 			<h2 className='font-bold text-4xl text-red-400 mb-4'>
 				Eliminar tu cuenta
 			</h2>

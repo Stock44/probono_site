@@ -12,10 +12,12 @@ import FormHeader from '@/components/form-header.tsx';
 export type AccountFormProps = {
 	readonly action: (state: FormState<UserUpdate>, data: FormData) => Promise<FormState<UserUpdate>>;
 	readonly user: User;
+	readonly sessionType: string;
 };
 
 export default function AccountForm(props: AccountFormProps) {
 	const {action, user} = props;
+
 	const validate = formValidators(userUpdateSchema);
 	return (
 		<Form
@@ -35,10 +37,15 @@ export default function AccountForm(props: AccountFormProps) {
 					<TextField label='Télefono de contacto' name='contactPhone' defaultValue={user.contactPhone ?? ''} validate={validate.contactPhone} className='grow mb-2'/>
 				</div>
 			</div>
-
-			<TextField label='Correo electrónico' name='email' validate={validate.email} defaultValue={user.email} className='mb-2'/>
-
+			{props.sessionType === 'auth0'
+				?				<TextField
+					label='Correo electrónico'
+					name='email'
+					validate={validate.email}
+					defaultValue={user.email}
+					className='mb-2'
+				/>
+				: null}
 		</Form>
-
 	);
 }

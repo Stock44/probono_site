@@ -35,7 +35,6 @@ export default function DashboardTile(props: DashboardTileProps) {
 					{children}
 				</div>
 			</Link>
-
 		</Paper>
 	);
 }
