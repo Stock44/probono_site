@@ -109,6 +109,30 @@ export default function GeneralInfoForm(props: GeneralInfoFormProps) {
 					validate={validate.webpage}
 					defaultValue={organization.webpage ?? ''}
 				/>
+
+				<TextField
+					label='Cuenta de Threads'
+					name='threads'
+					icon={<Public viewBox='0 0 24 24' className='h-4 w-4 fill-stone-600 group-focus-within:fill-stone-50'/>}
+					type='url'
+					className='grow basis-5/12 mb-4'
+					validate={validate.threads}
+					defaultValue={organization.threads ?? ''}
+				/>
+
+				<TextField
+					label='Cuenta de Mastadon'
+					name='mastadon'
+					icon={<Public viewBox='0 0 24 24' className='h-4 w-4 fill-stone-600 group-focus-within:fill-stone-50'/>}
+					type='url'
+					className='grow basis-5/12 mb-4'
+					validate={validate.webpage}
+					defaultValue={organization.mastadon ?? ''}
+				/>
+
+
+
+
 			</div>
 
 			<div className='flex-none lg:flex gap-4 items-end'>

@@ -205,6 +205,8 @@ model Organization {
   foundingYear           Int
   phone                  String?
   email                  String?
+  threads                String?
+  mastadon               String?
   hasInvestmentAgreement Boolean?
   logoUrl                String?
   ods                    Int?
