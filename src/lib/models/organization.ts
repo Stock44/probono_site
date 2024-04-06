@@ -228,7 +228,6 @@ export async function updateOrganization(organizationId: number, update: Organiz
 		},
 	}));
 
-if (organization.addressId && update.address) {
 	if (update.address) {
 		console.log(`updating organization ${organization.id}`);
 		operations.push(prisma.$queryRaw`update "Address" as a
