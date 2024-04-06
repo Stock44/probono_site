@@ -45,9 +45,9 @@ export default async function AccountPage() {
 	};
 
 	const session = await getSession();
-	const sessionType = session?.user?.sub.split('-')[0] as string;
+	const sessionType = session?.user?.sub.split('|')[0] as string;
 
-	if (sessionType === 'google') {
+	if (sessionType !== 'auth0') {
 		redirect('/my/account');
 	}
 

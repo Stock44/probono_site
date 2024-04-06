@@ -37,7 +37,15 @@ export default function AccountForm(props: AccountFormProps) {
 					<TextField label='Télefono de contacto' name='contactPhone' defaultValue={user.contactPhone ?? ''} validate={validate.contactPhone} className='grow mb-2'/>
 				</div>
 			</div>
-			{props.sessionType === 'google' ? null : <TextField label='Correo electrónico' name='email' validate={validate.email} defaultValue={user.email} className='mb-2'/>}
+			{props.sessionType === 'auth0'
+				?				<TextField
+					label='Correo electrónico'
+					name='email'
+					validate={validate.email}
+					defaultValue={user.email}
+					className='mb-2'
+				/>
+				: null}
 		</Form>
 	);
 }

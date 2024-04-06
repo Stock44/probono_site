@@ -17,27 +17,11 @@ const AccountDeletionDialog = dynamic(
 		import('@/app/(logged-in)/my/account/account-deletion-dialog.tsx'),
 );
 
-function ShowChangeUserPassword(props: {readonly sessionType: string}) {
-	if (props.sessionType === 'google') {
-		return null;
-	}
-
-	return (
-		<>
-			<LinkButton className='mb-4' variant='outlined' href='/my/account/password' size='lg'>
-				<Key className='me-1 fill-current'/>
-				Cambiar contraseña
-			</LinkButton>
-			<Separator/>
-		</>
-	);
-}
-
 export default async function AccountPage() {
 	const user = await getUserFromSession();
 
 	const session = await getSession();
-	const sessionType = session?.user?.sub.split('-')[0] as string;
+	const sessionType = session?.user?.sub.split('|')[0] as string;
 
 	if (!user) {
 		redirect('/onboarding/user');
@@ -48,7 +32,16 @@ export default async function AccountPage() {
 			<AccountForm action={updateUserAction} user={user} sessionType={sessionType}/>
 			<Separator/>
 			<div className='flex-row gap-10'>
-				{ShowChangeUserPassword({sessionType})}
+				{sessionType === 'auth0'
+					? <>
+						<LinkButton className='mb-4' variant='outlined' href='/my/account/password' size='lg'>
+							<Key className='me-1 fill-current'/>
+							Cambiar contraseña
+						</LinkButton>
+						<Separator/>
+					</>
+					: null}
+
 			</div>
 			<h2 className='font-bold text-4xl text-red-400 mb-4'>
 				Eliminar tu cuenta
