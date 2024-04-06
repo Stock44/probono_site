@@ -15,30 +15,8 @@ export type AccountFormProps = {
 	readonly sessionType: string;
 };
 
-function ShowUpdateMail(props: {
-
-	readonly sessionType: string;
-	readonly validate: any;
-	readonly user: User;
-}) {
-	if (props.sessionType === 'google') {
-		return null;
-	}
-
-	return (
-		<TextField
-			label='Correo electrónico'
-			name='email'
-			validate={props.validate.email}
-			defaultValue={props.user.email}
-			className='mb-2'
-		/>
-	);
-}
-
 export default function AccountForm(props: AccountFormProps) {
 	const {action, user} = props;
-	const sessionType = props.sessionType;
 
 	const validate = formValidators(userUpdateSchema);
 	return (
@@ -59,10 +37,7 @@ export default function AccountForm(props: AccountFormProps) {
 					<TextField label='Télefono de contacto' name='contactPhone' defaultValue={user.contactPhone ?? ''} validate={validate.contactPhone} className='grow mb-2'/>
 				</div>
 			</div>
-
-			{ShowUpdateMail({sessionType, validate, user})}
-
+			{props.sessionType === 'google' ? null : <TextField label='Correo electrónico' name='email' validate={validate.email} defaultValue={user.email} className='mb-2'/>}
 		</Form>
-
 	);
 }

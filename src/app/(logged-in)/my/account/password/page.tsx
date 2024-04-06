@@ -21,7 +21,6 @@ export default async function AccountPage() {
 			};
 		}
 
-
 		console.log(session.user);
 
 		try {
@@ -48,8 +47,8 @@ export default async function AccountPage() {
 	const session = await getSession();
 	const sessionType = session?.user?.sub.split('-')[0] as string;
 
-	if (sessionType == 'google') {
-		redirect('/my/account')
+	if (sessionType === 'google') {
+		redirect('/my/account');
 	}
 
 	return (
