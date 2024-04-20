@@ -26,6 +26,9 @@ import {formValidators} from '@/lib/form-utils.ts';
 import Separator from '@/components/separator.tsx';
 import {formatInMxn} from '@/lib/format-mxn.ts';
 import FormHeader from '@/components/form-header.tsx';
+import ModalTrigger from '@/components/modal/modal-trigger';
+import Delete from '@material-design-icons/svg/round/delete.svg';
+import OrganizationDeletionDialog from './organization-deletion-dialog';
 
 export type GeneralInfoFormProps = {
 	readonly action: (state: FormState<OrganizationUpdate>, data: FormData) => Promise<FormState<OrganizationUpdate>>;
@@ -40,6 +43,7 @@ export default function GeneralInfoForm(props: GeneralInfoFormProps) {
 
 	const validate = formValidators(organizationInitSchema);
 	return (
+		<>
 		<Form
 			successToast={{
 				title: 'Se han guardado los cambios.',
@@ -290,5 +294,32 @@ export default function GeneralInfoForm(props: GeneralInfoFormProps) {
 			</div>
 
 		</Form>
+
+		<Separator/>
+
+		<h2 className='font-bold text-4xl text-red-400 mb-4'>
+			Eliminar tu organización
+		</h2>
+		<p className='text-stone-300 mb-4'>
+			Al eliminar la organización, borrarás todos los datos relacionados con la misma. 
+			Además, todos los usuarios que se esten asociados con esta organización dejaran de estarlo 
+			<span className='text-bold'> permanentemente.</span>			
+		</p>
+
+		<ModalTrigger
+			isDismissable
+			className='text-red-400'
+			variant='outlined'
+			size='lg'
+			label = {
+				<>
+					<Delete className='me-1 fill-current'/>
+					Eliminar organización
+				</>
+			}
+		>
+			<OrganizationDeletionDialog organizationId={organization.id}/>
+		</ModalTrigger>
+		</>
 	);
 }
