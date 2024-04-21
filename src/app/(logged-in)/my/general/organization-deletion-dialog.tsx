@@ -4,7 +4,6 @@ import type {Organization} from '@prisma/client';
 import {useCloseModal} from '@/components/modal/modal-context.ts';
 import Dialog from '@/components/dialog.tsx';
 import Button from '@/components/button/button.tsx';
-import LoadingSpinner from '@/components/loading-spinner.tsx';
 
 export type OrganizationDeletionDialogProps = {
 	readonly deleteOrganization: () => Promise <void>;
