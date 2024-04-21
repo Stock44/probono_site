@@ -299,8 +299,7 @@ export default function GeneralInfoForm(props: GeneralInfoFormProps) {
 			</h2>
 			<p className='text-stone-300 mb-4'>
 				Al eliminar la organización, borrarás todos los datos relacionados con la misma.
-				Además, todos los usuarios que se esten asociados con esta organización dejaran de estarlo
-				<span className='text-bold'>permanentemente.</span>
+				Además, todos los usuarios que se esten asociados con esta organización dejaran de estarlo <span className='text-bold'>permanentemente.</span>
 			</p>
 
 			<ModalTrigger

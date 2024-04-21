@@ -7,7 +7,7 @@ import Button from '@/components/button/button.tsx';
 import LoadingSpinner from '@/components/loading-spinner.tsx';
 
 export type OrganizationDeletionDialogProps = {
-	readonly deleteOrganization: () => void;
+	readonly deleteOrganization: () => Promise <void>;
 	readonly organization: Organization;
 };
 
@@ -15,32 +15,20 @@ export default function OrganizationDeletionDialog(props: OrganizationDeletionDi
 	const {deleteOrganization, organization} = props;
 	const closeModal = useCloseModal();
 
+	const deleteOrganizationHandler = async () => {
+		await deleteOrganization();
+		window.location.href = '/my';
+	};
+
 	return (
 		<Dialog title={<span className='text-red-400'>Borrar la organización</span>}>
-			¿Estás seguro de que quieres borrar la organización?
-			<div className='mt-4'>
-				Se borrará la siguiente organización:
-				{
-					organization
-						? <ul className='list-disc list-inside'>
-							<li key={organization.id}>
-								{organization.name}
-							</li>
-						</ul>
-						: <div className='h-16 flex items-center justify-center mt-4'>
-							<LoadingSpinner/>
-						</div>
-				}
-			</div>
+			¿Estás seguro de que quieres borrar la organización <span className=' font-bold'>{organization.name}</span>?
 			<div className='mt-4 flex justify-between'>
 				<Button variant='secondary' onPress={closeModal}>
 					Cancelar
 				</Button>
 				<Button
-					variant='outlined' className='text-red-400 font-bold' onPress={async () => {
-						await deleteOrganization();
-						window.location.href = '/my';
-					}}>
+					variant='outlined' className='text-red-400 font-bold' onPress={deleteOrganizationHandler}>
 					Confirmar
 				</Button>
 			</div>
