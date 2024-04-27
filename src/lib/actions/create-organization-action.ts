@@ -27,5 +27,5 @@ export default async function createOrganizationAction(userId: number, state: Fo
 		return handleActionError(state, error);
 	}
 
-	redirect('/my/general');
+	redirect('/my');
 }
