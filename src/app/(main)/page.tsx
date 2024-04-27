@@ -62,7 +62,7 @@ export default function Home() {
 
 					<div className='flex justify-center gap-16 px-4'>
 						<Image src={GeoStatsLogoMark} alt='GeoStats Logomark' width={106} height={96} className='object-contain  mb-8 '/>
-						<Image src={ProBonoLogo} alt='GeoStats Logomark' width={106} height={96} className='object-contain  mb-8 '/>
+						<Image src={ProBonoLogo} alt='ProBono Logomark' width={106} height={96} className='object-contain  mb-8 '/>
 					</div>
 
 					<p className='w-fit text-center mx-auto mb-8'>
