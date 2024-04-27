@@ -1,6 +1,7 @@
 import React from 'react';
 import Image, {getImageProps} from 'next/image';
 import GeoStatsLogoMark from 'public/logos/geostats-logomark.png';
+import ProBonoLogo from 'public/logos/probono.png';
 import labnl from '@/app/(main)/labnl_vignette.webp';
 import labnl_mobile from '@/app/(main)/labnl_vignette_mobile.webp';
 import map from '@/app/(main)/map.jpg';
@@ -58,7 +59,12 @@ export default function Home() {
 					¿Quiénes somos?
 				</h2>
 				<div className='mx-auto mb-48 w-fit'>
-					<Image src={GeoStatsLogoMark} alt='GeoStats Logomark' width={96} height={96} className='mx-auto mb-8'/>
+
+					<div className='flex justify-center gap-16 px-4'>
+						<Image src={GeoStatsLogoMark} alt='GeoStats Logomark' width={106} height={96} className='object-contain  mb-8 '/>
+						<Image src={ProBonoLogo} alt='GeoStats Logomark' width={106} height={96} className='object-contain  mb-8 '/>
+					</div>
+
 					<p className='w-fit text-center mx-auto mb-8'>
 						Nosotros somos <span className='font-bold'>[GeoStats]</span>.
 					</p>
