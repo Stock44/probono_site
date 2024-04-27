@@ -15,7 +15,12 @@ import InstagramLogo from 'public/logos/instagram.png';
 import ThreadsLogo from 'public/logos/threads.png';
 import FacebookLogo from 'public/logos/facebook.png';
 import MastadonLogo from 'public/logos/mastadon.png';
-import {type EmployeeCountCategory, type IncomeCategory, type VolunteerCountCategory, type Organization} from '@prisma/client';
+import {
+	type EmployeeCountCategory,
+	type IncomeCategory,
+	type VolunteerCountCategory,
+	type Organization,
+} from '@prisma/client';
 import Delete from '@material-design-icons/svg/round/delete.svg';
 import OrganizationDeletionDialog from './organization-deletion-dialog.tsx';
 import {NumberField} from '@/components/number-field.tsx';
@@ -36,11 +41,18 @@ export type GeneralInfoFormProps = {
 	readonly organization: Organization;
 	readonly volunteerCountCategories: VolunteerCountCategory[];
 	readonly incomeCategories: IncomeCategory[];
-	readonly deleteOrganization: () => void;
+	readonly deleteOrganization: () => Promise<void>;
 };
 
 export default function GeneralInfoForm(props: GeneralInfoFormProps) {
-	const {organization, volunteerCountCategories, employeeCountCategories, incomeCategories, action, deleteOrganization} = props;
+	const {
+		organization,
+		volunteerCountCategories,
+		employeeCountCategories,
+		incomeCategories,
+		action,
+		deleteOrganization,
+	} = props;
 	const validate = formValidators(organizationInitSchema);
 	return (
 		<>
@@ -50,7 +62,9 @@ export default function GeneralInfoForm(props: GeneralInfoFormProps) {
 					icon: <Done/>,
 				}}
 				action={action}>
-				<FormHeader title='Información general' description='Datos básicos sobre tu organización, como información de contacto y redes sociales.'/>
+				<FormHeader
+					title='Información general'
+					description='Datos básicos sobre tu organización, como información de contacto y redes sociales.'/>
 				<div className='flex items-center gap-x-4 w-full flex-wrap'>
 					<div className='border rounded border-stone-700 w-full lg:w-auto flex justify-center items-center mb-4'>
 						<OrganizationImagePicker
@@ -220,17 +234,18 @@ export default function GeneralInfoForm(props: GeneralInfoFormProps) {
 					/>
 					<TextField
 						label='Cuenta de Threads'
-					name='threads'
-					icon={<Image
-						src={ThreadsLogo} alt='Instagram logo' height={20}
-						width={20}
-						className='group-focus-within:brightness-100 brightness-50'/>}
-					type='url'
-					className='grow basis-full sm:basis-5/12 mb-4'
-					validate={validate.threads}
-					defaultValue={organization.threads ?? ''}
-				/>
-				<TextFieldlabel='X (anteriormente Twitter)'
+						name='threads'
+						icon={<Image
+							src={ThreadsLogo} alt='Instagram logo' height={20}
+							width={20}
+							className='group-focus-within:brightness-100 brightness-50'/>}
+						type='url'
+						className='grow basis-full sm:basis-5/12 mb-4'
+						validate={validate.threads}
+						defaultValue={organization.threads ?? ''}
+					/>
+					<TextField
+						label='X (anteriormente Twitter)'
 						name='twitter'
 						icon={<Image
 							src={XLogo} alt='X logo' height={16}
@@ -276,17 +291,17 @@ export default function GeneralInfoForm(props: GeneralInfoFormProps) {
 						className='flex-auto mb-4'
 						validate={validate.linkedIn}
 						defaultValue={organization.linkedIn ? `https://www.linkedin.com/${organization.linkedIn}` : ''}/>
-				<TextField
-					label='Cuenta de Mastadon'
-					name='mastadon'
-					icon={<Image
-						src={MastadonLogo} alt='LinkedIn logo' height={16}
-						width={16}
-						className='group-focus-within:brightness-100 brightness-50'/>}
-					type='url'
-					className='flex-auto mb-4'
-					validate={validate.mastadon}
-					defaultValue={organization.mastadon ?? ''}
+					<TextField
+						label='Cuenta de Mastadon'
+						name='mastadon'
+						icon={<Image
+							src={MastadonLogo} alt='LinkedIn logo' height={16}
+							width={16}
+							className='group-focus-within:brightness-100 brightness-50'/>}
+						type='url'
+						className='flex-auto mb-4'
+						validate={validate.mastadon}
+						defaultValue={organization.mastadon ?? ''}
 					/>
 				</div>
 
@@ -299,7 +314,8 @@ export default function GeneralInfoForm(props: GeneralInfoFormProps) {
 			</h2>
 			<p className='text-stone-300 mb-4'>
 				Al eliminar la organización, borrarás todos los datos relacionados con la misma.
-				Además, todos los usuarios que se esten asociados con esta organización dejaran de estarlo <span className='text-bold'>permanentemente.</span>
+				Además, todos los usuarios que se estén asociados con esta organización dejaran de estarlo{' '}<span
+					className='text-bold'>permanentemente.</span>
 			</p>
 
 			<ModalTrigger
