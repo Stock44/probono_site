@@ -12,7 +12,9 @@ import XLogo from 'public/logos/x.png';
 import TikTokLogo from 'public/logos/tiktok.png';
 import LinkedInLogo from 'public/logos/linkedin.png';
 import InstagramLogo from 'public/logos/instagram.png';
+import ThreadsLogo from 'public/logos/threads.png';
 import FacebookLogo from 'public/logos/facebook.png';
+import MastadonLogo from 'public/logos/mastadon.png';
 import {type EmployeeCountCategory, type IncomeCategory, type VolunteerCountCategory, type Organization} from '@prisma/client';
 import {NumberField} from '@/components/number-field.tsx';
 import OrganizationImagePicker from '@/app/(logged-in)/my/general/organization-image-picker.tsx';
@@ -109,6 +111,7 @@ export default function GeneralInfoForm(props: GeneralInfoFormProps) {
 					validate={validate.webpage}
 					defaultValue={organization.webpage ?? ''}
 				/>
+
 			</div>
 
 			<div className='flex-none lg:flex gap-4 items-end'>
@@ -213,6 +216,18 @@ export default function GeneralInfoForm(props: GeneralInfoFormProps) {
 					defaultValue={organization.instagram ? `https://www.instagram.com/${organization.instagram}` : ''}
 				/>
 				<TextField
+					label='Cuenta de Threads'
+					name='threads'
+					icon={<Image
+						src={ThreadsLogo} alt='Instagram logo' height={20}
+						width={20}
+						className='group-focus-within:brightness-100 brightness-50'/>}
+					type='url'
+					className='grow basis-full sm:basis-5/12 mb-4'
+					validate={validate.threads}
+					defaultValue={organization.threads ?? ''}
+				/>
+				<TextField
 					label='X (anteriormente Twitter)'
 					name='twitter'
 					icon={<Image
@@ -244,7 +259,7 @@ export default function GeneralInfoForm(props: GeneralInfoFormProps) {
 						width={16}
 						className='group-focus-within:brightness-100 brightness-50'/>}
 					type='url'
-					className='flex-auto mb-4'
+					className='grow basis-full sm:basis-5/12 mb-4'
 					validate={validate.youtube}
 					defaultValue={organization.youtube ? `https://www.youtube.com/${organization.youtube}` : ''}
 				/>
@@ -259,6 +274,18 @@ export default function GeneralInfoForm(props: GeneralInfoFormProps) {
 					className='flex-auto mb-4'
 					validate={validate.linkedIn}
 					defaultValue={organization.linkedIn ? `https://www.linkedin.com/${organization.linkedIn}` : ''}
+				/>
+				<TextField
+					label='Cuenta de Mastadon'
+					name='mastadon'
+					icon={<Image
+						src={MastadonLogo} alt='LinkedIn logo' height={16}
+						width={16}
+						className='group-focus-within:brightness-100 brightness-50'/>}
+					type='url'
+					className='flex-auto mb-4'
+					validate={validate.mastadon}
+					defaultValue={organization.mastadon ?? ''}
 				/>
 			</div>
 

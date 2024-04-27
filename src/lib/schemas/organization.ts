@@ -5,7 +5,7 @@ import {
 	json,
 	phoneSchema,
 	urlHostnameRefinement,
-} from '@/lib/schemas/util.ts';
+	getSubstringAfterAt} from '@/lib/schemas/util.ts';
 import {addressInitSchema} from '@/lib/schemas/address.ts';
 
 const organizationSchema = z.object({
@@ -26,6 +26,9 @@ const organizationSchema = z.object({
 	tiktok: z.string().transform(urlHostnameRefinement('tiktok')).nullish(),
 	youtube: z.string().transform(urlHostnameRefinement('youtube')).nullish(),
 	linkedIn: z.string().transform(urlHostnameRefinement('linkedin')).nullish(),
+
+	threads: z.string().transform(urlHostnameRefinement('threads', 'net')).nullish(),
+	mastadon: z.string().url().transform(getSubstringAfterAt).nullish(),
 
 	wantsToIncorporate: z.coerce.boolean().nullish(),
 	isIncorporated: z.coerce.boolean(),

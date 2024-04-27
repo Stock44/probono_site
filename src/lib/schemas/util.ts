@@ -32,8 +32,19 @@ export const emptyStringToNullSchema = z.string().transform(emptyStringToNull);
  *
  * @return {function} - A Zod refinement function that takes a URL and a Zod RefinementCtx and refines the URL hostname.
  */
-export function urlHostnameRefinement(hostname: string) {
-	const hostnames = new Set([`${hostname}.com`, `www.${hostname}.com`]);
+
+export function getSubstringAfterAt(string_: String) {
+	const atIndex = string_.indexOf('@');
+
+	if (atIndex === -1) {
+		return '';
+	}
+
+	return string_.slice(Math.max(0, atIndex));
+}
+
+export function urlHostnameRefinement(hostname: string, extension?: string) {
+	const hostnames = new Set([`${hostname}.${extension ?? 'com'}`, `www.${hostname}.${extension ?? 'com'}`]);
 	return (url: string, ctx: z.RefinementCtx) => {
 		try {
 			const urlObject = url.startsWith('https://') ? new URL(url) : new URL(`https://${url}`);
