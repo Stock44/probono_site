@@ -1,12 +1,8 @@
 {
-	"name": "geostats",
-	"version": "1.0.0",
+	"name": "design-system",
+	"version": "0.0.1",
 	"description": "",
 	"main": "index.js",
-	"workspaces": [
-		"packages/*",
-		"apps/*"
-	],
 	"scripts": {
 		"test": "echo \"Error: no test specified\" && exit 1"
 	},
@@ -14,5 +10,8 @@
 		"type": "git",
 		"url": "https://github.com/Stock44/probono_site.git"
 	},
-	"private": true
+	"private": true,
+	"dependencies": {
+		"typescript": "latest"
+	}
 }
