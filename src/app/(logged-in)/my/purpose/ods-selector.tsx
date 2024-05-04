@@ -2,14 +2,13 @@
 import React, {useRef} from 'react';
 import CheckCircle from '@material-design-icons/svg/round/check_circle.svg';
 import Image, {type StaticImageData} from 'next/image';
-import {type RadioGroupProps, type RadioGroupState, useRadioGroupState} from 'react-stately';
+import {type CheckboxGroupProps, type CheckboxGroupState, useCheckboxGroupState} from 'react-stately';
+import {useToggleState} from 'react-stately';
+import {mergeProps, useFocusRing, VisuallyHidden} from 'react-aria';
 import {
-	type AriaRadioGroupProps,
-	mergeProps,
-	useFocusRing,
-	useRadio,
-	useRadioGroup,
-	VisuallyHidden,
+	type AriaCheckboxProps,
+	useCheckbox,
+	useCheckboxGroup,
 } from 'react-aria';
 import ods13Logo from 'public/ods-icons/13.png';
 import ods14Logo from 'public/ods-icons/14.png';
@@ -52,25 +51,52 @@ const ods: Ods[] = [
 	[17, 'Alianzas para lograr los objetivos', ods17Logo],
 ];
 
-type OdsRadioProps = {
-	readonly state: RadioGroupState;
+export type OdsSelectorProps = {
+	readonly name?: string;
+	readonly className?: string;
+} & CheckboxGroupProps & AriaCheckboxProps;
+
+export default function OdsSelector(props: OdsSelectorProps) {
+	const {className, label} = props;
+
+	const state = useCheckboxGroupState(props);
+	const {labelProps} = useCheckboxGroup(props, state);
+
+	return (
+		<div {...useCheckboxGroup} className={className}>
+			<span {...labelProps} className='text-stone-400 text-sm'>
+				{label}
+			</span>
+			<div className='flex gap-4 flex-wrap mt-1 justify-around'>
+				{ods.map(ods => (
+					<OdsCheckbox key={ods[0]} ods={ods}/>
+				))}
+			</div>
+		</div>
+	);
+}
+
+type OdsCheckboxProps = {
 	readonly ods: Ods;
-};
+} & AriaCheckboxProps;
 
-function OdsRadio(props: OdsRadioProps) {
-	const {state, ods} = props;
+function OdsCheckbox(props: OdsCheckboxProps) {
+	const {ods} = props;
 	const [value, name, image] = ods;
-	const ref = useRef(null);
-
-	const {inputProps, isSelected} = useRadio({
+	const {children} = props;
+	const state = useToggleState(props);
+	const ref = React.useRef(null);
+	const {isFocusVisible, focusProps} = useFocusRing();
+	const {inputProps, isSelected} = useCheckbox({
 		'aria-label': name,
 		value: value.toString(),
 	}, state, ref);
-
-	const {isFocusVisible, focusProps} = useFocusRing();
-
 	return (
 		<label>
+			<VisuallyHidden>
+				<input {...mergeProps(inputProps, focusProps)} ref={ref}/>
+				{name}
+			</VisuallyHidden>
 			<VisuallyHidden>
 				<input {...mergeProps(inputProps, focusProps)} ref={ref}/>
 				{name}
@@ -91,31 +117,7 @@ function OdsRadio(props: OdsRadioProps) {
 					alt={name} src={image}/>
 				{isSelected ? <CheckCircle className='absolute bottom-1 right-1 fill-stone-50'/> : null}
 			</div>
+			{children}
 		</label>
-	);
-}
-
-export type OdsSelectorProps = {
-	readonly name?: string;
-	readonly className?: string;
-} & RadioGroupProps & AriaRadioGroupProps;
-
-export default function OdsSelector(props: OdsSelectorProps) {
-	const {className, label} = props;
-
-	const state = useRadioGroupState(props);
-	const {radioGroupProps, labelProps} = useRadioGroup(props, state);
-
-	return (
-		<div {...radioGroupProps} className={className}>
-			<span {...labelProps} className='text-stone-400 text-sm'>
-				{label}
-			</span>
-			<div className='flex gap-4 flex-wrap mt-1 justify-around'>
-				{ods.map(ods => (
-					<OdsRadio key={ods[0]} state={state} ods={ods}/>
-				))}
-			</div>
-		</div>
 	);
 }
