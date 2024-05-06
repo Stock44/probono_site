@@ -10,13 +10,17 @@ import Group from '@material-design-icons/svg/round/group.svg';
 import Map from '@material-design-icons/svg/round/map.svg';
 import Menu from '@material-design-icons/svg/round/menu.svg';
 import MySectionLink from '@/app/(logged-in)/my/my-section-link.tsx';
-import {getCurrentUserOrganizations, getUserFromSession, getUsersActiveOrganization} from '@/lib/models/user.ts';
+import {
+	getCurrentUserOrganizations,
+	getUserFromSession,
+	getUsersActiveOrganization,
+} from '@/lib/models/user.ts';
 import OrganizationSelectorButton from '@/components/organization-selector/organization-selector-button.tsx';
 import AccountButton from '@/app/(logged-in)/onboarding/account-button.tsx';
 import TopBar from '@/components/top-bar.tsx';
 import Footer from '@/components/footer.tsx';
-import SidebarTrigger from '@/components/sidebar-trigger.tsx';
-import LinkButton from '@/components/button/link-button.tsx';
+import SidebarTrigger from 'geostats-ui/sidebar-trigger.tsx';
+import LinkButton from 'geostats-ui/button/link-button.tsx';
 
 export type MyLayoutProps = {
 	readonly children: ReactNode;
@@ -42,63 +46,166 @@ export default async function MyLayout(props: MyLayoutProps) {
 	return (
 		<div className='min-h-screen min-w-full'>
 			<TopBar>
-				<div className='hidden lg:flex gap-2'>
-					{
-						organizations && organizations.length > 0
-            && <OrganizationSelectorButton items={organizations} currentOrganization={organization} className='max-w-64'/>
-					}
-					<AccountButton/>
+				<div className='hidden gap-2 lg:flex'>
+					{organizations && organizations.length > 0 && (
+						<OrganizationSelectorButton
+							items={organizations}
+							currentOrganization={organization}
+							className='max-w-64'
+						/>
+					)}
+					<AccountButton />
 				</div>
-				<SidebarTrigger icon={<Menu className='fill-current'/>} variant='text' className='block lg:hidden'>
-					<div className='p-4 flex flex-col gap-2'>
-						<p className='text-stone-300 font-bold text-xs ps-2'>
+				<SidebarTrigger
+					icon={<Menu className='fill-current' />}
+					variant='text'
+					className='block lg:hidden'
+				>
+					<div className='flex flex-col gap-2 p-4'>
+						<p className='ps-2 text-xs font-bold text-stone-300'>
 							Organización actual:
 						</p>
-						{
-							organizations.length > 0
-              && <OrganizationSelectorButton items={organizations} currentOrganization={organization} className='w-full max-w-48 flex justify-between'/>
-						}
-						<MySectionLink icon={<Home/>} root='/my' className='mt-4'>Inicio</MySectionLink>
-						<MySectionLink icon={<Person/>} root='/my' slug='account'>Mi cuenta</MySectionLink>
-						<p className='text-stone-300 font-bold text-xs mt-4 ps-2'>
+						{organizations.length > 0 && (
+							<OrganizationSelectorButton
+								items={organizations}
+								currentOrganization={organization}
+								className='flex w-full max-w-48 justify-between'
+							/>
+						)}
+						<MySectionLink
+							icon={<Home />}
+							root='/my'
+							className='mt-4'
+						>
+							Inicio
+						</MySectionLink>
+						<MySectionLink
+							icon={<Person />}
+							root='/my'
+							slug='account'
+						>
+							Mi cuenta
+						</MySectionLink>
+						<p className='mt-4 ps-2 text-xs font-bold text-stone-300'>
 							Mi organización
 						</p>
-						<MySectionLink icon={<Feed/>} root='/my' slug='general'>Información general</MySectionLink>
-						<MySectionLink icon={<Psychology/>} root='/my' slug='purpose'>Propósito</MySectionLink>
-						<MySectionLink icon={<Policy/>} root='/my' slug='legal'>Datos legales</MySectionLink>
-						<MySectionLink icon={<LocationOn/>} root='/my' slug='location'>Ubicación</MySectionLink>
-						<MySectionLink icon={<Map/>} root='/my' slug='sectors'>Alcance geografico</MySectionLink>
-						<MySectionLink icon={<Group/>} root='/my' slug='members'>Miembros</MySectionLink>
+						<MySectionLink
+							icon={<Feed />}
+							root='/my'
+							slug='general'
+						>
+							Información general
+						</MySectionLink>
+						<MySectionLink
+							icon={<Psychology />}
+							root='/my'
+							slug='purpose'
+						>
+							Propósito
+						</MySectionLink>
+						<MySectionLink
+							icon={<Policy />}
+							root='/my'
+							slug='legal'
+						>
+							Datos legales
+						</MySectionLink>
+						<MySectionLink
+							icon={<LocationOn />}
+							root='/my'
+							slug='location'
+						>
+							Ubicación
+						</MySectionLink>
+						<MySectionLink icon={<Map />} root='/my' slug='sectors'>
+							Alcance geografico
+						</MySectionLink>
+						<MySectionLink
+							icon={<Group />}
+							root='/my'
+							slug='members'
+						>
+							Miembros
+						</MySectionLink>
 
-						<LinkButton href='/api/auth/logout' className='mt-4 w-full' variant='outlined'>Cerrar sesión</LinkButton>
+						<LinkButton
+							href='/api/auth/logout'
+							className='mt-4 w-full'
+							variant='outlined'
+						>
+							Cerrar sesión
+						</LinkButton>
 					</div>
 				</SidebarTrigger>
 			</TopBar>
-			<div className='min-h-[calc(100vh-theme(spacing.16))] pb-32 pt-8 px-4 mt-16'>
+			<div className='mt-16 min-h-[calc(100vh-theme(spacing.16))] px-4 pb-32 pt-8'>
 				<div className='flex flex-wrap'>
-					<div className='flex gap-8 max-w-7xl mx-auto w-full relative items-start'>
-						<div className='flex-none flex-col gap-2 sticky top-8 hidden lg:flex '>
-							<p className='text-stone-300 font-bold text-sm mb-2 ps-2'>
+					<div className='relative mx-auto flex w-full max-w-7xl items-start gap-8'>
+						<div className='sticky top-8 hidden flex-none flex-col gap-2 lg:flex '>
+							<p className='mb-2 ps-2 text-sm font-bold text-stone-300'>
 								Menú
 							</p>
-							<MySectionLink icon={<Home/>} root='/my'>Inicio</MySectionLink>
-							<MySectionLink icon={<Person/>} root='/my' slug='account'>Mi cuenta</MySectionLink>
-							<p className='text-stone-300 font-bold text-sm mt-4 mb-2 ps-2'>
+							<MySectionLink icon={<Home />} root='/my'>
+								Inicio
+							</MySectionLink>
+							<MySectionLink
+								icon={<Person />}
+								root='/my'
+								slug='account'
+							>
+								Mi cuenta
+							</MySectionLink>
+							<p className='mb-2 mt-4 ps-2 text-sm font-bold text-stone-300'>
 								Mi organización
 							</p>
-							<MySectionLink icon={<Feed/>} root='/my' slug='general'>Información general</MySectionLink>
-							<MySectionLink icon={<Psychology/>} root='/my' slug='purpose'>Propósito</MySectionLink>
-							<MySectionLink icon={<Policy/>} root='/my' slug='legal'>Datos legales</MySectionLink>
-							<MySectionLink icon={<LocationOn/>} root='/my' slug='location'>Ubicación</MySectionLink>
-							<MySectionLink icon={<Map/>} root='/my' slug='sectors'>Alcance geografico</MySectionLink>
-							<MySectionLink icon={<Group/>} root='/my' slug='members'>Miembros</MySectionLink>
+							<MySectionLink
+								icon={<Feed />}
+								root='/my'
+								slug='general'
+							>
+								Información general
+							</MySectionLink>
+							<MySectionLink
+								icon={<Psychology />}
+								root='/my'
+								slug='purpose'
+							>
+								Propósito
+							</MySectionLink>
+							<MySectionLink
+								icon={<Policy />}
+								root='/my'
+								slug='legal'
+							>
+								Datos legales
+							</MySectionLink>
+							<MySectionLink
+								icon={<LocationOn />}
+								root='/my'
+								slug='location'
+							>
+								Ubicación
+							</MySectionLink>
+							<MySectionLink
+								icon={<Map />}
+								root='/my'
+								slug='sectors'
+							>
+								Alcance geografico
+							</MySectionLink>
+							<MySectionLink
+								icon={<Group />}
+								root='/my'
+								slug='members'
+							>
+								Miembros
+							</MySectionLink>
 						</div>
 						{children}
 					</div>
 				</div>
 			</div>
-			<Footer/>
+			<Footer />
 		</div>
-
 	);
 }

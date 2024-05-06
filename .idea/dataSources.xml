@@ -15,11 +15,11 @@
       <jdbc-url>jdbc:postgresql://ep-wild-haze-a5rs918i.us-east-2.aws.neon.tech/probono?sslmode=require</jdbc-url>
       <working-dir>$ProjectFileDir$</working-dir>
     </data-source>
-    <data-source source="LOCAL" name="geostats@localhost" uuid="89dadfb7-d7bd-43f9-b1ab-115c104a0fc7">
+    <data-source source="LOCAL" name="probono@localhost" uuid="3c053af6-5777-49b5-b1e2-41ba2c2e4cff">
       <driver-ref>postgresql</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>org.postgresql.Driver</jdbc-driver>
-      <jdbc-url>jdbc:postgresql://localhost:5432/geostats</jdbc-url>
+      <jdbc-url>jdbc:postgresql://localhost:5432/probono</jdbc-url>
       <working-dir>$ProjectFileDir$</working-dir>
     </data-source>
   </component>

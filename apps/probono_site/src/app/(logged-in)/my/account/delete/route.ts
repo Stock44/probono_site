@@ -3,7 +3,8 @@ import {redirect} from 'next/navigation';
 import {NextResponse} from 'next/server';
 import {deleteUser, getUserFromSession} from '@/lib/models/user.ts';
 import {
-	consumeUserReauthentication, NoReauthenticationRequestedError,
+	consumeUserReauthentication,
+	NoReauthenticationRequestedError,
 	ReauthenticationExpiredError,
 } from '@/lib/models/user-reauthentication.ts';
 

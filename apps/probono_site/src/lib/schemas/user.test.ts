@@ -1,5 +1,9 @@
 import {ZodError} from 'zod';
-import {userDeleteSchema, userInitSchema, userUpdateSchema} from '@/lib/schemas/user.ts';
+import {
+	userDeleteSchema,
+	userInitSchema,
+	userUpdateSchema,
+} from '@/lib/schemas/user.ts';
 
 describe('user init schema', () => {
 	test('parsing a complete user init object should pass', () => {

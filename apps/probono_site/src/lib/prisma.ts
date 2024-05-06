@@ -6,7 +6,6 @@ import ws from 'ws';
 
 dotenv.config();
 
-// eslint-disable-next-line import/no-mutable-exports
 let prisma: PrismaClient;
 
 if (process.env.NODE_ENV === 'production') {
@@ -22,8 +21,9 @@ if (process.env.NODE_ENV === 'production') {
 } else {
 	const prismaClientSingleton = () => new PrismaClient();
 
-	// @ts-expect-error untyped
-	prisma = globalThis.prismaGlobal as PrismaClient ?? prismaClientSingleton();
+	prisma =
+		// @ts-expect-error untyped
+		(globalThis.prismaGlobal as PrismaClient) ?? prismaClientSingleton();
 
 	// @ts-expect-error untyped
 	globalThis.prismaGlobal = prisma;

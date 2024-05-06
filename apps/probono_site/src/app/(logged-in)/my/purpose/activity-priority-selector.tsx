@@ -1,8 +1,8 @@
-import React, {useMemo, useState} from 'react';
-import {Item, type Key, type ListData, type ListProps, type Node, Section, useListData, useListState} from 'react-stately';
+import React, {useMemo} from 'react';
+import {Item, type Key} from 'react-stately';
 import {type Activity} from '@prisma/client';
-import ComboBox from '@/components/combo-box.tsx';
-import ListPrioritizer from '@/components/list-prioritizer.tsx';
+import ComboBox from 'geostats-ui/combo-box.tsx';
+import ListPrioritizer from 'geostats-ui/list-prioritizer.tsx';
 import {type SearchableListData} from '@/lib/hooks/use-searchable-list-data.ts';
 
 export type ActivityPrioritySelectorProps = {
@@ -10,10 +10,22 @@ export type ActivityPrioritySelectorProps = {
 	readonly label: string;
 };
 
-export default function ActivityPrioritySelector(props: ActivityPrioritySelectorProps) {
+export default function ActivityPrioritySelector(
+	props: ActivityPrioritySelectorProps,
+) {
 	const {activities, label} = props;
 
-	const {items, selectedKeys, setSelectedKeys, moveBefore, moveAfter, filteredKeys, getItem, filterText, setFilterText} = activities;
+	const {
+		items,
+		selectedKeys,
+		setSelectedKeys,
+		moveBefore,
+		moveAfter,
+		filteredKeys,
+		getItem,
+		filterText,
+		setFilterText,
+	} = activities;
 
 	const selectedItems = useMemo(() => {
 		if (selectedKeys === 'all') {
@@ -23,7 +35,10 @@ export default function ActivityPrioritySelector(props: ActivityPrioritySelector
 		return items.filter(items => selectedKeys.has(items.id));
 	}, [items, selectedKeys]);
 
-	const filteredItems = useMemo(() => filteredKeys.toList().map(key => getItem(key)), [filteredKeys, getItem]);
+	const filteredItems = useMemo(
+		() => filteredKeys.toList().map(key => getItem(key)),
+		[filteredKeys, getItem],
+	);
 
 	return (
 		<>
@@ -32,9 +47,12 @@ export default function ActivityPrioritySelector(props: ActivityPrioritySelector
 				placeholder='Escribe aquí para buscar'
 				className='mb-4 w-full'
 				label={label}
-				items={filteredItems} inputValue={filterText} menuTrigger='focus'
+				items={filteredItems}
+				inputValue={filterText}
+				menuTrigger='focus'
 				selectedKey={null}
-				onInputChange={setFilterText} onSelectionChange={(key: Key) => {
+				onInputChange={setFilterText}
+				onSelectionChange={(key: Key) => {
 					if (key === null) {
 						if (filterText !== '') {
 							setFilterText('');
@@ -49,45 +67,42 @@ export default function ActivityPrioritySelector(props: ActivityPrioritySelector
 					}
 
 					setSelectedKeys(selectedKeys.add(key));
-				}}>
-				{
-					activity => (
-						<Item>
-							{activity.name}
-						</Item>
-					)
-				}
+				}}
+			>
+				{activity => <Item>{activity.name}</Item>}
 			</ComboBox>
-			{
-				selectedItems.size === 0 ? null
-					: <ListPrioritizer
-						className='mb-4'
-						items={selectedItems} onRemove={key => {
-							console.log(key);
-							if (selectedKeys === 'all') {
-								setSelectedKeys(items.map(item => item.id as Key).toSet().remove(key));
-								return;
-							}
-
-							setSelectedKeys(selectedKeys.remove(key));
-						}} onReorder={(key, previous, next) => {
-							if (previous !== undefined) {
-								moveBefore(previous, [key]);
-								return;
-							}
-
-							if (next !== undefined) {
-								moveAfter(next, [key]);
-							}
-						}}>
-						{
-							activity => (
-								<Item>{activity.name}</Item>
-							)
+			{selectedItems.size === 0 ? null : (
+				<ListPrioritizer
+					className='mb-4'
+					items={selectedItems}
+					onRemove={(key: Key) => {
+						console.log(key);
+						if (selectedKeys === 'all') {
+							setSelectedKeys(
+								items
+									.map(item => item.id as Key)
+									.toSet()
+									.remove(key),
+							);
+							return;
 						}
-					</ListPrioritizer>
-			}
 
+						setSelectedKeys(selectedKeys.remove(key));
+					}}
+					onReorder={(key: Key, previous: Key, next: Key) => {
+						if (previous !== undefined) {
+							moveBefore(previous, [key]);
+							return;
+						}
+
+						if (next !== undefined) {
+							moveAfter(next, [key]);
+						}
+					}}
+				>
+					{(activity: Activity) => <Item>{activity.name}</Item>}
+				</ListPrioritizer>
+			)}
 		</>
 	);
 }

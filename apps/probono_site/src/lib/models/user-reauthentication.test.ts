@@ -5,7 +5,12 @@
 import {getSession} from '@auth0/nextjs-auth0';
 import {prismaMock} from '@/lib/singleton.ts';
 import {getUserFromSession} from '@/lib/models/user.ts';
-import {requestUserReauthentication, consumeUserReauthentication, ReauthenticationExpiredError, NoReauthenticationRequestedError} from '@/lib/models/user-reauthentication.ts';
+import {
+	requestUserReauthentication,
+	consumeUserReauthentication,
+	ReauthenticationExpiredError,
+	NoReauthenticationRequestedError,
+} from '@/lib/models/user-reauthentication.ts';
 
 jest.mock('@auth0/nextjs-auth0');
 jest.mock('@/lib/models/user.ts');
@@ -32,16 +37,20 @@ test('requests reauthentication for authenticated user', async () => {
 });
 
 test('throws error when requesting reauthentication for unauthenticated user', async () => {
-	(getSession as jest.Mock).mockResolvedValue(undefined);
+	(getSession as jest.Mock).mockResolvedValue(null);
 
-	await expect(requestUserReauthentication()).rejects.toThrow('Not authenticated');
+	await expect(requestUserReauthentication()).rejects.toThrow(
+		'Not authenticated',
+	);
 });
 
 test('throws error when unable to find user for current session', async () => {
 	(getSession as jest.Mock).mockResolvedValue('session');
-	(getUserFromSession as jest.Mock).mockResolvedValue(undefined);
+	(getUserFromSession as jest.Mock).mockResolvedValue(null);
 
-	await expect(requestUserReauthentication()).rejects.toThrow('Could not find user information for current session');
+	await expect(requestUserReauthentication()).rejects.toThrow(
+		'Could not find user information for current session',
+	);
 });
 
 test('consumes reauthentication request for authenticated user', async () => {
@@ -49,9 +58,15 @@ test('consumes reauthentication request for authenticated user', async () => {
 	const testDate2 = new Date();
 	testDate2.setSeconds(testDate2.getSeconds() + 5);
 	// eslint-disable-next-line @typescript-eslint/naming-convention
-	(getSession as jest.Mock).mockResolvedValue({user: {auth_time: Math.floor(testDate2.getTime() / 1000)}});
+	(getSession as jest.Mock).mockResolvedValue({
+		user: {auth_time: Math.floor(testDate2.getTime() / 1000)},
+	});
 	(getUserFromSession as jest.Mock).mockResolvedValue({id: 1});
-	(prismaMock.userReauthentication.findFirst as jest.Mock).mockResolvedValue({id: 2, userId: 1, time: testDate});
+	(prismaMock.userReauthentication.findFirst as jest.Mock).mockResolvedValue({
+		id: 2,
+		userId: 1,
+		time: testDate,
+	});
 
 	await expect(consumeUserReauthentication()).resolves.toBeUndefined();
 
@@ -77,25 +92,33 @@ test('consumes reauthentication request for authenticated user', async () => {
 });
 
 test('throws error when consuming reauthentication for unauthenticated user', async () => {
-	(getSession as jest.Mock).mockResolvedValue(undefined);
+	(getSession as jest.Mock).mockResolvedValue(null);
 
-	await expect(consumeUserReauthentication()).rejects.toThrow('Not authenticated');
+	await expect(consumeUserReauthentication()).rejects.toThrow(
+		'Not authenticated',
+	);
 });
 
 test('throws error when unable to find user for current session', async () => {
 	(getSession as jest.Mock).mockResolvedValue('session');
-	(getUserFromSession as jest.Mock).mockResolvedValue(undefined);
+	(getUserFromSession as jest.Mock).mockResolvedValue(null);
 
-	await expect(consumeUserReauthentication()).rejects.toThrow('Could not find user information for current session');
+	await expect(consumeUserReauthentication()).rejects.toThrow(
+		'Could not find user information for current session',
+	);
 });
 
 test('throws error when there is no pending reauthentication request', async () => {
 	// eslint-disable-next-line @typescript-eslint/naming-convention
-	(getSession as jest.Mock).mockResolvedValue({user: {auth_time: Date.now() / 1000}});
+	(getSession as jest.Mock).mockResolvedValue({
+		user: {auth_time: Date.now() / 1000},
+	});
 	(getUserFromSession as jest.Mock).mockResolvedValue({id: 1});
 	prismaMock.userReauthentication.findFirst.mockResolvedValue(null);
 
-	await expect(consumeUserReauthentication()).rejects.toThrow(NoReauthenticationRequestedError);
+	await expect(consumeUserReauthentication()).rejects.toThrow(
+		NoReauthenticationRequestedError,
+	);
 });
 
 test('throws error when the reauthentication request is expired', async () => {
@@ -103,9 +126,18 @@ test('throws error when the reauthentication request is expired', async () => {
 	oldDate.setMinutes(oldDate.getMinutes() - 5); // 5 minutes in the past
 
 	// eslint-disable-next-line @typescript-eslint/naming-convention
-	(getSession as jest.Mock).mockResolvedValue({user: {auth_time: Date.now() / 1000}});
+	(getSession as jest.Mock).mockResolvedValue({
+		user: {auth_time: Date.now() / 1000},
+	});
 	(getUserFromSession as jest.Mock).mockResolvedValue({id: 1});
-	prismaMock.userReauthentication.findFirst.mockResolvedValue({id: 2, userId: 1, time: oldDate, consumed: false});
+	prismaMock.userReauthentication.findFirst.mockResolvedValue({
+		id: 2,
+		userId: 1,
+		time: oldDate,
+		consumed: false,
+	});
 
-	await expect(consumeUserReauthentication()).rejects.toThrow(ReauthenticationExpiredError);
+	await expect(consumeUserReauthentication()).rejects.toThrow(
+		ReauthenticationExpiredError,
+	);
 });

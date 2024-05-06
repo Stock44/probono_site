@@ -19,12 +19,14 @@ export default function NavLink(props: NavLinkProps) {
 
 	return (
 		<Link
-			href={`/${slug}`} className={cx(
+			href={`/${slug}`}
+			className={cx(
 				'transition-all',
 				active && 'text-stone-50',
 				!active && 'text-stone-400 hover:text-stone-200',
 				className,
-			)}>
+			)}
+		>
 			{children}
 		</Link>
 	);

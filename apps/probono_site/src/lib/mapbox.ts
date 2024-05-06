@@ -30,7 +30,9 @@ type MapboxReverseGeocodingResult = {
 	query: [number, number];
 } & MapboxGeocodingResult;
 
-export async function geocodeAddress(address: Address): Promise<[number, number] | undefined> {
+export async function geocodeAddress(
+	address: Address,
+): Promise<[number, number] | undefined> {
 	const uri = `${address.number} ${address.street} ${address.municipality} ${address.state} ${address.postalCode}`;
 	const parameters = new URLSearchParams([
 		['access_token', process.env.NEXT_PUBLIC_MAPBOX_TOKEN!],
@@ -38,9 +40,11 @@ export async function geocodeAddress(address: Address): Promise<[number, number]
 		['language', 'es'],
 		['limit', '1'],
 	]);
-	const response = await fetch(`https://api.mapbox.com/geocoding/v5/mapbox.places/${encodeURIComponent(uri)}.json?${parameters.toString()}`);
+	const response = await fetch(
+		`https://api.mapbox.com/geocoding/v5/mapbox.places/${encodeURIComponent(uri)}.json?${parameters.toString()}`,
+	);
 
-	const data = await response.json() as MapboxForwardGeocodingResult;
+	const data = (await response.json()) as MapboxForwardGeocodingResult;
 
 	console.log(data);
 
@@ -61,9 +65,11 @@ export async function reverseGeocode(coords: [number, number]) {
 		['limit', '1'],
 		['types', 'address'],
 	]);
-	const response = await fetch(`https://api.mapbox.com/geocoding/v5/mapbox.places/${coords[1]},${coords[0]}.json?${parameters.toString()}`);
+	const response = await fetch(
+		`https://api.mapbox.com/geocoding/v5/mapbox.places/${coords[1]},${coords[0]}.json?${parameters.toString()}`,
+	);
 
-	const data = await response.json() as MapboxReverseGeocodingResult;
+	const data = (await response.json()) as MapboxReverseGeocodingResult;
 
 	if (data.features.length === 0) {
 		return;

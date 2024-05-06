@@ -2,19 +2,20 @@ import {omit} from 'lodash';
 import {del, put} from '@vercel/blob';
 import {filetypeextension} from 'magic-bytes.js';
 import {type Organization, type Prisma, type User} from '@prisma/client';
-import {type OrganizationInit, type OrganizationUpdate} from '@/lib/schemas/organization.ts';
+import {
+	type OrganizationInit,
+	type OrganizationUpdate,
+} from '@/lib/schemas/organization.ts';
 import prisma from '@/lib/prisma.ts';
 
 export async function getApprovedOrganizationLocations() {
-	const result = (
-		await prisma.$queryRaw`
+	const result = await prisma.$queryRaw`
         select o.id                                 as id,
                array [a.location[0], a.location[1]] as location
         from "Organization" as o
                  join "Address" as a on o."addressId" = a.id
         where o.approved = true;
-    `
-	);
+    `;
 
 	return result as Array<{
 		id: number;
@@ -36,7 +37,9 @@ export async function getApprovedOrganizationInfo() {
 		},
 	});
 
-	const addressMap = new Map(locations.map(location => [location.id, location.location] as const));
+	const addressMap = new Map(
+		locations.map(location => [location.id, location.location] as const),
+	);
 
 	return organizations.map(organization => ({
 		...organization,
@@ -51,7 +54,10 @@ export async function getApprovedOrganizationInfo() {
  * @param {number} userId - The ID of the user to check authorization for.
  * @returns {boolean} - True if the user is authorized for the organization, otherwise false.
  */
-export async function userAuthorizedForOrganization(userId: number, organizationId: number) {
+export async function userAuthorizedForOrganization(
+	userId: number,
+	organizationId: number,
+) {
 	const authorized = await prisma.organization.findFirst({
 		where: {
 			id: organizationId,
@@ -77,40 +83,48 @@ export async function userAuthorizedForOrganization(userId: number, organization
  * @returns {Promise<Organization>} - A promise that resolves to the created organization.
  * @throws {Error} - If the file extension for the logo is not found.
  */
-export async function createOrganization(ownerId: number, init: OrganizationInit): Promise<Organization> {
+export async function createOrganization(
+	ownerId: number,
+	init: OrganizationInit,
+): Promise<Organization> {
 	const organization = await prisma.$transaction(async tx => {
 		const organization = await tx.organization.create({
 			// @ts-expect-error type mismatched when using ids directly and at the same time using create to connect records
 			data: {
-				...omit(init,
-					['logo']),
+				...omit(init, ['logo']),
 				address: init.address
 					? {
-						create: init.address,
-					}
+							create: init.address,
+						}
 					: undefined,
 				owners: {
 					connect: {
 						id: ownerId,
 					},
 				},
-				ageGroups: init.ageGroups ? {
-					create: init.ageGroups.map(ageGroup => ({
-						ageGroupId: ageGroup.ageGroupId,
-						gender: ageGroup.gender,
-					})),
-				} : undefined,
-				activities: init.activities ? {
-					create: init.activities.map((item, idx) => ({
-						activityId: item.activityId,
-						priority: idx,
-					})),
-				} : undefined,
-				beneficiaries: init.beneficiaries ? {
-					connect: init.beneficiaries.map(id => ({
-						id,
-					})),
-				} : undefined,
+				ageGroups: init.ageGroups
+					? {
+							create: init.ageGroups.map(ageGroup => ({
+								ageGroupId: ageGroup.ageGroupId,
+								gender: ageGroup.gender,
+							})),
+						}
+					: undefined,
+				activities: init.activities
+					? {
+							create: init.activities.map((item, index) => ({
+								activityId: item.activityId,
+								priority: index,
+							})),
+						}
+					: undefined,
+				beneficiaries: init.beneficiaries
+					? {
+							connect: init.beneficiaries.map(id => ({
+								id,
+							})),
+						}
+					: undefined,
 			},
 		});
 
@@ -125,17 +139,23 @@ export async function createOrganization(ownerId: number, init: OrganizationInit
 	});
 
 	if (init.logo) {
-		const fileStart = new Uint8Array(await init.logo.slice(0, 100).arrayBuffer());
+		const fileStart = new Uint8Array(
+			await init.logo.slice(0, 100).arrayBuffer(),
+		);
 
 		const extensions = filetypeextension(fileStart);
 
 		if (extensions.length === 0) {
-			throw new Error('Can\'t find correct extension for file.');
+			throw new Error("Can't find correct extension for file.");
 		}
 
-		const result = await put(`organizationLogos/${organization.id}-${Date.now().valueOf()}.${extensions[0]}`, init.logo, {
-			access: 'public',
-		});
+		const result = await put(
+			`organizationLogos/${organization.id}-${Date.now().valueOf()}.${extensions[0]}`,
+			init.logo,
+			{
+				access: 'public',
+			},
+		);
 
 		return prisma.organization.update({
 			where: {
@@ -158,7 +178,10 @@ export async function createOrganization(ownerId: number, init: OrganizationInit
  * @return {Promise<void>} - A promise that resolves when the [organizationId] is successfully updated.
  * @throws {Error} - Throws an error if the logo image is not in a supported format.
  */
-export async function updateOrganization(organizationId: number, update: OrganizationUpdate) {
+export async function updateOrganization(
+	organizationId: number,
+	update: OrganizationUpdate,
+) {
 	const organization = await prisma.organization.findUniqueOrThrow({
 		where: {
 			id: organizationId,
@@ -168,65 +191,71 @@ export async function updateOrganization(organizationId: number, update: Organiz
 	const operations: Array<Prisma.PrismaPromise<any>> = [];
 
 	if (update.ageGroups) {
-		operations.push(prisma.organizationToAgeGroup.deleteMany({
-			where: {
-				organizationId,
-			},
-		}));
+		operations.push(
+			prisma.organizationToAgeGroup.deleteMany({
+				where: {
+					organizationId,
+				},
+			}),
+		);
 	}
 
 	if (update.activities) {
-		operations.push(prisma.organizationToActivity.deleteMany({
-			where: {
-				organizationId,
-			},
-		}));
+		operations.push(
+			prisma.organizationToActivity.deleteMany({
+				where: {
+					organizationId,
+				},
+			}),
+		);
 	}
 
-	operations.push(prisma.organization.update({
-		where: {
-			id: organizationId,
-		},
-		// @ts-expect-error type mismatched when using ids directly and at the same time using create to connect records
-		data: {
-			...omit(update,
-				['logo'],
-			),
-			address: update.address
-				? {
-					upsert: {
-						update: omit(update.address, 'location'),
-						create: omit(update.address, 'location'),
-					},
-				}
-				: undefined,
-			ageGroups: update.ageGroups
-				? {
-					createMany: {
-						data: update.ageGroups.map(item => ({
-							ageGroupId: item.ageGroupId,
-							gender: item.gender,
-						})),
-					},
-				}
-				: undefined,
-			activities: update.activities
-				? {
-					createMany: {
-						data: update.activities.map((item, idx) => ({
-							activityId: item.activityId,
-							priority: idx,
-						})),
-					},
-				}
-				: undefined,
-			beneficiaries: update.beneficiaries ? {
-				set: update.beneficiaries.map(id => ({
-					id,
-				})),
-			} : undefined,
-		},
-	}));
+	operations.push(
+		prisma.organization.update({
+			where: {
+				id: organizationId,
+			},
+			// @ts-expect-error type mismatched when using ids directly and at the same time using create to connect records
+			data: {
+				...omit(update, ['logo']),
+				address: update.address
+					? {
+							upsert: {
+								update: omit(update.address, 'location'),
+								create: omit(update.address, 'location'),
+							},
+						}
+					: undefined,
+				ageGroups: update.ageGroups
+					? {
+							createMany: {
+								data: update.ageGroups.map(item => ({
+									ageGroupId: item.ageGroupId,
+									gender: item.gender,
+								})),
+							},
+						}
+					: undefined,
+				activities: update.activities
+					? {
+							createMany: {
+								data: update.activities.map((item, index) => ({
+									activityId: item.activityId,
+									priority: index,
+								})),
+							},
+						}
+					: undefined,
+				beneficiaries: update.beneficiaries
+					? {
+							set: update.beneficiaries.map(id => ({
+								id,
+							})),
+						}
+					: undefined,
+			},
+		}),
+	);
 
 	if (update.address) {
 		console.log(`updating organization ${organization.id}`);
@@ -239,21 +268,27 @@ export async function updateOrganization(organizationId: number, update: Organiz
 	await prisma.$transaction(operations);
 
 	if (update.logo) {
-		const fileStart = new Uint8Array(await update.logo.slice(0, 100).arrayBuffer());
+		const fileStart = new Uint8Array(
+			await update.logo.slice(0, 100).arrayBuffer(),
+		);
 
 		const extensions = filetypeextension(fileStart);
 
 		if (extensions.length === 0) {
-			throw new Error('Can\'t find correct extension for file.');
+			throw new Error("Can't find correct extension for file.");
 		}
 
 		if (organization.logoUrl) {
 			await del(organization.logoUrl);
 		}
 
-		const result = await put(`organizationLogos/${organizationId}-${Date.now().valueOf()}.${extensions[0]}`, update.logo, {
-			access: 'public',
-		});
+		const result = await put(
+			`organizationLogos/${organizationId}-${Date.now().valueOf()}.${extensions[0]}`,
+			update.logo,
+			{
+				access: 'public',
+			},
+		);
 
 		await prisma.organization.update({
 			where: {
@@ -338,9 +373,13 @@ export async function deleteOrganizations(ids: number[]): Promise<void> {
  * console.log(organizations);
  * // Output: [{ id: 1, _count: { owners: 1 } }, { id: 2, _count: { owners: 1 } }]
  */
-export async function getUsersDependantOrganizations(userId: number): Promise<Array<Organization & {
-	_count: {owners: number};
-}>> {
+export async function getUsersDependantOrganizations(userId: number): Promise<
+	Array<
+		Organization & {
+			_count: {owners: number};
+		}
+	>
+> {
 	const organizations = await prisma.organization.findMany({
 		where: {
 			owners: {
@@ -358,16 +397,22 @@ export async function getUsersDependantOrganizations(userId: number): Promise<Ar
 		},
 	});
 
-	return organizations.filter(organization => organization._count.owners === 1);
+	return organizations.filter(
+		organization => organization._count.owners === 1,
+	);
 }
 
-export async function getOrganizationOwners(organizationId: number): Promise<User[]> {
-	return prisma.organization.findUniqueOrThrow({
-		where: {
-			id: organizationId,
-		},
-		select: {
-			owners: true,
-		},
-	}).owners();
+export async function getOrganizationOwners(
+	organizationId: number,
+): Promise<User[]> {
+	return prisma.organization
+		.findUniqueOrThrow({
+			where: {
+				id: organizationId,
+			},
+			select: {
+				owners: true,
+			},
+		})
+		.owners();
 }

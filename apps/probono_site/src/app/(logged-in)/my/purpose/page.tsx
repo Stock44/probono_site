@@ -8,13 +8,7 @@ import prisma from '@/lib/prisma.ts';
 import updateOrganizationAction from '@/lib/actions/update-organization-action.ts';
 import {getUsersActiveOrganization} from '@/lib/models/user.ts';
 
-export type PurposePageProps = {
-	readonly searchParams: {
-		readonly organization: string;
-	};
-};
-
-export default async function PurposePage(props: PurposePageProps) {
+export default async function PurposePage() {
 	const baseOrganization = await getUsersActiveOrganization();
 	const organizationIncludes = await prisma.organization.findUniqueOrThrow({
 		where: {
@@ -49,7 +43,14 @@ export default async function PurposePage(props: PurposePageProps) {
 
 	return (
 		<main className='w-full'>
-			<PurposeInfoForm action={action} organization={organization} organizationCategories={organizationCategories} activities={activities} beneficiaries={beneficiaries} ageGroups={ageGroups}/>
+			<PurposeInfoForm
+				action={action}
+				organization={organization}
+				organizationCategories={organizationCategories}
+				activities={activities}
+				beneficiaries={beneficiaries}
+				ageGroups={ageGroups}
+			/>
 		</main>
 	);
 }

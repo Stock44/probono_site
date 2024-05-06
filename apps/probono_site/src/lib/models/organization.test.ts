@@ -11,7 +11,11 @@ import {
 	organizationInitSchema,
 	organizationUpdateSchema,
 } from '@/lib/schemas/organization.ts';
-import {createOrganization, updateOrganization, getUsersDependantOrganizations} from '@/lib/models/organization.ts';
+import {
+	createOrganization,
+	updateOrganization,
+	getUsersDependantOrganizations,
+} from '@/lib/models/organization.ts';
 import {prismaMock} from '@/lib/singleton.ts';
 
 jest.mock('@vercel/blob');
@@ -30,13 +34,9 @@ const mockOrganizationInit = {
 	isIncorporated: true,
 	email: 'test@organization.com',
 	webpage: 'http://www.organization.com',
-	ageGroups: [
-		{ageGroupId: 1, gender: Gender.male},
-	],
+	ageGroups: [{ageGroupId: 1, gender: Gender.male}],
 	beneficiaries: [1, 2, 3],
-	activities: [
-		{activityId: 1, priority: 1},
-	],
+	activities: [{activityId: 1, priority: 1}],
 	address: {
 		id: 2,
 		street: 'Street',
@@ -53,13 +53,17 @@ const mockOrganization = {
 };
 
 beforeEach(async () => {
-	// @ts-expect-error other properties not needed for tests.
-	(prismaMock.organization.create || prismaMock.organization.update).mockClear().mockResolvedValue(mockOrganization);
+	(prismaMock.organization.create || prismaMock.organization.update)
+		.mockClear()
+		// @ts-expect-error other properties not needed for tests.
+		.mockResolvedValue(mockOrganization);
 
 	prismaMock.$queryRaw.mockClear();
 
-	(prismaMock.organizationToAgeGroup.deleteMany || prismaMock.organizationToActivity.deleteMany)
-		.mockClear();
+	(
+		prismaMock.organizationToAgeGroup.deleteMany ||
+		prismaMock.organizationToActivity.deleteMany
+	).mockClear();
 
 	// @ts-expect-error other properties not needed for test
 	mocked(put).mockClear().mockResolvedValue({url: mockLogoUrl});
@@ -70,7 +74,10 @@ beforeEach(async () => {
 
 describe('createOrganization function', () => {
 	it('completes successfully with valid init data', async () => {
-		await createOrganization(ownerId, await organizationInitSchema.parseAsync(mockOrganizationInit));
+		await createOrganization(
+			ownerId,
+			await organizationInitSchema.parseAsync(mockOrganizationInit),
+		);
 
 		// Verify the transaction method calls
 		expect(prismaMock.organization.create).toBeCalled();
@@ -84,11 +91,14 @@ describe('createOrganization function', () => {
 
 	it('throws error on unknown file extension for logo', async () => {
 		mocked(filetypeextension).mockReturnValueOnce([]);
-		const organization = await organizationInitSchema.parseAsync(mockOrganization);
-		await expect(createOrganization(ownerId, {
-			...organization,
-			logo: mockLogo,
-		})).rejects.toThrow('Can\'t find correct extension for file.');
+		const organization =
+			await organizationInitSchema.parseAsync(mockOrganization);
+		await expect(
+			createOrganization(ownerId, {
+				...organization,
+				logo: mockLogo,
+			}),
+		).rejects.toThrow("Can't find correct extension for file.");
 	});
 });
 
@@ -103,10 +113,15 @@ describe('updateOrganization function tests', () => {
 	};
 
 	it('completes successfully with valid update data', async () => {
-		// @ts-expect-error updateOrganization only selects the logoUrl field for this query
-		prismaMock.organization.findUniqueOrThrow.mockResolvedValueOnce(pick(mockOrganization, ['logoUrl']));
+		prismaMock.organization.findUniqueOrThrow.mockResolvedValueOnce(
+			// @ts-expect-error updateOrganization only selects the logoUrl field for this query
+			pick(mockOrganization, ['logoUrl']),
+		);
 
-		await updateOrganization(organizationId, await organizationUpdateSchema.parseAsync(update));
+		await updateOrganization(
+			organizationId,
+			await organizationUpdateSchema.parseAsync(update),
+		);
 
 		// Verify the prisma transaction method calls
 		expect(prismaMock.organization.update).toBeCalled();
@@ -121,10 +136,12 @@ describe('updateOrganization function tests', () => {
 	it('throws error on unknown file extension for logo', async () => {
 		(filetypeextension as jest.Mock).mockReturnValueOnce([]);
 		const organization = await organizationUpdateSchema.parseAsync(update);
-		await expect(updateOrganization(organizationId, {
-			...organization,
-			logo: mockLogo,
-		})).rejects.toThrow('Can\'t find correct extension for file.');
+		await expect(
+			updateOrganization(organizationId, {
+				...organization,
+				logo: mockLogo,
+			}),
+		).rejects.toThrow("Can't find correct extension for file.");
 	});
 });
 jest.mock('@prisma/client');
@@ -132,12 +149,14 @@ jest.mock('@prisma/client');
 describe('getOrganizationsWithSoleOwner function', () => {
 	it('should return organizations with a sole owner when a valid userID is provided', async () => {
 		const userId = 1;
-		const expectedResponse = [{
-			id: 1,
-			_count: {
-				owners: 1,
+		const expectedResponse = [
+			{
+				id: 1,
+				_count: {
+					owners: 1,
+				},
 			},
-		}];
+		];
 
 		// @ts-expect-error typings not needed for test
 		prismaMock.organization.findMany.mockResolvedValue(expectedResponse);
@@ -173,8 +192,10 @@ describe('getUsersDependantOrganizations()', () => {
 		const findManyMock = prismaMock.organization.findMany as jest.Mock;
 
 		// Sample data to be returned by the findMany function
-		// @ts-expect-error not needed for test
-		const sampleData: Array<Organization & {_count: {owners: number}}> = [{id: 123, _count: {owners: 1}}];
+		const sampleData: Array<Organization & {_count: {owners: number}}> = [
+			// @ts-expect-error not needed for test
+			{id: 123, _count: {owners: 1}},
+		];
 
 		// Setting what our prisma findMany mock should return
 		findManyMock.mockResolvedValue(sampleData);
@@ -207,10 +228,10 @@ describe('getUsersDependantOrganizations()', () => {
 		findManyMock.mockRejectedValue(new Error('Database error'));
 
 		// We wrap our async function inside a function for jest to properly handle the promise rejection
+		// eslint-disable-next-line unicorn/consistent-function-scoping
 		const wrapper = async () => getUsersDependantOrganizations(1);
 
 		await expect(wrapper()).rejects.toThrowError('Database error');
 		expect(findManyMock).toHaveBeenCalledTimes(1);
 	});
 });
-

@@ -13,7 +13,11 @@ type ServerActionFailure = {
 	message: string;
 };
 
-export type ServerActionResult<Data=undefined> = (Data extends undefined ? ServerActionSuccess : ServerActionSuccessWithData<Data>) | ServerActionFailure;
+export type ServerActionResult<Data = undefined> =
+	| (Data extends undefined
+			? ServerActionSuccess
+			: ServerActionSuccessWithData<Data>)
+	| ServerActionFailure;
 
 export const internalErrorResult = {
 	success: false as const,

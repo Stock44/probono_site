@@ -1,5 +1,11 @@
 import z, {ZodError} from 'zod';
-import {boolean, emptyStringToNull, json, phoneSchema, urlHostnameRefinement} from '@/lib/schemas/util.ts';
+import {
+	boolean,
+	emptyStringToNull,
+	json,
+	phoneSchema,
+	urlHostnameRefinement,
+} from '@/lib/schemas/util.ts';
 
 describe('emptyStringToNull', () => {
 	test('empty string should be converted to null', () => {
@@ -67,7 +73,9 @@ describe('url hostname refinement', () => {
 		expect(schema.parse('example.com/asdf')).toEqual('asdf');
 	});
 	test('refinement of same hostname should return path 2', () => {
-		expect(schema.parse('example.com/asdf/asdf/asdf')).toEqual('asdf/asdf/asdf');
+		expect(schema.parse('example.com/asdf/asdf/asdf')).toEqual(
+			'asdf/asdf/asdf',
+		);
 	});
 });
 

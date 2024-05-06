@@ -1,4 +1,4 @@
-import React, {type ReactNode} from 'react';
+import {type ReactNode} from 'react';
 import {getSession} from '@auth0/nextjs-auth0';
 import {redirect} from 'next/navigation';
 

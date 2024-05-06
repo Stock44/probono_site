@@ -2,8 +2,8 @@
 
 import React from 'react';
 import {MapContainer} from 'react-leaflet';
-import GeostatsTileLayer from '@/components/geostats-tile-layer.tsx';
-import LocationMarker from '@/components/location-marker.tsx';
+import GeostatsTileLayer from 'geostats-ui/geostats-tile-layer.tsx';
+import LocationMarker from 'geostats-ui/location-marker.tsx';
 
 export type LocationMapProps = {
 	readonly organizations: Array<{
@@ -18,12 +18,14 @@ export default function LocationMap(props: LocationMapProps) {
 	const {organizations, className} = props;
 	return (
 		<MapContainer center={[25.68, -100.31]} className={className} zoom={12}>
-			{
-				organizations.map(organization => (
-					<LocationMarker key={organization.id} position={organization.location} popup={organization.name}/>
-				))
-			}
-			<GeostatsTileLayer/>
+			{organizations.map(organization => (
+				<LocationMarker
+					key={organization.id}
+					position={organization.location}
+					popup={organization.name}
+				/>
+			))}
+			<GeostatsTileLayer />
 		</MapContainer>
 	);
 }

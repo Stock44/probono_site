@@ -1,6 +1,8 @@
 // Pages/api/auth/[auth0].js
 import {
-	type AppRouteHandlerFn, type AppRouteHandlerFnContext, getSession,
+	type AppRouteHandlerFn,
+	type AppRouteHandlerFnContext,
+	getSession,
 	handleAuth,
 	handleLogin,
 } from '@auth0/nextjs-auth0';
@@ -15,7 +17,7 @@ export const GET = handleAuth({
 		},
 	}),
 	// Provides an authorization endpoint in which it is required that the user reauthenticate, in order to proceed.
-	async reauth(request: NextRequest, ctx: AppRouteHandlerFnContext) {
+	async reauth(request: NextRequest, context: AppRouteHandlerFnContext) {
 		try {
 			await requestUserReauthentication();
 		} catch {
@@ -28,7 +30,10 @@ export const GET = handleAuth({
 
 		let connection = (session.user.sub as string).split('|')[0];
 		// If the connection name is auth0, replace it with the default connection name
-		connection = connection === 'auth0' ? 'Username-Password-Authentication' : connection;
+		connection =
+			connection === 'auth0'
+				? 'Username-Password-Authentication'
+				: connection;
 
 		const handler = handleLogin({
 			authorizationParams: {
@@ -39,7 +44,7 @@ export const GET = handleAuth({
 			},
 		});
 
-		return handler(request, ctx);
+		return handler(request, context);
 	},
 }) as AppRouteHandlerFn;
 /* eslint-enable @typescript-eslint/naming-convention */

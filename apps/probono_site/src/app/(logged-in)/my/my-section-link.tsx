@@ -8,14 +8,15 @@ export type MySectionLinkProps = {
 	readonly root: string;
 	readonly slug?: string;
 	readonly children: ReactNode;
-	readonly className?: ReactNode;
+	readonly className?: string;
 	readonly icon: ReactNode;
 };
 
 export default function MySectionLink(props: MySectionLinkProps) {
 	const {root, slug, children, className, icon} = props;
 	const pathname = useSelectedLayoutSegment();
-	const selected = (slug === undefined && pathname === null) || pathname === slug;
+	const selected =
+		(slug === undefined && pathname === null) || pathname === slug;
 
 	return (
 		<Link

@@ -18,7 +18,9 @@ export async function getOrganizationInvitation(invitationId: string) {
 	});
 }
 
-export async function isInvitationValid(invitationId: string): Promise<boolean> {
+export async function isInvitationValid(
+	invitationId: string,
+): Promise<boolean> {
 	const invite = await prisma.organizationInvitation.findUnique({
 		where: {
 			id: invitationId,
@@ -29,10 +31,14 @@ export async function isInvitationValid(invitationId: string): Promise<boolean> 
 		return false;
 	}
 
-	return invite.timestamp >= (new Date(Date.now() - duration));
+	return invite.timestamp >= new Date(Date.now() - duration);
 }
 
-export async function createOrganizationInvitation(recipient: string, organizationId: number, senderId: number) {
+export async function createOrganizationInvitation(
+	recipient: string,
+	organizationId: number,
+	senderId: number,
+) {
 	return prisma.organizationInvitation.create({
 		data: {
 			organizationId,
@@ -42,7 +48,10 @@ export async function createOrganizationInvitation(recipient: string, organizati
 	});
 }
 
-export async function consumeOrganizationInvitation(invitationId: string, recipientUserId: number) {
+export async function consumeOrganizationInvitation(
+	invitationId: string,
+	recipientUserId: number,
+) {
 	const invite = await prisma.organizationInvitation.findUnique({
 		where: {
 			id: invitationId,
@@ -53,7 +62,7 @@ export async function consumeOrganizationInvitation(invitationId: string, recipi
 		throw new Error('Invitation not found');
 	}
 
-	if (invite.timestamp < (new Date(Date.now() - duration))) {
+	if (invite.timestamp < new Date(Date.now() - duration)) {
 		throw new Error('Invitation expired');
 	}
 
@@ -81,7 +90,10 @@ export async function consumeOrganizationInvitation(invitationId: string, recipi
 	return updateActiveOrganization(invite.organizationId);
 }
 
-export async function activeOrganizationInvitationExists(recipient: string, organizationId: number) {
+export async function activeOrganizationInvitationExists(
+	recipient: string,
+	organizationId: number,
+) {
 	const existingInvite = await prisma.organizationInvitation.findFirst({
 		where: {
 			recipient,
@@ -95,26 +107,32 @@ export async function activeOrganizationInvitationExists(recipient: string, orga
 	return Boolean(existingInvite);
 }
 
-export const getActiveOrganizationInvitations = cache(async (organizationId: number) => prisma.organizationInvitation.findMany({
-	where: {
-		organizationId,
-		timestamp: {
-			gt: new Date(Date.now() - duration),
-		},
-	},
-	orderBy: {
-		timestamp: 'desc',
-	},
-}));
+export const getActiveOrganizationInvitations = cache(
+	async (organizationId: number) =>
+		prisma.organizationInvitation.findMany({
+			where: {
+				organizationId,
+				timestamp: {
+					gt: new Date(Date.now() - duration),
+				},
+			},
+			orderBy: {
+				timestamp: 'desc',
+			},
+		}),
+);
 
-export const getExpiredOrganizationInvitations = cache(async (organizationId: number) => prisma.organizationInvitation.findMany({
-	where: {
-		organizationId,
-		timestamp: {
-			lte: new Date(Date.now() - duration),
-		},
-	},
-	orderBy: {
-		timestamp: 'desc',
-	},
-}));
+export const getExpiredOrganizationInvitations = cache(
+	async (organizationId: number) =>
+		prisma.organizationInvitation.findMany({
+			where: {
+				organizationId,
+				timestamp: {
+					lte: new Date(Date.now() - duration),
+				},
+			},
+			orderBy: {
+				timestamp: 'desc',
+			},
+		}),
+);

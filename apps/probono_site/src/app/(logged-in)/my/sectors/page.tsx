@@ -6,13 +6,7 @@ import prisma from '@/lib/prisma.ts';
 import updateOrganizationSectorsAction from '@/lib/actions/update-organization-sectors-action.ts';
 import {getUsersActiveOrganization} from '@/lib/models/user.ts';
 
-export type SectorsPageProps = {
-	readonly searchParams: {
-		readonly organization?: string;
-	};
-};
-
-export default async function SectorsPage(props: SectorsPageProps) {
+export default async function SectorsPage() {
 	const baseOrganization = await getUsersActiveOrganization();
 	const organizationSectors = await prisma.organization.findUniqueOrThrow({
 		where: {
@@ -42,7 +36,11 @@ export default async function SectorsPage(props: SectorsPageProps) {
 
 	return (
 		<main className='w-full'>
-			<SectorsForm sectors={sectors} organization={organization} action={action}/>
+			<SectorsForm
+				sectors={sectors}
+				organization={organization}
+				action={action}
+			/>
 		</main>
 	);
 }

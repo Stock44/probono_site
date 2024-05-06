@@ -1,0 +1,14 @@
+{
+	"extends": "tsconfig-geostats/react-library.json",
+	"compilerOptions": {
+		"baseUrl": ".",
+		"paths": {
+			"@/*": [
+				"./src/*"
+			]
+		}
+	},
+	"exclude": [
+		"node_modules"
+	]
+}

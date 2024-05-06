@@ -1,17 +1,25 @@
 'use client';
 import React, {useState} from 'react';
-import {CluniStatus, type CorporationType, DonationAuthStatus, type Organization} from '@prisma/client';
+import {
+	CluniStatus,
+	type CorporationType,
+	DonationAuthStatus,
+	type Organization,
+} from '@prisma/client';
 import {Item} from 'react-stately';
 import CalendarMonth from '@material-design-icons/svg/round/calendar_month.svg';
 import Done from '@material-design-icons/svg/round/done.svg';
-import Select from '@/components/select.tsx';
-import {NumberField} from '@/components/number-field.tsx';
-import Checkbox from '@/components/checkbox.tsx';
-import TextField from '@/components/text-field.tsx';
-import Form, {type FormState} from '@/components/form/form.tsx';
-import {organizationInitSchema, type OrganizationUpdate} from '@/lib/schemas/organization.ts';
+import Select from 'geostats-ui/select.tsx';
+import {NumberField} from 'geostats-ui/number-field.tsx';
+import Checkbox from 'geostats-ui/checkbox.tsx';
+import TextField from 'geostats-ui/text-field.tsx';
+import Form, {type FormState} from 'geostats-ui/form/form.tsx';
+import {
+	organizationInitSchema,
+	type OrganizationUpdate,
+} from '@/lib/schemas/organization.ts';
 import {formValidators} from '@/lib/form-utils.ts';
-import FormHeader from '@/components/form-header.tsx';
+import FormHeader from 'geostats-ui/form-header.tsx';
 
 const clunis = [
 	{
@@ -54,7 +62,10 @@ const donationStatuses = [
 export type LegalInfoFormProps = {
 	readonly organization: Organization;
 	readonly corporationTypes: CorporationType[];
-	readonly action: (state: FormState<OrganizationUpdate>, data: FormData) => Promise<FormState<OrganizationUpdate>>;
+	readonly action: (
+		state: FormState<OrganizationUpdate>,
+		data: FormData,
+	) => Promise<FormState<OrganizationUpdate>>;
 };
 
 export default function LegalInfoForm(props: LegalInfoFormProps) {
@@ -68,113 +79,112 @@ export default function LegalInfoForm(props: LegalInfoFormProps) {
 		<Form
 			successToast={{
 				title: 'Se han guardado los cambios.',
-				icon: <Done/>,
+				icon: <Done />,
 			}}
-			action={action} staticValues={{
+			action={action}
+			staticValues={{
 				isIncorporated: enabled ? undefined : false,
-			}}>
-			<FormHeader title='Datos legales' description='Información legal de tu organización.'/>
+			}}
+		>
+			<FormHeader
+				title='Datos legales'
+				description='Información legal de tu organización.'
+			/>
 			<Checkbox
 				name='isIncorporated'
 				value='true'
 				validate={validate.isIncorporated}
 				className='mb-4'
-				isSelected={enabled} onChange={isSelected => {
+				isSelected={enabled}
+				onChange={isSelected => {
 					setEnabled(isSelected);
-				}}>
+				}}
+			>
 				La organización esta incorporada legalmente.
 			</Checkbox>
-			<div className='flex gap-2 flex-wrap'>
+			<div className='flex flex-wrap gap-2'>
 				<TextField
 					name='legalConcept'
 					defaultValue={organization.legalConcept ?? undefined}
 					isDisabled={!enabled}
 					label='Razón social'
-					className='grow basis-9/12 mb-4'
+					className='mb-4 grow basis-9/12'
 				/>
 				<Select
 					placeholder='Tipo'
 					name='corporationTypeId'
-					defaultSelectedKey={organization.corporationTypeId ?? undefined}
+					defaultSelectedKey={
+						organization.corporationTypeId ?? undefined
+					}
 					validate={validate.corporationTypeId}
 					isDisabled={!enabled}
 					label='Tipo'
-					className='basis-full md:basis-2/12 mb-4'
-					items={corporationTypes}>
-					{
-						corporationType => (
-							<Item>
-								{corporationType.shortName ?? corporationType.name}
-							</Item>
-						)
-					}
+					className='mb-4 basis-full md:basis-2/12'
+					items={corporationTypes}
+				>
+					{corporationType => (
+						<Item>
+							{corporationType.shortName ?? corporationType.name}
+						</Item>
+					)}
 				</Select>
 			</div>
 
-			<div className='flex-none lg:flex gap-2'>
+			<div className='flex-none gap-2 lg:flex'>
 				<TextField
 					label='RFC'
 					name='rfc'
 					validate={validate.rfc}
 					defaultValue={organization.rfc ?? undefined}
 					isDisabled={!enabled}
-					className='grow basis-8/12 mb-4'
+					className='mb-4 grow basis-8/12'
 				/>
 				<NumberField
 					isDisabled={!enabled}
 					name='incorporationYear'
-					icon={<CalendarMonth
-						viewBox='0 0 24 24'
-						className='h-4 w-4 fill-stone-600 group-focus-within:fill-stone-50'/>}
+					icon={
+						<CalendarMonth
+							viewBox='0 0 24 24'
+							className='size-4 fill-stone-600 group-focus-within:fill-stone-50'
+						/>
+					}
 					validate={validate.incorporationYear}
 					defaultValue={organization.incorporationYear ?? undefined}
 					label='Año de incorporación'
-					className='basis-3/12 mb-4'
+					className='mb-4 basis-3/12'
 					formatOptions={{
 						useGrouping: false,
 					}}
 				/>
-
 			</div>
-			<div className='flex-none lg:flex gap-2'>
+			<div className='flex-none gap-2 lg:flex'>
 				<Select
 					label='Estatus de CLUNI'
 					name='cluniStatus'
 					validate={validate.cluniStatus}
 					defaultSelectedKey={organization.cluniStatus ?? undefined}
 					isDisabled={!enabled}
-					className='grow basis-full sm:basis-5/12 w-full mb-4'
+					className='mb-4 w-full grow basis-full sm:basis-5/12'
 					placeholder='Selecciona un valor'
 					items={clunis}
 				>
-					{
-						cluni => (
-							<Item>
-								{cluni.label}
-							</Item>
-						)
-					}
+					{cluni => <Item>{cluni.label}</Item>}
 				</Select>
 				<Select
 					label='Estatus de donataria autorizada'
-					className='grow basis-full sm:basis-5/12 mb-4 w-full'
+					className='mb-4 w-full grow basis-full sm:basis-5/12'
 					name='donationAuthStatus'
 					validate={validate.donationAuthStatus}
-					defaultSelectedKey={organization.donationAuthStatus ?? undefined}
+					defaultSelectedKey={
+						organization.donationAuthStatus ?? undefined
+					}
 					isDisabled={!enabled}
 					placeholder='Selecciona un valor'
 					items={donationStatuses}
 				>
-					{
-						donationStatus => (
-							<Item>
-								{donationStatus.label}
-							</Item>
-						)
-					}
+					{donationStatus => <Item>{donationStatus.label}</Item>}
 				</Select>
 			</div>
-
 		</Form>
 	);
 }

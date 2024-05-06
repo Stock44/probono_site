@@ -16,9 +16,7 @@ export function preprocessFormValue(value: unknown): unknown {
 		return value;
 	}
 
-	return value.trim() === ''
-		? null
-		: value;
+	return value.trim() === '' ? null : value;
 }
 
 /**
@@ -32,12 +30,14 @@ export const decodeForm = async <Schema extends z.ZodTypeAny>(
 	formDataOrRequest: FormData | Request,
 	schema: Schema,
 ): Promise<z.infer<Schema>> => {
-	const formData
-			= formDataOrRequest instanceof FormData
-				? formDataOrRequest
-				: await formDataOrRequest.clone().formData();
+	const formData =
+		formDataOrRequest instanceof FormData
+			? formDataOrRequest
+			: await formDataOrRequest.clone().formData();
 
-	const data = Object.fromEntries([...formData].map(([key, value]) => [key, preprocessFormValue(value)]));
+	const data = Object.fromEntries(
+		[...formData].map(([key, value]) => [key, preprocessFormValue(value)]),
+	);
 
 	// eslint-disable-next-line @typescript-eslint/no-unsafe-return
 	return schema.parseAsync(data);
@@ -49,22 +49,24 @@ export const decodeForm = async <Schema extends z.ZodTypeAny>(
  * @param {Schema} schema - The schema object to generate validators for.
  * @returns An object containing validators for each property in the schema.
  */
-export function formValidators<Schema extends z.AnyZodObject>(schema: Schema | z.ZodBranded<Schema, any>) {
+export function formValidators<Schema extends z.AnyZodObject>(
+	schema: Schema | z.ZodBranded<Schema, never>,
+) {
 	const schemas = unbrandObjectSchema(schema).shape as {
 		[K in keyof Schema['shape']]: z.ZodSchema;
 	};
 
-	return Object.fromEntries(Object.entries(schemas)
-		.map(
-			([key, validator]) =>
-				[
-					key,
-					(value: unknown) => {
-						const result = validator.safeParse(preprocessFormValue(value));
+	return Object.fromEntries(
+		Object.entries(schemas).map(([key, validator]) => [
+			key,
+			(value: unknown) => {
+				const result = validator.safeParse(preprocessFormValue(value));
 
-						return result.success ? null : result.error.issues.map(issue => issue.message).join(' ');
-					},
-				]),
+				return result.success
+					? null
+					: result.error.issues.map(issue => issue.message).join(' ');
+			},
+		]),
 	) as {
 		[K in keyof Schema['shape']]: (value: unknown) => null | string;
 	};

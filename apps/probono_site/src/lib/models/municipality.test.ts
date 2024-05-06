@@ -19,4 +19,3 @@ test('getMunicipalitiesByState gets state data', async () => {
 	prismaMock.municipality.findMany.mockResolvedValue(municipalities);
 	await expect(getMunicipalitiesByState(1)).resolves.toEqual(municipalities);
 });
-

@@ -83,7 +83,8 @@ export async function consumeUserReauthentication(): Promise<void> {
 		throw new NoReauthenticationRequestedError();
 	}
 
-	const timeDelta = (session.user.auth_time as number) - (reauth.time.getTime() / 1000);
+	const timeDelta =
+		(session.user.auth_time as number) - reauth.time.getTime() / 1000;
 
 	if (timeDelta < 0 || timeDelta > reauthTime) {
 		throw new ReauthenticationExpiredError();

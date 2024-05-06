@@ -1,0 +1,10 @@
+{
+	"name": "tailwind-config-geostats",
+	"main": "tailwind.config.ts",
+	"type": "module",
+	"devDependencies": {
+		"prettier-config-geostats": "*",
+		"tailwind-scrollbar": "^3.1.0",
+		"tailwindcss": "^3.4.3"
+	}
+}

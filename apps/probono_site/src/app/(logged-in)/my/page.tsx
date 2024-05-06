@@ -13,20 +13,23 @@ import {getAddress} from '@/lib/models/address.ts';
 import DashboardTile from '@/app/(logged-in)/my/dashboard-tile.tsx';
 import SectorsList from '@/app/(logged-in)/my/sectors-list.tsx';
 import MembersList from '@/app/(logged-in)/my/members-list.tsx';
-import Paper from '@/components/paper/paper.tsx';
+import Paper from 'geostats-ui/paper/paper.tsx';
 
-const LocationMap = dynamic(async () => import('@/app/(logged-in)/my/location-map.tsx'), {
-	ssr: false,
-	loading() {
-		return (
-			<div className='h-48 animate-pulse bg-stone-800 mb-2'/>
-		);
+const LocationMap = dynamic(
+	async () => import('@/app/(logged-in)/my/location-map.tsx'),
+	{
+		ssr: false,
+		loading() {
+			return <div className='mb-2 h-48 animate-pulse bg-stone-800' />;
+		},
 	},
-});
+);
 
-async function countNullModelAttributes(model: Record<string, unknown> & {
-	_count?: Record<string, number>;
-}): Promise<[number, number]> {
+async function countNullModelAttributes(
+	model: Record<string, unknown> & {
+		_count?: Record<string, number>;
+	},
+): Promise<[number, number]> {
 	let total = 0;
 	let nulls = 0;
 
@@ -65,149 +68,178 @@ export default async function MyStartPage() {
 		},
 	});
 
-	const address = organization.addressId ? await getAddress(organization.addressId) : null;
+	const address = organization.addressId
+		? await getAddress(organization.addressId)
+		: null;
 
-	const [nulls, totals] = await countNullModelAttributes(omit(organization, ['id', 'wantsToIncorporate', 'approved', 'isIncorporated', 'sectors', 'owners', 'workplaceTypeId', 'hasInvestmentAgreement']));
+	const [nulls, totals] = await countNullModelAttributes(
+		omit(organization, [
+			'id',
+			'wantsToIncorporate',
+			'approved',
+			'isIncorporated',
+			'sectors',
+			'owners',
+			'workplaceTypeId',
+			'hasInvestmentAgreement',
+		]),
+	);
 
-	const [purposeNulls, purposeTotals] = await countNullModelAttributes(pick(organization, [
-		'categoryId',
-		'ods',
-		'_count',
-	]));
+	const [purposeNulls, purposeTotals] = await countNullModelAttributes(
+		pick(organization, ['categoryId', 'ods', '_count']),
+	);
 
-	const [generalNulls, generalTotals] = await countNullModelAttributes(pick(organization, [
-		'logoUrl',
-		'name',
-		'foundingYear',
-		'phone',
-		'email',
-		'webpage',
-		'employeeCountCategoryId',
-		'volunteerCountCategoryId',
-		'incomeCategoryId',
-		'facebook',
-		'instagram',
-		'twitter',
-		'tiktok',
-		'youtube',
-		'linkedIn',
-	]));
+	const [generalNulls, generalTotals] = await countNullModelAttributes(
+		pick(organization, [
+			'logoUrl',
+			'name',
+			'foundingYear',
+			'phone',
+			'email',
+			'webpage',
+			'employeeCountCategoryId',
+			'volunteerCountCategoryId',
+			'incomeCategoryId',
+			'facebook',
+			'instagram',
+			'twitter',
+			'tiktok',
+			'youtube',
+			'linkedIn',
+		]),
+	);
 
-	const [legalNulls, legalTotals] = await countNullModelAttributes(pick(organization, [
-		'legalConcept',
-		'corporationTypeId',
-		'rfc',
-		'incorporationYear',
-		'cluniStatus',
-		'donationAuthStatus',
-	]));
+	const [legalNulls, legalTotals] = await countNullModelAttributes(
+		pick(organization, [
+			'legalConcept',
+			'corporationTypeId',
+			'rfc',
+			'incorporationYear',
+			'cluniStatus',
+			'donationAuthStatus',
+		]),
+	);
 
 	return (
 		<main className='w-full'>
-			<div className='text-stone-300 w-full grid gap-4 grid-cols-1 md:grid-cols-3'>
+			<div className='grid w-full grid-cols-1 gap-4 text-stone-300 md:grid-cols-3'>
 				<Paper
 					hoverEffect
-					className='md:col-span-3 flex gap-8 items-center flex-wrap md:flex-nowrap justify-center md:justify-start '>
-					{
-						organization.logoUrl && (
-							<Image src={organization.logoUrl} alt='Organization logo' width={64} height={64}/>
-						)
-					}
-					<h1 className='text-stone-200 text-4xl font-bold md:basis-auto truncate'>
+					className='flex flex-wrap items-center justify-center gap-8 md:col-span-3 md:flex-nowrap md:justify-start '
+				>
+					{organization.logoUrl && (
+						<Image
+							src={organization.logoUrl}
+							alt='Organization logo'
+							width={64}
+							height={64}
+						/>
+					)}
+					<h1 className='truncate text-4xl font-bold text-stone-200 md:basis-auto'>
 						{organization.name}
 					</h1>
-					<div className='grow hidden md:block'/>
-					<div className='basis-5/12 md:basis-auto flex-none'>
-						<h3 className='text-sm text-stone-400 text-center md:text-left'>
+					<div className='hidden grow md:block' />
+					<div className='flex-none basis-5/12 md:basis-auto'>
+						<h3 className='text-center text-sm text-stone-400 md:text-left'>
 							Miembro(s)
 						</h3>
-						<p className='text-2xl font-bold text-center md:text-left'>
+						<p className='text-center text-2xl font-bold md:text-left'>
 							{organization.owners.length}
 						</p>
 					</div>
-					<div className='basis-5/12 md:basis-auto flex-none'>
-						<h3 className='text-sm text-stone-400 text-center md:text-left'>
+					<div className='flex-none basis-5/12 md:basis-auto'>
+						<h3 className='text-center text-sm text-stone-400 md:text-left'>
 							Campos llenados
 						</h3>
-						<p className='text-2xl font-bold text-center md:text-left'>
+						<p className='text-center text-2xl font-bold md:text-left'>
 							{totals - nulls} / {totals}
 						</p>
 					</div>
-					<div className='basis-5/12 md:basis-auto flex-none'>
-						<h3 className='text-sm text-stone-400 text-center md:text-left'>
+					<div className='flex-none basis-5/12 md:basis-auto'>
+						<h3 className='text-center text-sm text-stone-400 md:text-left'>
 							Estatus de aprobación
 						</h3>
-						<p className='text-2xl font-bold text-center md:text-left'>
-							{
-								organization.approved
-									? 'Aprobada'
-									: 'En espera'
-							}
+						<p className='text-center text-2xl font-bold md:text-left'>
+							{organization.approved ? 'Aprobada' : 'En espera'}
 						</p>
 					</div>
-
 				</Paper>
-				<DashboardTile title='Tu información general' href='/my/general' icon={<Feed className='fill-current'/>}>
-					<h3 className='text-xs text-stone-400 text-center md:text-left'>
+				<DashboardTile
+					title='Tu información general'
+					href='/my/general'
+					icon={<Feed className='fill-current' />}
+				>
+					<h3 className='text-center text-xs text-stone-400 md:text-left'>
 						Campos llenados
 					</h3>
-					<p className='text-lg font-bold text-center md:text-left'>
+					<p className='text-center text-lg font-bold md:text-left'>
 						{generalTotals - generalNulls} / {generalTotals}
 					</p>
 				</DashboardTile>
-				<DashboardTile title='Tu propósito' href='/my/purpose' icon={<Psychology className='fill-current'/>}>
-					<h3 className='text-xs text-stone-400 text-center md:text-left'>
+				<DashboardTile
+					title='Tu propósito'
+					href='/my/purpose'
+					icon={<Psychology className='fill-current' />}
+				>
+					<h3 className='text-center text-xs text-stone-400 md:text-left'>
 						Campos llenados
 					</h3>
-					<p className='text-lg font-bold text-center md:text-left'>
+					<p className='text-center text-lg font-bold md:text-left'>
 						{purposeTotals - purposeNulls} / {purposeTotals}
 					</p>
 				</DashboardTile>
-				<DashboardTile title='Tus datos legales' href='/my/legal' icon={<Policy className='fill-current'/>}>
-					<h3 className='text-xs text-stone-400 text-center md:text-left'>
+				<DashboardTile
+					title='Tus datos legales'
+					href='/my/legal'
+					icon={<Policy className='fill-current' />}
+				>
+					<h3 className='text-center text-xs text-stone-400 md:text-left'>
 						Campos llenados
 					</h3>
-					<p className='text-lg font-bold text-center md:text-left'>
+					<p className='text-center text-lg font-bold md:text-left'>
 						{legalTotals - legalNulls} / {legalTotals}
 					</p>
 				</DashboardTile>
-				<DashboardTile title='Tu ubicación' href='/my/location' icon={<LocationOn className='fill-current'/>}>
-					{
-						address
-							? (
-								<>
-									<div className='rounded overflow-hidden'>
-										<LocationMap location={address.location} className='h-48 mb-4'/>
-									</div>
-									<p className='text-base'>
-										{address.street} {address.number}
-									</p>
-								</>
-
-							)
-							: (
-								<p>
-									No llenado
-								</p>
-							)
-					}
+				<DashboardTile
+					title='Tu ubicación'
+					href='/my/location'
+					icon={<LocationOn className='fill-current' />}
+				>
+					{address ? (
+						<>
+							<div className='overflow-hidden rounded'>
+								<LocationMap
+									location={address.location}
+									className='mb-4 h-48'
+								/>
+							</div>
+							<p className='text-base'>
+								{address.street} {address.number}
+							</p>
+						</>
+					) : (
+						<p>No llenado</p>
+					)}
 				</DashboardTile>
-				<DashboardTile title='Tu alcance geográfico' href='/my/sectors' icon={<Map className='fill-current'/>}>
-					{
-						organization.sectors.length === 0
-							? (
-								<h3 className='font-bold md:text-left'>
-									No has agregado sectores.
-								</h3>
-							)
-							: (
-								<SectorsList sectors={organization.sectors}/>
-							)
-					}
-
+				<DashboardTile
+					title='Tu alcance geográfico'
+					href='/my/sectors'
+					icon={<Map className='fill-current' />}
+				>
+					{organization.sectors.length === 0 ? (
+						<h3 className='font-bold md:text-left'>
+							No has agregado sectores.
+						</h3>
+					) : (
+						<SectorsList sectors={organization.sectors} />
+					)}
 				</DashboardTile>
-				<DashboardTile title='Miembros' href='/my/members' icon={<Group className='fill-current'/>}>
-					<MembersList members={organization.owners}/>
+				<DashboardTile
+					title='Miembros'
+					href='/my/members'
+					icon={<Group className='fill-current' />}
+				>
+					<MembersList members={organization.owners} />
 				</DashboardTile>
 			</div>
 		</main>

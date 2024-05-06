@@ -16,7 +16,11 @@ test('getAllEmployeeCountCategories should return corporation types', async () =
 		},
 	];
 
-	prismaMock.employeeCountCategory.findMany.mockResolvedValue(employeeCountCategories);
+	prismaMock.employeeCountCategory.findMany.mockResolvedValue(
+		employeeCountCategories,
+	);
 
-	await expect(getAllEmployeeCountCategories()).resolves.toEqual(employeeCountCategories);
+	await expect(getAllEmployeeCountCategories()).resolves.toEqual(
+		employeeCountCategories,
+	);
 });

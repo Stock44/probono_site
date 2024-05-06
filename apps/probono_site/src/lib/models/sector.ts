@@ -4,7 +4,8 @@ import {type Geometry} from 'geojson';
 import prisma from '@/lib/prisma.ts';
 
 export const getAllSectors = cache(async () => {
-	const sectors: Array<Sector & {geom: Geometry; municipalityName: string}> = await prisma.$queryRaw`select s.id,
+	const sectors: Array<Sector & {geom: Geometry; municipalityName: string}> =
+		await prisma.$queryRaw`select s.id,
                                                                                   s.name,
                                                                                   s."municipalityId",
                                                                                   m."name"                                        as "municipalityName",

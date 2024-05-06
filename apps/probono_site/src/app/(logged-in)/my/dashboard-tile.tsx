@@ -2,7 +2,7 @@ import React, {type ReactNode} from 'react';
 import NavigateNext from '@material-design-icons/svg/round/navigate_next.svg';
 import Link from 'next/link';
 import {cx} from '@/lib/cva.ts';
-import Paper from '@/components/paper/paper.tsx';
+import Paper from 'geostats-ui/paper/paper.tsx';
 
 export type DashboardTileProps = {
 	readonly className?: string;
@@ -13,25 +13,18 @@ export type DashboardTileProps = {
 };
 
 export default function DashboardTile(props: DashboardTileProps) {
-	const {
-		title,
-		className,
-		children,
-		href,
-		icon,
-	} = props;
+	const {title, className, children, href, icon} = props;
 
-	return 	(
+	return (
 		<Paper hoverEffect className={cx('group', className)}>
-			<Link href={href} className='w-full h-full'>
-				<div className='flex justify-between sticky  mb-2'>
-					<h2 className='text-stone-200 font-bold mb-2 flex gap-3'>
+			<Link href={href} className='size-full'>
+				<div className='sticky mb-2 flex  justify-between'>
+					<h2 className='mb-2 flex gap-3 font-bold text-stone-200'>
 						{icon} {title}
 					</h2>
-					<NavigateNext className='fill-current'/>
+					<NavigateNext className='fill-current' />
 				</div>
-				<div
-					className='overflow-auto max-h-64  scrollbar-thin scrollbar-thumb-stone-50 scrollbar-track-transparent scrollbar-thumb-rounded'>
+				<div className='max-h-64 overflow-auto  scrollbar-thin scrollbar-track-transparent scrollbar-thumb-stone-50 scrollbar-thumb-rounded'>
 					{children}
 				</div>
 			</Link>

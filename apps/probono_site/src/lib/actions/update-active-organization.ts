@@ -12,24 +12,26 @@ export default async function updateActiveOrganization(id: number) {
 		return null;
 	}
 
-	const organization = (await prisma.organization.findUnique({
-		where: {
-			id,
-			owners: {
-				some: {
-					id: user.id,
+	const organization =
+		(await prisma.organization.findUnique({
+			where: {
+				id,
+				owners: {
+					some: {
+						id: user.id,
+					},
 				},
 			},
-		},
-	})) ?? (await prisma.organization.findFirstOrThrow({
-		where: {
-			owners: {
-				some: {
-					id: user.id,
+		})) ??
+		(await prisma.organization.findFirstOrThrow({
+			where: {
+				owners: {
+					some: {
+						id: user.id,
+					},
 				},
 			},
-		},
-	}));
+		}));
 
 	cookies().set('organizationId', organization.id.toString());
 	revalidatePath('/my');

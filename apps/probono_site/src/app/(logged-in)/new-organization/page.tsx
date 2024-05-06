@@ -3,7 +3,7 @@ import OrganizationCreationForm from '@/components/organization-creation-form.ts
 import createOrganizationAction from '@/lib/actions/create-organization-action.ts';
 import {getUserFromSession} from '@/lib/models/user.ts';
 import TopBar from '@/components/top-bar.tsx';
-import LinkButton from '@/components/button/link-button.tsx';
+import LinkButton from 'geostats-ui/button/link-button.tsx';
 import Footer from '@/components/footer.tsx';
 
 export default async function NewOrganizationPage() {
@@ -19,16 +19,15 @@ export default async function NewOrganizationPage() {
 				</LinkButton>
 			</TopBar>
 			<div className='min-h-[calc(100vh-theme(spacing.16))]'>
-				<div className='w-fit mx-auto my-auto rounded border-stone-700 md:border p-8 mt-16 md:mt-24'>
-					<h1 className='text-stone-300 text-2xl mb-4'>
+				<div className='m-auto mt-16 w-fit rounded border-stone-700 p-8 md:mt-24 md:border'>
+					<h1 className='mb-4 text-2xl text-stone-300'>
 						Nueva organización
 					</h1>
-					<OrganizationCreationForm action={action}/>
+					<OrganizationCreationForm action={action} />
 				</div>
 			</div>
 
-			<Footer/>
+			<Footer />
 		</div>
-
 	);
 }

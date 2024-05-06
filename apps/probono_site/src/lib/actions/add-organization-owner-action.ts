@@ -3,7 +3,7 @@
 import {revalidatePath} from 'next/cache';
 import {render} from '@react-email/render';
 import {createElement} from 'react';
-import {type FormState} from '@/components/form/form.tsx';
+import {type FormState} from 'geostats-ui/form/form.tsx';
 import {
 	type OrganizationOwnerAddition,
 	organizationOwnerAdditionSchema,
@@ -20,7 +20,11 @@ import {
 	createOrganizationInvitation,
 } from '@/lib/models/organization-invitation.ts';
 
-export default async function addOrganizationOwnerAction(organizationId: number, state: FormState<OrganizationOwnerAddition>, data: FormData): Promise<FormState<OrganizationOwnerAddition>> {
+export default async function addOrganizationOwnerAction(
+	organizationId: number,
+	state: FormState<OrganizationOwnerAddition>,
+	data: FormData,
+): Promise<FormState<OrganizationOwnerAddition>> {
 	const user = await getUserFromSession();
 
 	if (!user) {
@@ -40,7 +44,10 @@ export default async function addOrganizationOwnerAction(organizationId: number,
 	}
 
 	try {
-		const {email: recipient} = await decodeForm(data, organizationOwnerAdditionSchema);
+		const {email: recipient} = await decodeForm(
+			data,
+			organizationOwnerAdditionSchema,
+		);
 
 		const recipientUser = await prisma.user.findUnique({
 			where: {
@@ -62,19 +69,33 @@ export default async function addOrganizationOwnerAction(organizationId: number,
 				},
 			});
 		} else {
-			const {email: recipient} = await decodeForm(data, organizationOwnerAdditionSchema);
+			const {email: recipient} = await decodeForm(
+				data,
+				organizationOwnerAdditionSchema,
+			);
 
-			if (await activeOrganizationInvitationExists(recipient, organizationId)) {
+			if (
+				await activeOrganizationInvitationExists(
+					recipient,
+					organizationId,
+				)
+			) {
 				return {
 					...state,
 					success: false,
 					fieldErrors: {
-						email: ['Ya se ha enviado una invitación a este usuario.'],
+						email: [
+							'Ya se ha enviado una invitación a este usuario.',
+						],
 					},
 				};
 			}
 
-			const invite = await createOrganizationInvitation(recipient, organizationId, user.id);
+			const invite = await createOrganizationInvitation(
+				recipient,
+				organizationId,
+				user.id,
+			);
 
 			const organization = await prisma.organization.findUniqueOrThrow({
 				where: {
@@ -82,13 +103,15 @@ export default async function addOrganizationOwnerAction(organizationId: number,
 				},
 			});
 
-			const html = render(createElement(OrganizationInvitationEmail, {
-				organizationLogoUrl: organization.logoUrl ?? '',
-				organizationName: organization.name,
-				senderEmail: user.email,
-				senderName: `${user.givenName} ${user.familyName}`,
-				inviteId: invite.id,
-			}));
+			const html = render(
+				createElement(OrganizationInvitationEmail, {
+					organizationLogoUrl: organization.logoUrl ?? '',
+					organizationName: organization.name,
+					senderEmail: user.email,
+					senderName: `${user.givenName} ${user.familyName}`,
+					inviteId: invite.id,
+				}),
+			);
 
 			try {
 				await email(recipient, {

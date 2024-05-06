@@ -1,5 +1,8 @@
 import React from 'react';
-import {getUserFromSession, getUsersActiveOrganization} from '@/lib/models/user.ts';
+import {
+	getUserFromSession,
+	getUsersActiveOrganization,
+} from '@/lib/models/user.ts';
 import {getOrganizationOwners} from '@/lib/models/organization.ts';
 import OwnersList from '@/app/(logged-in)/my/members/owners-list.tsx';
 import addOrganizationOwnerAction from '@/lib/actions/add-organization-owner-action.ts';
@@ -15,38 +18,56 @@ export default async function MembersPage() {
 
 	const organization = await getUsersActiveOrganization();
 
-	const activeInvites = await getActiveOrganizationInvitations(organization.id);
+	const activeInvites = await getActiveOrganizationInvitations(
+		organization.id,
+	);
 
-	const expiredInvites = await getExpiredOrganizationInvitations(organization.id);
+	const expiredInvites = await getExpiredOrganizationInvitations(
+		organization.id,
+	);
 
 	const owners = await getOrganizationOwners(organization.id);
 
 	const ownersWithoutUser = owners.filter(owner => owner.id !== user.id);
 
-	const addOwnerAction = addOrganizationOwnerAction.bind(null, organization.id);
+	const addOwnerAction = addOrganizationOwnerAction.bind(
+		null,
+		organization.id,
+	);
 
-	const removeOwnersAction = removeOrganizationOwnersAction.bind(null, organization.id);
+	const removeOwnersAction = removeOrganizationOwnersAction.bind(
+		null,
+		organization.id,
+	);
 
 	return (
 		<main className='w-full'>
-			<h1 className='text-stone-200 text-4xl mb-2'>
+			<h1 className='mb-2 text-4xl text-stone-200'>
 				Miembros de la organización
 			</h1>
-			<p className='text-stone-300 mb-4'>
-				Aquí puedes controlar quién puede acceder a y modificar los datos de tu organización
+			<p className='mb-4 text-stone-300'>
+				Aquí puedes controlar quién puede acceder a y modificar los
+				datos de tu organización
 			</p>
-			<OwnersList currentUser={user} owners={ownersWithoutUser} addOwnerAction={addOwnerAction} removeOwnersAction={removeOwnersAction}/>
+			<OwnersList
+				currentUser={user}
+				owners={ownersWithoutUser}
+				addOwnerAction={addOwnerAction}
+				removeOwnersAction={removeOwnersAction}
+			/>
 
-			{
-				expiredInvites.length + activeInvites.length > 0 && (
-					<>
-						<h2 className='text-stone-200 text-2xl mt-8 mb-4'>
-							Invitaciones enviadas
-						</h2>
-						<InvitationList className='mb-4' activeInvites={activeInvites} expiredInvites={expiredInvites}/>
-					</>
-				)
-			}
+			{expiredInvites.length + activeInvites.length > 0 && (
+				<>
+					<h2 className='mb-4 mt-8 text-2xl text-stone-200'>
+						Invitaciones enviadas
+					</h2>
+					<InvitationList
+						className='mb-4'
+						activeInvites={activeInvites}
+						expiredInvites={expiredInvites}
+					/>
+				</>
+			)}
 		</main>
 	);
 }

@@ -21,8 +21,7 @@ test('should fetch all sectors', async () => {
 			name: 'test-name',
 			municipalityId: 'test-municipality-id',
 			municipalityName: 'test-municipality-name',
-			geom: {type: 'Point', coordinates: [0, 0],
-			},
+			geom: {type: 'Point', coordinates: [0, 0]},
 		},
 	];
 

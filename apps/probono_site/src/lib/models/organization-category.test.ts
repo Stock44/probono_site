@@ -21,6 +21,8 @@ describe('getAllOrganizationCategories', () => {
 
 		prismaMock.organizationCategory.findMany.mockResolvedValue(categories);
 
-		await expect(getAllOrganizationCategories()).resolves.toEqual(categories);
+		await expect(getAllOrganizationCategories()).resolves.toEqual(
+			categories,
+		);
 	});
 });

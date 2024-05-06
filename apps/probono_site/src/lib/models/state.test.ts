@@ -12,7 +12,9 @@ test('should call prisma.state.findMany with correct params', async () => {
 });
 
 test('should throw an error if prisma.state.findMany fails', async () => {
-	prismaMock.state.findMany.mockRejectedValueOnce(new Error('Database Error'));
+	prismaMock.state.findMany.mockRejectedValueOnce(
+		new Error('Database Error'),
+	);
 
 	await expect(getAllStates()).rejects.toThrow('Database Error');
 });

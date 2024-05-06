@@ -15,16 +15,18 @@ const transport = nodemailer.createTransport({
 type EmailContent = {
 	subject: string;
 } & (
-	{
-		text: string;
-	}
-	|
-	{
-		html: string;
-	}
+	| {
+			text: string;
+	  }
+	| {
+			html: string;
+	  }
 );
 
-export default async function email(to: string | string[], content: EmailContent) {
+export default async function email(
+	to: string | string[],
+	content: EmailContent,
+) {
 	await transport.sendMail({
 		...content,
 		to: typeof to === 'string' ? to : to.join(', '),

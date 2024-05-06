@@ -11,10 +11,16 @@ describe('password update schema', () => {
 		expect(() => passwordUpdateSchema.parse(validPassword)).not.toThrow();
 	});
 	test('parsing incomplete password update should throw 1', () => {
-		expect(() => passwordUpdateSchema.parse(omit(validPassword, ['currentPassword']))).toThrow(ZodError);
+		expect(() =>
+			passwordUpdateSchema.parse(
+				omit(validPassword, ['currentPassword']),
+			),
+		).toThrow(ZodError);
 	});
 	test('parsing incomplete password update should throw 2', () => {
-		expect(() => passwordUpdateSchema.parse(omit(validPassword, ['password']))).toThrow(ZodError);
+		expect(() =>
+			passwordUpdateSchema.parse(omit(validPassword, ['password'])),
+		).toThrow(ZodError);
 	});
 	test('parsing empty object should throw', () => {
 		expect(() => passwordUpdateSchema.parse({})).toThrow(ZodError);

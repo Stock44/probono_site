@@ -42,8 +42,10 @@ describe('updateActiveOrganization function', () => {
 
 		// @ts-expect-error not needed for test
 		mocked(getUserFromSession).mockResolvedValueOnce({id: 32});
-		// @ts-expect-error not needed for test
-		prismaMock.organization.findUnique.mockResolvedValueOnce(mockOrganization);
+		prismaMock.organization.findUnique.mockResolvedValueOnce(
+			// @ts-expect-error not needed for test
+			mockOrganization,
+		);
 
 		await updateActiveOrganization(42);
 
@@ -53,14 +55,15 @@ describe('updateActiveOrganization function', () => {
 	});
 
 	it('Finds the first organization and sets id in cookies when provided organization was not found', async () => {
-		const mockSession = {user: {sub: 'mockSub'}};
 		const mockOrganization = {id: 5};
 
 		// @ts-expect-error not needed for test
 		mocked(getUserFromSession).mockResolvedValueOnce({id: 32});
 		prismaMock.organization.findUnique.mockResolvedValueOnce(null);
-		// @ts-expect-error not needed for test
-		prismaMock.organization.findFirstOrThrow.mockResolvedValueOnce(mockOrganization);
+		prismaMock.organization.findFirstOrThrow.mockResolvedValueOnce(
+			// @ts-expect-error not needed for test
+			mockOrganization,
+		);
 
 		await updateActiveOrganization(32);
 

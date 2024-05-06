@@ -13,9 +13,11 @@ export const userDeleteSchema = z.object({
 	password: z.string(),
 });
 
-export const userUpdateSchema = userInitSchema.extend({
-	email: z.string().email(),
-}).partial();
+export const userUpdateSchema = userInitSchema
+	.extend({
+		email: z.string().email(),
+	})
+	.partial();
 
 export type UserInit = z.infer<typeof userInitSchema>;
 

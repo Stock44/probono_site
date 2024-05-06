@@ -6,22 +6,22 @@ import z from 'zod';
  * @param {unknown} arg - The input value to be converted.
  * @return {unknown} - The converted value. If the input is not a string or if it is not empty, the input value is returned as is. If the input is an empty string, null is returned.
  */
-export function emptyStringToNull(arg: unknown) {
-	if (typeof arg !== 'string') {
-		return arg;
+export function emptyStringToNull(argument: unknown) {
+	if (typeof argument !== 'string') {
+		return argument;
 	}
 
-	if (arg.trim() === '') {
+	if (argument.trim() === '') {
 		return null;
 	}
 
-	return arg;
+	return argument;
 }
 
 export const phoneSchema = z
 	.string()
-	.regex(/\+?[()+\d ]+(x\d+)?/g, 'Numero inválido')
-	.transform(value => value.replaceAll(/[^+\dx]/g, ''));
+	.regex(/\+?[\d ()+]+(x\d+)?/g, 'Numero inválido')
+	.transform(value => value.replaceAll(/[^\d+x]/g, ''));
 
 export const emptyStringToNullSchema = z.string().transform(emptyStringToNull);
 
@@ -32,25 +32,16 @@ export const emptyStringToNullSchema = z.string().transform(emptyStringToNull);
  *
  * @return {function} - A Zod refinement function that takes a URL and a Zod RefinementCtx and refines the URL hostname.
  */
-
-export function getSubstringAfterAt(string_: String) {
-	const atIndex = string_.indexOf('@');
-
-	if (atIndex === -1) {
-		return '';
-	}
-
-	return string_.slice(Math.max(0, atIndex));
-}
-
-export function urlHostnameRefinement(hostname: string, extension?: string) {
-	const hostnames = new Set([`${hostname}.${extension ?? 'com'}`, `www.${hostname}.${extension ?? 'com'}`]);
-	return (url: string, ctx: z.RefinementCtx) => {
+export function urlHostnameRefinement(hostname: string) {
+	const hostnames = new Set([`${hostname}.com`, `www.${hostname}.com`]);
+	return (url: string, context: z.RefinementCtx) => {
 		try {
-			const urlObject = url.startsWith('https://') ? new URL(url) : new URL(`https://${url}`);
+			const urlObject = url.startsWith('https://')
+				? new URL(url)
+				: new URL(`https://${url}`);
 
 			if (!hostnames.has(urlObject.hostname)) {
-				ctx.addIssue({
+				context.addIssue({
 					code: z.ZodIssueCode.invalid_string,
 					validation: 'url',
 					message: 'Dirección inválida',
@@ -70,7 +61,7 @@ export function urlHostnameRefinement(hostname: string, extension?: string) {
 
 			return socialId;
 		} catch {
-			ctx.addIssue({
+			context.addIssue({
 				code: z.ZodIssueCode.invalid_string,
 				validation: 'url',
 				message: 'Dirección inválida',
@@ -83,8 +74,10 @@ export function formInputSchema<Schema extends z.ZodTypeAny>(schema: Schema) {
 	return z.preprocess(emptyStringToNull, schema);
 }
 
-export const boolean = z.literal('')
-	.transform(() => false).or(z.coerce.boolean());
+export const boolean = z
+	.literal('')
+	.transform(() => false)
+	.or(z.coerce.boolean());
 
 /**
  * Parse a JSON string into an object of a given schema.
@@ -97,16 +90,20 @@ export const boolean = z.literal('')
  * @returns {Schema} - The parsed object
  */
 export function json<Schema extends z.ZodTypeAny>(schema: Schema) {
-	return z.string().transform((value, ctx) => {
-		try {
-			return JSON.parse(value) as unknown;
-		} catch {
-			ctx.addIssue({
-				code: z.ZodIssueCode.custom,
-			});
-			return z.NEVER;
-		}
-	}).pipe(schema).or(schema);
+	return z
+		.string()
+		.transform((value, context) => {
+			try {
+				return JSON.parse(value) as unknown;
+			} catch {
+				context.addIssue({
+					code: z.ZodIssueCode.custom,
+				});
+				return z.NEVER;
+			}
+		})
+		.pipe(schema)
+		.or(schema);
 }
 
 /**
@@ -116,7 +113,10 @@ export function json<Schema extends z.ZodTypeAny>(schema: Schema) {
  *
  * @returns {Schema} - The unbranded Zod object schema.
  */
-export function unbrandObjectSchema<Schema extends z.AnyZodObject, Brand extends string>(schema: Schema | z.ZodBranded<Schema, Brand>): Schema {
+export function unbrandObjectSchema<
+	Schema extends z.AnyZodObject,
+	Brand extends string,
+>(schema: Schema | z.ZodBranded<Schema, Brand>): Schema {
 	if ('unwrap' in schema) {
 		return schema.unwrap();
 	}

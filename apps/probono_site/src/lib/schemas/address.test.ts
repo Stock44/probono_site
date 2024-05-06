@@ -14,22 +14,34 @@ describe('address schema', () => {
 		expect(() => addressInitSchema.parse(validAddress)).not.toThrow();
 	});
 	test('parsing incomplete address should throw 1', () => {
-		expect(() => addressInitSchema.parse(omit(validAddress, ['street', 'postalCode']))).toThrow(ZodError);
+		expect(() =>
+			addressInitSchema.parse(
+				omit(validAddress, ['street', 'postalCode']),
+			),
+		).toThrow(ZodError);
 	});
 	test('parsing incomplete address should throw 2', () => {
-		expect(() => addressInitSchema.parse(omit(validAddress, ['location', 'number']))).toThrow(ZodError);
+		expect(() =>
+			addressInitSchema.parse(omit(validAddress, ['location', 'number'])),
+		).toThrow(ZodError);
 	});
 	test('parsing incomplete address should throw 3', () => {
-		expect(() => addressInitSchema.parse(omit(validAddress, ['postalCode', 'municipalityId']))).toThrow(ZodError);
+		expect(() =>
+			addressInitSchema.parse(
+				omit(validAddress, ['postalCode', 'municipalityId']),
+			),
+		).toThrow(ZodError);
 	});
 
 	test('parsing invalid address should throw', () => {
-		expect(() => addressInitSchema.parse({
-			street: 2,
-			postalCode: false,
-			number: 'abc',
-			location: 2,
-			municipalityId: 'pop',
-		})).toThrow(ZodError);
+		expect(() =>
+			addressInitSchema.parse({
+				street: 2,
+				postalCode: false,
+				number: 'abc',
+				location: 2,
+				municipalityId: 'pop',
+			}),
+		).toThrow(ZodError);
 	});
 });

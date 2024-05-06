@@ -4,7 +4,7 @@ import {type Set} from 'immutable';
 import {type Geometry} from 'geojson';
 import {type Sector} from '@prisma/client';
 import {cx} from '@/lib/cva.ts';
-import GeostatsTileLayer from '@/components/geostats-tile-layer.tsx';
+import GeostatsTileLayer from 'geostats-ui/geostats-tile-layer.tsx';
 
 type SectorProps = {
 	readonly isSelected: boolean;
@@ -31,10 +31,9 @@ function SectorDisplay(props: SectorProps) {
 				stroke: true,
 				weight: 1,
 				color: '#78716c',
-			}}>
-			<Tooltip>
-				{sector.name}
-			</Tooltip>
+			}}
+		>
+			<Tooltip>{sector.name}</Tooltip>
 		</GeoJSON>
 	);
 }
@@ -52,22 +51,32 @@ export default function SectorsMap(props: SectorsMapProps) {
 	const time = useMemo(() => Date.now(), []);
 
 	return (
-		<MapContainer key={time} scrollWheelZoom worldCopyJump center={[25.68, -100.31]} zoom={11} className={cx('rounded border border-stone-800 glow-2xl', className)}>
-			<GeostatsTileLayer/>
-			{
-				sectors.map(sector => (
-					<SectorDisplay
-						key={sector.id}
-						sector={sector} isSelected={selectedKeys.has(sector.id)} onIsSelectedChange={isSelected => {
-							if (isSelected) {
-								setSelectedKeys(selectedKeys.add(sector.id));
-							} else {
-								setSelectedKeys(selectedKeys.remove(sector.id));
-							}
-						}}/>
-				))
-			}
-
+		<MapContainer
+			key={time}
+			scrollWheelZoom
+			worldCopyJump
+			center={[25.68, -100.31]}
+			zoom={11}
+			className={cx(
+				'rounded border border-stone-800 glow-2xl',
+				className,
+			)}
+		>
+			<GeostatsTileLayer />
+			{sectors.map(sector => (
+				<SectorDisplay
+					key={sector.id}
+					sector={sector}
+					isSelected={selectedKeys.has(sector.id)}
+					onIsSelectedChange={isSelected => {
+						if (isSelected) {
+							setSelectedKeys(selectedKeys.add(sector.id));
+						} else {
+							setSelectedKeys(selectedKeys.remove(sector.id));
+						}
+					}}
+				/>
+			))}
 		</MapContainer>
 	);
 }

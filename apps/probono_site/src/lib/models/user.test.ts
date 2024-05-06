@@ -4,7 +4,6 @@
 import {getSession} from '@auth0/nextjs-auth0';
 import {mocked} from 'jest-mock';
 import {cookies} from 'next/headers';
-import {type User} from '@prisma/client';
 import {NextResponse, NextRequest} from 'next/server';
 import {management} from '@/lib/auth0.ts';
 import {prismaMock} from '@/lib/singleton.ts';
@@ -12,9 +11,14 @@ import {
 	createUser,
 	updateUser,
 	getUsersActiveOrganization,
-	deleteUser, getUserFromSession, getCurrentUserOrganizations,
+	deleteUser,
+	getUserFromSession,
+	getCurrentUserOrganizations,
 } from '@/lib/models/user.ts';
-import {deleteOrganizations, getUsersDependantOrganizations} from '@/lib/models/organization.ts';
+import {
+	deleteOrganizations,
+	getUsersDependantOrganizations,
+} from '@/lib/models/organization.ts';
 import prisma from '@/lib/prisma.ts';
 
 jest.mock('@auth0/nextjs-auth0'); // Replace with your actual session management module
@@ -42,12 +46,14 @@ describe('createUser', () => {
 			},
 		});
 
-		prismaMock.$transaction.mockImplementation(async callback => callback({
-			// @ts-expect-error not required for test
-			user: {
-				create: jest.fn().mockResolvedValue(expectedUser),
-			},
-		}));
+		prismaMock.$transaction.mockImplementation(async callback =>
+			callback({
+				// @ts-expect-error not required for test
+				user: {
+					create: jest.fn().mockResolvedValue(expectedUser),
+				},
+			}),
+		);
 
 		// @ts-expect-error not required for test
 		const result = await createUser(authId, init);
@@ -62,14 +68,20 @@ describe('updateUser', () => {
 	test('should update a user in the database and in the auth service', async () => {
 		const authId = 'test authId';
 		const id = 1;
-		const update = {email: 'updated@test.com', password: 'updated password'};
+		const update = {
+			email: 'updated@test.com',
+			password: 'updated password',
+		};
 
 		// @ts-expect-error not required for test
 		prismaMock.user.findUniqueOrThrow.mockResolvedValue({authId});
 
 		await updateUser(id, update);
 
-		expect(management.users.update).toHaveBeenCalledWith({id: authId}, {email: update.email});
+		expect(management.users.update).toHaveBeenCalledWith(
+			{id: authId},
+			{email: update.email},
+		);
 		expect(prismaMock.$transaction).toHaveBeenCalledTimes(1);
 	});
 });
@@ -91,7 +103,9 @@ describe('getUsersActiveOrganiation', () => {
 	it('throws an error if not authenticated', async () => {
 		(getSession as jest.Mock).mockResolvedValueOnce(null);
 
-		await expect(getUsersActiveOrganization()).rejects.toThrow('Not authenticated');
+		await expect(getUsersActiveOrganization()).rejects.toThrow(
+			'Not authenticated',
+		);
 	});
 
 	it('returns an existing organization if organizationId is set', async () => {
@@ -130,8 +144,10 @@ describe('getUsersActiveOrganiation', () => {
 		// Mock session return object
 		(getSession as jest.Mock).mockResolvedValueOnce(sessionData);
 		get.mockReturnValueOnce(null);
-		// @ts-expect-error not needed for test
-		prismaMock.organization.findFirstOrThrow.mockResolvedValueOnce(organization);
+		prismaMock.organization.findFirstOrThrow.mockResolvedValueOnce(
+			// @ts-expect-error not needed for test
+			organization,
+		);
 
 		const result = await getUsersActiveOrganization();
 
@@ -150,8 +166,10 @@ describe('getUsersActiveOrganiation', () => {
 
 		(getSession as jest.Mock).mockResolvedValueOnce(sessionData);
 		get.mockReturnValueOnce({value: '2'});
-		// @ts-expect-error not needed for test
-		prismaMock.organization.findFirstOrThrow.mockResolvedValueOnce(organization);
+		prismaMock.organization.findFirstOrThrow.mockResolvedValueOnce(
+			// @ts-expect-error not needed for test
+			organization,
+		);
 
 		const result = await getUsersActiveOrganization();
 
@@ -171,8 +189,10 @@ describe('getUsersActiveOrganiation', () => {
 
 		(getSession as jest.Mock).mockResolvedValueOnce(sessionData);
 		get.mockReturnValueOnce(null);
-		// @ts-expect-error not needed for test
-		prismaMock.organization.findFirstOrThrow.mockResolvedValueOnce(organization);
+		prismaMock.organization.findFirstOrThrow.mockResolvedValueOnce(
+			// @ts-expect-error not needed for test
+			organization,
+		);
 
 		const result = await getUsersActiveOrganization();
 
@@ -226,8 +246,12 @@ describe('deleteUser function', () => {
 	});
 
 	it('deletes user and organizations when user is the only owner', async () => {
-		// @ts-expect-error not needed for test
-		mocked(getUsersDependantOrganizations).mockResolvedValue([{id: 2, _count: {owners: 1}}, {id: 3, _count: {owners: 1}}]);
+		mocked(getUsersDependantOrganizations).mockResolvedValue([
+			// @ts-expect-error not needed for test
+			{id: 2, _count: {owners: 1}},
+			// @ts-expect-error not needed for test
+			{id: 3, _count: {owners: 1}},
+		]);
 
 		await deleteUser(userId);
 
@@ -241,8 +265,10 @@ describe('deleteUser function', () => {
 	});
 
 	it('does not delete organizations when user is not the only owner', async () => {
-		// @ts-expect-error not needed for test
-		mocked(getUsersDependantOrganizations).mockResolvedValue([{id: 3, _count: {owners: 1}}]);
+		mocked(getUsersDependantOrganizations).mockResolvedValue([
+			// @ts-expect-error not needed for test
+			{id: 3, _count: {owners: 1}},
+		]);
 
 		await deleteUser(userId);
 
@@ -259,6 +285,7 @@ describe('deleteUser function', () => {
 });
 
 describe('getUserFromSession', () => {
+	const sub = 'auth0|userId123456';
 	beforeEach(() => {
 		jest.clearAllMocks();
 	});
@@ -272,12 +299,12 @@ describe('getUserFromSession', () => {
 	test('returns user when session exists', async () => {
 		const sessionData = {
 			user: {
-				sub: 'auth0|userId123456',
+				sub,
 			},
 		};
 		const userData = {
 			id: 2,
-			authId: 'auth0|userId123456',
+			authId: sub,
 			_count: {
 				organizations: 5,
 			},
@@ -303,12 +330,12 @@ describe('getUserFromSession', () => {
 	test('returns user when passing NextRequest and NextResponse', async () => {
 		const sessionData = {
 			user: {
-				sub: 'auth0|userId123456',
+				sub,
 			},
 		};
 		const userData = {
 			id: 921,
-			authId: 'auth0|userId123456',
+			authId: sub,
 			_count: {
 				organizations: 5,
 			},
@@ -351,7 +378,9 @@ describe('getCurrentUserOrganizations', () => {
 		prismaMock.user.findUniqueOrThrow.mockImplementation(() => {
 			throw new Error('User not found');
 		});
-		await expect(getCurrentUserOrganizations()).rejects.toThrow('User not found');
+		await expect(getCurrentUserOrganizations()).rejects.toThrow(
+			'User not found',
+		);
 	});
 
 	it('returns organizations if the session and user exist', async () => {
@@ -359,14 +388,30 @@ describe('getCurrentUserOrganizations', () => {
 		// @ts-expect-error correct typings not needed for test
 		prismaMock.user.findUniqueOrThrow.mockReturnValue({
 			organizations: jest.fn().mockResolvedValueOnce([
-				{id: 'org1', name: 'Org 1', logoUrl: 'http://example.com/logo1.png'},
-				{id: 'org2', name: 'Org 2', logoUrl: 'http://example.com/logo2.png'},
+				{
+					id: 'org1',
+					name: 'Org 1',
+					logoUrl: 'http://example.com/logo1.png',
+				},
+				{
+					id: 'org2',
+					name: 'Org 2',
+					logoUrl: 'http://example.com/logo2.png',
+				},
 			]),
 		});
 		const orgs = await getCurrentUserOrganizations();
 		expect(orgs).toEqual([
-			{id: 'org1', name: 'Org 1', logoUrl: 'http://example.com/logo1.png'},
-			{id: 'org2', name: 'Org 2', logoUrl: 'http://example.com/logo2.png'},
+			{
+				id: 'org1',
+				name: 'Org 1',
+				logoUrl: 'http://example.com/logo1.png',
+			},
+			{
+				id: 'org2',
+				name: 'Org 2',
+				logoUrl: 'http://example.com/logo2.png',
+			},
 		]);
 	});
 });

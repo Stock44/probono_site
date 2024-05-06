@@ -4,9 +4,9 @@ import GeoStatsLogoMark from 'public/logos/geostats-logomark.png';
 import labnl from '@/app/(main)/labnl_vignette.webp';
 import labnl_mobile from '@/app/(main)/labnl_vignette_mobile.webp';
 import map from '@/app/(main)/map.jpg';
-import Dropdown from '@/components/dropdown.tsx';
-import ALinkButton from '@/components/button/a-link-button.tsx';
-import Paper from '@/components/paper/paper.tsx';
+import Dropdown from 'geostats-ui/dropdown.tsx';
+import ALinkButton from 'geostats-ui/button/a-link-button.tsx';
+import Paper from 'geostats-ui/paper/paper.tsx';
 
 export default function Home() {
 	const common = {alt: 'LabNL', sizes: '100vw'};
@@ -29,111 +29,133 @@ export default function Home() {
 
 	return (
 		<div className='w-full'>
-			<div className='relative flex flex-col justify-center w-full mx-auto mb-48'>
-				<picture
-					className='min-h-[500px] h-[500px] lg:min-h-[800px] lg:h-[800px] overflow-hidden w-auto flex justify-center'>
-					<source media='(min-width: 1024px)' srcSet={desktop}/>
-					<source srcSet={mobile}/>
-					<img {...rest} className='h-full w-auto max-w-none'/>
+			<div className='relative mx-auto mb-48 flex w-full flex-col justify-center'>
+				<picture className='flex h-[500px] min-h-[500px] w-auto justify-center overflow-hidden lg:h-[800px] lg:min-h-[800px]'>
+					<source media='(min-width: 1024px)' srcSet={desktop} />
+					<source srcSet={mobile} />
+					<img {...rest} className='h-full w-auto max-w-none' />
 				</picture>
 
-				<div
-					className='lg:absolute lg:top-0 lg:bottom-0 lg:left-0 lg:right-0 -mt-16 lg:mt-0 text-stone-50  lg:z-10 flex flex-col justify-end lg:justify-center px-4 text-center lg:text-left'>
-					<div className='w-full max-w-7xl mx-auto'>
-						<div className='lg:ml-32 max-w-xl mx-auto lg:mx-0'>
-							<h1 className='font-bold text-3xl lg:text-5xl mb-8 mx-auto lg:mx-0'>Empodera a tu organización Pro
-								Bono</h1>
-							<p className='text-base mb-8 mx-auto lg:mx-0'>Únete a nuestra plataforma y muestra el impacto que tiene tu
-								organización.</p>
+				<div className='-mt-16 flex flex-col justify-end px-4 text-center text-stone-50 lg:absolute  lg:inset-0 lg:z-10 lg:mt-0 lg:justify-center lg:text-left'>
+					<div className='mx-auto w-full max-w-7xl'>
+						<div className='mx-auto max-w-xl lg:mx-0 lg:ml-32'>
+							<h1 className='mx-auto mb-8 text-3xl font-bold lg:mx-0 lg:text-5xl'>
+								Empodera a tu organización Pro Bono
+							</h1>
+							<p className='mx-auto mb-8 text-base lg:mx-0'>
+								Únete a nuestra plataforma y muestra el impacto
+								que tiene tu organización.
+							</p>
 							<ALinkButton
-								href='/api/auth/signup?returnTo=/my' className='mx-auto lg:mx-0  glow shadow-stone-50/20'
-								size='lg'>
+								href='/api/auth/signup?returnTo=/my'
+								className='mx-auto shadow-stone-50/20  glow lg:mx-0'
+								size='lg'
+							>
 								Regístrate ahora
 							</ALinkButton>
 						</div>
-
 					</div>
-
 				</div>
 			</div>
-			<div className='max-w-7xl mx-auto text-stone-300 px-2'>
+			<div className='mx-auto max-w-7xl px-2 text-stone-300'>
 				<Paper className='mx-auto mb-48 w-full' spacing='xl'>
-					<Image src={GeoStatsLogoMark} alt='GeoStats Logomark' width={96} height={96} className='mx-auto mb-8'/>
-					<p className='w-fit text-center mx-auto mb-8'>
-						Nosotros somos <span className='font-bold'>[GeoStats]</span>.
+					<Image
+						src={GeoStatsLogoMark}
+						alt='GeoStats Logomark'
+						width={96}
+						height={96}
+						className='mx-auto mb-8'
+					/>
+					<p className='mx-auto mb-8 w-fit text-center'>
+						Nosotros somos{' '}
+						<span className='font-bold'>[GeoStats]</span>.
 					</p>
-					<p className='max-w-2xl w-fit text-center mx-auto mb-8'>
-						Somos un grupo de jóvenes mexicanos con interés de utilizar la cartografía social para construir
-						conocimiento de forma colaborativa.
-						Buscamos estandarizar y recopilar datos de las organizaciones Pro Bono para democratizar la generación y el
-						acceso a la información.
+					<p className='mx-auto mb-8 w-fit max-w-2xl text-center'>
+						Somos un grupo de jóvenes mexicanos con interés de
+						utilizar la cartografía social para construir
+						conocimiento de forma colaborativa. Buscamos
+						estandarizar y recopilar datos de las organizaciones Pro
+						Bono para democratizar la generación y el acceso a la
+						información.
 					</p>
-					<ALinkButton href='https://geostatsmty.com/' variant='outlined' size='lg' className='mx-auto'>
+					<ALinkButton
+						href='https://geostatsmty.com/'
+						variant='outlined'
+						size='lg'
+						className='mx-auto'
+					>
 						Conocer más
 					</ALinkButton>
 				</Paper>
 
-				<h2 className='text-stone-50 mx-auto w-fit text-center font-bold text-3xl mb-12'>
+				<h2 className='mx-auto mb-12 w-fit text-center text-3xl font-bold text-stone-50'>
 					¿Cómo funciona?
 				</h2>
-				<p className='w-fit text-center mx-auto mb-12'>
-					En nuestra plataforma, las organizaciones Pro Bono de Nuevo Léon pueden registrarse y destacar su labor de
-					manera sencilla.
+				<p className='mx-auto mb-12 w-fit text-center'>
+					En nuestra plataforma, las organizaciones Pro Bono de Nuevo
+					Léon pueden registrarse y destacar su labor de manera
+					sencilla.
 				</p>
-				<div className='text-stone-300 grid grid-cols-1 lg:grid-cols-3 gap-4 mb-48'>
+				<div className='mb-48 grid grid-cols-1 gap-4 text-stone-300 lg:grid-cols-3'>
 					<Paper hoverEffect className='flex items-center gap-2'>
-						<p className='font-bold text-2xl'>
-							1.
-						</p>
+						<p className='text-2xl font-bold'>1.</p>
+						<h3>Registrate en la plataforma creando una cuenta.</h3>
+					</Paper>
+					<Paper hoverEffect className='flex items-center gap-2'>
+						<p className='text-2xl font-bold'>2.</p>
 						<h3>
-							Registrate en la plataforma creando una cuenta.
+							Proporciona información básica sobre la
+							organización.
 						</h3>
 					</Paper>
 					<Paper hoverEffect className='flex items-center gap-2'>
-						<p className='font-bold text-2xl'>
-							2.
-						</p>
+						<p className='text-2xl font-bold'>3.</p>
 						<h3>
-							Proporciona información básica sobre la organización.
-						</h3>
-					</Paper>
-					<Paper hoverEffect className='flex items-center gap-2'>
-						<p className='font-bold text-2xl'>
-							3.
-						</p>
-						<h3>
-							Llena los formularios y crea un perfil más completo de tu organización.
+							Llena los formularios y crea un perfil más completo
+							de tu organización.
 						</h3>
 					</Paper>
 				</div>
-				<h2 className='text-stone-50 mx-auto w-fit text-center font-bold text-3xl mb-8'>
+				<h2 className='mx-auto mb-8 w-fit text-center text-3xl font-bold text-stone-50'>
 					¿Por qué registrarse?
 				</h2>
-				<div className='max-w-7xl mx-auto flex flex-col gap-4 mb-64'>
+				<div className='mx-auto mb-64 flex max-w-7xl flex-col gap-4'>
 					<Dropdown label='Visibilidad'>
-						Al estar en nuestra plataforma, las organizaciones ganan visibilidad ante posibles voluntarios, donantes y
+						Al estar en nuestra plataforma, las organizaciones ganan
+						visibilidad ante posibles voluntarios, donantes y
 						aliados.
 					</Dropdown>
 					<Dropdown label='Networking'>
-						Conectarse con otros actores comprometidos en el cambio social, fomentando la conexión entre actores del
+						Conectarse con otros actores comprometidos en el cambio
+						social, fomentando la conexión entre actores del
 						ecosistema Pro Bono.
 					</Dropdown>
 					<Dropdown label='Recursos'>
-						Acceder a herramientas, capacitaciones y oportunidades de fortalecimiento.
+						Acceder a herramientas, capacitaciones y oportunidades
+						de fortalecimiento.
 					</Dropdown>
 				</div>
-
 			</div>
-			<div className='relative h-[600px] border-stone-700 flex justify-center items-center p-8'>
-				<div
-					className='absolute -z-10 top-0 bottom-0 left-0 right-0 overflow-hidden brightness-50 bg-gradient-to-b from-stone-950 to-transparent'>
-					<Image src={map} alt='Background map' width={600} height={600} className='object-cover w-full h-full'/>
+			<div className='relative flex h-[600px] items-center justify-center border-stone-700 p-8'>
+				<div className='absolute inset-0 -z-10 overflow-hidden bg-gradient-to-b from-stone-950 to-transparent brightness-50'>
+					<Image
+						src={map}
+						alt='Background map'
+						width={600}
+						height={600}
+						className='size-full object-cover'
+					/>
 				</div>
 				<div className='my-auto'>
-					<h2 className='text-stone-50 font-bold text-3xl mx-auto w-fit mb-8 text-center'>
-						¡Únete a nuestra plataforma y empieza a mostrar tu impacto hoy!
+					<h2 className='mx-auto mb-8 w-fit text-center text-3xl font-bold text-stone-50'>
+						¡Únete a nuestra plataforma y empieza a mostrar tu
+						impacto hoy!
 					</h2>
-					<ALinkButton href='/api/auth/signup?returnTo=/my' className='mx-auto' size='lg'>
+					<ALinkButton
+						href='/api/auth/signup?returnTo=/my'
+						className='mx-auto'
+						size='lg'
+					>
 						Únirme ahora
 					</ALinkButton>
 				</div>

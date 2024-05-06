@@ -3,7 +3,7 @@ import React from 'react';
 import {type OrganizationInvitation} from '@prisma/client';
 import {Cell, Column, Row, TableBody, TableHeader} from 'react-stately';
 import {List} from 'immutable';
-import Table from '@/components/table/table.tsx';
+import Table from 'geostats-ui/table/table.tsx';
 import {cx} from '@/lib/cva.ts';
 
 export type InvitationListProps = {
@@ -37,44 +37,37 @@ export default function InvitationList(props: InvitationListProps) {
 		},
 	];
 
-	const partitionedInvites = invites
-		.groupBy(invite => invite.recipient);
+	const partitionedInvites = invites.groupBy(invite => invite.recipient);
 
-	const latestInvites = partitionedInvites.map((invites, recipient) => invites.maxBy(invite => invite.timestamp)!).toList();
+	const latestInvites = partitionedInvites
+		.map(invites => invites.maxBy(invite => invite.timestamp)!)
+		.toList();
 
 	return (
-		<div className={cx('border border-stone-700 rounded min-h-48 text-stone-300 overflow-y-auto', className)}>
-			<Table
-				showSelectionCheckboxes
-				className='w-full'
-			>
+		<div
+			className={cx(
+				'border border-stone-700 rounded min-h-48 text-stone-300 overflow-y-auto',
+				className,
+			)}
+		>
+			<Table showSelectionCheckboxes className='w-full'>
 				<TableHeader columns={columns}>
-					{
-						column => (
-							<Column>
-								{column.name}
-							</Column>
-						)
-					}
+					{column => <Column>{column.name}</Column>}
 				</TableHeader>
 				<TableBody items={latestInvites}>
-					{
-						item => (
-							<Row>
-								{
-									columnKey => (
-										<Cell>
-											{
-												columnKey === 'active'
-													? (item.active ? 'Activa' : 'Inactiva')
-													: item[columnKey as 'recipient']
-											}
-										</Cell>
-									)
-								}
-							</Row>
-						)
-					}
+					{item => (
+						<Row>
+							{columnKey => (
+								<Cell>
+									{columnKey === 'active'
+										? item.active
+											? 'Activa'
+											: 'Inactiva'
+										: item[columnKey as 'recipient']}
+								</Cell>
+							)}
+						</Row>
+					)}
 				</TableBody>
 			</Table>
 		</div>

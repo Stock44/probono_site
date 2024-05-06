@@ -3,7 +3,7 @@ import React from 'react';
 import {MapContainer, Marker} from 'react-leaflet';
 import {Icon} from 'leaflet';
 import Location from 'public/location.png';
-import GeostatsTileLayer from '@/components/geostats-tile-layer.tsx';
+import GeostatsTileLayer from 'geostats-ui/geostats-tile-layer.tsx';
 
 const locationIcon = new Icon({
 	iconUrl: Location.src,
@@ -20,11 +20,17 @@ export default function LocationMap(props: LocationMapProps) {
 	const {location, className} = props;
 	return (
 		<MapContainer
-			center={location} className={className} zoom={15}
-			scrollWheelZoom={false} keyboard={false} zoomControl={false}
-			attributionControl={false} dragging={false}>
-			<GeostatsTileLayer/>
-			<Marker position={location} icon={locationIcon}/>
+			center={location}
+			className={className}
+			zoom={15}
+			scrollWheelZoom={false}
+			keyboard={false}
+			zoomControl={false}
+			attributionControl={false}
+			dragging={false}
+		>
+			<GeostatsTileLayer />
+			<Marker position={location} icon={locationIcon} />
 		</MapContainer>
 	);
 }

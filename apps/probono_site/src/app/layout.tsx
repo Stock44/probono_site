@@ -4,7 +4,7 @@ import 'leaflet/dist/leaflet.css';
 import Script from 'next/script';
 import './globals.css';
 import ClientProviders from '@/app/client-providers.tsx';
-import {ToastProvider} from '@/components/toast.tsx';
+import {ToastProvider} from 'geostats-ui/toast.tsx';
 
 export const metadata: Metadata = {
 	title: 'GeoStats Pro Bono',
@@ -20,7 +20,8 @@ export default function RootLayout(props: RootLayoutProps) {
 	return (
 		<html lang='en'>
 			<Script
-				id='clarity-script' dangerouslySetInnerHTML={{
+				id='clarity-script'
+				dangerouslySetInnerHTML={{
 					__html: `
           (function(c,l,a,r,i,t,y){
           c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
@@ -28,12 +29,11 @@ export default function RootLayout(props: RootLayoutProps) {
           y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
           })(window, document, "clarity", "script", "jh8ea3tii2");
         `,
-				}}/>
+				}}
+			/>
 			<body className='bg-stone-950'>
 				<ClientProviders>
-					<ToastProvider>
-						{children}
-					</ToastProvider>
+					<ToastProvider>{children}</ToastProvider>
 				</ClientProviders>
 			</body>
 		</html>

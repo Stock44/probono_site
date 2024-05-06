@@ -3,11 +3,14 @@ import {getSession} from '@auth0/nextjs-auth0';
 import {cache} from 'react';
 import {cookies} from 'next/headers';
 import {type NextRequest, type NextResponse} from 'next/server';
-import {Organization, Prisma} from '@prisma/client';
+import {Prisma} from '@prisma/client';
 import {type UserInit, type UserUpdate} from '@/lib/schemas/user.ts';
 import prisma from '@/lib/prisma.ts';
 import {management} from '@/lib/auth0.ts';
-import {deleteOrganizations, getUsersDependantOrganizations} from '@/lib/models/organization.ts';
+import {
+	deleteOrganizations,
+	getUsersDependantOrganizations,
+} from '@/lib/models/organization.ts';
 import OrganizationGetPayload = Prisma.OrganizationGetPayload;
 
 /**
@@ -20,7 +23,9 @@ import OrganizationGetPayload = Prisma.OrganizationGetPayload;
  * @throws {Error} - If the user is not authenticated.
  */
 export const getUsersActiveOrganization = cache(
-	async <Args extends Omit<Prisma.OrganizationDefaultArgs, 'where'>> (args?: Args): Promise<OrganizationGetPayload<Args>> => {
+	async <Args extends Omit<Prisma.OrganizationDefaultArgs, 'where'>>(
+		args?: Args,
+	): Promise<OrganizationGetPayload<Args>> => {
 		const session = await getSession();
 
 		if (!session) {
@@ -47,7 +52,7 @@ export const getUsersActiveOrganization = cache(
 			});
 
 			if (activeOrganization) {
-				return (activeOrganization as OrganizationGetPayload<Args>);
+				return activeOrganization as OrganizationGetPayload<Args>;
 			}
 		}
 		// If we didn't find an organization with the id specified in the cookie associated with this user,
@@ -74,26 +79,28 @@ export const getUsersActiveOrganization = cache(
  * @param {Array} args - The optional NextRequest and NextResponse objects to be used for getSession, if available.
  * @returns {Promise<User | null>} - The user object if session exists, otherwise null.
  */
-export const getUserFromSession = cache(async (...args: [] | [NextRequest, NextResponse]) => {
-	const session = await getSession(...args);
+export const getUserFromSession = cache(
+	async (...args: [] | [NextRequest, NextResponse]) => {
+		const session = await getSession(...args);
 
-	if (!session) {
-		return null;
-	}
+		if (!session) {
+			return null;
+		}
 
-	return prisma.user.findUnique({
-		where: {
-			authId: session.user.sub as string,
-		},
-		include: {
-			_count: {
-				select: {
-					organizations: true,
+		return prisma.user.findUnique({
+			where: {
+				authId: session.user.sub as string,
+			},
+			include: {
+				_count: {
+					select: {
+						organizations: true,
+					},
 				},
 			},
-		},
-	});
-});
+		});
+	},
+);
 
 /**
  * Fetches the organizations associated with the current user.
@@ -177,30 +184,30 @@ export async function deleteUser(id: number): Promise<void> {
 
 	if (organizationsToDelete.length > 0) {
 		// Filter to only organizations which have a single owner (this user), and map to their ids.
-		const organizationsToDeleteIds = organizationsToDelete
-			.map(({id}) => id);
+		const organizationsToDeleteIds = organizationsToDelete.map(
+			({id}) => id,
+		);
 
 		await deleteOrganizations(organizationsToDeleteIds);
 	}
 
-	await prisma.$transaction(
-		[
-			prisma.userReauthentication.deleteMany({
-				where: {
-					userId: id,
-				},
-			}),
-			prisma.organizationInvitation.deleteMany({
-				where: {
-					senderId: id,
-				},
-			}),
-			prisma.user.delete({
-				where: {
-					id,
-				},
-			}),
-		]);
+	await prisma.$transaction([
+		prisma.userReauthentication.deleteMany({
+			where: {
+				userId: id,
+			},
+		}),
+		prisma.organizationInvitation.deleteMany({
+			where: {
+				senderId: id,
+			},
+		}),
+		prisma.user.delete({
+			where: {
+				id,
+			},
+		}),
+	]);
 }
 
 /**
@@ -224,11 +231,14 @@ export async function updateUser(id: number, update: UserUpdate) {
 		});
 
 		if (update.email) {
-			await management.users.update({
-				id: authId,
-			}, {
-				email: update.email,
-			});
+			await management.users.update(
+				{
+					id: authId,
+				},
+				{
+					email: update.email,
+				},
+			);
 		}
 
 		await tx.user.update({

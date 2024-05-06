@@ -5,7 +5,10 @@ import prisma from '@/lib/prisma.ts';
 import {getUserFromSession} from '@/lib/models/user.ts';
 import {userAuthorizedForOrganization} from '@/lib/models/organization.ts';
 
-export default async function updateOrganizationSectorsAction(organizationId: number, sectorIds: number[]): Promise<ServerActionResult> {
+export default async function updateOrganizationSectorsAction(
+	organizationId: number,
+	sectorIds: number[],
+): Promise<ServerActionResult> {
 	const user = await getUserFromSession();
 
 	if (!user) {

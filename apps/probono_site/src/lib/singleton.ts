@@ -9,12 +9,12 @@ jest.mock('./prisma.ts', () => ({
 
 beforeEach(() => {
 	mockReset(prismaMock);
-	prismaMock.$transaction.mockImplementation(async func => {
-		if (typeof func === 'function') {
-			return func(prismaMock);
+	prismaMock.$transaction.mockImplementation(async function_ => {
+		if (typeof function_ === 'function') {
+			return function_(prismaMock);
 		}
 
-		return Promise.all(func);
+		return Promise.all(function_);
 	});
 });
 

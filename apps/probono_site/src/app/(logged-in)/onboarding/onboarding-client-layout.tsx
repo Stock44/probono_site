@@ -28,40 +28,43 @@ export default function OnboardingClientLayout(props: LayoutContainerProps) {
 	const selectedSegment = useSelectedLayoutSegment();
 
 	return (
-		<div
-			className='bg-stone-950 text-stone-200 flex justify-center  place-items-start justify-items-start  mx-auto md:max-w-md'>
-			<motion.div layout className='bg-stone-950 border-stone-800 md:border rounded md:p-8 w-full h-fit overflow-hidden mb-16'>
-				<motion.div layout className='flex mb-4'>
-					{
-						[segments
-							.map(([segment, name]) => {
-								const isSelected = segment === selectedSegment;
-								return (
-									<div key={segment} className='grow'>
-										<Link
-											href={`/onboarding/${segment ?? ''}${inviteParameter}`}
-											className={cx(
-												'p-2 flex justify-center items-center h-16 md:h-auto text-sm md:text-base',
-												isSelected && 'text-stone-50',
-												!isSelected && 'text-stone-400 hover:text-stone-50 ',
-												segment === 'organization' && isOrganizationTabDisabled && 'pointer-events-none text-stone-600',
-											)}
-										>
-											{name}
-										</Link>
-										{
-											isSelected && (
-												<motion.div className='w-full border-b border-stone-50' layoutId='selectedBorder'/>
-											)
-										}
-									</div>
-								);
-							})]
-					}
+		<div className='mx-auto flex place-items-start justify-center  justify-items-start bg-stone-950  text-stone-200 md:max-w-md'>
+			<motion.div
+				layout
+				className='mb-16 h-fit w-full overflow-hidden rounded border-stone-800 bg-stone-950 md:border md:p-8'
+			>
+				<motion.div layout className='mb-4 flex'>
+					{[
+						segments.map(([segment, name]) => {
+							const isSelected = segment === selectedSegment;
+							return (
+								<div key={segment} className='grow'>
+									<Link
+										href={`/onboarding/${segment ?? ''}${inviteParameter}`}
+										className={cx(
+											'p-2 flex justify-center items-center h-16 md:h-auto text-sm md:text-base',
+											isSelected && 'text-stone-50',
+											!isSelected &&
+												'text-stone-400 hover:text-stone-50 ',
+											segment === 'organization' &&
+												isOrganizationTabDisabled &&
+												'pointer-events-none text-stone-600',
+										)}
+									>
+										{name}
+									</Link>
+									{isSelected && (
+										<motion.div
+											className='w-full border-b border-stone-50'
+											layoutId='selectedBorder'
+										/>
+									)}
+								</div>
+							);
+						}),
+					]}
 				</motion.div>
-				<div className='p-4 md:p-0'>
-					{children}
-				</div>
+				<div className='p-4 md:p-0'>{children}</div>
 			</motion.div>
 		</div>
 	);
