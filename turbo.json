@@ -10,6 +10,7 @@
 				"!.next/cache/**"
 			]
 		},
+		"clean": {},
 		"deploy": {
 			"dependsOn": [
 				"build",

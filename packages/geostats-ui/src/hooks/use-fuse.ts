@@ -13,7 +13,7 @@ import {type IFuseOptions} from 'fuse.js';
  *
  * @returns {Fuse<T> | undefined} - The initialized Fuse instance, or undefined if the Fuse instance is not yet available.
  */
-export default function useFuse<T>(
+export function useFuse<T>(
 	items: List<T>,
 	options?: IFuseOptions<T>,
 ): Fuse<T> | undefined {

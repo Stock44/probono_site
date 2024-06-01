@@ -1,19 +1,20 @@
 'use client';
-import React, {type ForwardedRef, forwardRef, type ReactNode} from 'react';
+import React, {type ReactNode, type RefObject} from 'react';
 import {type AriaButtonOptions, useButton} from 'react-aria';
 import {useObjectRef} from '@react-aria/utils';
 import {type VariantProps} from '@/cva.ts';
-import buttonVariant from '@/button/button-variants.tsx';
+import {buttonVariants} from '@/button/button-variants.tsx';
 
 export type ButtonProps = {
 	readonly children?: ReactNode;
 	readonly className?: string;
+	readonly buttonRef?: RefObject<HTMLButtonElement>;
 } & AriaButtonOptions<'button'> &
-	VariantProps<typeof buttonVariant>;
+	VariantProps<typeof buttonVariants>;
 
-const Button = (props: ButtonProps, ref: ForwardedRef<HTMLButtonElement>) => {
-	const {children} = props;
-	const buttonRef = useObjectRef(ref);
+export function Button(props: ButtonProps) {
+	const {children, buttonRef} = props;
+	const ref = useObjectRef<HTMLButtonElement>(buttonRef);
 	const {buttonProps} = useButton(
 		{
 			...props,
@@ -32,17 +33,15 @@ const Button = (props: ButtonProps, ref: ForwardedRef<HTMLButtonElement>) => {
 				}, 1);
 			},
 		},
-		buttonRef,
+		ref,
 	);
 	return (
 		<button
 			{...buttonProps}
 			ref={buttonRef}
-			className={buttonVariant(props)}
+			className={buttonVariants(props)}
 		>
 			{children}
 		</button>
 	);
-};
-
-export default forwardRef(Button);
+}

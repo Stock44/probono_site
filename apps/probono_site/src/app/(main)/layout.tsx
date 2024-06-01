@@ -2,8 +2,8 @@ import React, {type ReactNode} from 'react';
 import Menu from '@material-design-icons/svg/round/menu.svg';
 import TopBar from '@/components/top-bar.tsx';
 import Footer from '@/components/footer.tsx';
-import SidebarTrigger from 'geostats-ui/sidebar-trigger.tsx';
-import ALinkButton from 'geostats-ui/button/a-link-button.tsx';
+import SidebarTrigger from 'geostats-ui/sidebar-trigger';
+import ALinkButton from 'geostats-ui/button/a-link-button';
 import NavLink from '@/app/(main)/nav-link.tsx';
 
 export type MainLayoutProps = {

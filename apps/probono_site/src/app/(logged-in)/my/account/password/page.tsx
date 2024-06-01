@@ -6,7 +6,7 @@ import {
 	type PasswordUpdate,
 	passwordUpdateSchema,
 } from '@/lib/schemas/password.ts';
-import {type FormState} from 'geostats-ui/form/form.tsx';
+import {type FormState} from 'geostats-ui';
 import {decodeForm} from '@/lib/form-utils.ts';
 import {handleActionError} from '@/lib/handle-action-error.ts';
 import {authentication, management} from '@/lib/auth0.ts';

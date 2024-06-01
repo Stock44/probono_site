@@ -3,7 +3,16 @@
 	"private": true,
 	"type": "module",
 	"exports": {
-		"./*": "./src/*"
+		".": {
+			"types": "./dist/index.d.ts",
+			"import": "./dist/index.js"
+		}
+	},
+	"scripts": {
+		"build": "tsup",
+		"dev": "tsup --watch",
+		"lint": "eslint . --max-warnings 0",
+		"clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist"
 	},
 	"dependencies": {
 		"@material-design-icons/svg": "^0.14.13",
@@ -24,6 +33,7 @@
 		"@types/lodash": "^4.17.0",
 		"eslint-config-geostats": "*",
 		"prettier-config-geostats": "*",
-		"tailwind-config-geostats": "*"
+		"tailwind-config-geostats": "*",
+		"tsup": "^8.0.2"
 	}
 }

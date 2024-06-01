@@ -9,7 +9,7 @@ export type DialogProps = {
 	readonly className?: string;
 } & AriaDialogProps;
 
-export default function Dialog(props: DialogProps) {
+export function Dialog(props: DialogProps) {
 	const {title, children, className} = props;
 
 	const ref = useRef(null);

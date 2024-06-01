@@ -4,7 +4,7 @@ import 'leaflet/dist/leaflet.css';
 import Script from 'next/script';
 import './globals.css';
 import ClientProviders from '@/app/client-providers.tsx';
-import {ToastProvider} from 'geostats-ui/toast.tsx';
+import {ToastProvider} from 'geostats-ui';
 
 export const metadata: Metadata = {
 	title: 'GeoStats Pro Bono',

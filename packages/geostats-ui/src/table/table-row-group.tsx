@@ -1,10 +1,9 @@
 import React, {type ReactNode} from 'react';
 import {useTableRowGroup} from 'react-aria';
 import {cx} from '@/cva.ts';
-import IntrinsicElements = JSX.IntrinsicElements;
 
 export type TableRowGroupProps = {
-	readonly type: keyof IntrinsicElements;
+	readonly type: keyof HTMLElementTagNameMap;
 	readonly children: ReactNode;
 };
 

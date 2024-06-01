@@ -97,7 +97,7 @@ export function BaseComboBox<T extends Record<string, unknown>>(
 						{/* @ts-expect-error children prop is passed in by react-aria */}
 						<BaseListBox
 							{...listBoxProps}
-							ref={listBoxObjectRef}
+							listBoxRef={listBoxObjectRef}
 							state={state}
 							className='max-h-96'
 						/>

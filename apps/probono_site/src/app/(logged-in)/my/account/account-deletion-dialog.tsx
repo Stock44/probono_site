@@ -2,11 +2,13 @@
 import React from 'react';
 import {useQuery} from 'react-query';
 import {type Organization} from '@prisma/client';
-import Dialog from 'geostats-ui/dialog.tsx';
-import Button from 'geostats-ui/button/button.tsx';
-import {useCloseModal} from 'geostats-ui/modal/modal-context.ts';
-import ALinkButton from 'geostats-ui/button/a-link-button.tsx';
-import LoadingSpinner from 'geostats-ui/loading-spinner.tsx';
+import {
+	Dialog,
+	Button,
+	useCloseModal,
+	ALinkButton,
+	LoadingSpinner,
+} from 'geostats-ui';
 
 export type AccountDeletionDialogProps = {
 	readonly userId: number;

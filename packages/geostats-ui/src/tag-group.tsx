@@ -1,4 +1,4 @@
-import React, {type ForwardedRef, forwardRef, useRef} from 'react';
+import React, {useRef} from 'react';
 import {
 	type AriaTagGroupProps,
 	type AriaTagProps,
@@ -7,7 +7,6 @@ import {
 	useTagGroup,
 } from 'react-aria';
 import {Set} from 'immutable';
-import {useObjectRef} from '@react-aria/utils';
 import {type Key, type ListState, type Node, useListState} from 'react-stately';
 import Close from '@material-design-icons/svg/round/close.svg';
 import Button from './button/button.tsx';
@@ -17,12 +16,11 @@ export type TagGroupProps<T extends Record<string, unknown>> = {
 	readonly onRemove?: (keys: Set<Key>) => void;
 } & Omit<AriaTagGroupProps<T>, 'onRemove'>;
 
-export default forwardRef(function TagGroup<T extends Record<string, unknown>>(
+export default function TagGroup<T extends Record<string, unknown>>(
 	props: TagGroupProps<T>,
-	ref: ForwardedRef<HTMLDivElement>,
 ) {
 	const {className, label, description, errorMessage, onRemove} = props;
-	const divRef = useObjectRef(ref);
+	const divRef = useRef<HTMLDivElement>(null);
 
 	const state = useListState(props);
 
@@ -59,7 +57,7 @@ export default forwardRef(function TagGroup<T extends Record<string, unknown>>(
 			)}
 		</div>
 	);
-});
+}
 
 type TagProps<T> = {
 	readonly item: Node<T>;

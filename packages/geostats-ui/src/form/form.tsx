@@ -62,7 +62,7 @@ function processStaticValues<T>(
 		.toArray();
 }
 
-export default function Form<T>(props: FormProps<T>) {
+export function Form<T>(props: FormProps<T>) {
 	const {children, action, staticValues, successToast, className} = props;
 	const [state, formAction] = useFormState(action, {
 		success: false,

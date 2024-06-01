@@ -1,5 +1,5 @@
 'use client';
-import React, {type ForwardedRef, forwardRef} from 'react';
+import React, {useRef, type RefObject} from 'react';
 import {
 	type AriaListBoxProps,
 	mergeProps,
@@ -10,7 +10,6 @@ import {
 } from 'react-aria';
 import {type Node} from '@react-types/shared';
 import {type ListProps, type ListState, useListState} from 'react-stately';
-import {useObjectRef} from '@react-aria/utils';
 import {twMerge} from 'tailwind-merge';
 import {cx} from './cva.ts';
 
@@ -31,25 +30,26 @@ export default function ListBox<T extends Record<string, unknown>>(
 type StatefulListBoxProps<T extends Record<string, unknown>> = ListProps<T> &
 	Omit<BaseListBoxProps<T>, 'state'>;
 
-const StatefulListBox = forwardRef(function StatefulListBox<
-	T extends Record<string, unknown>,
->(props: StatefulListBoxProps<T>, ref: ForwardedRef<HTMLUListElement>) {
+function StatefulListBox<T extends Record<string, unknown>>(
+	props: StatefulListBoxProps<T>,
+) {
 	const state = useListState<T>(props);
 
-	return <BaseListBox {...props} ref={ref} state={state} />;
-});
+	return <BaseListBox {...props} state={state} />;
+}
 
 export type BaseListBoxProps<T extends Record<string, unknown>> = {
 	readonly className?: string;
+	readonly listBoxRef?: RefObject<HTMLUListElement>;
 	readonly state: ListState<T>;
 } & AriaListBoxProps<T>;
 
-export const BaseListBox = forwardRef(function BaseListBox<
-	T extends Record<string, unknown>,
->(props: BaseListBoxProps<T>, ref: ForwardedRef<HTMLUListElement>) {
+export function BaseListBox<T extends Record<string, unknown>>(
+	props: BaseListBoxProps<T>,
+) {
 	const {label, state, className} = props;
 
-	const listBoxRef = useObjectRef(ref);
+	const listBoxRef = useRef<HTMLUListElement>(null);
 	const {listBoxProps, labelProps} = useListBox<T>(props, state, listBoxRef);
 
 	return (
@@ -85,7 +85,7 @@ export const BaseListBox = forwardRef(function BaseListBox<
 			</ul>
 		</>
 	);
-});
+}
 
 export type ListBoxSectionProps<T> = {
 	readonly section: Node<T>;
