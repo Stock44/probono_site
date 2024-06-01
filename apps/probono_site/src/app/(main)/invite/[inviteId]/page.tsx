@@ -5,8 +5,9 @@ import {
 	consumeOrganizationInvitation,
 	isInvitationValid,
 } from '@/lib/models/organization-invitation.ts';
-import LinkButton from 'geostats-ui/button/link-button.tsx';
 import {getUserFromSession} from '@/lib/models/user.ts';
+
+import {LinkButton} from 'geostats-ui';
 
 export type InvitePageProps = {
 	readonly params: {

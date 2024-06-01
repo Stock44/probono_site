@@ -3,7 +3,8 @@ import React from 'react';
 import {MapContainer, Marker} from 'react-leaflet';
 import {Icon} from 'leaflet';
 import Location from 'public/location.png';
-import GeostatsTileLayer from 'geostats-ui/geostats-tile-layer.tsx';
+
+import {GeostatsTileLayer} from 'geostats-ui';
 
 const locationIcon = new Icon({
 	iconUrl: Location.src,

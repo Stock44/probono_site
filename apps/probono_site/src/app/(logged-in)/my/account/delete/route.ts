@@ -8,6 +8,7 @@ import {
 	ReauthenticationExpiredError,
 } from '@/lib/models/user-reauthentication.ts';
 
+
 // eslint-disable-next-line @typescript-eslint/naming-convention
 export const GET = withApiAuthRequired(async request => {
 	const user = await getUserFromSession(request, new NextResponse());

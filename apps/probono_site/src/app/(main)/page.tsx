@@ -4,9 +4,8 @@ import GeoStatsLogoMark from 'public/logos/geostats-logomark.png';
 import labnl from '@/app/(main)/labnl_vignette.webp';
 import labnl_mobile from '@/app/(main)/labnl_vignette_mobile.webp';
 import map from '@/app/(main)/map.jpg';
-import Dropdown from 'geostats-ui/dropdown.tsx';
-import ALinkButton from 'geostats-ui/button/a-link-button.tsx';
-import Paper from 'geostats-ui/paper/paper.tsx';
+
+import {Dropdown, ALinkButton, Paper} from 'geostats-ui';
 
 export default function Home() {
 	const common = {alt: 'LabNL', sizes: '100vw'};

@@ -19,8 +19,8 @@ import OrganizationSelectorButton from '@/components/organization-selector/organ
 import AccountButton from '@/app/(logged-in)/onboarding/account-button.tsx';
 import TopBar from '@/components/top-bar.tsx';
 import Footer from '@/components/footer.tsx';
-import SidebarTrigger from 'geostats-ui/sidebar-trigger.tsx';
-import LinkButton from 'geostats-ui/button/link-button.tsx';
+
+import {SidebarTrigger, LinkButton} from 'geostats-ui';
 
 export type MyLayoutProps = {
 	readonly children: ReactNode;

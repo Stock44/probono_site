@@ -2,7 +2,8 @@
 import React from 'react';
 import {type Sector} from '@prisma/client';
 import {Item} from 'react-stately';
-import ListBox from 'geostats-ui/list-box.tsx';
+
+import {ListBox} from 'geostats-ui';
 
 export type SectorsListProps = {
 	readonly sectors: Sector[];

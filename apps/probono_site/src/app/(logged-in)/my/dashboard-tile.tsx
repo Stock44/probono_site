@@ -2,7 +2,8 @@ import React, {type ReactNode} from 'react';
 import NavigateNext from '@material-design-icons/svg/round/navigate_next.svg';
 import Link from 'next/link';
 import {cx} from '@/lib/cva.ts';
-import Paper from 'geostats-ui/paper/paper.tsx';
+
+import {Paper} from 'geostats-ui';
 
 export type DashboardTileProps = {
 	readonly className?: string;

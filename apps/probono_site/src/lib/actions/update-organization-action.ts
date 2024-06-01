@@ -1,6 +1,5 @@
 'use server';
 import {revalidatePath} from 'next/cache';
-import {type FormState} from 'geostats-ui/form/form.tsx';
 import {
 	type OrganizationUpdate,
 	organizationUpdateSchema,
@@ -12,6 +11,8 @@ import {
 } from '@/lib/models/organization.ts';
 import {handleActionError} from '@/lib/handle-action-error.ts';
 import {getUserFromSession} from '@/lib/models/user.ts';
+
+import {type FormState} from 'geostats-ui';
 
 export default async function updateOrganizationAction(
 	organizationId: number,

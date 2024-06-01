@@ -7,10 +7,7 @@ import {getSession} from '@auth0/nextjs-auth0';
 import AccountForm from '@/app/(logged-in)/my/account/account-form.tsx';
 import updateUserAction from '@/lib/actions/update-user-action.ts';
 import {getUserFromSession} from '@/lib/models/user.ts';
-import Separator from 'geostats-ui/separator.tsx';
-import LinkButton from 'geostats-ui/button/link-button.tsx';
-import ModalTrigger from 'geostats-ui/modal/modal-trigger.tsx';
-import HashSpyToaster from 'geostats-ui/hash-spy-toaster.tsx';
+import {Separator, LinkButton, ModalTrigger, HashSpyToaster} from 'geostats-ui';
 
 const AccountDeletionDialog = dynamic(
 	async () =>

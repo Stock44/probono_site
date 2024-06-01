@@ -9,17 +9,13 @@ import {useOverlayTrigger} from 'react-aria';
 import {type Organization} from '@prisma/client';
 import AddPhotoAlternate from '@material-design-icons/svg/round/add_photo_alternate.svg';
 import Save from '@material-design-icons/svg/round/save.svg';
-import Button from 'geostats-ui/button/button.tsx';
-import Modal from 'geostats-ui/modal/modal.tsx';
 import ImageButton from '@/components/image-button.tsx';
-import Dialog from 'geostats-ui/dialog.tsx';
-import FileDropZone from 'geostats-ui/file-drop-zone.tsx';
-import Form, {type FormState} from 'geostats-ui/form/form.tsx';
 import {
 	organizationInitSchema,
 	type OrganizationUpdate,
 } from '@/lib/schemas/organization.ts';
-import SubmitButton from 'geostats-ui/submit-button.tsx';
+
+import {Button, Modal, ImageButton, Dialog, FileDropZone, Form, type FromState, SubmitButton} from 'geostats-ui';
 
 export type OrganizationImagePickerProps = {
 	readonly label: ReactNode;

@@ -2,8 +2,8 @@
 
 import React from 'react';
 import {MapContainer} from 'react-leaflet';
-import GeostatsTileLayer from 'geostats-ui/geostats-tile-layer.tsx';
-import LocationMarker from 'geostats-ui/location-marker.tsx';
+
+import {LocationMarker, GeostatsTileLayer} from 'geostats-ui';
 
 export type LocationMapProps = {
 	readonly organizations: Array<{

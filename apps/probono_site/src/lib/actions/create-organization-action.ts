@@ -2,7 +2,6 @@
 import {getSession} from '@auth0/nextjs-auth0';
 import {redirect} from 'next/navigation';
 import {cookies} from 'next/headers';
-import type {FormState} from 'geostats-ui/form/form.tsx';
 import {
 	type OrganizationInit,
 	organizationInitSchema,
@@ -10,6 +9,8 @@ import {
 import {decodeForm} from '@/lib/form-utils.ts';
 import {createOrganization} from '@/lib/models/organization.ts';
 import {handleActionError} from '@/lib/handle-action-error.ts';
+
+import {type FormState} from 'geostats-ui';
 
 export default async function createOrganizationAction(
 	userId: number,

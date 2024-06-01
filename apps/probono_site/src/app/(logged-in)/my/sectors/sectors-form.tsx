@@ -7,12 +7,9 @@ import {Seq, Set} from 'immutable';
 import {Item, Section, useListData} from 'react-stately';
 import Save from '@material-design-icons/svg/round/save.svg';
 import Remove from '@material-design-icons/svg/round/remove.svg';
-import ListBox from 'geostats-ui/list-box.tsx';
-import Button from 'geostats-ui/button/button.tsx';
 import {type ServerActionResult} from '@/lib/server-action-result.ts';
-import {useToasts} from 'geostats-ui/toast.tsx';
-import LoadingSpinner from 'geostats-ui/loading-spinner.tsx';
-import Paper from 'geostats-ui/paper/paper.tsx';
+
+import {ListBox, Button, useToasts, LoadingSpinner, Paper} from 'geostats-ui';
 
 const SectorsMap = dynamic(
 	async () => import('@/app/(logged-in)/my/sectors/sectors-map.tsx'),

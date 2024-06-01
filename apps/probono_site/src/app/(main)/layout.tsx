@@ -2,10 +2,9 @@ import React, {type ReactNode} from 'react';
 import Menu from '@material-design-icons/svg/round/menu.svg';
 import TopBar from '@/components/top-bar.tsx';
 import Footer from '@/components/footer.tsx';
-import SidebarTrigger from 'geostats-ui/sidebar-trigger';
-import ALinkButton from 'geostats-ui/button/a-link-button';
-import {SidebarTrigger, ALinkButton} from 'geostats-uid';
 import NavLink from '@/app/(main)/nav-link.tsx';
+
+import {SidebarTrigger, ALinkButton} from 'geostats-ui';
 
 export type MainLayoutProps = {
 	readonly children: ReactNode;

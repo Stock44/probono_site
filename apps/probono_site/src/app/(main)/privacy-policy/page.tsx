@@ -1,5 +1,6 @@
 import React from 'react';
-import Separator from 'geostats-ui/separator.tsx';
+
+import {Separator} from 'geostats-ui';
 
 export default function Terms() {
 	return (

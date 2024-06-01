@@ -11,8 +11,8 @@ import TikTokLogo from 'public/logos/tiktok.png';
 import LinkedInLogo from 'public/logos/linkedin.png';
 import YoutubeLogo from 'public/logos/youtube.png';
 import Public from '@material-design-icons/svg/round/public.svg';
-import SocialLink from 'geostats-ui/social-link.tsx';
-import Paper from 'geostats-ui/paper/paper.tsx';
+
+import {SocialLink, Paper} from 'geostats-ui';
 
 export type OrganizationCardProps = {
 	readonly organization: Organization & {address: Address | null};

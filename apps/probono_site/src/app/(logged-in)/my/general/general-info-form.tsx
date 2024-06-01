@@ -19,19 +19,15 @@ import {
 	type VolunteerCountCategory,
 	type Organization,
 } from '@prisma/client';
-import {NumberField} from 'geostats-ui/number-field.tsx';
 import OrganizationImagePicker from '@/app/(logged-in)/my/general/organization-image-picker.tsx';
-import TextField from 'geostats-ui/text-field.tsx';
-import Select from 'geostats-ui/select.tsx';
-import Form, {type FormState} from 'geostats-ui/form/form.tsx';
 import {
 	organizationInitSchema,
 	type OrganizationUpdate,
 } from '@/lib/schemas/organization.ts';
 import {formValidators} from '@/lib/form-utils.ts';
-import Separator from 'geostats-ui/separator.tsx';
 import {formatInMxn} from '@/lib/format-mxn.ts';
-import FormHeader from 'geostats-ui/form-header.tsx';
+
+import {NumberField, TextField, Select, Form, type FormState, Separator, FormHeader} from 'geostats-ui';
 
 export type GeneralInfoFormProps = {
 	readonly action: (

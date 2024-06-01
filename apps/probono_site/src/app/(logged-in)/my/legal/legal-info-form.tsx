@@ -9,17 +9,13 @@ import {
 import {Item} from 'react-stately';
 import CalendarMonth from '@material-design-icons/svg/round/calendar_month.svg';
 import Done from '@material-design-icons/svg/round/done.svg';
-import Select from 'geostats-ui/select.tsx';
-import {NumberField} from 'geostats-ui/number-field.tsx';
-import Checkbox from 'geostats-ui/checkbox.tsx';
-import TextField from 'geostats-ui/text-field.tsx';
-import Form, {type FormState} from 'geostats-ui/form/form.tsx';
 import {
 	organizationInitSchema,
 	type OrganizationUpdate,
 } from '@/lib/schemas/organization.ts';
 import {formValidators} from '@/lib/form-utils.ts';
-import FormHeader from 'geostats-ui/form-header.tsx';
+
+import {Select, NumberField, Checkbox, TextField, Form, type FormState, FormHeader} from 'geostats-ui';
 
 const clunis = [
 	{

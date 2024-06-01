@@ -13,7 +13,8 @@ import {getAddress} from '@/lib/models/address.ts';
 import DashboardTile from '@/app/(logged-in)/my/dashboard-tile.tsx';
 import SectorsList from '@/app/(logged-in)/my/sectors-list.tsx';
 import MembersList from '@/app/(logged-in)/my/members-list.tsx';
-import Paper from 'geostats-ui/paper/paper.tsx';
+
+import {Paper} from 'geostats-ui';
 
 const LocationMap = dynamic(
 	async () => import('@/app/(logged-in)/my/location-map.tsx'),

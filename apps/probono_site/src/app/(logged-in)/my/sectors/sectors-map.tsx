@@ -4,7 +4,8 @@ import {type Set} from 'immutable';
 import {type Geometry} from 'geojson';
 import {type Sector} from '@prisma/client';
 import {cx} from '@/lib/cva.ts';
-import GeostatsTileLayer from 'geostats-ui/geostats-tile-layer.tsx';
+
+import {GeostatsTileLayer} from 'geostats-ui';
 
 type SectorProps = {
 	readonly isSelected: boolean;

@@ -4,10 +4,8 @@ import React from 'react';
 import {type User} from '@prisma/client';
 import Done from '@material-design-icons/svg/round/done.svg';
 import {type UserUpdate, userUpdateSchema} from '@/lib/schemas/user.ts';
-import Form, {type FormState} from 'geostats-ui/form/form.tsx';
-import TextField from 'geostats-ui/text-field.tsx';
 import {formValidators} from '@/lib/form-utils.ts';
-import FormHeader from 'geostats-ui/form-header.tsx';
+import {Form, type FormState, TextField, FormHeader} from 'geostats-ui';
 
 export type AccountFormProps = {
 	readonly action: (

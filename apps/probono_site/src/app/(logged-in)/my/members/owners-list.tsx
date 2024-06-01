@@ -13,16 +13,10 @@ import {
 } from 'react-stately';
 import Add from '@material-design-icons/svg/round/add.svg';
 import Delete from '@material-design-icons/svg/round/delete.svg';
-import TextField from 'geostats-ui/text-field.tsx';
-import Button from 'geostats-ui/button/button.tsx';
-import Table from 'geostats-ui/table/table.tsx';
 import {type OrganizationOwnerAddition} from '@/lib/schemas/organization-owner-addition.ts';
-import Form, {type FormAction} from 'geostats-ui/form/form.tsx';
 import {type ServerActionResult} from '@/lib/server-action-result.ts';
-import {useToasts} from 'geostats-ui/toast.tsx';
-import LoadingSpinner from 'geostats-ui/loading-spinner.tsx';
-import SubmitButton from 'geostats-ui/submit-button.tsx';
-import Paper from 'geostats-ui/paper/paper.tsx';
+
+import {TextField, Button, Table, Form, type FormAction, useToasts, LoadingSpinner, SubmitButton, Paper} from 'geostats-ui';
 
 export type OwnersListProps = {
 	readonly currentUser: User;

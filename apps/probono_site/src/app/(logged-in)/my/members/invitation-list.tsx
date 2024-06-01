@@ -3,8 +3,9 @@ import React from 'react';
 import {type OrganizationInvitation} from '@prisma/client';
 import {Cell, Column, Row, TableBody, TableHeader} from 'react-stately';
 import {List} from 'immutable';
-import Table from 'geostats-ui/table/table.tsx';
 import {cx} from '@/lib/cva.ts';
+
+import {Table} from 'geostats-ui';
 
 export type InvitationListProps = {
 	readonly activeInvites: OrganizationInvitation[];

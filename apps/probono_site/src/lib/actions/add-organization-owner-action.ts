@@ -3,7 +3,6 @@
 import {revalidatePath} from 'next/cache';
 import {render} from '@react-email/render';
 import {createElement} from 'react';
-import {type FormState} from 'geostats-ui/form/form.tsx';
 import {
 	type OrganizationOwnerAddition,
 	organizationOwnerAdditionSchema,
@@ -19,6 +18,8 @@ import {
 	activeOrganizationInvitationExists,
 	createOrganizationInvitation,
 } from '@/lib/models/organization-invitation.ts';
+
+import {type FormState} from 'geostats-ui';
 
 export default async function addOrganizationOwnerAction(
 	organizationId: number,

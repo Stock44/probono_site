@@ -2,9 +2,7 @@
 
 import Save from '@material-design-icons/svg/round/save.svg';
 import React, {useState} from 'react';
-import Form, {type FormState} from 'geostats-ui/form/form.tsx';
-import SubmitButton from 'geostats-ui/submit-button.tsx';
-import TextField from 'geostats-ui/text-field.tsx';
+import {Form, type FormState, SubmitButton, TextField} from 'geostats-ui';
 import {formValidators} from '@/lib/form-utils.ts';
 import {
 	type PasswordUpdate,
