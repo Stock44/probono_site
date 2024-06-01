@@ -10,6 +10,7 @@ import OrganizationCreationForm from '@/components/organization-creation-form.ts
 import {consumeOrganizationInvitation, getOrganizationInvitation} from '@/lib/models/organization-invitation.ts';
 import SubmitButton from '@/components/submit-button.tsx';
 import {getUserFromSession} from '@/lib/models/user.ts';
+import {getAllOrganizationCategories} from '@/lib/models/organization-category.ts';
 
 export type OrganizationOnboardingPageProps = {
 	readonly searchParams: {
@@ -63,6 +64,8 @@ export default async function OrganizationOnboardingPage(props: OrganizationOnbo
 		redirect('/my');
 	}
 
+	const organizationCategories = await getAllOrganizationCategories();
+
 	return (
 		<AnimatedLayoutContainer>
 			{
@@ -99,7 +102,7 @@ export default async function OrganizationOnboardingPage(props: OrganizationOnbo
 								También necesitamos algunos datos sobre tu organización.
 							</p>
 
-							<OrganizationCreationForm action={action}/>
+							<OrganizationCreationForm action={action} organizationCategories={organizationCategories}/>
 						</>
 
 					)

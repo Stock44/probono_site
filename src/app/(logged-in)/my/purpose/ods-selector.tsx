@@ -119,3 +119,23 @@ export default function OdsSelector(props: OdsSelectorProps) {
 		</div>
 	);
 }
+
+export function OdsSelectorRegistro(props: OdsSelectorProps) {
+	const {className, label} = props;
+
+	const state = useRadioGroupState(props);
+	const {radioGroupProps, labelProps} = useRadioGroup(props, state);
+
+	return (
+		<div {...radioGroupProps} className={className}>
+			<span {...labelProps} className='text-stone-400 text-sm'>
+				{label}
+			</span>
+			<div className='flex gap-1 flex-wrap mt-1 w-full'>
+				{ods.map(ods => (
+					<OdsRadio key={ods[0]} state={state} ods={ods}/>
+				))}
+			</div>
+		</div>
+	);
+}

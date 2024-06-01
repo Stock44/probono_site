@@ -49,6 +49,7 @@ export default function UserOnboardingForm(props: UserOnboardingFormProps) {
 				defaultValue={user?.familyName ?? defaultFamilyName ?? ''}
 			/>
 			<TextField
+				isRequired
 				className='mb-4'
 				name='contactEmail'
 				label='Correo electrónico de contacto'
