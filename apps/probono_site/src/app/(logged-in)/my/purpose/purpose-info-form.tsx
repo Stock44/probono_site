@@ -14,19 +14,15 @@ import {Item, type Key} from 'react-stately';
 import {List, Set} from 'immutable';
 import Done from '@material-design-icons/svg/round/done.svg';
 import OdsSelector from '@/app/(logged-in)/my/purpose/ods-selector.tsx';
-import Select from 'geostats-ui/select.tsx';
-import ComboBoxTagMultiSelect from 'geostats-ui/combo-box-tag-multi-select.tsx';
 import AgeGenderGroupSelector from '@/app/(logged-in)/my/purpose/age-gender-group-selector.tsx';
 import ActivityPrioritySelector from '@/app/(logged-in)/my/purpose/activity-priority-selector.tsx';
-import useImmutableListData from 'geostats-ui/hooks/use-immutable-list-data.ts';
 import useSearchableListData from '@/lib/hooks/use-searchable-list-data.ts';
-import Form, {type FormState} from 'geostats-ui/form/form.tsx';
 import {formValidators} from '@/lib/form-utils.ts';
 import {
 	organizationInitSchema,
 	type OrganizationUpdate,
 } from '@/lib/schemas/organization.ts';
-import FormHeader from 'geostats-ui/form-header.tsx';
+import {Select, ComboBoxTagMultiSelect, useImmutableListData, Form, type FormState, FormHeader} from 'geostats-ui';
 
 export type PurposeInfoFormProps = {
 	readonly organizationCategories: OrganizationCategory[];

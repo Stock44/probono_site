@@ -3,9 +3,8 @@ import React from 'react';
 import {redirect} from 'next/navigation';
 import UserForm from '@/app/(logged-in)/onboarding/user/user-onboarding-form.tsx';
 import prisma from '@/lib/prisma.ts';
-import AnimatedLayoutContainer from 'geostats-ui/animated-layout-container.tsx';
+import {AnimatedLayoutContainer, type FormState} from 'geostats-ui';
 import upsertUserAction from '@/lib/actions/upsert-user-action.ts';
-import {type FormState} from 'geostats-ui/form/form.tsx';
 import {type UserInit, type UserUpdate} from '@/lib/schemas/user.ts';
 
 export type UserOnboardingPageProps = {

@@ -1,9 +1,7 @@
 import {Item} from 'react-stately';
 import {Set} from 'immutable';
 import {type AgeGroup, type Gender} from '@prisma/client';
-import Select from 'geostats-ui/select.tsx';
-import List from 'geostats-ui/list.tsx';
-import {type ImmutableListData} from 'geostats-ui/hooks/use-immutable-list-data.ts';
+import {Select, List, type ImmutableListData} from 'geostats-ui';
 import genders from '@/lib/genders.ts';
 
 export type AgeGenderGroupSelectorProps = {

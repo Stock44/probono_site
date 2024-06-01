@@ -3,7 +3,7 @@ import OrganizationCreationForm from '@/components/organization-creation-form.ts
 import createOrganizationAction from '@/lib/actions/create-organization-action.ts';
 import {getUserFromSession} from '@/lib/models/user.ts';
 import TopBar from '@/components/top-bar.tsx';
-import LinkButton from 'geostats-ui/button/link-button.tsx';
+import {LinkButton} from 'geostats-ui';
 import Footer from '@/components/footer.tsx';
 
 export default async function NewOrganizationPage() {

@@ -1,9 +1,8 @@
 import React, {useMemo} from 'react';
 import {Item, type Key} from 'react-stately';
 import {type Activity} from '@prisma/client';
-import ComboBox from 'geostats-ui/combo-box.tsx';
-import ListPrioritizer from 'geostats-ui/list-prioritizer.tsx';
 import {type SearchableListData} from '@/lib/hooks/use-searchable-list-data.ts';
+import {ComboBox, ListPrioritizer} from 'geostats-ui';
 
 export type ActivityPrioritySelectorProps = {
 	readonly activities: SearchableListData<Activity>;

@@ -3,8 +3,8 @@ import {redirect} from 'next/navigation';
 import {getUserFromSession} from '@/lib/models/user.ts';
 import OnboardingClientLayout from '@/app/(logged-in)/onboarding/onboarding-client-layout.tsx';
 import TopBar from '@/components/top-bar.tsx';
-import LinkButton from 'geostats-ui/button/link-button.tsx';
 import Footer from '@/components/footer.tsx';
+import {LinkButton} from 'geostats-ui';
 
 export type OnboardingLayoutProps = {
 	readonly children: ReactNode;

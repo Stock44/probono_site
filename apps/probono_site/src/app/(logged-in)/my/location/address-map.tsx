@@ -1,7 +1,7 @@
 import React, {type ForwardedRef, useMemo} from 'react';
 import {type Map} from 'leaflet';
 import {MapContainer, TileLayer, useMapEvents} from 'react-leaflet';
-import LocationMarker from 'geostats-ui/location-marker.tsx';
+import {LocationMarker} from 'geostats-ui';
 
 type AddressMapProps = {
 	readonly selectedCoords: [number, number] | null;

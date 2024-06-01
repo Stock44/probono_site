@@ -12,15 +12,11 @@ import {useQuery} from 'react-query';
 import dynamic from 'next/dynamic';
 import {useDebounce} from 'usehooks-ts';
 import Done from '@material-design-icons/svg/round/done.svg';
-import Select from 'geostats-ui/select.tsx';
-import TextField from 'geostats-ui/text-field.tsx';
-import {NumberField} from 'geostats-ui/number-field.tsx';
-import Form, {type FormState} from 'geostats-ui/form/form.tsx';
 import {formValidators} from '@/lib/form-utils.ts';
 import {addressInitSchema} from '@/lib/schemas/address.ts';
 import {geocodeAddress, reverseGeocode} from '@/lib/mapbox.ts';
 import {type OrganizationUpdate} from '@/lib/schemas/organization.ts';
-import FormHeader from 'geostats-ui/form-header.tsx';
+import {Select, TextField, NumberField, Form, type FormState, FormHeader} from 'geostats-ui';
 
 const AddressMap = dynamic(
 	async () => import('@/app/(logged-in)/my/location/address-map.tsx'),

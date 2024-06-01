@@ -1,7 +1,6 @@
 import React from 'react';
 import NavigateNext from '@material-design-icons/svg/round/navigate_next.svg';
-import LinkButton from 'geostats-ui/button/link-button.tsx';
-import AnimatedLayoutContainer from 'geostats-ui/animated-layout-container.tsx';
+import {LinkButton, AnimatedLayoutContainer} from 'geostats-ui';
 
 export type OnboardingPageProps = {
 	readonly searchParams: {

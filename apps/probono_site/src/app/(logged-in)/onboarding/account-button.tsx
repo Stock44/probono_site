@@ -3,8 +3,7 @@ import React from 'react';
 import Link from 'next/link';
 import Person from '@material-design-icons/svg/round/person.svg';
 import ArrowDropDown from '@material-design-icons/svg/round/arrow_drop_down.svg';
-import Button from 'geostats-ui/button/button.tsx';
-import PopoverButtonTrigger from 'geostats-ui/popover-button-trigger.tsx';
+import {Button, PopoverButtonTrigger} from 'geostats-ui';
 
 export default function AccountButton() {
 	return (

@@ -2,15 +2,14 @@
 import React from 'react';
 import {type User} from '@prisma/client';
 import NavigateNext from '@material-design-icons/svg/round/navigate_next.svg';
-import TextField from 'geostats-ui/text-field.tsx';
-import Form, {type FormState} from 'geostats-ui/form/form.tsx';
 import {
 	type UserInit,
 	userInitSchema,
 	type UserUpdate,
 } from '@/lib/schemas/user.ts';
 import {formValidators} from '@/lib/form-utils.ts';
-import SubmitButton from 'geostats-ui/submit-button.tsx';
+import  from 'geostats-ui/submit-button.tsx';
+import {SubmitButton, type FormState, TextField} from 'geostats-ui';
 
 export type UserOnboardingFormProps =
 	| {
