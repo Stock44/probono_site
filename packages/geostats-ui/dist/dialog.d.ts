@@ -9,4 +9,4 @@ type DialogProps = {
 } & AriaDialogProps;
 declare function Dialog(props: DialogProps): react_jsx_runtime.JSX.Element;
 
-export { type DialogProps, Dialog as default };
+export { Dialog, type DialogProps };

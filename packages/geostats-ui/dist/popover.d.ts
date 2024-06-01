@@ -7,4 +7,4 @@ declare const Popover: React__default.ForwardRefExoticComponent<{
     readonly state: OverlayTriggerState;
 } & Omit<AriaPopoverProps, "popoverRef"> & React__default.RefAttributes<HTMLDivElement>>;
 
-export { Popover as default };
+export { Popover };

@@ -7,4 +7,4 @@ type AnimatedLayoutContainerProps = {
 };
 declare function AnimatedLayoutContainer(props: AnimatedLayoutContainerProps): react_jsx_runtime.JSX.Element;
 
-export { type AnimatedLayoutContainerProps, AnimatedLayoutContainer as default };
+export { AnimatedLayoutContainer, type AnimatedLayoutContainerProps };

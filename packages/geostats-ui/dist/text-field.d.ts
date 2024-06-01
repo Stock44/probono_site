@@ -1,13 +1,12 @@
-import React__default, { ReactNode } from 'react';
+import * as react_jsx_runtime from 'react/jsx-runtime';
+import { ReactNode, RefObject } from 'react';
 import { AriaTextFieldProps } from 'react-aria';
 
 type TextFieldProps = {
     readonly className?: string;
     readonly icon?: ReactNode;
+    readonly inputRef?: RefObject<HTMLInputElement>;
 } & AriaTextFieldProps;
-declare const _default: React__default.ForwardRefExoticComponent<{
-    readonly className?: string | undefined;
-    readonly icon?: React__default.ReactNode;
-} & AriaTextFieldProps & React__default.RefAttributes<HTMLInputElement>>;
+declare function TextField(props: TextFieldProps): react_jsx_runtime.JSX.Element;
 
-export { type TextFieldProps, _default as default };
+export { TextField, type TextFieldProps };

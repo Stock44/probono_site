@@ -9,4 +9,4 @@ type TagGroupProps<T extends Record<string, unknown>> = {
 } & Omit<AriaTagGroupProps<T>, 'onRemove'>;
 declare function TagGroup<T extends Record<string, unknown>>(props: TagGroupProps<T>): react_jsx_runtime.JSX.Element;
 
-export { type TagGroupProps, TagGroup as default };
+export { TagGroup, type TagGroupProps };

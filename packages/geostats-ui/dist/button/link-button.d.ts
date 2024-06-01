@@ -2,7 +2,7 @@ import * as react_jsx_runtime from 'react/jsx-runtime';
 import { ReactNode } from 'react';
 import { LinkProps } from 'next/link';
 import { VariantProps } from 'cva';
-import buttonVariants from './button-variants.js';
+import { buttonVariants } from './button-variants.js';
 
 type LinkButtonProps = {
     readonly children: ReactNode;
@@ -10,4 +10,4 @@ type LinkButtonProps = {
 } & LinkProps & VariantProps<typeof buttonVariants>;
 declare function LinkButton(props: LinkButtonProps): react_jsx_runtime.JSX.Element;
 
-export { type LinkButtonProps, LinkButton as default };
+export { LinkButton, type LinkButtonProps };

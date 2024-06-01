@@ -9,4 +9,4 @@ type SidebarProps = {
 } & AriaModalOverlayProps;
 declare function Sidebar(props: SidebarProps): react_jsx_runtime.JSX.Element;
 
-export { type SidebarProps, Sidebar as default };
+export { Sidebar, type SidebarProps };

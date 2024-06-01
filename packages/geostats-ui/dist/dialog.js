@@ -1,10 +1,10 @@
 "use client";
 import {
   Dialog
-} from "./chunk-QZGCNRQF.js";
+} from "./chunk-VE73YE4U.js";
 import "./chunk-2BW276DM.js";
 import "./chunk-BQWMX7FD.js";
 export {
-  Dialog as default
+  Dialog
 };
 //# sourceMappingURL=dialog.js.map

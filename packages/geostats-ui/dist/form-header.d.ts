@@ -6,4 +6,4 @@ type FormHeaderProps = {
 };
 declare function FormHeader(props: FormHeaderProps): react_jsx_runtime.JSX.Element;
 
-export { type FormHeaderProps, FormHeader as default };
+export { FormHeader, type FormHeaderProps };

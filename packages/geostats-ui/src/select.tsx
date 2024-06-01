@@ -20,10 +20,9 @@ export type SelectProps<T extends Record<string, unknown>> = {
 } & AriaSelectProps<T> &
 	SelectStateOptions<T>;
 
-const Select = forwardRef(function Select<T extends Record<string, unknown>>(
-	props: SelectProps<T>,
-	ref: ForwardedRef<HTMLButtonElement>,
-) {
+export const Select = forwardRef(function Select<
+	T extends Record<string, unknown>,
+>(props: SelectProps<T>, ref: ForwardedRef<HTMLButtonElement>) {
 	const {
 		className,
 		label,
@@ -82,7 +81,7 @@ const Select = forwardRef(function Select<T extends Record<string, unknown>>(
 			/>
 			<Button
 				{...triggerProps}
-				ref={triggerRef}
+				buttonRef={triggerRef}
 				variant='outlined'
 				isDisabled={isDisabled}
 				className={cx(
@@ -122,5 +121,3 @@ const Select = forwardRef(function Select<T extends Record<string, unknown>>(
 		</div>
 	);
 });
-
-export Select;

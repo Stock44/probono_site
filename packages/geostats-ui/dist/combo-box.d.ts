@@ -14,4 +14,4 @@ type BaseComboBoxProps<T extends Record<string, unknown>> = {
 } & AriaComboBoxProps<T>;
 declare function BaseComboBox<T extends Record<string, unknown>>(props: BaseComboBoxProps<T>): react_jsx_runtime.JSX.Element;
 
-export { BaseComboBox, type BaseComboBoxProps, type ComboBoxProps, StatefulComboBox, type StatefulComboBoxProps, ComboBox as default };
+export { BaseComboBox, type BaseComboBoxProps, ComboBox, type ComboBoxProps, StatefulComboBox, type StatefulComboBoxProps };

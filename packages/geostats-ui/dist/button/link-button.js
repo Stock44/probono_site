@@ -1,10 +1,10 @@
 import {
   LinkButton
-} from "../chunk-BSGEI2WN.js";
-import "../chunk-3ED7USTZ.js";
+} from "../chunk-SVW2CWPB.js";
+import "../chunk-DVNVA3OH.js";
 import "../chunk-2BW276DM.js";
 import "../chunk-BQWMX7FD.js";
 export {
-  LinkButton as default
+  LinkButton
 };
 //# sourceMappingURL=link-button.js.map

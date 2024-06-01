@@ -1,9 +1,9 @@
 "use client";
 import {
   AnimatedLayoutContainer
-} from "./chunk-PIDZVYSZ.js";
+} from "./chunk-Y72P7KMW.js";
 import "./chunk-BQWMX7FD.js";
 export {
-  AnimatedLayoutContainer as default
+  AnimatedLayoutContainer
 };
 //# sourceMappingURL=animated-layout-container.js.map

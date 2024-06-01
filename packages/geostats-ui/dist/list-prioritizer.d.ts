@@ -9,4 +9,4 @@ type ListPrioritizerProps<T extends Record<string, unknown>> = {
 } & ReorderableListStateProps<T>;
 declare function ListPrioritizer<T extends Record<string, unknown>>(props: ListPrioritizerProps<T>): react_jsx_runtime.JSX.Element;
 
-export { type ListPrioritizerProps, ListPrioritizer as default };
+export { ListPrioritizer, type ListPrioritizerProps };

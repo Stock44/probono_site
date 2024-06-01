@@ -19,4 +19,4 @@ type HashSpyToasterProps = {
  */
 declare function HashSpyToaster(props: HashSpyToasterProps): null;
 
-export { type HashSpyToasterProps, HashSpyToaster as default };
+export { HashSpyToaster, type HashSpyToasterProps };

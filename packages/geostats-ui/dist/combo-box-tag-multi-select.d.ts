@@ -17,4 +17,4 @@ type ComboBoxTagMultiSelectProps<T extends Record<string, unknown>> = {
 };
 declare function ComboBoxTagMultiSelect<T extends Record<string, unknown>>(props: ComboBoxTagMultiSelectProps<T>): react_jsx_runtime.JSX.Element;
 
-export { type ComboBoxTagMultiSelectProps, ComboBoxTagMultiSelect as default };
+export { ComboBoxTagMultiSelect, type ComboBoxTagMultiSelectProps };

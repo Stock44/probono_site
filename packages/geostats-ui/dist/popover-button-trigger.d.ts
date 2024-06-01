@@ -14,4 +14,4 @@ type PopoverButtonTriggerProps = {
 } & OverlayTriggerProps & ButtonProps;
 declare function PopoverButtonTrigger(props: PopoverButtonTriggerProps): react_jsx_runtime.JSX.Element;
 
-export { type PopoverButtonTriggerProps, PopoverButtonTrigger as default };
+export { PopoverButtonTrigger, type PopoverButtonTriggerProps };

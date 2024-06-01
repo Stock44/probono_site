@@ -7,8 +7,8 @@ import {
 } from 'react-stately';
 import ArrowDropDown from '@material-design-icons/svg/round/arrow_drop_down.svg';
 import {BaseListBox} from './list-box.tsx';
-import Button from './button/button.tsx';
-import Popover from './popover.tsx';
+import {Button} from './button/button.tsx';
+import {Popover} from './popover.tsx';
 import {cx} from './cva.ts';
 
 export type ComboBoxProps<T extends Record<string, unknown>> =
@@ -81,7 +81,11 @@ export function BaseComboBox<T extends Record<string, unknown>>(
 					ref={inputObjectRef}
 					className='grow bg-transparent p-1 outline-0 placeholder:text-stone-500'
 				/>
-				<Button {...buttonProps} ref={buttonObjectRef} variant='text'>
+				<Button
+					{...buttonProps}
+					buttonRef={buttonObjectRef}
+					variant='text'
+				>
 					<ArrowDropDown
 						aria-hidden='true'
 						className='fill-current'

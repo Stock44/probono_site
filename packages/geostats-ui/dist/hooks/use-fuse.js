@@ -1,8 +1,8 @@
 import {
   useFuse
-} from "../chunk-XFV6XJTW.js";
+} from "../chunk-JT4IMHDW.js";
 import "../chunk-BQWMX7FD.js";
 export {
-  useFuse as default
+  useFuse
 };
 //# sourceMappingURL=use-fuse.js.map

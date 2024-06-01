@@ -6,7 +6,7 @@ import {
 	useTableSelectAllCheckbox,
 	VisuallyHidden,
 } from 'react-aria';
-import Checkbox from '@/checkbox.tsx';
+import {Checkbox} from '@/checkbox.tsx';
 
 export type TableSelectAllCellProps<T> = {
 	readonly column: GridNode<T>;

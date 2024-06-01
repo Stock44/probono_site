@@ -7,4 +7,4 @@ type SearchFieldProps = {
 } & AriaSearchFieldProps & SearchFieldProps$1;
 declare function SearchField(props: SearchFieldProps): react_jsx_runtime.JSX.Element;
 
-export { type SearchFieldProps, SearchField as default };
+export { SearchField, type SearchFieldProps };

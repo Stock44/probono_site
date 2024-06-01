@@ -2,7 +2,7 @@ import { VariantProps } from 'cva';
 
 declare const buttonVariants: (props?: ({
     size?: "xs" | "sm" | "md" | "lg" | "xl" | undefined;
-    variant?: "primary" | "secondary" | "outlined" | "destructive" | "text" | undefined;
+    variant?: "text" | "primary" | "secondary" | "outlined" | "destructive" | undefined;
 } & ({
     class?: string | number | boolean | (string | number | boolean | (string | number | boolean | (string | number | boolean | (string | number | boolean | (string | number | boolean | (string | number | boolean | (string | number | boolean | (string | number | boolean | (string | number | boolean | (string | number | boolean | (string | number | boolean | any | {
         [x: string]: any;
@@ -60,4 +60,4 @@ declare const buttonVariants: (props?: ({
 })) | undefined) => string;
 type ButtonVariantProps = VariantProps<typeof buttonVariants>;
 
-export { type ButtonVariantProps, buttonVariants as default };
+export { type ButtonVariantProps, buttonVariants };

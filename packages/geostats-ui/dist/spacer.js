@@ -1,8 +1,8 @@
 import {
   Spacer
-} from "./chunk-H6HIFH35.js";
+} from "./chunk-BVGYFCTU.js";
 import "./chunk-BQWMX7FD.js";
 export {
-  Spacer as default
+  Spacer
 };
 //# sourceMappingURL=spacer.js.map

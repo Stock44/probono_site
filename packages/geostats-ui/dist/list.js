@@ -1,13 +1,13 @@
 import {
-  ListItem,
-  list_default
-} from "./chunk-BAI7P3OI.js";
-import "./chunk-YCYC65IN.js";
+  List,
+  ListItem
+} from "./chunk-5QLJ37BA.js";
+import "./chunk-KKGHZZZD.js";
 import "./chunk-VPMSH5IA.js";
 import "./chunk-2BW276DM.js";
 import "./chunk-BQWMX7FD.js";
 export {
-  ListItem,
-  list_default as default
+  List,
+  ListItem
 };
 //# sourceMappingURL=list.js.map

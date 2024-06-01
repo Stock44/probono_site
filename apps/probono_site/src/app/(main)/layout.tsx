@@ -4,6 +4,7 @@ import TopBar from '@/components/top-bar.tsx';
 import Footer from '@/components/footer.tsx';
 import SidebarTrigger from 'geostats-ui/sidebar-trigger';
 import ALinkButton from 'geostats-ui/button/a-link-button';
+import {SidebarTrigger, ALinkButton} from 'geostats-uid';
 import NavLink from '@/app/(main)/nav-link.tsx';
 
 export type MainLayoutProps = {

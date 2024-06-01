@@ -10,4 +10,4 @@ type SocialLinkProps = {
 };
 declare function SocialLink(props: SocialLinkProps): react_jsx_runtime.JSX.Element;
 
-export { type SocialLinkProps, SocialLink as default };
+export { SocialLink, type SocialLinkProps };

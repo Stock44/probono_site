@@ -1,9 +1,9 @@
 import {
   LoadingSpinner
-} from "./chunk-ZXJ4M6MB.js";
+} from "./chunk-NQRPTKN5.js";
 import "./chunk-2BW276DM.js";
 import "./chunk-BQWMX7FD.js";
 export {
-  LoadingSpinner as default
+  LoadingSpinner
 };
 //# sourceMappingURL=loading-spinner.js.map

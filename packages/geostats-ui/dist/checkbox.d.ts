@@ -7,4 +7,4 @@ type CheckboxProps = {
 } & AriaCheckboxProps & ToggleProps;
 declare function Checkbox(props: CheckboxProps): react_jsx_runtime.JSX.Element;
 
-export { type CheckboxProps, Checkbox as default };
+export { Checkbox, type CheckboxProps };

@@ -16,4 +16,4 @@ type BaseDropdownProps = {
 };
 declare function BaseDropdown(props: BaseDropdownProps): react_jsx_runtime.JSX.Element;
 
-export { BaseDropdown, type BaseDropdownProps, type DropdownProps, StatefulDropDown, type StatefulDropDownProps, Dropdown as default };
+export { BaseDropdown, type BaseDropdownProps, Dropdown, type DropdownProps, StatefulDropDown, type StatefulDropDownProps };

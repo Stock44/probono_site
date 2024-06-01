@@ -1,9 +1,9 @@
 import {
-  popover_default
-} from "./chunk-KCDLBART.js";
+  Popover
+} from "./chunk-6Z6BK3HU.js";
 import "./chunk-VPMSH5IA.js";
 import "./chunk-BQWMX7FD.js";
 export {
-  popover_default as default
+  Popover
 };
 //# sourceMappingURL=popover.js.map

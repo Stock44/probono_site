@@ -13,4 +13,4 @@ declare const Select: React__default.ForwardRefExoticComponent<{
     readonly popoverPlacement?: Placement | undefined;
 } & AriaSelectProps<Record<string, unknown>> & SelectStateOptions<Record<string, unknown>> & React__default.RefAttributes<HTMLButtonElement>>;
 
-export { type SelectProps, Select as default };
+export { Select, type SelectProps };

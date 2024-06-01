@@ -2,7 +2,7 @@ import React, {useRef} from 'react';
 import {type GridNode} from '@react-types/grid';
 import {type TableState} from 'react-stately';
 import {useTableCell, useTableSelectionCheckbox} from 'react-aria';
-import Checkbox from '@/checkbox.tsx';
+import {Checkbox} from '@/checkbox.tsx';
 
 export type TableCheckboxCellProps<T> = {
 	readonly cell: GridNode<T>;

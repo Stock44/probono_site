@@ -11,4 +11,4 @@ type FileDropZoneProps = {
 } & FormValidationProps<File | undefined> & Omit<ComponentProps<'input'>, 'type' | 'accept' | 'ref'>;
 declare function FileDropZone(props: FileDropZoneProps): react_jsx_runtime.JSX.Element;
 
-export { type FileDropZoneProps, FileDropZone as default };
+export { FileDropZone, type FileDropZoneProps };

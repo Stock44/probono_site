@@ -13,4 +13,4 @@ import Fuse, { IFuseOptions } from 'fuse.js';
  */
 declare function useFuse<T>(items: List<T>, options?: IFuseOptions<T>): Fuse<T> | undefined;
 
-export { useFuse as default };
+export { useFuse };

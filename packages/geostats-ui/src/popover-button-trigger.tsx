@@ -2,11 +2,9 @@ import React, {type ReactElement, type ReactNode} from 'react';
 import {type OverlayTriggerProps, useOverlayTriggerState} from 'react-stately';
 import {mergeProps, type Placement, useOverlayTrigger} from 'react-aria';
 
-import {Button , type ButtonProps} from '@/button/button.tsx';
+import {Button, type ButtonProps} from '@/button/button.tsx';
 
-
-
-import Popover from '@/popover.tsx';
+import {Popover} from '@/popover.tsx';
 
 export type PopoverButtonTriggerProps = {
 	readonly className?: string;
@@ -28,7 +26,7 @@ export function PopoverButtonTrigger(props: PopoverButtonTriggerProps) {
 
 	return (
 		<>
-			<Button {...mergeProps(triggerProps, props)} ref={buttonRef}>
+			<Button {...mergeProps(triggerProps, props)} buttonRef={buttonRef}>
 				{label}
 			</Button>
 			{state.isOpen && (

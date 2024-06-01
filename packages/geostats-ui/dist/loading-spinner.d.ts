@@ -5,4 +5,4 @@ type LoadingSpinnerProps = {
 };
 declare function LoadingSpinner(props: LoadingSpinnerProps): react_jsx_runtime.JSX.Element;
 
-export { type LoadingSpinnerProps, LoadingSpinner as default };
+export { LoadingSpinner, type LoadingSpinnerProps };

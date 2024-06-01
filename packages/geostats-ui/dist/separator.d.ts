@@ -6,4 +6,4 @@ type SeparatorProps = {
 } & SeparatorProps$1;
 declare function Separator(props: SeparatorProps): react_jsx_runtime.JSX.Element;
 
-export { type SeparatorProps, Separator as default };
+export { Separator, type SeparatorProps };

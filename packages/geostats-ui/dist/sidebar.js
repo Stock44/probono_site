@@ -1,9 +1,9 @@
 "use client";
 import {
   Sidebar
-} from "./chunk-VUFQ3X6F.js";
+} from "./chunk-NECYG4IQ.js";
 import "./chunk-BQWMX7FD.js";
 export {
-  Sidebar as default
+  Sidebar
 };
 //# sourceMappingURL=sidebar.js.map

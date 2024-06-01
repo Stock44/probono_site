@@ -12,4 +12,4 @@ type SubmitButtonProps = {
 } & Omit<ButtonProps, 'type'>;
 declare function SubmitButton(props: SubmitButtonProps): react_jsx_runtime.JSX.Element;
 
-export { type SubmitButtonProps, SubmitButton as default };
+export { SubmitButton, type SubmitButtonProps };

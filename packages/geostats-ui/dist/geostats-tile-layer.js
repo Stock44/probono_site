@@ -1,8 +1,8 @@
 import {
   GeostatsTileLayer
-} from "./chunk-EPHI7DRS.js";
+} from "./chunk-BPY3MVPB.js";
 import "./chunk-BQWMX7FD.js";
 export {
-  GeostatsTileLayer as default
+  GeostatsTileLayer
 };
 //# sourceMappingURL=geostats-tile-layer.js.map

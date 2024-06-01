@@ -11,4 +11,4 @@ type SidebarTriggerProps = {
 } & OverlayTriggerProps & ButtonVariantProps;
 declare function SidebarTrigger(props: SidebarTriggerProps): react_jsx_runtime.JSX.Element;
 
-export { type SidebarTriggerProps, SidebarTrigger as default };
+export { SidebarTrigger, type SidebarTriggerProps };

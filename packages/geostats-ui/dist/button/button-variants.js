@@ -1,9 +1,9 @@
 import {
-  button_variants_default
-} from "../chunk-3ED7USTZ.js";
+  buttonVariants
+} from "../chunk-DVNVA3OH.js";
 import "../chunk-2BW276DM.js";
 import "../chunk-BQWMX7FD.js";
 export {
-  button_variants_default as default
+  buttonVariants
 };
 //# sourceMappingURL=button-variants.js.map

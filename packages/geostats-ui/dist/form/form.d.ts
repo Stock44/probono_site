@@ -24,4 +24,4 @@ type FormProps<T> = {
 };
 declare function Form<T>(props: FormProps<T>): react_jsx_runtime.JSX.Element;
 
-export { type FormAction, type FormProps, type FormState, Form as default };
+export { Form, type FormAction, type FormProps, type FormState };

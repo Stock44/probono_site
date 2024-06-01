@@ -22,4 +22,4 @@ type OptionProps<T extends Record<string, unknown>> = {
     readonly state: ListState<T>;
 };
 
-export { BaseListBox, type BaseListBoxProps, type ListBoxProps, type ListBoxSectionProps, type OptionProps, ListBox as default };
+export { BaseListBox, type BaseListBoxProps, ListBox, type ListBoxProps, type ListBoxSectionProps, type OptionProps };
