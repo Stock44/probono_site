@@ -3,8 +3,8 @@ import {Map, Seq} from 'immutable';
 import {type Key} from 'react-stately';
 import DragHandle from '@material-design-icons/svg/round/drag_handle.svg';
 import Remove from '@material-design-icons/svg/round/remove.svg';
-import Spacer from '@/spacer.tsx';
-import Button from '@/button/button.tsx';
+import {Spacer} from '@/spacer.tsx';
+import {Button} from '@/button/button.tsx';
 import useReorderableListState, {
 	type ReorderableListStateProps,
 } from '@/hooks/use-reorderable-list-state.ts';
@@ -15,7 +15,7 @@ export type ListPrioritizerProps<T extends Record<string, unknown>> = {
 	readonly className?: string;
 } & ReorderableListStateProps<T>;
 
-export default function ListPrioritizer<T extends Record<string, unknown>>(
+export function ListPrioritizer<T extends Record<string, unknown>>(
 	props: ListPrioritizerProps<T>,
 ) {
 	const {onRemove, className} = props;

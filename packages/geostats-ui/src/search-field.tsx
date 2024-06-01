@@ -6,7 +6,7 @@ import {
 } from 'react-stately';
 import Search from '@material-design-icons/svg/round/search.svg';
 import Close from '@material-design-icons/svg/round/close.svg';
-import Button from './button/button.tsx';
+import {Button} from './button/button.tsx';
 import {cx} from './cva.ts';
 
 export type SearchFieldProps = {
@@ -14,7 +14,7 @@ export type SearchFieldProps = {
 } & AriaSearchFieldProps &
 	SearchFieldStateProps;
 
-export default function SearchField(props: SearchFieldProps) {
+export function SearchField(props: SearchFieldProps) {
 	const {label, className} = props;
 	const state = useSearchFieldState(props);
 	const inputRef = useRef<HTMLInputElement>(null);

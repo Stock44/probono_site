@@ -8,9 +8,9 @@ import {
 	type Placement,
 } from 'react-aria';
 import ArrowDropDown from '@material-design-icons/svg/round/arrow_drop_down.svg';
-import Button from './button/button.tsx';
-import Popover from './popover.tsx';
-import ListBox from './list-box.tsx';
+import {Button} from './button/button.tsx';
+import {Popover} from './popover.tsx';
+import {ListBox} from './list-box.tsx';
 import {cx} from './cva.ts';
 
 export type SelectProps<T extends Record<string, unknown>> = {
@@ -123,4 +123,4 @@ const Select = forwardRef(function Select<T extends Record<string, unknown>>(
 	);
 });
 
-export default Select;
+export Select;

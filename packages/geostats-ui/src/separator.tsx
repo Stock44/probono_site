@@ -10,7 +10,7 @@ export type SeparatorProps = {
 	readonly className?: string;
 } & AriaSeparatorProps;
 
-export default function Separator(props: SeparatorProps) {
+export function Separator(props: SeparatorProps) {
 	const {className, orientation = 'horizontal'} = props;
 	const {separatorProps} = useSeparator(props);
 

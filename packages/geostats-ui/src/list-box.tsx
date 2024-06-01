@@ -17,7 +17,7 @@ export type ListBoxProps<T extends Record<string, unknown>> =
 	| StatefulListBoxProps<T>
 	| BaseListBoxProps<T>;
 
-export default function ListBox<T extends Record<string, unknown>>(
+export function ListBox<T extends Record<string, unknown>>(
 	props: ListBoxProps<T>,
 ) {
 	return 'state' in props ? (

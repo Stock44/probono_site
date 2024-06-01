@@ -15,7 +15,7 @@ export type CheckboxProps = {
 } & AriaCheckboxProps &
 	ToggleProps;
 
-export default function Checkbox(props: CheckboxProps) {
+export function Checkbox(props: CheckboxProps) {
 	const {children, className} = props;
 	const ref = useRef<HTMLInputElement>(null);
 	const state = useToggleState(props);

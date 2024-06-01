@@ -64,4 +64,4 @@ const Popover = forwardRef(function Popover(
 	);
 });
 
-export default Popover;
+export {Popover};

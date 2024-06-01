@@ -1,8 +1,8 @@
 'use client';
 import React, {type ReactNode} from 'react';
 import {useFormStatus} from 'react-dom';
-import Button, {type ButtonProps} from './button/button.tsx';
-import LoadingSpinner from './loading-spinner.tsx';
+import {Button,type ButtonProps} from './button/button.tsx';
+import {LoadingSpinner} from './loading-spinner.tsx';
 
 export type SubmitButtonProps = {
 	readonly children: ReactNode;
@@ -10,7 +10,7 @@ export type SubmitButtonProps = {
 	readonly iconPlacement?: 'left' | 'right';
 } & Omit<ButtonProps, 'type'>;
 
-export default function SubmitButton(props: SubmitButtonProps) {
+export function SubmitButton(props: SubmitButtonProps) {
 	const {isDisabled, children, icon, iconPlacement = 'left'} = props;
 	const {pending} = useFormStatus();
 	return (

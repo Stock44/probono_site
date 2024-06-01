@@ -8,7 +8,7 @@ export type AnimatedLayoutContainerProps = {
 	readonly className?: string;
 };
 
-export default function AnimatedLayoutContainer(
+export function AnimatedLayoutContainer(
 	props: AnimatedLayoutContainerProps,
 ) {
 	const {children, className} = props;

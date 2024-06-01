@@ -1,11 +1,11 @@
 'use client';
 import React from 'react';
 import Delete from '@material-design-icons/svg/round/delete.svg';
-import Dialog from './dialog.tsx';
+import {Dialog} from './dialog.tsx';
 import ModalTrigger from './modal/modal-trigger.tsx';
-import LinkButton from './button/link-button.tsx';
+import {LinkButton} from './button/link-button.tsx';
 
-export default function DeleteDialogTrigger() {
+export function DeleteDialogTrigger() {
 	return (
 		<ModalTrigger
 			className='mb-4 text-red-500'

@@ -18,7 +18,7 @@ export type HashSpyToasterProps = {
  *
  * @returns {null} - This method does not return any value.
  */
-export default function HashSpyToaster(props: HashSpyToasterProps): null {
+export function HashSpyToaster(props: HashSpyToasterProps): null {
 	const {toast, hash} = props;
 
 	const toasts = useToasts();

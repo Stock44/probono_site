@@ -7,7 +7,7 @@ import {cx} from './cva.ts';
 
 export type DropdownProps = BaseDropdownProps | StatefulDropDownProps;
 
-export default function Dropdown(props: DropdownProps) {
+export function Dropdown(props: DropdownProps) {
 	return 'isOpen' in props ? (
 		<BaseDropdown {...props} />
 	) : (

@@ -27,7 +27,7 @@ const imageMimeTypes = new Set<string>([
 	'image/webp',
 ]);
 
-export default function FileDropZone(props: FileDropZoneProps) {
+export function FileDropZone(props: FileDropZoneProps) {
 	const {label, className, acceptedMimeTypes, error} = props;
 
 	const [file, setFile] = useState<File>();

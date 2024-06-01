@@ -10,7 +10,7 @@ export type SidebarProps = {
 	readonly children: ReactNode;
 } & AriaModalOverlayProps;
 
-export default function Sidebar(props: SidebarProps) {
+export function Sidebar(props: SidebarProps) {
 	const {state, children} = props;
 
 	const ref = useRef<HTMLDivElement>(null);

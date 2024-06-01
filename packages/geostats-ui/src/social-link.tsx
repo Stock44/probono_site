@@ -9,7 +9,7 @@ export type SocialLinkProps = {
 	readonly size?: number;
 	readonly className?: string;
 };
-export default function SocialLink(props: SocialLinkProps) {
+export function SocialLink(props: SocialLinkProps) {
 	const {image, href, name, className, size = 24} = props;
 	return (
 		<a

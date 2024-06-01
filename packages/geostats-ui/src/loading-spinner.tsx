@@ -5,7 +5,7 @@ export type LoadingSpinnerProps = {
 	readonly className?: string;
 };
 
-export default function LoadingSpinner(props: LoadingSpinnerProps) {
+export function LoadingSpinner(props: LoadingSpinnerProps) {
 	const {className} = props;
 	return (
 		<svg

@@ -15,7 +15,7 @@ export type ComboBoxProps<T extends Record<string, unknown>> =
 	| StatefulComboBoxProps<T>
 	| BaseComboBoxProps<T>;
 
-export default function ComboBox<T extends Record<string, unknown>>(
+export function ComboBox<T extends Record<string, unknown>>(
 	props: ComboBoxProps<T>,
 ) {
 	return 'state' in props ? (

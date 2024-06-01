@@ -1,13 +1,13 @@
 import React from 'react';
 import Save from '@material-design-icons/svg/round/save.svg';
-import SubmitButton from './submit-button.tsx';
+import {SubmitButton} from './submit-button.tsx';
 
 export type FormHeaderProps = {
 	readonly title: string;
 	readonly description: string;
 };
 
-export default function FormHeader(props: FormHeaderProps) {
+export function FormHeader(props: FormHeaderProps) {
 	const {title, description} = props;
 	return (
 		<div className='mb-4 flex flex-wrap items-end gap-3'>

@@ -5,7 +5,7 @@ import {useObjectRef} from '@react-aria/utils';
 import {twJoin} from 'tailwind-merge';
 import ArrowDropDown from '@material-design-icons/svg/round/arrow_drop_down.svg';
 import ArrowDropUp from '@material-design-icons/svg/round/arrow_drop_up.svg';
-import Button from '@/button/button.tsx';
+import {Button} from '@/button/button.tsx';
 import {cx} from '@/cva.ts';
 
 export type NumberFieldProps = {

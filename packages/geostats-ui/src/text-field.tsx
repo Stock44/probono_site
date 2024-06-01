@@ -1,4 +1,4 @@
-import React, {type ForwardedRef, forwardRef, type ReactNode} from 'react';
+import React, {type RefObject , type ReactNode} from 'react';
 import {type AriaTextFieldProps, useTextField} from 'react-aria';
 import {useObjectRef} from '@react-aria/utils';
 import {cx} from './cva.ts';
@@ -6,14 +6,14 @@ import {cx} from './cva.ts';
 export type TextFieldProps = {
 	readonly className?: string;
 	readonly icon?: ReactNode;
+	readonly inputRef?: RefObject<HTMLInputElement>;
 } & AriaTextFieldProps;
 
-export default forwardRef(function TextField(
-	props: TextFieldProps,
-	ref: ForwardedRef<HTMLInputElement>,
+export function TextField(
+	props: TextFieldProps
 ) {
 	const {label, isDisabled, className, description, icon, isRequired} = props;
-	const inputRef = useObjectRef(ref);
+	const inputRef = useObjectRef(props.inputRef);
 	const {
 		labelProps,
 		inputProps,
@@ -64,4 +64,4 @@ export default forwardRef(function TextField(
 			)}
 		</div>
 	);
-});
+};

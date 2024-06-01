@@ -9,14 +9,14 @@ import {
 import {Set} from 'immutable';
 import {type Key, type ListState, type Node, useListState} from 'react-stately';
 import Close from '@material-design-icons/svg/round/close.svg';
-import Button from './button/button.tsx';
+import {Button} from './button/button.tsx';
 
 export type TagGroupProps<T extends Record<string, unknown>> = {
 	readonly className?: string;
 	readonly onRemove?: (keys: Set<Key>) => void;
 } & Omit<AriaTagGroupProps<T>, 'onRemove'>;
 
-export default function TagGroup<T extends Record<string, unknown>>(
+export function TagGroup<T extends Record<string, unknown>>(
 	props: TagGroupProps<T>,
 ) {
 	const {className, label, description, errorMessage, onRemove} = props;

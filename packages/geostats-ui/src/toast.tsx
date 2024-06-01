@@ -10,7 +10,7 @@ import {
 import {AnimatePresence, motion, type Variants} from 'framer-motion';
 import {omit} from 'lodash';
 import Close from '@material-design-icons/svg/round/close.svg';
-import Button from './button/button.tsx';
+import {Button} from './button/button.tsx';
 import {cx} from './cva.ts';
 
 export type ToastContent = {

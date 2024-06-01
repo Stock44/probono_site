@@ -3,8 +3,8 @@ import {useListState, type Key} from 'react-stately';
 import {type List, Seq, Set} from 'immutable';
 import {type CollectionElement} from '@react-types/shared';
 import {useId} from '@react-aria/utils';
-import ComboBox from './combo-box.tsx';
-import TagGroup from './tag-group.tsx';
+import {ComboBox} from './combo-box.tsx';
+import {TagGroup} from './tag-group.tsx';
 import {cx} from './cva.ts';
 
 export type ComboBoxTagMultiSelectProps<T extends Record<string, unknown>> = {
@@ -20,7 +20,7 @@ export type ComboBoxTagMultiSelectProps<T extends Record<string, unknown>> = {
 	readonly searchPlaceholder?: string;
 };
 
-export default function ComboBoxTagMultiSelect<
+export function ComboBoxTagMultiSelect<
 	T extends Record<string, unknown>,
 >(props: ComboBoxTagMultiSelectProps<T>) {
 	const {

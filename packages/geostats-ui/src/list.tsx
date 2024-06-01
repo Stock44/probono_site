@@ -14,7 +14,7 @@ import {
 	type Node,
 } from 'react-stately';
 import {useObjectRef} from '@react-aria/utils';
-import Checkbox from './checkbox.tsx';
+import {Checkbox} from './checkbox.tsx';
 import {cx} from './cva.ts';
 
 export type ListProps<T extends Record<string, unknown>> = {
@@ -48,7 +48,7 @@ function List<T extends Record<string, unknown>>(
 	);
 }
 
-export default forwardRef(List);
+export forwardRef(List);
 
 type ListItemProps<T extends Record<string, unknown>> = {
 	readonly state: ListState<T>;

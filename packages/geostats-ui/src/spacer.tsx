@@ -1,5 +1,5 @@
 import React from 'react';
 
-export default function Spacer() {
+export function Spacer() {
 	return <div className='grow' />;
 }
