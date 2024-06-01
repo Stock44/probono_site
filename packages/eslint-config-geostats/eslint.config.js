@@ -13,7 +13,6 @@ import pluginSecurity from 'eslint-plugin-security';
 import pluginReactRedux from 'eslint-plugin-react-redux';
 import eslintPluginPrettierRecommended from 'eslint-plugin-prettier/recommended';
 import pluginReactHooks from 'eslint-plugin-react-hooks';
-import pluginImport from 'eslint-plugin-import';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -36,8 +35,6 @@ export default [
 	pluginReactConfig,
 	...compat.config(pluginSonarJs.configs.recommended),
 	...compat.config(pluginReactHooks.configs.recommended),
-	...compat.config(pluginImport.configs.recommended),
-	...compat.config(pluginImport.configs.typescript),
 	eslintPluginPrettierRecommended,
 	{
 		rules: {
@@ -55,7 +52,6 @@ export default [
 			],
 			'react-redux/no-unused-prop-types': 'off', // weird duplicate rule that causes false positives
 			'react/react-in-jsx-scope': 'off',
-			'import/no-default-export': 'error',
 		},
 	},
 	{

@@ -31,6 +31,7 @@
 	},
 	"devDependencies": {
 		"@types/lodash": "^4.17.0",
+		"@typescript-eslint/parser": "^7.11.0",
 		"eslint-config-geostats": "*",
 		"prettier-config-geostats": "*",
 		"tailwind-config-geostats": "*",

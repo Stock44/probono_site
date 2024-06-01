@@ -232,3 +232,5 @@ yarn-error.log*
 next-env.d.ts
 
 /packages/geostats-ui/dist/
+
+.env*
