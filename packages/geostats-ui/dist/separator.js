@@ -1,9 +1,9 @@
+"use client"
 "use client";
 import {
   Separator
-} from "./chunk-G7EWWOWY.js";
-import "./chunk-2BW276DM.js";
-import "./chunk-BQWMX7FD.js";
+} from "./chunk-H7EMDQO3.js";
+import "./chunk-ZWT6NWOG.js";
 export {
   Separator
 };

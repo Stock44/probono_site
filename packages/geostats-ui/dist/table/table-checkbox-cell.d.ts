@@ -8,4 +8,4 @@ type TableCheckboxCellProps<T> = {
 };
 declare function TableCheckboxCell<T>(props: TableCheckboxCellProps<T>): react_jsx_runtime.JSX.Element;
 
-export { type TableCheckboxCellProps, TableCheckboxCell as default };
+export { TableCheckboxCell, type TableCheckboxCellProps };

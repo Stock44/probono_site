@@ -10,4 +10,4 @@ type TableRowProps<T> = {
 };
 declare function TableRow<T>(props: TableRowProps<T>): react_jsx_runtime.JSX.Element;
 
-export { type TableRowProps, TableRow as default };
+export { TableRow, type TableRowProps };

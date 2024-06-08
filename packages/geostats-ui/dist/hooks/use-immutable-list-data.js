@@ -1,8 +1,8 @@
+"use client"
 import {
   useImmutableListData
-} from "../chunk-OFUINEFA.js";
-import "../chunk-BQWMX7FD.js";
+} from "../chunk-QJMAKKE6.js";
 export {
-  useImmutableListData as default
+  useImmutableListData
 };
 //# sourceMappingURL=use-immutable-list-data.js.map

@@ -7,4 +7,4 @@ type TableProps<T> = {
 } & AriaTableProps<T> & TableStateProps<T>;
 declare function Table<T extends object>(props: TableProps<T>): react_jsx_runtime.JSX.Element;
 
-export { type TableProps, Table as default };
+export { Table, type TableProps };

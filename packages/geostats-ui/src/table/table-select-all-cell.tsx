@@ -13,9 +13,7 @@ export type TableSelectAllCellProps<T> = {
 	readonly state: TableState<T>;
 };
 
-export default function TableSelectAllCell<T>(
-	props: TableSelectAllCellProps<T>,
-) {
+export function TableSelectAllCell<T>(props: TableSelectAllCellProps<T>) {
 	const {column, state} = props;
 	const cellRef = useRef<HTMLTableHeaderCellElement>(null);
 	const {columnHeaderProps} = useTableColumnHeader(

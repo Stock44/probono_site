@@ -44,7 +44,7 @@ export default function OrganizationSelectorButton(
 
 	return (
 		<>
-			<Button {...menuTriggerProps} ref={ref} className={className}>
+			<Button {...menuTriggerProps} buttonRef={ref} className={className}>
 				<span className='flex-1 truncate'>
 					{currentOrganization.name}
 				</span>

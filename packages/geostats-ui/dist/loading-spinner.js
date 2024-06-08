@@ -1,8 +1,8 @@
+"use client"
 import {
   LoadingSpinner
-} from "./chunk-NQRPTKN5.js";
-import "./chunk-2BW276DM.js";
-import "./chunk-BQWMX7FD.js";
+} from "./chunk-LCDNAHPW.js";
+import "./chunk-ZWT6NWOG.js";
 export {
   LoadingSpinner
 };

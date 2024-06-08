@@ -1,3 +1,4 @@
+'use client';
 import React, {useRef} from 'react';
 import {type GridNode} from '@react-types/grid';
 import {type TableState} from 'react-stately';
@@ -9,7 +10,7 @@ export type TableCheckboxCellProps<T> = {
 	readonly state: TableState<T>;
 };
 
-export default function TableCheckboxCell<T>(props: TableCheckboxCellProps<T>) {
+export function TableCheckboxCell<T>(props: TableCheckboxCellProps<T>) {
 	const {cell, state} = props;
 	const cellRef = useRef<HTMLTableCellElement>(null);
 	const {gridCellProps} = useTableCell({node: cell}, state, cellRef);

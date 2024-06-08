@@ -1,9 +1,9 @@
+"use client"
 import {
   useSearchableListData
-} from "../chunk-5LSPA5KJ.js";
-import "../chunk-JT4IMHDW.js";
-import "../chunk-OFUINEFA.js";
-import "../chunk-BQWMX7FD.js";
+} from "../chunk-FN4NDOSM.js";
+import "../chunk-KR37POKN.js";
+import "../chunk-QJMAKKE6.js";
 export {
   useSearchableListData as default
 };

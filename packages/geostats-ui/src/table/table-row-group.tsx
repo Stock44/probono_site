@@ -7,7 +7,7 @@ export type TableRowGroupProps = {
 	readonly children: ReactNode;
 };
 
-export default function TableRowGroup(props: TableRowGroupProps) {
+export function TableRowGroup(props: TableRowGroupProps) {
 	const {type: Element, children} = props;
 
 	const {rowGroupProps} = useTableRowGroup();

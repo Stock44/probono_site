@@ -9,8 +9,8 @@
 		}
 	},
 	"scripts": {
-		"build": "tsup",
-		"dev": "tsup --watch",
+		"build": "NODE_OPTIONS='--max-old-space-size=16384' tsup",
+		"dev": "NODE_OPTIONS='--max-old-space-size=16384' tsup --watch",
 		"lint": "eslint . --max-warnings 0",
 		"clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist"
 	},

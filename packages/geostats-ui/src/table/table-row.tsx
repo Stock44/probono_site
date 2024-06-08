@@ -10,7 +10,7 @@ export type TableRowProps<T> = {
 	readonly state: TableState<T>;
 };
 
-export default function TableRow<T>(props: TableRowProps<T>) {
+export function TableRow<T>(props: TableRowProps<T>) {
 	const {item, children, state} = props;
 	const rowRef = useRef<HTMLTableRowElement>(null);
 	const isSelected = state.selectionManager.isSelected(item.key);

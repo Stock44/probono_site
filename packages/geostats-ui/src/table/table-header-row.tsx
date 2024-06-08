@@ -1,3 +1,4 @@
+'use client';
 import React, {type ReactNode, useRef} from 'react';
 import {useTableHeaderRow} from 'react-aria';
 import type {GridNode} from '@react-types/grid';

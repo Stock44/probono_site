@@ -8,4 +8,4 @@ type TableSelectAllCellProps<T> = {
 };
 declare function TableSelectAllCell<T>(props: TableSelectAllCellProps<T>): react_jsx_runtime.JSX.Element;
 
-export { type TableSelectAllCellProps, TableSelectAllCell as default };
+export { TableSelectAllCell, type TableSelectAllCellProps };

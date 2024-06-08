@@ -1,9 +1,9 @@
+"use client"
 import {
   FileDropZone
-} from "./chunk-ZIZJYFP4.js";
-import "./chunk-VPMSH5IA.js";
-import "./chunk-2BW276DM.js";
-import "./chunk-BQWMX7FD.js";
+} from "./chunk-RB2TN4Z2.js";
+import "./chunk-MZPJR3CP.js";
+import "./chunk-ZWT6NWOG.js";
 export {
   FileDropZone
 };

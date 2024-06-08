@@ -1,9 +1,9 @@
+"use client"
 import {
   TableRow
-} from "../chunk-RMBLNDJT.js";
-import "../chunk-2BW276DM.js";
-import "../chunk-BQWMX7FD.js";
+} from "../chunk-HZYP7VJT.js";
+import "../chunk-ZWT6NWOG.js";
 export {
-  TableRow as default
+  TableRow
 };
 //# sourceMappingURL=table-row.js.map

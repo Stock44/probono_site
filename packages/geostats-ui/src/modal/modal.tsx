@@ -7,7 +7,7 @@ export type ModalProps = {
 	readonly children: ReactNode;
 } & AriaModalOverlayProps;
 
-export default function Modal(props: ModalProps) {
+export function Modal(props: ModalProps) {
 	const {state, children} = props;
 	const ref = React.useRef<HTMLDivElement>(null);
 	const {modalProps, underlayProps} = useModalOverlay(props, state, ref);

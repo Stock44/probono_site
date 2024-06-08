@@ -11,4 +11,4 @@ type ImmutableListData<T> = Omit<ListData<T>, 'items' | 'selectedKeys' | 'setSel
 };
 declare function useImmutableListData<T>(options: ImmutableListOptions<T>): ImmutableListData<T>;
 
-export { type ImmutableListData, type ImmutableListOptions, useImmutableListData as default };
+export { type ImmutableListData, type ImmutableListOptions, useImmutableListData };

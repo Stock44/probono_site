@@ -1,8 +1,8 @@
+"use client"
 import {
   TableColumnHeader
-} from "../chunk-P4K5DSRK.js";
-import "../chunk-2BW276DM.js";
-import "../chunk-BQWMX7FD.js";
+} from "../chunk-SYTOFJEN.js";
+import "../chunk-ZWT6NWOG.js";
 export {
   TableColumnHeader
 };

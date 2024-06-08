@@ -6,12 +6,11 @@ import paperVariants, {
 
 export type PaperProps = ComponentProps<'div'> & PaperVariantProps;
 
-const Paper = (props: PaperProps, ref: ForwardedRef<HTMLDivElement>) => (
-	<div
-		{...omit(props, ['hoverEffect', 'spacing'])}
-		ref={ref}
-		className={paperVariants(props)}
-	/>
-);
-
-export default forwardRef<HTMLDivElement>(Paper);
+export function Paper(props: PaperProps) {
+	return (
+		<div
+			{...omit(props, ['hoverEffect', 'spacing'])}
+			className={paperVariants(props)}
+		/>
+	);
+}

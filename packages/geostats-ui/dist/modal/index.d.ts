@@ -1,6 +1,6 @@
-export { ModalProps } from './modal.js';
+export { Modal, ModalProps } from './modal.js';
 export { modalContext, useCloseModal } from './modal-context.js';
-export { ModalTriggerProps } from './modal-trigger.js';
+export { ModalTrigger, ModalTriggerProps } from './modal-trigger.js';
 import 'react/jsx-runtime';
 import 'react';
 import 'react-aria';

@@ -20,7 +20,7 @@ export type ImmutableListData<T> = Omit<
 	readonly setSelectedKeys: (keys: Set<Key> | 'all') => void;
 };
 
-export default function useImmutableListData<T>(
+export function useImmutableListData<T>(
 	options: ImmutableListOptions<T>,
 ): ImmutableListData<T> {
 	const listData = useListData<T>({

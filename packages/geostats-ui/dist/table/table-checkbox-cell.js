@@ -1,10 +1,11 @@
+"use client"
+"use client";
 import {
   TableCheckboxCell
-} from "../chunk-WOVWEQ5J.js";
-import "../chunk-KKGHZZZD.js";
-import "../chunk-2BW276DM.js";
-import "../chunk-BQWMX7FD.js";
+} from "../chunk-4REWEA6B.js";
+import "../chunk-36Y3GJYB.js";
+import "../chunk-ZWT6NWOG.js";
 export {
-  TableCheckboxCell as default
+  TableCheckboxCell
 };
 //# sourceMappingURL=table-checkbox-cell.js.map

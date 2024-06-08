@@ -7,4 +7,4 @@ type TableRowGroupProps = {
 };
 declare function TableRowGroup(props: TableRowGroupProps): react_jsx_runtime.JSX.Element;
 
-export { type TableRowGroupProps, TableRowGroup as default };
+export { TableRowGroup, type TableRowGroupProps };

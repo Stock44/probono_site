@@ -1,10 +1,10 @@
+"use client"
 import {
-  paper_default
-} from "../chunk-WKF4JODK.js";
-import "../chunk-URFHZKAI.js";
-import "../chunk-2BW276DM.js";
-import "../chunk-BQWMX7FD.js";
+  Paper
+} from "../chunk-ELDDUETZ.js";
+import "../chunk-MV64WXPP.js";
+import "../chunk-ZWT6NWOG.js";
 export {
-  paper_default as default
+  Paper
 };
 //# sourceMappingURL=paper.js.map

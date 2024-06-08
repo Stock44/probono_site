@@ -1,7 +1,7 @@
+"use client"
 import {
   GeostatsTileLayer
-} from "./chunk-BPY3MVPB.js";
-import "./chunk-BQWMX7FD.js";
+} from "./chunk-B4B4HDQJ.js";
 export {
   GeostatsTileLayer
 };

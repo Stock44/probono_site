@@ -9,4 +9,4 @@ type ModalProps = {
 } & AriaModalOverlayProps;
 declare function Modal(props: ModalProps): react_jsx_runtime.JSX.Element;
 
-export { type ModalProps, Modal as default };
+export { Modal, type ModalProps };

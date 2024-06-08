@@ -1,9 +1,9 @@
+"use client"
 "use client";
 import {
   Dialog
-} from "./chunk-VE73YE4U.js";
-import "./chunk-2BW276DM.js";
-import "./chunk-BQWMX7FD.js";
+} from "./chunk-UZ3PVINW.js";
+import "./chunk-ZWT6NWOG.js";
 export {
   Dialog
 };

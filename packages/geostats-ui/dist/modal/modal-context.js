@@ -1,8 +1,9 @@
+"use client"
+"use client";
 import {
   modalContext,
   useCloseModal
-} from "../chunk-E6V3DQUE.js";
-import "../chunk-BQWMX7FD.js";
+} from "../chunk-7WZ6EXUR.js";
 export {
   modalContext,
   useCloseModal

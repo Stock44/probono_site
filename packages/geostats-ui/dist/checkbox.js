@@ -1,8 +1,8 @@
+"use client"
 import {
   Checkbox
-} from "./chunk-KKGHZZZD.js";
-import "./chunk-2BW276DM.js";
-import "./chunk-BQWMX7FD.js";
+} from "./chunk-36Y3GJYB.js";
+import "./chunk-ZWT6NWOG.js";
 export {
   Checkbox
 };

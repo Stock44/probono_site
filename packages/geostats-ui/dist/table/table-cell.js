@@ -1,9 +1,9 @@
+"use client"
 import {
   TableCell
-} from "../chunk-3I3WHWOK.js";
-import "../chunk-2BW276DM.js";
-import "../chunk-BQWMX7FD.js";
+} from "../chunk-NV4UZ5L5.js";
+import "../chunk-ZWT6NWOG.js";
 export {
-  TableCell as default
+  TableCell
 };
 //# sourceMappingURL=table-cell.js.map

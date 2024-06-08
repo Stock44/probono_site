@@ -1,8 +1,8 @@
+"use client"
 import {
   Popover
-} from "./chunk-6Z6BK3HU.js";
-import "./chunk-VPMSH5IA.js";
-import "./chunk-BQWMX7FD.js";
+} from "./chunk-3YA4ISDS.js";
+import "./chunk-MZPJR3CP.js";
 export {
   Popover
 };

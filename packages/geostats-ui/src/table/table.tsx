@@ -1,13 +1,13 @@
 import React, {useRef} from 'react';
 import {type AriaTableProps, useTable} from 'react-aria';
 import {type TableStateProps, useTableState} from 'react-stately';
-import TableRowGroup from '@/table/table-row-group.tsx';
+import {TableRowGroup} from '@/table/table-row-group.tsx';
 import {TableHeaderRow} from '@/table/table-header-row.tsx';
-import TableSelectAllCell from '@/table/table-select-all-cell.tsx';
+import {TableSelectAllCell} from '@/table/table-select-all-cell.tsx';
 import {TableColumnHeader} from '@/table/table-column-header.tsx';
-import TableRow from '@/table/table-row.tsx';
-import TableCheckboxCell from '@/table/table-checkbox-cell.tsx';
-import TableCell from '@/table/table-cell.tsx';
+import {TableRow} from '@/table/table-row.tsx';
+import {TableCheckboxCell} from '@/table/table-checkbox-cell.tsx';
+import {TableCell} from '@/table/table-cell.tsx';
 import {cx} from '@/cva.ts';
 
 export type TableProps<T> = {
@@ -15,7 +15,7 @@ export type TableProps<T> = {
 } & AriaTableProps<T> &
 	TableStateProps<T>;
 
-export default function Table<T extends object>(props: TableProps<T>) {
+export function Table<T extends object>(props: TableProps<T>) {
 	const {className} = props;
 
 	const state = useTableState<T>(props);

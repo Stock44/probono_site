@@ -1,7 +1,7 @@
+"use client"
 import {
   Spacer
-} from "./chunk-BVGYFCTU.js";
-import "./chunk-BQWMX7FD.js";
+} from "./chunk-PZU557AL.js";
 export {
   Spacer
 };

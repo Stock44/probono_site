@@ -8,8 +8,7 @@ import {
 	type UserUpdate,
 } from '@/lib/schemas/user.ts';
 import {formValidators} from '@/lib/form-utils.ts';
-import  from 'geostats-ui/submit-button.tsx';
-import {SubmitButton, type FormState, TextField} from 'geostats-ui';
+import {SubmitButton, type FormState, TextField, Form} from 'geostats-ui';
 
 export type UserOnboardingFormProps =
 	| {

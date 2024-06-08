@@ -1,4 +1,4 @@
-import {type ForwardedRef, forwardRef, type ReactNode} from 'react';
+import {type ReactNode, type RefObject} from 'react';
 import {type AriaNumberFieldProps, useLocale, useNumberField} from 'react-aria';
 import {type NumberFieldStateOptions, useNumberFieldState} from 'react-stately';
 import {useObjectRef} from '@react-aria/utils';
@@ -12,13 +12,11 @@ export type NumberFieldProps = {
 	readonly className?: string;
 	readonly name?: string;
 	readonly icon?: ReactNode;
+	readonly inputRef?: RefObject<HTMLInputElement>;
 } & AriaNumberFieldProps &
 	Omit<NumberFieldStateOptions, 'locale'>;
 
-export const NumberField = forwardRef(function NumberField(
-	props: NumberFieldProps,
-	ref: ForwardedRef<HTMLInputElement>,
-) {
+export function NumberField(props: NumberFieldProps) {
 	const {locale} = useLocale();
 	const {label, className, icon, isDisabled, name, isRequired} = props;
 	const state = useNumberFieldState({
@@ -26,7 +24,7 @@ export const NumberField = forwardRef(function NumberField(
 		...props,
 		locale,
 	});
-	const inputRef = useObjectRef(ref);
+	const inputRef = useObjectRef(props.inputRef);
 	const {
 		labelProps,
 		groupProps,
@@ -86,4 +84,4 @@ export const NumberField = forwardRef(function NumberField(
 			)}
 		</div>
 	);
-});
+}

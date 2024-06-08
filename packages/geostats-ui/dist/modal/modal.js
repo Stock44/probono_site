@@ -1,8 +1,8 @@
+"use client"
 import {
   Modal
-} from "../chunk-L5EMHVMM.js";
-import "../chunk-BQWMX7FD.js";
+} from "../chunk-NS3QULJG.js";
 export {
-  Modal as default
+  Modal
 };
 //# sourceMappingURL=modal.js.map

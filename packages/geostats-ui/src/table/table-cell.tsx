@@ -9,7 +9,7 @@ export type TableCellProps<T> = {
 	readonly state: TableState<T>;
 };
 
-export default function TableCell<T>(props: TableCellProps<T>) {
+export function TableCell<T>(props: TableCellProps<T>) {
 	const {cell, state} = props;
 
 	const cellRef = useRef<HTMLTableCellElement>(null);

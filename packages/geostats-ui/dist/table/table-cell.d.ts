@@ -8,4 +8,4 @@ type TableCellProps<T> = {
 };
 declare function TableCell<T>(props: TableCellProps<T>): react_jsx_runtime.JSX.Element;
 
-export { type TableCellProps, TableCell as default };
+export { TableCell, type TableCellProps };

@@ -1,17 +1,17 @@
+"use client"
 import {
   Table
-} from "../chunk-LDWJ6DPR.js";
-import "../chunk-WOVWEQ5J.js";
-import "../chunk-P4K5DSRK.js";
-import "../chunk-E2RS2WK2.js";
-import "../chunk-6DORXOGE.js";
-import "../chunk-RMBLNDJT.js";
-import "../chunk-HIQUFUXX.js";
-import "../chunk-3I3WHWOK.js";
-import "../chunk-KKGHZZZD.js";
-import "../chunk-2BW276DM.js";
-import "../chunk-BQWMX7FD.js";
+} from "../chunk-HMMZW3L7.js";
+import "../chunk-SYTOFJEN.js";
+import "../chunk-ZR7H7G6O.js";
+import "../chunk-KGJURYK3.js";
+import "../chunk-HZYP7VJT.js";
+import "../chunk-QGP7XVOW.js";
+import "../chunk-NV4UZ5L5.js";
+import "../chunk-4REWEA6B.js";
+import "../chunk-36Y3GJYB.js";
+import "../chunk-ZWT6NWOG.js";
 export {
-  Table as default
+  Table
 };
 //# sourceMappingURL=table.js.map

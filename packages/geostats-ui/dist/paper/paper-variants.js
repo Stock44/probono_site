@@ -1,8 +1,8 @@
+"use client"
 import {
   paper_variants_default
-} from "../chunk-URFHZKAI.js";
-import "../chunk-2BW276DM.js";
-import "../chunk-BQWMX7FD.js";
+} from "../chunk-MV64WXPP.js";
+import "../chunk-ZWT6NWOG.js";
 export {
   paper_variants_default as default
 };

@@ -2,7 +2,7 @@
 import React, {type ReactElement, type ReactNode} from 'react';
 import {type OverlayTriggerProps, useOverlayTriggerState} from 'react-stately';
 import {useOverlayTrigger} from 'react-aria';
-import Modal, {type ModalProps} from '@/modal/modal.tsx';
+import {Modal, type ModalProps} from '@/modal/modal.tsx';
 import {Button} from '@/button/button.tsx';
 import {type ButtonVariantProps} from '@/button/button-variants.tsx';
 import {modalContext} from '@/modal/modal-context.ts';
@@ -15,7 +15,7 @@ export type ModalTriggerProps = {
 	Omit<ModalProps, 'state' | 'children'> &
 	ButtonVariantProps;
 
-export default function ModalTrigger(props: ModalTriggerProps) {
+export function ModalTrigger(props: ModalTriggerProps) {
 	const {children, label, className} = props;
 	const state = useOverlayTriggerState(props);
 	const {triggerProps, overlayProps} = useOverlayTrigger(

@@ -1,10 +1,10 @@
+"use client"
 import {
   TableSelectAllCell
-} from "../chunk-HIQUFUXX.js";
-import "../chunk-KKGHZZZD.js";
-import "../chunk-2BW276DM.js";
-import "../chunk-BQWMX7FD.js";
+} from "../chunk-QGP7XVOW.js";
+import "../chunk-36Y3GJYB.js";
+import "../chunk-ZWT6NWOG.js";
 export {
-  TableSelectAllCell as default
+  TableSelectAllCell
 };
 //# sourceMappingURL=table-select-all-cell.js.map

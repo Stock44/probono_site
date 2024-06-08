@@ -13,4 +13,4 @@ type ModalTriggerProps = {
 } & OverlayTriggerProps & Omit<ModalProps, 'state' | 'children'> & ButtonVariantProps;
 declare function ModalTrigger(props: ModalTriggerProps): react_jsx_runtime.JSX.Element;
 
-export { type ModalTriggerProps, ModalTrigger as default };
+export { ModalTrigger, type ModalTriggerProps };
