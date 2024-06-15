@@ -1,5 +1,0 @@
-{
-	"name": "prettier-config-geostats",
-	"type": "module",
-	"main": "prettier.config.js"
-}

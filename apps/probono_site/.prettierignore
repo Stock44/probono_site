@@ -1,8 +1,0 @@
-.next/*
-public/*
-node_modules/*
-.env.development
-.eslintrc.json
-.nvmrc
-.prettierrc.json
-

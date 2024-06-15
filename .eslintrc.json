@@ -1,0 +1,34 @@
+{
+	"env": {
+		"node": true,
+		"es6": true
+	},
+	"ignorePatterns": [
+		"./*",
+		"*__mocks__/*"
+	],
+	"rules": {
+		"react/prop-types": "off",
+		"import/no-duplicates": "off",
+		"react/require-default-props": "off",
+		"n/file-extension-in-import": "off",
+		"@typescript-eslint/ban-types": "off",
+		"n/prefer-global/process": "off",
+		"react/button-has-type": "off",
+		"new-cap": "off",
+		"react/jsx-indent-props": "off",
+		"react/jsx-closing-bracket-location": "off",
+		"react/jsx-closing-tag-location": "off",
+		"react/jsx-no-bind": "off",
+		"@typescript-eslint/no-unnecessary-type-assertion": "off",
+		"@typescript-eslint/no-unsafe-call": "off",
+		"no-irregular-whitespace": "off"
+	},
+	"extends": [
+		"plugin:@next/next/recommended",
+		"xo",
+		"xo-typescript",
+		"xo-react",
+		"./node_modules/xo/config/plugins.cjs"
+	]
+}
