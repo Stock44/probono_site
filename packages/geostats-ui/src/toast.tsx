@@ -9,6 +9,7 @@ import {
 } from '@react-aria/toast';
 import {AnimatePresence, motion, type Variants} from 'framer-motion';
 import {omit} from 'lodash';
+// @ts-expect-error bad typings
 import Close from '@material-design-icons/svg/round/close.svg';
 import {Button} from './button/button.tsx';
 import {cx} from './cva.ts';

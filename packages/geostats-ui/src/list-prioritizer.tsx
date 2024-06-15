@@ -1,7 +1,9 @@
 import React, {useMemo, useState} from 'react';
 import {Map, Seq} from 'immutable';
 import {type Key} from 'react-stately';
+// @ts-expect-error bad typings
 import DragHandle from '@material-design-icons/svg/round/drag_handle.svg';
+// @ts-expect-error bad typings
 import Remove from '@material-design-icons/svg/round/remove.svg';
 import {Spacer} from '@/spacer.tsx';
 import {Button} from '@/button/button.tsx';

@@ -3,7 +3,7 @@ import {redirect} from 'next/navigation';
 import {getSession} from '@auth0/nextjs-auth0';
 import Image from 'next/image';
 import NavigateNext from '@material-design-icons/svg/round/navigate_next.svg';
-import {AnimatedLayoutContainer, SubmitButton} from 'geostats-ui';
+import {AnimatedLayoutContainer} from 'geostats-ui';
 import prisma from '@/lib/prisma.ts';
 import createOrganizationAction from '@/lib/actions/create-organization-action.ts';
 import OrganizationCreationForm from '@/components/organization-creation-form.tsx';
@@ -12,6 +12,7 @@ import {
 	getOrganizationInvitation,
 } from '@/lib/models/organization-invitation.ts';
 import {getUserFromSession} from '@/lib/models/user.ts';
+import {SubmitButton} from '@/components/submit-button.tsx';
 
 export type OrganizationOnboardingPageProps = {
 	readonly searchParams: {

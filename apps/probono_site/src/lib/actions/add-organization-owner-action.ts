@@ -18,8 +18,7 @@ import {
 	activeOrganizationInvitationExists,
 	createOrganizationInvitation,
 } from '@/lib/models/organization-invitation.ts';
-
-import {type FormState} from 'geostats-ui';
+import {FormState} from '@/components/form';
 
 export default async function addOrganizationOwnerAction(
 	organizationId: number,

@@ -1,4 +1,4 @@
-import React, {type ForwardedRef, forwardRef, type ReactNode} from 'react';
+import React, {type ReactNode, RefObject} from 'react';
 import {useSelectState, type SelectStateOptions} from 'react-stately';
 import {useObjectRef} from '@react-aria/utils';
 import {
@@ -7,6 +7,7 @@ import {
 	HiddenSelect,
 	type Placement,
 } from 'react-aria';
+// @ts-expect-error bad typings
 import ArrowDropDown from '@material-design-icons/svg/round/arrow_drop_down.svg';
 import {Button} from './button/button.tsx';
 import {Popover} from './popover.tsx';
@@ -17,12 +18,13 @@ export type SelectProps<T extends Record<string, unknown>> = {
 	readonly className?: string;
 	readonly placeholder?: ReactNode;
 	readonly popoverPlacement?: Placement;
+	readonly selectRef?: RefObject<HTMLButtonElement>;
 } & AriaSelectProps<T> &
 	SelectStateOptions<T>;
 
-export const Select = forwardRef(function Select<
-	T extends Record<string, unknown>,
->(props: SelectProps<T>, ref: ForwardedRef<HTMLButtonElement>) {
+export function Select<T extends Record<string, unknown>>(
+	props: SelectProps<T>,
+) {
 	const {
 		className,
 		label,
@@ -30,6 +32,7 @@ export const Select = forwardRef(function Select<
 		name,
 		placeholder,
 		isRequired,
+		selectRef,
 		popoverPlacement = 'bottom start',
 	} = props;
 	const state = useSelectState({
@@ -38,7 +41,7 @@ export const Select = forwardRef(function Select<
 	});
 	const {selectedItem, isFocused, isOpen} = state;
 
-	const triggerRef = useObjectRef(ref);
+	const triggerRef = useObjectRef(selectRef);
 
 	const {
 		labelProps,
@@ -120,4 +123,4 @@ export const Select = forwardRef(function Select<
 			)}
 		</div>
 	);
-});
+}

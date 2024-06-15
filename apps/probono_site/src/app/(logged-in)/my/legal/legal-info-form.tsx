@@ -15,7 +15,8 @@ import {
 } from '@/lib/schemas/organization.ts';
 import {formValidators} from '@/lib/form-utils.ts';
 
-import {Select, NumberField, Checkbox, TextField, Form, type FormState, FormHeader} from 'geostats-ui';
+import {Select, NumberField, Checkbox, TextField} from 'geostats-ui';
+import {Form, FormHeader, FormState} from '@/components/form';
 
 const clunis = [
 	{

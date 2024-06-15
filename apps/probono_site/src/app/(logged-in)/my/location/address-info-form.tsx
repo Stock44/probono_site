@@ -16,14 +16,15 @@ import {formValidators} from '@/lib/form-utils.ts';
 import {addressInitSchema} from '@/lib/schemas/address.ts';
 import {geocodeAddress, reverseGeocode} from '@/lib/mapbox.ts';
 import {type OrganizationUpdate} from '@/lib/schemas/organization.ts';
-import {Select, TextField, NumberField, Form, type FormState, FormHeader} from 'geostats-ui';
+import {Select, TextField, NumberField} from 'geostats-ui';
+import {Form, FormHeader, FormState} from '@/components/form';
 
 const AddressMap = dynamic(
 	async () => import('@/app/(logged-in)/my/location/address-map.tsx'),
 	{
 		ssr: false,
 		loading: () => (
-			<div className='mb-4 h-96 w-full animate-pulse bg-stone-900' />
+			<div className="mb-4 h-96 w-full animate-pulse bg-stone-900" />
 		),
 	},
 );
@@ -33,9 +34,9 @@ export type AddressInfoFormProps = {
 	readonly organization: Organization & {
 		readonly address:
 			| (Address & {
-					readonly municipality: Municipality;
-					readonly location: [number, number] | null;
-			  })
+			readonly municipality: Municipality;
+			readonly location: [number, number] | null;
+		})
 			| null;
 	};
 	readonly action: (
@@ -134,16 +135,16 @@ export default function AddressInfoForm(props: AddressInfoFormProps) {
 				address:
 					coords && address?.municipalityId
 						? {
-								...address,
-								municipalityId: address.municipalityId,
-								location: coords,
-							}
+							...address,
+							municipalityId: address.municipalityId,
+							location: coords,
+						}
 						: undefined,
 			}}
 		>
 			<FormHeader
-				title='Dirección'
-				description='¿Dónde está ubicada tu organización?'
+				title="Dirección"
+				description="¿Dónde está ubicada tu organización?"
 			/>
 			<AddressMap
 				initialZoom={organization.address?.location ? 15 : 11}
@@ -187,13 +188,13 @@ export default function AddressInfoForm(props: AddressInfoFormProps) {
 					mapRef.current?.flyTo(address.center, 15);
 				}}
 			/>
-			<div className='w-full flex-none gap-x-4 lg:flex'>
+			<div className="w-full flex-none gap-x-4 lg:flex">
 				<TextField
 					isRequired
-					name='streetName'
+					name="streetName"
 					validate={validate.street}
-					label='Calle'
-					className='mb-4 grow'
+					label="Calle"
+					className="mb-4 grow"
 					value={address.street}
 					onChange={value => {
 						setAddress(previous => ({
@@ -206,9 +207,9 @@ export default function AddressInfoForm(props: AddressInfoFormProps) {
 				/>
 				<NumberField
 					isRequired
-					label='Número'
-					className='mb-4 w-full lg:w-32'
-					name='extNumber'
+					label="Número"
+					className="mb-4 w-full lg:w-32"
+					name="extNumber"
 					validate={validate.number}
 					value={address.number}
 					formatOptions={{
@@ -225,9 +226,9 @@ export default function AddressInfoForm(props: AddressInfoFormProps) {
 				/>
 				<TextField
 					isRequired
-					label='Codigo postal'
-					name='postalCode'
-					className='mb-4 w-full lg:w-32'
+					label="Codigo postal"
+					name="postalCode"
+					className="mb-4 w-full lg:w-32"
 					value={address.postalCode}
 					onChange={value => {
 						setAddress(previous => ({
@@ -239,13 +240,13 @@ export default function AddressInfoForm(props: AddressInfoFormProps) {
 					}}
 				/>
 			</div>
-			<div className='flex-none gap-x-4 lg:flex'>
+			<div className="flex-none gap-x-4 lg:flex">
 				<Select
 					isRequired
-					label='Estado'
-					placeholder='Selecciona un estado'
+					label="Estado"
+					placeholder="Selecciona un estado"
 					items={states}
-					className='mb-4 w-full basis-1/2'
+					className="mb-4 w-full basis-1/2"
 					selectedKey={address.stateId}
 					onSelectionChange={selection => {
 						setAddress(previous => ({
@@ -259,13 +260,13 @@ export default function AddressInfoForm(props: AddressInfoFormProps) {
 				</Select>
 				<Select
 					isRequired
-					name='municipalityId'
+					name="municipalityId"
 					validate={validate.municipalityId}
 					isDisabled={municipalities === undefined}
-					label='Municipio'
-					placeholder='Selecciona un municipio'
+					label="Municipio"
+					placeholder="Selecciona un municipio"
 					items={municipalities ?? []}
-					className='mb-4 w-full basis-1/2'
+					className="mb-4 w-full basis-1/2"
 					selectedKey={address.municipalityId}
 					onSelectionChange={selection => {
 						setAddress(previous => ({

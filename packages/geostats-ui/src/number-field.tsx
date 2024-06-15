@@ -3,7 +3,9 @@ import {type AriaNumberFieldProps, useLocale, useNumberField} from 'react-aria';
 import {type NumberFieldStateOptions, useNumberFieldState} from 'react-stately';
 import {useObjectRef} from '@react-aria/utils';
 import {twJoin} from 'tailwind-merge';
+// @ts-expect-error bad typings
 import ArrowDropDown from '@material-design-icons/svg/round/arrow_drop_down.svg';
+// @ts-expect-error bad typings
 import ArrowDropUp from '@material-design-icons/svg/round/arrow_drop_up.svg';
 import {Button} from '@/button/button.tsx';
 import {cx} from '@/cva.ts';

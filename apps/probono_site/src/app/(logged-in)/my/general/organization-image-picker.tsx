@@ -14,9 +14,11 @@ import {
 	type OrganizationUpdate,
 } from '@/lib/schemas/organization.ts';
 
-import {Button, Modal, Dialog, FileDropZone, Form, type FormState, SubmitButton} from 'geostats-ui';
+import {Button, Modal, Dialog, FileDropZone} from 'geostats-ui';
 
 import ImageButton from '@/components/image-button.tsx';
+import {Form, FormState} from '@/components/form';
+import {SubmitButton} from '@/components/submit-button.tsx';
 
 export type OrganizationImagePickerProps = {
 	readonly label: ReactNode;

@@ -6,13 +6,13 @@ import GeoStatsLogo from 'public/logos/geostats.png';
 import FacebookLogo from 'public/logos/facebook.png';
 import InstagramLogo from 'public/logos/instagram.png';
 import LinkedinLogo from 'public/logos/linkedin.png';
-import SocialLink from 'geostats-ui/social-link.tsx';
 import AccountButton from '@/app/(logged-in)/onboarding/account-button.tsx';
 import OrganizationSelectorButton from '@/components/organization-selector/organization-selector-button.tsx';
 import {
 	getCurrentUserOrganizations,
 	getUsersActiveOrganization,
 } from '@/lib/models/user.ts';
+import {SocialLink} from 'geostats-ui';
 
 export type LoggedInLayoutProps = {
 	readonly children: ReactNode;

@@ -42,13 +42,13 @@ export default function ActivityPrioritySelector(
 	return (
 		<>
 			<ComboBox
-				aria-label='Ingresa el nombre de un actividad.'
-				placeholder='Escribe aquí para buscar'
-				className='mb-4 w-full'
+				aria-label="Ingresa el nombre de un actividad."
+				placeholder="Escribe aquí para buscar"
+				className="mb-4 w-full"
 				label={label}
 				items={filteredItems}
 				inputValue={filterText}
-				menuTrigger='focus'
+				menuTrigger="focus"
 				selectedKey={null}
 				onInputChange={setFilterText}
 				onSelectionChange={(key: Key) => {
@@ -72,7 +72,7 @@ export default function ActivityPrioritySelector(
 			</ComboBox>
 			{selectedItems.size === 0 ? null : (
 				<ListPrioritizer
-					className='mb-4'
+					className="mb-4"
 					items={selectedItems}
 					onRemove={(key: Key) => {
 						console.log(key);
@@ -88,7 +88,7 @@ export default function ActivityPrioritySelector(
 
 						setSelectedKeys(selectedKeys.remove(key));
 					}}
-					onReorder={(key: Key, previous: Key, next: Key) => {
+					onReorder={(key, previous, next) => {
 						if (previous !== undefined) {
 							moveBefore(previous, [key]);
 							return;

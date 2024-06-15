@@ -2,7 +2,9 @@
 
 import Save from '@material-design-icons/svg/round/save.svg';
 import React, {useState} from 'react';
-import {Form, type FormState, SubmitButton, TextField} from 'geostats-ui';
+import {TextField} from 'geostats-ui';
+import {SubmitButton} from '@/components/submit-button.tsx';
+import {Form, type FormState} from '@/components/form';
 import {formValidators} from '@/lib/form-utils.ts';
 import {
 	type PasswordUpdate,
@@ -25,26 +27,26 @@ export default function PasswordForm(props: PasswordFormProps) {
 			<TextField
 				isRequired
 				validate={validate.currentPassword}
-				label='Contraseña actual'
-				name='currentPassword'
-				type='password'
-				className='mb-4'
+				label="Contraseña actual"
+				name="currentPassword"
+				type="password"
+				className="mb-4"
 			/>
 			<TextField
 				isRequired
 				value={password}
-				label='Nueva contraseña'
+				label="Nueva contraseña"
 				validate={validate.password}
-				name='password'
-				type='password'
-				className='mb-4'
+				name="password"
+				type="password"
+				className="mb-4"
 				onChange={setPassword}
 			/>
 			<TextField
 				isRequired
-				label='Confirma la nueva contraseña'
-				type='password'
-				className='mb-4'
+				label="Confirma la nueva contraseña"
+				type="password"
+				className="mb-4"
 				validate={value =>
 					value === password
 						? true

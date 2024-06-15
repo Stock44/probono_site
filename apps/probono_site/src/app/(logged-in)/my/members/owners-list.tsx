@@ -16,7 +16,9 @@ import Delete from '@material-design-icons/svg/round/delete.svg';
 import {type OrganizationOwnerAddition} from '@/lib/schemas/organization-owner-addition.ts';
 import {type ServerActionResult} from '@/lib/server-action-result.ts';
 
-import {TextField, Button, Table, Form, type FormAction, useToasts, LoadingSpinner, SubmitButton, Paper} from 'geostats-ui';
+import {TextField, Button, Table, useToasts, LoadingSpinner, Paper} from 'geostats-ui';
+import {Form, FormAction} from '@/components/form';
+import {SubmitButton} from '@/components/submit-button.tsx';
 
 export type OwnersListProps = {
 	readonly currentUser: User;
@@ -83,19 +85,19 @@ export default function OwnersList(props: OwnersListProps) {
 
 	return (
 		<>
-			<div className='mb-4 flex items-start gap-4'>
+			<div className="mb-4 flex items-start gap-4">
 				<Form
 					action={addOwnerAction}
-					className='flex flex-1 items-start gap-4'
+					className="flex flex-1 items-start gap-4"
 					successToast={{
 						title: 'Invitación enviada correctamente',
 					}}
 				>
 					<TextField
-						className='min-w-0 flex-1'
-						placeholder='Ingresa un correo para agregarlo a la organización'
-						type='email'
-						name='email'
+						className="min-w-0 flex-1"
+						placeholder="Ingresa un correo para agregarlo a la organización"
+						type="email"
+						name="email"
 						validate={email =>
 							email === currentUser.email
 								? 'No te puedes agregar a ti mismo.'
@@ -103,16 +105,16 @@ export default function OwnersList(props: OwnersListProps) {
 						}
 					/>
 					<SubmitButton
-						variant='secondary'
-						className='w-fit'
-						icon={<Add className='fill-current' />}
+						variant="secondary"
+						className="w-fit"
+						icon={<Add className="fill-current" />}
 					>
-						<span className='hidden md:inline'>Agregar</span>
+						<span className="hidden md:inline">Agregar</span>
 					</SubmitButton>
 				</Form>
 				<Button
-					variant='destructive'
-					className='flex-none'
+					variant="destructive"
+					className="flex-none"
 					isDisabled={
 						deletePending ||
 						(selectedUsers !== 'all' && selectedUsers.size === 0)
@@ -120,20 +122,20 @@ export default function OwnersList(props: OwnersListProps) {
 					onPress={onRemoveUsers}
 				>
 					{deletePending ? (
-						<LoadingSpinner className='m-1' />
+						<LoadingSpinner className="m-1" />
 					) : (
-						<Delete className='fill-current' />
+						<Delete className="fill-current" />
 					)}
 				</Button>
 			</div>
 
-			<Paper className='min-h-96 overflow-y-auto glow-lg' spacing='none'>
+			<Paper className="min-h-96 overflow-y-auto glow-lg" spacing="none">
 				<Table
 					showSelectionCheckboxes
 					selectedKeys={selectedUsers}
-					className='w-full'
-					selectionMode='multiple'
-					selectionBehavior='toggle'
+					className="w-full"
+					selectionMode="multiple"
+					selectionBehavior="toggle"
 					onSelectionChange={setSelectedUsers}
 				>
 					<TableHeader columns={columns}>

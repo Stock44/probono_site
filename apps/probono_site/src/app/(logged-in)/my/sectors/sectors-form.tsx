@@ -17,7 +17,7 @@ const SectorsMap = dynamic(
 		ssr: false,
 		loading() {
 			return (
-				<div className='mb-4 h-[32rem] grow animate-pulse rounded bg-stone-900' />
+				<div className="mb-4 h-[32rem] grow animate-pulse rounded bg-stone-900" />
 			);
 		},
 	},
@@ -26,9 +26,9 @@ const SectorsMap = dynamic(
 export type SectorFormProps = {
 	readonly sectors: Array<
 		Sector & {
-			geom: Geometry;
-			municipalityName: string;
-		}
+		geom: Geometry;
+		municipalityName: string;
+	}
 	>;
 	readonly organization: {
 		sectors: Array<{
@@ -50,7 +50,6 @@ export default function SectorsForm(props: SectorFormProps) {
 	);
 	const {add} = useToasts();
 	const [isLoading, setIsLoading] = useState(false);
-	const [error, setError] = useState<string>();
 	const selectedSectors = useMemo(
 		() =>
 			Seq(selectedSectorKeys)
@@ -67,21 +66,21 @@ export default function SectorsForm(props: SectorFormProps) {
 	);
 
 	return (
-		<div className='grow'>
-			<div className='mb-4 flex flex-wrap items-end gap-3'>
-				<div className='w-full lg:w-auto'>
-					<h1 className='mb-2 text-4xl text-stone-200'>
+		<div className="grow">
+			<div className="mb-4 flex flex-wrap items-end gap-3">
+				<div className="w-full lg:w-auto">
+					<h1 className="mb-2 text-4xl text-stone-200">
 						Alcance geográfico
 					</h1>
-					<p className='text-stone-300'>
+					<p className="text-stone-300">
 						¿En dónde trabaja tu organización?
 					</p>
 				</div>
-				<div className='hidden grow lg:block' />
+				<div className="hidden grow lg:block" />
 				<Button
 					isDisabled={isLoading}
-					className='shadow-stone-700 glow-xl'
-					type='submit'
+					className="shadow-stone-700 glow-xl"
+					type="submit"
 					onPress={async () => {
 						setIsLoading(true);
 						const result = await action([...selectedSectorKeys]);
@@ -90,33 +89,31 @@ export default function SectorsForm(props: SectorFormProps) {
 							add({
 								title: 'Se han guardado los cambios.',
 							});
-							setError(undefined);
-						} else {
-							setError(result.message);
 						}
 					}}
 				>
 					{isLoading ? (
-						<LoadingSpinner className='me-1' />
+						<LoadingSpinner className="me-1" />
 					) : (
-						<Save className='me-1 fill-current' />
+						<Save className="me-1 fill-current" />
 					)}
 					Guardar
 				</Button>
 			</div>
-			<div className='my-8 flex h-auto flex-wrap gap-4'>
+			<div className="my-8 flex h-auto flex-wrap gap-4">
 				<SectorsMap
 					sectors={sectors}
 					selectedKeys={selectedSectorKeys}
 					setSelectedKeys={key => {
 						setSelectedSectorKeys(key as Set<number>);
 					}}
-					className='h-[32rem] grow'
+					className="h-[32rem] grow"
 				/>
-				<Paper className='h-[28rem] w-full overflow-y-scroll scrollbar-thin scrollbar-track-transparent  scrollbar-thumb-stone-50 scrollbar-thumb-rounded lg:h-[32rem] lg:w-64'>
+				<Paper
+					className="h-[28rem] w-full overflow-y-scroll scrollbar-thin scrollbar-track-transparent  scrollbar-thumb-stone-50 scrollbar-thumb-rounded lg:h-[32rem] lg:w-64">
 					<ListBox
 						items={selectedSectors}
-						label='Sectores seleccionados'
+						label="Sectores seleccionados"
 					>
 						{municipality => (
 							<Section
@@ -125,13 +122,13 @@ export default function SectorsForm(props: SectorFormProps) {
 							>
 								{sector => (
 									<Item textValue={sector.name}>
-										<div className='flex w-full items-center'>
-											<span className='grow'>
+										<div className="flex w-full items-center">
+											<span className="grow">
 												{sector.name}
 											</span>
 											<Button
-												variant='text'
-												className='enabled:hover:bg-stone-700'
+												variant="text"
+												className="enabled:hover:bg-stone-700"
 												onPress={() => {
 													setSelectedSectorKeys(
 														previous =>
@@ -141,7 +138,7 @@ export default function SectorsForm(props: SectorFormProps) {
 													);
 												}}
 											>
-												<Remove className='fill-current' />
+												<Remove className="fill-current" />
 											</Button>
 										</div>
 									</Item>

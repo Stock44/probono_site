@@ -22,7 +22,8 @@ import {
 	organizationInitSchema,
 	type OrganizationUpdate,
 } from '@/lib/schemas/organization.ts';
-import {Select, ComboBoxTagMultiSelect, useImmutableListData, Form, type FormState, FormHeader} from 'geostats-ui';
+import {Select, ComboBoxTagMultiSelect, useImmutableListData} from 'geostats-ui';
+import {Form, FormHeader, FormState} from '@/components/form';
 
 export type PurposeInfoFormProps = {
 	readonly organizationCategories: OrganizationCategory[];

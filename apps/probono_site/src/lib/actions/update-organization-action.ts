@@ -11,8 +11,7 @@ import {
 } from '@/lib/models/organization.ts';
 import {handleActionError} from '@/lib/handle-action-error.ts';
 import {getUserFromSession} from '@/lib/models/user.ts';
-
-import {type FormState} from 'geostats-ui';
+import {FormState} from '@/components/form';
 
 export default async function updateOrganizationAction(
 	organizationId: number,

@@ -2,8 +2,8 @@ import React, {type ReactNode, useMemo} from 'react';
 import {FormValidationContext} from 'react-stately';
 import {useFormState} from 'react-dom';
 import {Seq} from 'immutable';
-import {type ToastContent} from '@/toast.tsx';
-import {FormSubmitListener} from '@/form/form-submit-listener.tsx';
+import {type ToastContent} from 'geostats-ui';
+import {FormSubmitListener} from '@/components/form/form-submit-listener.tsx';
 
 export type FormState<T> = {
 	readonly success: boolean;
@@ -91,10 +91,8 @@ export function Form<T>(props: FormProps<T>) {
 			{successToast && (
 				<FormSubmitListener state={state} successToast={successToast} />
 			)}
-			<FormValidationContext.Provider
-				// @ts-expect-error fieldErrors is of a correct type, provider is wrongly typed.
-				value={fieldErrors}
-			>
+			{/** @ts-expect-error wrong typing**/}
+			<FormValidationContext.Provider value={fieldErrors}>
 				{children}
 			</FormValidationContext.Provider>
 		</form>

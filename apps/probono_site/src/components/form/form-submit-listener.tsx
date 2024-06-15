@@ -1,7 +1,7 @@
 import {useFormStatus} from 'react-dom';
 import {useEffect} from 'react';
-import {type ToastContent, useToasts} from '@/toast.tsx';
-import {type FormState} from '@/form/form.tsx';
+import {FormState} from '@/components/form/form.tsx';
+import {ToastContent, useToasts} from 'geostats-ui';
 
 type FormSubmitListenerProps<T> = {
 	readonly state: FormState<T>;

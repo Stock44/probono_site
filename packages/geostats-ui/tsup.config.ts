@@ -1,4 +1,6 @@
 import {defineConfig} from 'tsup';
+import svgr from 'esbuild-plugin-svgr';
+import jsx from '@svgr/plugin-jsx';
 
 export default defineConfig(options => ({
 	banner: {
@@ -9,5 +11,6 @@ export default defineConfig(options => ({
 	dts: true,
 	sourcemap: true,
 	external: ['react', 'react-dom'],
+	esbuildPlugins: [svgr({svgo: false, plugins: [jsx]})],
 	...options,
 }));

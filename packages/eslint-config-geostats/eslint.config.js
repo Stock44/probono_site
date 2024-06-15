@@ -11,8 +11,8 @@ import pluginTailwindcss from 'eslint-plugin-tailwindcss';
 import pluginSonarJs from 'eslint-plugin-sonarjs';
 import pluginSecurity from 'eslint-plugin-security';
 import pluginReactRedux from 'eslint-plugin-react-redux';
-import eslintPluginPrettierRecommended from 'eslint-plugin-prettier/recommended';
 import pluginReactHooks from 'eslint-plugin-react-hooks';
+import prettierConfig from 'eslint-config-prettier';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -35,7 +35,7 @@ export default [
 	pluginReactConfig,
 	...compat.config(pluginSonarJs.configs.recommended),
 	...compat.config(pluginReactHooks.configs.recommended),
-	eslintPluginPrettierRecommended,
+	prettierConfig,
 	{
 		rules: {
 			'unicorn/no-null': 'off',

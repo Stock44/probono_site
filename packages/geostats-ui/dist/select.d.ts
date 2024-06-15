@@ -1,4 +1,5 @@
-import React__default, { ReactNode } from 'react';
+import * as react_jsx_runtime from 'react/jsx-runtime';
+import { ReactNode, RefObject } from 'react';
 import { SelectStateOptions } from 'react-stately';
 import { Placement, AriaSelectProps } from 'react-aria';
 
@@ -6,11 +7,8 @@ type SelectProps<T extends Record<string, unknown>> = {
     readonly className?: string;
     readonly placeholder?: ReactNode;
     readonly popoverPlacement?: Placement;
+    readonly selectRef?: RefObject<HTMLButtonElement>;
 } & AriaSelectProps<T> & SelectStateOptions<T>;
-declare const Select: React__default.ForwardRefExoticComponent<{
-    readonly className?: string | undefined;
-    readonly placeholder?: ReactNode;
-    readonly popoverPlacement?: Placement | undefined;
-} & AriaSelectProps<Record<string, unknown>> & SelectStateOptions<Record<string, unknown>> & React__default.RefAttributes<HTMLButtonElement>>;
+declare function Select<T extends Record<string, unknown>>(props: SelectProps<T>): react_jsx_runtime.JSX.Element;
 
 export { Select, type SelectProps };

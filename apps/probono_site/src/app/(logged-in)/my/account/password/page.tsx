@@ -6,10 +6,10 @@ import {
 	type PasswordUpdate,
 	passwordUpdateSchema,
 } from '@/lib/schemas/password.ts';
-import {type FormState} from 'geostats-ui';
 import {decodeForm} from '@/lib/form-utils.ts';
 import {handleActionError} from '@/lib/handle-action-error.ts';
 import {authentication, management} from '@/lib/auth0.ts';
+import {FormState} from '@/components/form';
 
 export default async function AccountPage() {
 	const action = async (
@@ -61,8 +61,8 @@ export default async function AccountPage() {
 	}
 
 	return (
-		<main className='w-full'>
-			<h1 className='mb-2 text-4xl text-stone-200'>
+		<main className="w-full">
+			<h1 className="mb-2 text-4xl text-stone-200">
 				Cambio de contraseña
 			</h1>
 			<PasswordForm action={action} />

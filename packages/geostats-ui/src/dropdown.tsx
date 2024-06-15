@@ -1,6 +1,8 @@
 'use client';
 import React, {type ReactNode, useState} from 'react';
+// @ts-expect-error bad typings
 import ArrowDropDown from '@material-design-icons/svg/round/arrow_drop_down.svg';
+// @ts-expect-error bad typings
 import ArrowDropUp from '@material-design-icons/svg/round/arrow_drop_up.svg';
 import {AnimatePresence, motion} from 'framer-motion';
 import {cx} from './cva.ts';

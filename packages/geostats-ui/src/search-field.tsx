@@ -4,7 +4,9 @@ import {
 	type SearchFieldProps as SearchFieldStateProps,
 	useSearchFieldState,
 } from 'react-stately';
+// @ts-expect-error bad typings
 import Search from '@material-design-icons/svg/round/search.svg';
+// @ts-expect-error bad typings
 import Close from '@material-design-icons/svg/round/close.svg';
 import {Button} from './button/button.tsx';
 import {cx} from './cva.ts';

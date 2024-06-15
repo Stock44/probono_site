@@ -1,8 +1,7 @@
 'use client';
 import React, {type ReactNode} from 'react';
 import {useFormStatus} from 'react-dom';
-import {Button,type ButtonProps} from './button/button.tsx';
-import {LoadingSpinner} from './loading-spinner.tsx';
+import {Button, ButtonProps, LoadingSpinner} from 'geostats-ui';
 
 export type SubmitButtonProps = {
 	readonly children: ReactNode;

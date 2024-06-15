@@ -1,6 +1,6 @@
 'use server';
 import {ZodError} from 'zod';
-import {type FormState} from 'geostats-ui';
+import {FormState} from '@/components/form';
 
 export async function handleActionError<T>(
 	previousState: FormState<T>,

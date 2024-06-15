@@ -1,9 +1,7 @@
 'use client';
 import React from 'react';
 import type {Organization} from '@prisma/client';
-import {useCloseModal} from '@/components/modal/modal-context.ts';
-import Dialog from '@/components/dialog.tsx';
-import Button from '@/components/button/button.tsx';
+import {Button, Dialog, useCloseModal} from 'geostats-ui';
 
 export type OrganizationDeletionDialogProps = {
 	readonly deleteOrganization: () => Promise <void>;

@@ -3,9 +3,10 @@ import React from 'react';
 import {redirect} from 'next/navigation';
 import UserForm from '@/app/(logged-in)/onboarding/user/user-onboarding-form.tsx';
 import prisma from '@/lib/prisma.ts';
-import {AnimatedLayoutContainer, type FormState} from 'geostats-ui';
+import {AnimatedLayoutContainer} from 'geostats-ui';
 import upsertUserAction from '@/lib/actions/upsert-user-action.ts';
 import {type UserInit, type UserUpdate} from '@/lib/schemas/user.ts';
+import {FormState} from '@/components/form';
 
 export type UserOnboardingPageProps = {
 	readonly searchParams: {

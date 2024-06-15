@@ -8,6 +8,7 @@ import {
 } from 'react-aria';
 import {Set} from 'immutable';
 import {type Key, type ListState, type Node, useListState} from 'react-stately';
+// @ts-expect-error bad typings
 import Close from '@material-design-icons/svg/round/close.svg';
 import {Button} from './button/button.tsx';
 

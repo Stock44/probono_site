@@ -17,6 +17,11 @@
 	"private": true,
 	"devDependencies": {
 		"eslint": "^8.57.0",
-		"prettier": "^3.2.5"
-	}
+		"prettier": "^3.2.5",
+		"turbo": "^2.0.4"
+	},
+	"dependencies": {
+		"esbuild-plugin-alias": "^0.2.1"
+	},
+	"packageManager": "npm@10.1.0"
 }

@@ -10,8 +10,7 @@ import prisma from '@/lib/prisma.ts';
 import {decodeForm} from '@/lib/form-utils.ts';
 import {createUser, updateUser} from '@/lib/models/user.ts';
 import {handleActionError} from '@/lib/handle-action-error.ts';
-
-import {type FormState} from 'geostats-ui';
+import {FormState} from '@/components/form';
 
 export default async function upsertUserAction(
 	state: FormState<UserInit | UserUpdate>,
