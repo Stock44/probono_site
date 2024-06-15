@@ -1,5 +1,6 @@
 import TopBar from '@/components/top-bar.tsx';
 import dynamic from 'next/dynamic';
+import {Paper} from 'geostats-ui';
 
 const MainMap = dynamic(() => import('@/components/main-map.tsx'), {
 	ssr: false,
@@ -7,9 +8,10 @@ const MainMap = dynamic(() => import('@/components/main-map.tsx'), {
 
 export default function Home() {
 	return (
-		<main className='min-h-screen w-screen bg-stone-950'>
+		<main className='h-screen w-screen overflow-hidden bg-stone-950 text-stone-300'>
 			<TopBar />
-			<MainMap className='h-screen' />
+			<Paper className='absolute right-8 top-20'>Hola!</Paper>
+			<MainMap className='h-full' />
 		</main>
 	);
 }

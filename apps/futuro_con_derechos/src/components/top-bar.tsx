@@ -34,7 +34,7 @@ export default function TopBar(props: TopBarProps) {
 	return (
 		<motion.header
 			className={cx(
-				'fixed z-[1100] backdrop-blur right-0 left-0 w-full h-16 border-b border-stone-800 px-16 bg-black/30',
+				'fixed z-[1100] backdrop-blur right-0 left-0 w-full h-16 border-b border-stone-800 px-12 bg-black/40',
 			)}
 			animate={{
 				top: showBar ? 0 : -64,

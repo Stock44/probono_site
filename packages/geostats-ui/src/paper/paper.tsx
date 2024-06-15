@@ -1,4 +1,4 @@
-import React, {type ComponentProps, ForwardedRef, forwardRef} from 'react';
+import React, {type ComponentProps} from 'react';
 import {omit} from 'lodash';
 import paperVariants, {
 	type PaperVariantProps,

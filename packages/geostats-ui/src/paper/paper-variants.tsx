@@ -2,7 +2,7 @@ import {type VariantProps} from 'cva';
 import {cva} from '@/cva.ts';
 
 const paperVariants = cva({
-	base: 'rounded border border-stone-800 bg-stone-900/5 text-stone-300 backdrop-blur transition-all',
+	base: 'rounded border border-stone-800 bg-black/40 text-stone-300 backdrop-blur transition-all',
 	variants: {
 		hoverEffect: {
 			true: 'duration-500 hover:scale-[101%] hover:border-stone-700 hover:glow-sm',
